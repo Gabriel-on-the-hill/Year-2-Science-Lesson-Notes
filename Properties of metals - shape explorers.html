@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 1: Shape Explorers | Year 2 Science</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .header-info {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .timer-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-left: 6px;
+        }
+
+        .slide-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .slide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 950px;
+            min-height: 520px;
+            padding: 32px;
+            display: none;
+            flex-direction: column;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-title {
+            font-size: 1.8rem;
+            color: #4a00e0;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .slide-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .week-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            color: #4a00e0;
+        }
+
+        .objectives {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 450px;
+        }
+
+        .objectives h3 {
+            color: #4a00e0;
+            margin-bottom: 10px;
+        }
+
+        .objectives li {
+            padding: 6px 0;
+            color: #555;
+            list-style: none;
+        }
+
+        .objectives li::before {
+            content: "✓ ";
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .vocab-card {
+            background: linear-gradient(135deg, #f8f9ff, #e8ebff);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-3px);
+            border-color: #667eea;
+        }
+
+        .vocab-card .emoji {
+            font-size: 2rem;
+            margin-bottom: 6px;
+        }
+
+        .vocab-card .word {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #4a00e0;
+        }
+
+        .vocab-card .meaning {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .shapes-display {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .shape-item {
+            text-align: center;
+            padding: 16px;
+            background: #f8f9ff;
+            border-radius: 12px;
+            min-width: 100px;
+        }
+
+        .shape-item svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 8px;
+        }
+
+        .shape-item .label {
+            font-weight: 600;
+            color: #4a00e0;
+        }
+
+        .activity-box {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 600px;
+        }
+
+        .activity-box h3 {
+            color: #0369a1;
+            margin-bottom: 12px;
+        }
+
+        .activity-box li {
+            padding: 6px 0;
+            font-size: 1.05rem;
+            color: #334155;
+        }
+
+        .hunt-item {
+            font-size: 1.8rem;
+            color: #333;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #fff9e6, #fff0c2);
+            border-radius: 12px;
+            margin: 16px 0;
+        }
+
+        .hunt-timer {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #4a00e0;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 6px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.03);
+        }
+
+        .btn.purple {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .quiz-q {
+            font-size: 1.3rem;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .quiz-opts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 550px;
+            width: 100%;
+        }
+
+        .quiz-opt {
+            background: #f8f9ff;
+            border: 3px solid #e0e7ff;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .quiz-opt:hover {
+            border-color: #667eea;
+        }
+
+        .quiz-opt.correct {
+            background: #dcfce7;
+            border-color: #22c55e;
+        }
+
+        .quiz-opt.wrong {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .quiz-opt.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .feedback {
+            margin-top: 16px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .feedback.wrong {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .match-container {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .match-col {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .match-item {
+            background: #f8f9ff;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .match-item:hover {
+            border-color: #667eea;
+        }
+
+        .match-item.selected {
+            background: #e0e7ff;
+            border-color: #667eea;
+        }
+
+        .match-item.matched {
+            background: #dcfce7;
+            border-color: #22c55e;
+            pointer-events: none;
+        }
+
+        .score-display {
+            text-align: center;
+        }
+
+        .score-big {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #4a00e0;
+        }
+
+        .score-text {
+            font-size: 1.3rem;
+            color: #666;
+            margin: 12px 0;
+        }
+
+        .score-stars {
+            font-size: 2.5rem;
+            margin: 16px 0;
+        }
+
+        .homework-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .homework-box h3 {
+            color: #92400e;
+            margin-bottom: 12px;
+        }
+
+        .homework-box p {
+            color: #78350f;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .nav-bar {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 14px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 24px;
+            font-weight: 600;
+            border-radius: 20px;
+            cursor: pointer;
+            color: #4a00e0;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: white;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #22c55e;
+            transition: width 0.3s;
+        }
+
+        .visual-q {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .visual-opt {
+            background: #f8f9ff;
+            border: 3px solid #e0e7ff;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .visual-opt:hover {
+            border-color: #667eea;
+            transform: scale(1.02);
+        }
+
+        .visual-opt.correct {
+            background: #dcfce7;
+            border-color: #22c55e;
+        }
+
+        .visual-opt.wrong {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .visual-opt svg {
+            width: 80px;
+            height: 80px;
+        }
+
+        .visual-opt .label {
+            margin-top: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+
+            .vocab-grid,
+            .quiz-opts {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .slide {
+                padding: 20px;
+            }
+
+            .main-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media print {
+
+            .header,
+            .nav-bar,
+            .progress-bar {
+                display: none;
+            }
+
+            .slide {
+                display: block !important;
+                page-break-after: always;
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="presentation">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+        <header class="header">
+            <h1>🔬 Year 2 Science – Week 1</h1>
+            <div class="header-info">
+                <div class="badge"><span id="timer">00:00</span><button class="timer-btn"
+                        onclick="toggleTimer()">▶</button></div>
+                <div class="badge">Slide <span id="curr">1</span>/<span id="total">14</span></div>
+                <div class="badge">Score: <span id="scoreDisplay">0</span>/6</div>
+            </div>
+        </header>
+        <div class="slide-container">
+            <!-- Slide 1: Title -->
+            <div class="slide active" data-slide="1">
+                <div class="slide-content">
+                    <div class="week-badge">📅 Week 1 – Materials</div>
+                    <h1 class="main-title">Shape Explorers</h1>
+                    <p class="slide-subtitle">Let's discover shapes all around us!</p>
+                    <div class="objectives">
+                        <h3>🎯 Today's Learning:</h3>
+                        <ul>
+                            <li>Describe shapes of solid objects</li>
+                            <li>Use words: round, flat, pointy, curved</li>
+                            <li>Find shapes in our home</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 2: What is a Solid -->
+            <div class="slide" data-slide="2">
+                <h2 class="slide-title">What is a Solid?</h2>
+                <p class="slide-subtitle">Things we can touch and hold!</p>
+                <div class="slide-content">
+                    <div class="activity-box">
+                        <h3>🤔 Think About It:</h3>
+                        <p style="font-size:1.1rem;color:#334155;line-height:1.7;">A <strong>solid</strong> keeps its
+                            shape. You can pick it up!<br><br>✅ A ball is solid<br>✅ A spoon is solid<br>✅ A book is
+                            solid<br>❌ Water is NOT solid (it flows!)</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 3: Vocabulary -->
+            <div class="slide" data-slide="3">
+                <h2 class="slide-title">Shape Words</h2>
+                <p class="slide-subtitle">Words to describe what we see</p>
+                <div class="slide-content">
+                    <div class="vocab-grid">
+                        <div class="vocab-card">
+                            <div class="emoji">⚽</div>
+                            <div class="word">Round</div>
+                            <div class="meaning">Curved all around</div>
+                        </div>
+                        <div class="vocab-card">
+                            <div class="emoji">📱</div>
+                            <div class="word">Flat</div>
+                            <div class="meaning">Smooth and level</div>
+                        </div>
+                        <div class="vocab-card">
+                            <div class="emoji">✏️</div>
+                            <div class="word">Pointy</div>
+                            <div class="meaning">Has a sharp end</div>
+                        </div>
+                        <div class="vocab-card">
+                            <div class="emoji">🌙</div>
+                            <div class="word">Curved</div>
+                            <div class="meaning">Bends smoothly</div>
+                        </div>
+                        <div class="vocab-card">
+                            <div class="emoji">📏</div>
+                            <div class="word">Straight</div>
+                            <div class="meaning">No bends</div>
+                        </div>
+                        <div class="vocab-card">
+                            <div class="emoji">🧊</div>
+                            <div class="word">Solid</div>
+                            <div class="meaning">Keeps its shape</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 4: Shapes -->
+            <div class="slide" data-slide="4">
+                <h2 class="slide-title">Shapes We See Every Day</h2>
+                <div class="slide-content">
+                    <div class="shapes-display">
+                        <div class="shape-item"><svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#667eea" />
+                            </svg>
+                            <div class="label">Circle</div>
+                        </div>
+                        <div class="shape-item"><svg viewBox="0 0 100 100">
+                                <rect x="15" y="15" width="70" height="70" fill="#22c55e" />
+                            </svg>
+                            <div class="label">Square</div>
+                        </div>
+                        <div class="shape-item"><svg viewBox="0 0 100 100">
+                                <polygon points="50,10 90,90 10,90" fill="#f59e0b" />
+                            </svg>
+                            <div class="label">Triangle</div>
+                        </div>
+                        <div class="shape-item"><svg viewBox="0 0 100 100">
+                                <rect x="10" y="25" width="80" height="50" fill="#ec4899" />
+                            </svg>
+                            <div class="label">Rectangle</div>
+                        </div>
+                        <div class="shape-item"><svg viewBox="0 0 100 100">
+                                <ellipse cx="50" cy="50" rx="45" ry="25" fill="#06b6d4" />
+                            </svg>
+                            <div class="label">Oval</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 5: Hunt Instructions -->
+            <div class="slide" data-slide="5">
+                <h2 class="slide-title">🔍 Scavenger Hunt!</h2>
+                <div class="slide-content">
+                    <div class="activity-box">
+                        <h3>🎮 How to Play:</h3>
+                        <ol>
+                            <li>I'll say a shape word</li>
+                            <li>You have <strong>30 seconds</strong> to find it</li>
+                            <li>Run and find something that shape!</li>
+                            <li>Show it on camera</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 6-8: Hunts -->
+            <div class="slide" data-slide="6">
+                <h2 class="slide-title">Find Something...</h2>
+                <div class="slide-content">
+                    <div class="hunt-item">⚽ ROUND! ⚽</div>
+                    <div class="hunt-timer" id="t1">30</div>
+                    <div><button class="btn" onclick="startHunt('t1')">▶ Start</button><button class="btn purple"
+                            onclick="resetHunt('t1')">↺ Reset</button></div>
+                    <p style="color:#666;margin-top:12px;">💡 Ball, plate, clock, orange...</p>
+                </div>
+            </div>
+            <div class="slide" data-slide="7">
+                <h2 class="slide-title">Find Something...</h2>
+                <div class="slide-content">
+                    <div class="hunt-item">📱 FLAT! 📱</div>
+                    <div class="hunt-timer" id="t2">30</div>
+                    <div><button class="btn" onclick="startHunt('t2')">▶ Start</button><button class="btn purple"
+                            onclick="resetHunt('t2')">↺ Reset</button></div>
+                    <p style="color:#666;margin-top:12px;">💡 Book, tablet, paper, table...</p>
+                </div>
+            </div>
+            <div class="slide" data-slide="8">
+                <h2 class="slide-title">Find Something...</h2>
+                <div class="slide-content">
+                    <div class="hunt-item">✏️ POINTY! ✏️</div>
+                    <div class="hunt-timer" id="t3">30</div>
+                    <div><button class="btn" onclick="startHunt('t3')">▶ Start</button><button class="btn purple"
+                            onclick="resetHunt('t3')">↺ Reset</button></div>
+                    <p style="color:#666;margin-top:12px;">💡 Pencil, fork, scissors (closed!)...</p>
+                </div>
+            </div>
+            <!-- Quiz Section -->
+            <div class="slide" data-slide="9">
+                <h2 class="slide-title">🧠 Quiz Time! (Q1/6)</h2>
+                <div class="slide-content">
+                    <p class="quiz-q">Which word describes the shape of a ball?</p>
+                    <div class="quiz-opts" id="q1">
+                        <div class="quiz-opt" onclick="answer(this,'q1',false)">Flat</div>
+                        <div class="quiz-opt" onclick="answer(this,'q1',true)">Round</div>
+                        <div class="quiz-opt" onclick="answer(this,'q1',false)">Pointy</div>
+                        <div class="quiz-opt" onclick="answer(this,'q1',false)">Straight</div>
+                    </div>
+                    <div class="feedback" id="fb1"></div>
+                </div>
+            </div>
+            <div class="slide" data-slide="10">
+                <h2 class="slide-title">🧠 Quiz Time! (Q2/6)</h2>
+                <div class="slide-content">
+                    <p class="quiz-q">True or False: A book is flat.</p>
+                    <div class="quiz-opts" id="q2" style="max-width:300px;">
+                        <div class="quiz-opt" onclick="answer(this,'q2',true)">✅ TRUE</div>
+                        <div class="quiz-opt" onclick="answer(this,'q2',false)">❌ FALSE</div>
+                    </div>
+                    <div class="feedback" id="fb2"></div>
+                </div>
+            </div>
+            <div class="slide" data-slide="11">
+                <h2 class="slide-title">🧠 Quiz Time! (Q3/6)</h2>
+                <p class="slide-subtitle">Click on the ROUND object</p>
+                <div class="slide-content">
+                    <div class="visual-q" id="q3">
+                        <div class="visual-opt" onclick="visualAns(this,'q3',true)"><svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#f59e0b" />
+                            </svg>
+                            <div class="label">Orange</div>
+                        </div>
+                        <div class="visual-opt" onclick="visualAns(this,'q3',false)"><svg viewBox="0 0 100 100">
+                                <rect x="15" y="20" width="70" height="60" fill="#667eea" />
+                            </svg>
+                            <div class="label">Book</div>
+                        </div>
+                        <div class="visual-opt" onclick="visualAns(this,'q3',false)"><svg viewBox="0 0 100 100">
+                                <polygon points="50,15 55,50 85,55 55,60 50,95 45,60 15,55 45,50" fill="#22c55e" />
+                            </svg>
+                            <div class="label">Star</div>
+                        </div>
+                    </div>
+                    <div class="feedback" id="fb3"></div>
+                </div>
+            </div>
+            <div class="slide" data-slide="12">
+                <h2 class="slide-title">🧠 Quiz Time! (Q4/6)</h2>
+                <div class="slide-content">
+                    <p class="quiz-q">Fill in the blank:<br>"A pencil has a _____ end."</p>
+                    <div class="quiz-opts" id="q4">
+                        <div class="quiz-opt" onclick="answer(this,'q4',false)">Round</div>
+                        <div class="quiz-opt" onclick="answer(this,'q4',true)">Pointy</div>
+                        <div class="quiz-opt" onclick="answer(this,'q4',false)">Flat</div>
+                        <div class="quiz-opt" onclick="answer(this,'q4',false)">Curved</div>
+                    </div>
+                    <div class="feedback" id="fb4"></div>
+                </div>
+            </div>
+            <div class="slide" data-slide="13">
+                <h2 class="slide-title">🧠 Quiz Time! (Q5/6)</h2>
+                <p class="slide-subtitle">Which would NOT roll down a hill?</p>
+                <div class="slide-content">
+                    <div class="visual-q" id="q5">
+                        <div class="visual-opt" onclick="visualAns(this,'q5',false)"><svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#ec4899" />
+                            </svg>
+                            <div class="label">Ball</div>
+                        </div>
+                        <div class="visual-opt" onclick="visualAns(this,'q5',true)"><svg viewBox="0 0 100 100">
+                                <rect x="15" y="20" width="70" height="60" fill="#667eea" />
+                            </svg>
+                            <div class="label">Book</div>
+                        </div>
+                        <div class="visual-opt" onclick="visualAns(this,'q5',false)"><svg viewBox="0 0 100 100">
+                                <ellipse cx="50" cy="50" rx="40" ry="40" fill="#f59e0b" />
+                            </svg>
+                            <div class="label">Orange</div>
+                        </div>
+                    </div>
+                    <div class="feedback" id="fb5"></div>
+                </div>
+            </div>
+            <div class="slide" data-slide="14">
+                <h2 class="slide-title">🧠 Quiz Time! (Q6/6)</h2>
+                <div class="slide-content">
+                    <p class="quiz-q">Why are plates round and not pointy?</p>
+                    <div class="quiz-opts" id="q6">
+                        <div class="quiz-opt" onclick="answer(this,'q6',false)">Because they look pretty</div>
+                        <div class="quiz-opt" onclick="answer(this,'q6',true)">So they don't hurt us</div>
+                        <div class="quiz-opt" onclick="answer(this,'q6',false)">Because they taste better</div>
+                        <div class="quiz-opt" onclick="answer(this,'q6',false)">So they can float</div>
+                    </div>
+                    <div class="feedback" id="fb6"></div>
+                </div>
+            </div>
+            <!-- Score -->
+            <div class="slide" data-slide="15">
+                <h2 class="slide-title">🏆 Your Score!</h2>
+                <div class="slide-content">
+                    <div class="score-display">
+                        <div class="score-big" id="finalScore">0/6</div>
+                        <div class="score-stars" id="stars">⭐⭐⭐</div>
+                        <div class="score-text" id="scoreMsg">Well done!</div>
+                        <button class="btn purple" onclick="location.reload()">🔄 Try Again</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Homework -->
+            <div class="slide" data-slide="16">
+                <h2 class="slide-title">📝 Homework Challenge</h2>
+                <div class="slide-content">
+                    <div class="homework-box">
+                        <p style="font-size:2rem;margin-bottom:12px;">🏠</p>
+                        <h3>Before Next Week:</h3>
+                        <p>Draw <strong>3 objects</strong> from your home.<br><br>Label each: <strong>Round? Flat?
+                                Pointy?</strong><br><br>Bring your drawings to show me! 🎨</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="nav-bar">
+            <button class="nav-btn" id="prevBtn" onclick="go(-1)">← Previous</button>
+            <button class="nav-btn" id="nextBtn" onclick="go(1)">Next →</button>
+        </nav>
+    </div>
+    <script>
+        let curr = 1, total = 16, score = 0, timerOn = false, timerSec = 0, timerInt, hunts = {};
+        document.getElementById('total').textContent = total;
+        function show(n) { if (n < 1) n = 1; if (n > total) n = total; curr = n; document.querySelectorAll('.slide').forEach(s => s.classList.remove('active')); document.querySelectorAll('.slide')[curr - 1].classList.add('active'); document.getElementById('curr').textContent = curr; document.getElementById('prevBtn').disabled = curr === 1; document.getElementById('nextBtn').disabled = curr === total; document.getElementById('progress').style.width = (curr / total * 100) + '%'; if (curr === 15) showFinal(); }
+        function go(d) { show(curr + d); }
+        document.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === ' ') go(1); if (e.key === 'ArrowLeft') go(-1); });
+        function toggleTimer() { if (timerOn) { clearInterval(timerInt); timerOn = false; } else { timerInt = setInterval(() => { timerSec++; let m = Math.floor(timerSec / 60).toString().padStart(2, '0'), s = (timerSec % 60).toString().padStart(2, '0'); document.getElementById('timer').textContent = m + ':' + s; }, 1000); timerOn = true; } }
+        function startHunt(id) { if (hunts[id]) return; let s = 30; document.getElementById(id).textContent = s; hunts[id] = setInterval(() => { s--; document.getElementById(id).textContent = s <= 0 ? "⏰ Time's up!" : s; if (s <= 0) { clearInterval(hunts[id]); hunts[id] = null; } }, 1000); }
+        function resetHunt(id) { if (hunts[id]) { clearInterval(hunts[id]); hunts[id] = null; } document.getElementById(id).textContent = '30'; }
+        function answer(el, qid, correct) { let opts = document.querySelectorAll('#' + qid + ' .quiz-opt'); opts.forEach(o => { o.classList.add('disabled'); if (o === el) o.classList.add(correct ? 'correct' : 'wrong'); }); let fb = document.getElementById('fb' + qid.slice(1)); fb.textContent = correct ? '🎉 Correct!' : '❌ Not quite!'; fb.className = 'feedback show ' + (correct ? 'correct' : 'wrong'); if (correct) { score++; document.getElementById('scoreDisplay').textContent = score; } }
+        function visualAns(el, qid, correct) { let opts = document.querySelectorAll('#' + qid + ' .visual-opt'); opts.forEach(o => { o.style.pointerEvents = 'none'; if (o === el) o.classList.add(correct ? 'correct' : 'wrong'); }); let fb = document.getElementById('fb' + qid.slice(1)); fb.textContent = correct ? '🎉 Correct!' : '❌ Try again next time!'; fb.className = 'feedback show ' + (correct ? 'correct' : 'wrong'); if (correct) { score++; document.getElementById('scoreDisplay').textContent = score; } }
+        function showFinal() { document.getElementById('finalScore').textContent = score + '/6'; let stars = '', msg = ''; if (score >= 5) { stars = '⭐⭐⭐'; msg = 'Amazing! You\'re a Shape Expert!'; } else if (score >= 3) { stars = '⭐⭐'; msg = 'Good job! Keep practising!'; } else { stars = '⭐'; msg = 'Nice try! Let\'s review shapes again.'; } document.getElementById('stars').textContent = stars; document.getElementById('scoreMsg').textContent = msg; }
+        show(1);
+    </script>
+</body>
+
+</html>

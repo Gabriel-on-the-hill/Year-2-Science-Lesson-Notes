@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 3: Bending & Stretching Lab</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            color: #444;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-info {
+            display: flex;
+            gap: 15px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 8px 16px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Slides */
+        .slide-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            max-width: 1000px;
+            height: 100%;
+            max-height: 620px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            display: none;
+            flex-direction: column;
+            animation: fadeUp 0.5s ease;
+            border: 4px solid white;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+            z-index: 10;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Typography */
+        h2 {
+            font-size: 2.2rem;
+            color: #764ba2;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #555;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            background: #764ba2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 0 #5a3d7a;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #5a3d7a;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #5a3d7a;
+        }
+
+        .btn-green {
+            background: #2CB67D;
+            box-shadow: 0 4px 0 #1e8259;
+        }
+
+        .btn-green:hover {
+            box-shadow: 0 6px 0 #1e8259;
+        }
+
+        .nav-bar {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* Flip Cards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 140px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .flip-card-front {
+            background-color: #f3e5f5;
+            border-left: 6px solid #764ba2;
+            color: #764ba2;
+        }
+
+        .flip-card-back {
+            background-color: #764ba2;
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flip-card strong {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .flip-hint {
+            font-size: 0.85rem;
+            margin-top: 8px;
+            color: #999;
+        }
+
+        /* Odd One Out / Quiz Items */
+        .odd-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .odd-item {
+            width: 170px;
+            padding: 18px;
+            background: white;
+            border: 3px solid #eee;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .odd-item:hover {
+            border-color: #764ba2;
+            transform: scale(1.05);
+        }
+
+        .odd-item.wrong {
+            background: #ffebee;
+            border-color: #ffcdd2;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .odd-item.correct {
+            background: #e8f5e9;
+            border-color: #2CB67D;
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(44, 182, 125, 0.3);
+            pointer-events: none;
+        }
+
+        .odd-img {
+            font-size: 3.5rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* Simulation Boxes */
+        .sim-box {
+            background: #2d3436;
+            border-radius: 20px;
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            min-height: 280px;
+        }
+
+        .sim-controls {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Rubber Band Stretcher */
+        .stretch-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .anchor {
+            width: 30px;
+            height: 60px;
+            background: #546e7a;
+            border-radius: 5px;
+        }
+
+        .rubber-band {
+            width: 150px;
+            height: 20px;
+            background: linear-gradient(90deg, #ff6b6b, #ee5a5a);
+            border-radius: 10px;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Pipe Cleaner Bender */
+        .pipe-cleaner {
+            width: 200px;
+            height: 12px;
+            background: repeating-linear-gradient(90deg, #4CAF50, #4CAF50 5px, #388E3C 5px, #388E3C 10px);
+            border-radius: 6px;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+        }
+
+        /* Speech Bubbles */
+        .bubble-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .kid-avatar {
+            font-size: 2.5rem;
+        }
+
+        .bubble {
+            background: white;
+            padding: 12px 18px;
+            border-radius: 20px;
+            border-bottom-left-radius: 2px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            color: #555;
+            position: relative;
+            max-width: 80%;
+        }
+
+        .bubble.right {
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 2px;
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .bubble-animated {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        .bubble-delay-1 {
+            animation-delay: 1s;
+        }
+
+        .bubble-delay-2 {
+            animation-delay: 2s;
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="presentation">
+
+        <header class="header">
+            <h1>🔬 Week 3: Bending & Stretching Lab</h1>
+            <div class="header-info">
+                <div class="badge">🧪 Materials Science</div>
+                <div class="badge">Slide <span id="slideNum">1</span>/20</div>
+            </div>
+        </header>
+
+        <div class="slide-container">
+
+            <!-- Slide 1: Title -->
+            <div class="slide active">
+                <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                    <div style="font-size:5rem;">🤸</div>
+                    <h1 style="font-size:3.2rem; color:#764ba2; margin:20px 0; text-align:center;">Bending & Stretching
+                    </h1>
+                    <p style="font-size:1.5rem;">How do materials change shape?</p>
+                    <div style="background:#f3e5f5; padding:20px; border-radius:15px; margin-top:20px;">
+                        <h3>🎯 Today's Learning Goals:</h3>
+                        <ul style="text-align:left; font-size:1.15rem; list-style:none; line-height:1.8;">
+                            <li>🔄 Understand what <strong>bending</strong> means</li>
+                            <li>↔️ Understand what <strong>stretching</strong> means</li>
+                            <li>🔍 Know which materials are <strong>flexible</strong> or <strong>elastic</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Vocabulary (Flip Cards) -->
+            <div class="slide">
+                <h2>🧠 Smart Words (Click to Reveal)</h2>
+                <div
+                    style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:10px;">
+                    <div class="bubble-container">
+                        <div class="kid-avatar">👦</div>
+                        <div class="bubble bubble-animated bubble-delay-1">Wait, what does "Elastic" mean?</div>
+                    </div>
+                    <div class="bubble-container">
+                        <div class="bubble right bubble-animated bubble-delay-2">I think it means it stretches... does
+                            it go back?</div>
+                        <div class="kid-avatar">👧</div>
+                    </div>
+                </div>
+                <div class="vocab-grid">
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front"><strong>Flexible 🌿</strong>
+                                <div class="flip-hint">(Click to reveal)</div>
+                            </div>
+                            <div class="flip-card-back"><strong>Can Bend!</strong>
+                                <p style="font-size:0.95rem;">Bends easily without breaking.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front"><strong>Rigid 🪵</strong>
+                                <div class="flip-hint">(Click to reveal)</div>
+                            </div>
+                            <div class="flip-card-back"><strong>Cannot Bend!</strong>
+                                <p style="font-size:0.95rem;">Hard and stiff. May snap!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front"><strong>Elastic 🎈</strong>
+                                <div class="flip-hint">(Click to reveal)</div>
+                            </div>
+                            <div class="flip-card-back"><strong>Bounces Back!</strong>
+                                <p style="font-size:0.95rem;">Stretches AND returns to shape.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front"><strong>Permanent ⚡</strong>
+                                <div class="flip-hint">(Click to reveal)</div>
+                            </div>
+                            <div class="flip-card-back"><strong>Stays Changed!</strong>
+                                <p style="font-size:0.95rem;">Paper stays creased.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front"><strong>Temporary 🔄</strong>
+                                <div class="flip-hint">(Click to reveal)</div>
+                            </div>
+                            <div class="flip-card-back"><strong>Goes Back!</strong>
+                                <p style="font-size:0.95rem;">Rubber band returns.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front"><strong>Force 💪</strong>
+                                <div class="flip-hint">(Click to reveal)</div>
+                            </div>
+                            <div class="flip-card-back"><strong>Push or Pull!</strong>
+                                <p style="font-size:0.95rem;">Energy to change shapes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: What is Bending? -->
+            <div class="slide">
+                <h2>🔄 What is Bending?</h2>
+                <p><strong>Bending</strong> = Making something curved without breaking it.</p>
+                <div style="display:flex; justify-content:center; gap:40px; margin:30px 0;">
+                    <div style="text-align:center;">
+                        <div style="font-size:4rem;">📏</div>
+                        <p>Straight Ruler</p>
+                    </div>
+                    <div style="font-size:3rem; display:flex; align-items:center;">➡️</div>
+                    <div style="text-align:center;">
+                        <div style="font-size:4rem;">🌙</div>
+                        <p>Bent Ruler</p>
+                    </div>
+                </div>
+                <div style="background:#e8f5e9; padding:20px; border-radius:15px;">
+                    <p><strong>Examples that BEND:</strong> Pipe cleaners, rubber rulers, paper, wire</p>
+                    <p><strong>Examples that DON'T bend (snap!):</strong> Wooden sticks, biscuits, chalk</p>
+                </div>
+            </div>
+
+            <!-- Slide 4: Bending Simulator -->
+            <div class="slide">
+                <h2>🧪 Bending Lab</h2>
+                <p>Click the pipe cleaner to bend it!</p>
+                <div class="sim-box" style="background:#e8f5e9;">
+                    <div id="pipeCleanerBox" class="pipe-cleaner" onclick="doBend()"
+                        style="background:none; display:flex; justify-content:center; align-items:center;">
+                        <svg width="300" height="150" viewBox="0 0 300 150">
+                            <!-- Helper line to show original shape (faded) -->
+                            <path id="ghostPath" d="M20,100 Q150,100 280,100" stroke="#ccc" stroke-width="12"
+                                stroke-linecap="round" fill="none" style="opacity:0; transition:opacity 0.5s;" />
+                            <!-- The Pipe Cleaner -->
+                            <path id="bendPath" d="M20,100 Q150,100 280,100" stroke="url(#pcGradient)" stroke-width="14"
+                                stroke-linecap="round" fill="none"
+                                style="transition: d 0.8s cubic-bezier(0.25, 1, 0.5, 1);" />
+                            <defs>
+                                <linearGradient id="pcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+                                    <stop offset="20%" style="stop-color:#388E3C;stop-opacity:1" />
+                                    <stop offset="40%" style="stop-color:#4CAF50;stop-opacity:1" />
+                                    <stop offset="60%" style="stop-color:#388E3C;stop-opacity:1" />
+                                    <stop offset="80%" style="stop-color:#4CAF50;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#388E3C;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <p id="bendLabel" style="color:#2d3436; margin-top:20px; font-weight:bold;">Click to apply BENDING
+                        force!</p>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" onclick="doBend()">🔄 Bend</button>
+                    <button class="btn btn-green" onclick="resetBend()">↩️ Reset</button>
+                </div>
+            </div>
+
+            <!-- Slide 5: Odd One Out - Bending -->
+            <div class="slide">
+                <h2>🤔 Odd One Out</h2>
+                <p>Which one is <strong>RIGID</strong> (Cannot bend)?</p>
+                <div class="odd-grid">
+                    <div class="odd-item" onclick="checkOdd(this, false, 'oddFeed1')">
+                        <span class="odd-img">🧹</span>
+                        <strong>Pipe Cleaner</strong>
+                    </div>
+                    <div class="odd-item" onclick="checkOdd(this, true, 'oddFeed1')">
+                        <span class="odd-img">🪵</span>
+                        <strong>Wooden Stick</strong>
+                    </div>
+                    <div class="odd-item" onclick="checkOdd(this, false, 'oddFeed1')">
+                        <span class="odd-img">📄</span>
+                        <strong>Paper</strong>
+                    </div>
+                </div>
+                <div id="oddFeed1"
+                    style="height:40px; text-align:center; font-weight:bold; font-size:1.3rem; margin-top:20px;"></div>
+            </div>
+
+            <!-- Slide 6: What is Stretching? -->
+            <div class="slide">
+                <h2>↔️ What is Stretching?</h2>
+                <p><strong>Stretching</strong> = Pulling something to make it longer.</p>
+                <div style="display:flex; justify-content:center; gap:40px; margin:30px 0;">
+                    <div style="text-align:center;">
+                        <div style="font-size:4rem;">⭕</div>
+                        <p>Rubber Band (Normal)</p>
+                    </div>
+                    <div style="font-size:3rem; display:flex; align-items:center;">➡️</div>
+                    <div style="text-align:center;">
+                        <div style="font-size:4rem;">⬭</div>
+                        <p>Rubber Band (Stretched)</p>
+                    </div>
+                </div>
+                <div style="background:#fff3e0; padding:20px; border-radius:15px;">
+                    <p><strong>ELASTIC (Bounces back):</strong> Rubber band, balloon, tights, sock</p>
+                    <p><strong>NOT Elastic (Stays stretched):</strong> Playdough, string</p>
+                </div>
+            </div>
+
+            <!-- Slide 7: Stretching Simulator -->
+            <div class="slide">
+                <h2>🧪 Stretching Lab</h2>
+                <p>Click the rubber band to stretch it!</p>
+                <div class="sim-box" style="background:#fff3e0;">
+                    <div class="stretch-container">
+                        <div class="anchor">📍</div>
+                        <div id="rubberBand" class="rubber-band" onclick="doStretch()">🔴</div>
+                        <div class="anchor">📍</div>
+                    </div>
+                    <p id="stretchLabel" style="color:#2d3436; margin-top:20px; font-weight:bold;">Click to STRETCH!</p>
+                </div>
+                <div class="sim-controls">
+                    <button class="btn" onclick="doStretch()">↔️ Stretch</button>
+                    <button class="btn btn-green" onclick="releaseStretch()">🔙 Release</button>
+                </div>
+            </div>
+
+            <!-- Slide 8: Odd One Out - Stretching -->
+            <div class="slide">
+                <h2>🤔 Odd One Out</h2>
+                <p>Which one is <strong>NOT ELASTIC</strong> (Won't bounce back)?</p>
+                <div class="odd-grid">
+                    <div class="odd-item" onclick="checkOdd(this, false, 'oddFeed2')">
+                        <span class="odd-img">🎈</span>
+                        <strong>Balloon</strong>
+                    </div>
+                    <div class="odd-item" onclick="checkOdd(this, true, 'oddFeed2')">
+                        <span class="odd-img">🧵</span>
+                        <strong>String</strong>
+                    </div>
+                    <div class="odd-item" onclick="checkOdd(this, false, 'oddFeed2')">
+                        <span class="odd-img">🧦</span>
+                        <strong>Sock</strong>
+                    </div>
+                </div>
+                <div id="oddFeed2"
+                    style="height:40px; text-align:center; font-weight:bold; font-size:1.3rem; margin-top:20px;"></div>
+            </div>
+
+            <!-- Slide 9: Prediction Station Intro -->
+            <div class="slide">
+                <h2>🔮 Prediction Station</h2>
+                <div class="bubble-container" style="justify-content:center; margin-bottom:20px;">
+                    <div class="kid-avatar">🤔</div>
+                    <div class="bubble bubble-animated">I wonder if the wooden stick will bend like the pipe cleaner?
+                    </div>
+                </div>
+                <p>I will test different materials. You must PREDICT what happens!</p>
+                <div style="font-size:5rem; margin:10px 0;">🤔 ➡️ 🧪 ➡️ ✅❌</div>
+                <div style="background:#f3e5f5; padding:20px; border-radius:15px;">
+                    <p><strong>Key Question:</strong> Will the material <em>bend</em> or <em>snap</em>?<br>Will it
+                        <em>stretch</em> or <em>stay the same</em>?
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 10: Prediction 1 - Paper -->
+            <div class="slide">
+                <h2>Test 1: Paper</h2>
+                <p>Will the paper BEND or SNAP?</p>
+                <div class="sim-box" style="background:#fafafa;">
+                    <div id="predPaper"
+                        style="width:120px; height:80px; background:white; border:2px solid #ccc; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:2rem; transition:transform 0.5s;">
+                        📄</div>
+                </div>
+                <div class="odd-grid">
+                    <div class="odd-item" onclick="runPrediction(1, true, this)">
+                        <strong>🔄 BEND</strong>
+                    </div>
+                    <div class="odd-item" onclick="runPrediction(1, false, this)">
+                        <strong>💥 SNAP</strong>
+                    </div>
+                </div>
+                <div id="predRes1" style="margin-top:15px; font-weight:bold; font-size:1.2rem; text-align:center;">
+                </div>
+            </div>
+
+            <!-- Slide 11: Prediction 2 - Wooden Stick -->
+            <div class="slide">
+                <h2>Test 2: Wooden Lollipop Stick</h2>
+                <p>Will the wooden stick BEND or SNAP?</p>
+                <div class="sim-box" style="background:#fff8e1;">
+                    <div id="predStick"
+                        style="width:120px; height:20px; background:#8d6e63; border-radius:3px; display:flex; align-items:center; justify-content:center; transition:all 0.5s;">
+                    </div>
+                </div>
+                <div class="odd-grid">
+                    <div class="odd-item" onclick="runPrediction(2, false, this)">
+                        <strong>🔄 BEND</strong>
+                    </div>
+                    <div class="odd-item" onclick="runPrediction(2, true, this)">
+                        <strong>💥 SNAP</strong>
+                    </div>
+                </div>
+                <div id="predRes2" style="margin-top:15px; font-weight:bold; font-size:1.2rem; text-align:center;">
+                </div>
+            </div>
+
+            <!-- Slide 12: Prediction 3 - String -->
+            <div class="slide">
+                <h2>Test 3: String</h2>
+                <p>Will the string STRETCH or stay the same?</p>
+                <div class="sim-box" style="background:#e3f2fd;">
+                    <div id="predString"
+                        style="width:100px; height:8px; background:#795548; border-radius:4px; transition:transform 0.5s;">
+                    </div>
+                </div>
+                <div class="odd-grid">
+                    <div class="odd-item" onclick="runPrediction(3, false, this)">
+                        <strong>↔️ STRETCH</strong>
+                    </div>
+                    <div class="odd-item" onclick="runPrediction(3, true, this)">
+                        <strong>➖ SAME</strong>
+                    </div>
+                </div>
+                <div id="predRes3" style="margin-top:15px; font-weight:bold; font-size:1.2rem; text-align:center;">
+                </div>
+            </div>
+
+            <!-- QUIZ SECTION -->
+            <!-- Slide 13: Quiz Intro -->
+            <div class="slide">
+                <h2>📝 Quiz Time!</h2>
+                <p>Let's test what you've learned!</p>
+                <div style="background:#f3e5f5; padding:30px; border-radius:20px; text-align:center;">
+                    <div style="font-size:4rem;">🧠</div>
+                    <p style="font-size:1.4rem; margin-top:20px;"><strong>5 Questions</strong> about Bending &
+                        Stretching</p>
+                </div>
+                <div style="margin-top:20px; font-size:1.2rem; font-weight:bold; color:#764ba2;">Score: <span
+                        id="quizScore">0</span>/5</div>
+            </div>
+
+            <!-- Slide 14: Q1 -->
+            <div class="slide">
+                <h2>Question 1</h2>
+                <p>What does <strong>STRETCHING</strong> mean?</p>
+                <div class="odd-grid">
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, false, 1)">
+                        <span class="odd-img">⬇️</span>
+                        <strong>Pushing down</strong>
+                    </div>
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, true, 1)">
+                        <span class="odd-img">↔️</span>
+                        <strong>Pulling longer</strong>
+                    </div>
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, false, 1)">
+                        <span class="odd-img">🔄</span>
+                        <strong>Turning around</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 15: Q2 -->
+            <div class="slide">
+                <h2>Question 2</h2>
+                <p>True or False: <strong>A rubber band is ELASTIC.</strong></p>
+                <div class="odd-grid">
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, true, 2)" style="background:#e8f5e9;">
+                        <span class="odd-img">✅</span>
+                        <strong>TRUE</strong>
+                    </div>
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, false, 2)" style="background:#ffebee;">
+                        <span class="odd-img">❌</span>
+                        <strong>FALSE</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 16: Q3 -->
+            <div class="slide">
+                <h2>Question 3</h2>
+                <p>Complete the sentence:</p>
+                <p style="font-size:1.4rem; background:#f5f5f5; padding:15px; border-radius:10px;">
+                    A pipe cleaner is <strong>_______</strong> because it bends easily.
+                </p>
+                <div class="odd-grid">
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, true, 3)">
+                        <strong>Flexible</strong>
+                    </div>
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, false, 3)">
+                        <strong>Rigid</strong>
+                    </div>
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, false, 3)">
+                        <strong>Heavy</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 17: Q4 Visual -->
+            <div class="slide">
+                <h2>Question 4</h2>
+                <p>Which action is shown?</p>
+                <div style="font-size:4rem; margin:20px 0;">📏 ➡️ 🌙</div>
+                <div class="odd-grid">
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, true, 4)">
+                        <strong>Bending</strong>
+                    </div>
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, false, 4)">
+                        <strong>Stretching</strong>
+                    </div>
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, false, 4)">
+                        <strong>Squashing</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 18: Q5 Application -->
+            <div class="slide">
+                <h2>Question 5</h2>
+                <p>Why are hair bobbles made of elastic material?</p>
+                <div class="odd-grid">
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, false, 5)">
+                        <strong>To look pretty</strong>
+                    </div>
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, true, 5)">
+                        <strong>To stretch around hair</strong>
+                    </div>
+                    <div class="odd-item quiz-opt" onclick="checkQuiz(this, false, 5)">
+                        <strong>To keep warm</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 19: Final Score -->
+            <div class="slide">
+                <h2>🎉 Your Results!</h2>
+                <div id="finalScoreBox"
+                    style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding:40px; border-radius:20px; color:white; text-align:center; flex:1; display:flex; flex-direction:column; justify-content:center;">
+                    <div style="font-size:4rem;" id="scoreStars">⭐⭐⭐⭐⭐</div>
+                    <p style="font-size:2.5rem; font-weight:bold; margin:20px 0;"><span id="finalScore">0</span>/5</p>
+                    <p id="scoreMessage" style="font-size:1.3rem;">Great work!</p>
+                </div>
+                <button class="btn btn-green" style="margin-top:20px;" onclick="resetQuiz()">🔄 Try Again</button>
+            </div>
+
+            <!-- Slide 20: Homework -->
+            <div class="slide">
+                <h2>📚 Homework Challenge</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; flex:1;">
+                    <div style="background:#e3f2fd; padding:20px; border-radius:16px; border-left:6px solid #2196f3;">
+                        <h3 style="color:#1565c0;">🏠 Task 1: Bending & Stretching Hunt</h3>
+                        <p style="text-align:left; font-size:1.05rem;">Find 4 objects at home:</p>
+                        <ul style="text-align:left; font-size:1rem; line-height:1.8;">
+                            <li>2 that <strong>BEND</strong></li>
+                            <li>2 that <strong>STRETCH</strong></li>
+                        </ul>
+                        <p style="font-size:0.9rem; color:#666; margin-top:10px;">📝 Record: Does each return to its
+                            original shape?</p>
+                    </div>
+                    <div style="background:#fff3e0; padding:20px; border-radius:16px; border-left:6px solid #ff9800;">
+                        <h3 style="color:#e65100;">💬 Task 2: Ask a Grown-Up</h3>
+                        <p style="text-align:left; font-size:1.05rem;">Discuss with a parent:</p>
+                        <p
+                            style="text-align:left; font-size:1.15rem; color:#764ba2; font-weight:bold; background:#f3e5f5; padding:12px; border-radius:8px; margin-top:10px;">
+                            "Why are spectacle frames made of flexible material instead of wood?"
+                        </p>
+                        <p style="font-size:0.9rem; color:#666; margin-top:10px;">🎯 Hint: Think about what happens when
+                            you put them on!</p>
+                    </div>
+                </div>
+                <p style="margin-top:15px; font-size:0.95rem; color:#888;">📅 Due: Before next lesson | ⭐ Bonus: Draw
+                    your objects!</p>
+            </div>
+
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-bar">
+            <button class="btn" onclick="changeSlide(-1)">⬅️ Back</button>
+            <button class="btn" onclick="changeSlide(1)">Next ➡️</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Audio Context
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+
+        function playSound(type) {
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'bend') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(150, audioCtx.currentTime + 0.3);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'stretch') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(500, audioCtx.currentTime + 0.4);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            } else if (type === 'snap') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.6, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } else if (type === 'boing') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.3);
+                gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.5);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+            }
+        }
+
+        // Slide Navigation
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides.forEach(s => s.classList.remove('active'));
+            if (n >= totalSlides) n = totalSlides - 1;
+            if (n < 0) n = 0;
+            currentSlide = n;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('slideNum').innerText = currentSlide + 1;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function changeSlide(d) { showSlide(currentSlide + d); }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+
+        // Bending Simulator (SVG Path Morphing)
+        let bendState = 0;
+        function doBend() {
+            const bendPath = document.getElementById('bendPath');
+            const ghostPath = document.getElementById('ghostPath');
+            const label = document.getElementById('bendLabel');
+
+            bendState = (bendState + 1) % 3;
+
+            if (bendState === 1) {
+                // Stage 1: Slight Bend (Curve upwards)
+                bendPath.setAttribute('d', 'M50,120 Q150,0 250,120');
+                label.innerText = 'Bending... (Flexible!)';
+                ghostPath.style.opacity = '0.3';
+                playSound('bend');
+            } else if (bendState === 2) {
+                // Stage 2: Strong Bend (U-shape)
+                bendPath.setAttribute('d', 'M80,120 Q150,-40 220,120');
+                label.innerText = 'Bent more! It stays bent!';
+                playSound('bend');
+            } else {
+                resetBend();
+            }
+        }
+
+        function resetBend() {
+            const bendPath = document.getElementById('bendPath');
+            const ghostPath = document.getElementById('ghostPath');
+            const label = document.getElementById('bendLabel');
+
+            // Reset to straight line
+            bendPath.setAttribute('d', 'M20,100 Q150,100 280,100');
+            label.innerText = 'Click to apply BENDING force!';
+            ghostPath.style.opacity = '0';
+            bendState = 0;
+        }
+
+        // Stretching Simulator
+        let stretchState = false;
+        function doStretch() {
+            const rb = document.getElementById('rubberBand');
+            const label = document.getElementById('stretchLabel');
+            rb.style.transform = 'scaleX(2)';
+            rb.innerText = '🔴➖➖🔴';
+            label.innerText = 'Stretching! (Elastic!)';
+            stretchState = true;
+            playSound('stretch');
+        }
+        function releaseStretch() {
+            const rb = document.getElementById('rubberBand');
+            const label = document.getElementById('stretchLabel');
+            rb.style.transform = 'scaleX(1)';
+            rb.innerText = '🔴';
+            label.innerText = 'BOING! It bounced back!';
+            playSound('boing');
+            stretchState = false;
+        }
+
+        // Odd One Out
+        function checkOdd(el, isCorrect, feedbackId) {
+            if (isCorrect) {
+                el.classList.add('correct');
+                el.innerHTML += "<br>✅ Correct!";
+                document.getElementById(feedbackId).innerText = "Spot on!";
+                document.getElementById(feedbackId).style.color = "#2CB67D";
+                playSound('correct');
+            } else {
+                el.classList.add('wrong');
+                el.innerHTML += "<br>❌ Try again";
+                playSound('wrong');
+            }
+        }
+
+        // Prediction Station
+        function runPrediction(id, isCorrect, el) {
+            const siblings = el.parentElement.querySelectorAll('.odd-item');
+            siblings.forEach(s => s.style.pointerEvents = 'none');
+
+            if (id === 1) { // Paper bends
+                document.getElementById('predPaper').style.transform = 'rotate(20deg) skewX(10deg)';
+                document.getElementById('predRes1').innerText = isCorrect ? '✅ Correct! Paper BENDS (flexible)' : '❌ Paper actually BENDS!';
+            } else if (id === 2) { // Stick snaps
+                const stick = document.getElementById('predStick');
+                stick.style.width = '50px';
+                stick.style.marginRight = '20px';
+                stick.insertAdjacentHTML('afterend', '<div style="width:50px; height:20px; background:#8d6e63; border-radius:3px;"></div>');
+                document.getElementById('predRes2').innerText = isCorrect ? '✅ Correct! Wood SNAPS (rigid)' : '❌ Wood actually SNAPS!';
+                playSound('snap');
+            } else if (id === 3) { // String doesn't stretch
+                document.getElementById('predRes3').innerText = isCorrect ? '✅ Correct! String doesn\'t stretch!' : '❌ String stays the SAME!';
+            }
+
+            document.getElementById('predRes' + id).style.color = isCorrect ? '#2CB67D' : '#e53935';
+            if (isCorrect) {
+                el.classList.add('correct');
+                playSound('correct');
+            } else {
+                el.classList.add('wrong');
+                playSound('wrong');
+            }
+        }
+
+        // Quiz Logic
+        let quizScore = 0;
+        const answeredQuestions = {};
+
+        function checkQuiz(el, isCorrect, qNum) {
+            if (answeredQuestions[qNum]) return;
+            answeredQuestions[qNum] = true;
+
+            const siblings = el.parentElement.querySelectorAll('.quiz-opt');
+            siblings.forEach(s => s.style.pointerEvents = 'none');
+
+            if (isCorrect) {
+                el.classList.add('correct');
+                el.innerHTML += "<br>✅ Correct!";
+                quizScore++;
+                playSound('correct');
+            } else {
+                el.classList.add('wrong');
+                el.innerHTML += "<br>❌ Wrong";
+                playSound('wrong');
+                siblings.forEach(s => {
+                    if (s.onclick.toString().includes('true')) {
+                        s.style.border = '3px solid #2CB67D';
+                    }
+                });
+            }
+
+            document.getElementById('quizScore').innerText = quizScore;
+            setTimeout(() => changeSlide(1), 1500);
+
+            if (Object.keys(answeredQuestions).length === 5) {
+                updateFinalScore();
+            }
+        }
+
+        function updateFinalScore() {
+            document.getElementById('finalScore').innerText = quizScore;
+            const stars = '⭐'.repeat(quizScore) + '☆'.repeat(5 - quizScore);
+            document.getElementById('scoreStars').innerText = stars;
+
+            let msg = '';
+            if (quizScore === 5) msg = "PERFECT! Material Master! 🏆";
+            else if (quizScore >= 4) msg = "Excellent work! 🌟";
+            else if (quizScore >= 3) msg = "Good job! Keep learning! 👍";
+            else if (quizScore >= 2) msg = "Nice try! Review the lesson! 📖";
+            else msg = "Let's try again! 💪";
+
+            document.getElementById('scoreMessage').innerText = msg;
+        }
+
+        function resetQuiz() {
+            quizScore = 0;
+            Object.keys(answeredQuestions).forEach(k => delete answeredQuestions[k]);
+
+            document.querySelectorAll('.quiz-opt').forEach(opt => {
+                opt.classList.remove('correct', 'wrong');
+                opt.style.pointerEvents = 'auto';
+                opt.style.border = '3px solid #eee';
+                const br = opt.querySelector('br');
+                if (br) { br.nextSibling?.remove(); br.remove(); }
+            });
+
+            document.getElementById('quizScore').innerText = '0';
+            showSlide(12); // Quiz intro
+        }
+
+        showSlide(0);
+    </script>
+</body>
+
+</html>
