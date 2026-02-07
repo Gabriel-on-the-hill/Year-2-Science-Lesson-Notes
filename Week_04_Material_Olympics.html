@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 4: Material Olympics 🏅</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        .slide-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #f1c40f, #e74c3c, #f1c40f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #f1c40f;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: #3498db;
+            margin: 15px 0;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.6);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #f1c40f, #f39c12);
+            box-shadow: 0 5px 20px rgba(241, 196, 15, 0.4);
+        }
+
+        .btn-gold:hover {
+            box-shadow: 0 8px 25px rgba(241, 196, 15, 0.6);
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        /* Data Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 10px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(52, 152, 219, 0.3);
+            font-weight: bold;
+            color: #f1c40f;
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+
+        /* Olympics Theme */
+        .olympic-rings {
+            font-size: 3rem;
+            margin: 20px 0;
+            letter-spacing: 5px;
+        }
+
+        .pigs-athletes {
+            font-size: 4rem;
+            margin: 20px 0;
+        }
+
+        /* Vocabulary Cards */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .flip-card {
+            perspective: 1000px;
+            height: 140px;
+            cursor: pointer;
+        }
+
+        .flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-front,
+        .flip-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .flip-front {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .flip-back {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            transform: rotateY(180deg);
+        }
+
+        .flip-front h4 {
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .flip-back p {
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        /* Material Buttons */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .material-btn {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .material-btn:hover {
+            transform: scale(1.05);
+            border-color: #f1c40f;
+            background: rgba(241, 196, 15, 0.2);
+        }
+
+        .material-btn.tested {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.2);
+        }
+
+        .material-btn .icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .material-btn .name {
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        /* Test Stage */
+        .test-stage {
+            background: linear-gradient(180deg, #2c3e50, #1a252f);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            min-height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .test-object {
+            font-size: 5rem;
+            transition: all 0.5s ease;
+            display: inline-block;
+        }
+
+        .test-object.bend {
+            transform: rotate(30deg) scaleX(1.2);
+        }
+
+        .test-object.snap {
+            animation: snapAnim 0.3s ease forwards;
+        }
+
+        @keyframes snapAnim {
+            0% {
+                transform: rotate(0);
+            }
+
+            50% {
+                transform: rotate(45deg);
+            }
+
+            100% {
+                transform: rotate(45deg) translateX(20px);
+                opacity: 0.5;
+            }
+        }
+
+        .test-object.stretch {
+            transform: scaleX(2);
+        }
+
+        .test-object.squash {
+            transform: scaleY(0.3) scaleX(1.5);
+        }
+
+        .test-object.twist {
+            transform: rotate(180deg) scaleX(0.8);
+        }
+
+        .test-object.bounce-back {
+            animation: bounceBack 0.5s ease;
+        }
+
+        @keyframes bounceBack {
+            0% {
+                transform: scaleY(0.3) scaleX(1.5);
+            }
+
+            50% {
+                transform: scaleY(1.2) scaleX(0.9);
+            }
+
+            100% {
+                transform: scaleY(1) scaleX(1);
+            }
+        }
+
+        /* Result Display */
+        .result-display {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 80px;
+        }
+
+        .result-display.success {
+            border: 2px solid #2ecc71;
+            background: rgba(46, 204, 113, 0.1);
+        }
+
+        .result-display.fail {
+            border: 2px solid #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.95rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .data-table th {
+            background: rgba(241, 196, 15, 0.3);
+            color: #f1c40f;
+        }
+
+        .data-table td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Quiz Styles */
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .quiz-btn {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .quiz-btn:hover {
+            background: rgba(52, 152, 219, 0.3);
+            border-color: #3498db;
+        }
+
+        /* Medal Display */
+        .medal-display {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .medal {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            min-width: 150px;
+        }
+
+        .medal .icon {
+            font-size: 3rem;
+        }
+
+        .medal .label {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: #f1c40f;
+        }
+
+        .medal .winner {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f1c40f, #e74c3c);
+            transition: width 0.3s ease;
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(241, 196, 15, 0.3);
+            border-color: #f1c40f;
+        }
+
+        /* Stretch-O-Meter */
+        .stretch-meter {
+            background: linear-gradient(90deg, #2ecc71, #f1c40f, #e74c3c);
+            height: 30px;
+            border-radius: 15px;
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stretch-marker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            width: 5px;
+            transition: left 0.5s ease;
+        }
+
+        .stretch-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        /* Prediction Bubble */
+        .prediction-bubble {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            border-radius: 20px;
+            padding: 15px 25px;
+            display: inline-block;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .prediction-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #8e44ad;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 11%;"></div>
+    </div>
+
+    <div class="slide-container">
+        <!-- SLIDE 1: Mission Briefing -->
+        <div class="slide active">
+            <div class="card">
+                <div class="olympic-rings">🔵🟡⚫🟢🔴</div>
+                <h1>The Material Olympics! 🏅</h1>
+                <div class="pigs-athletes">🐷🏃‍♂️ 🐷🏋️ 🐷🤸</div>
+                <p>The Three Little Pigs are training for the <strong>Material Olympics!</strong></p>
+                <p>They need YOUR help to investigate which materials can <strong>BEND, STRETCH, TWIST, and
+                        SQUASH!</strong></p>
+                <div style="background: rgba(241, 196, 15, 0.2); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <h3>🎯 Today's Mission</h3>
+                    <p style="margin: 0;">Test different materials and find the <strong>CHAMPIONS</strong> of each
+                        event!</p>
+                </div>
+                <button class="btn btn-gold" onclick="nextSlide()">Start Training! 🏅</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: Fair Test Review + Investigation Setup -->
+        <div class="slide">
+            <div class="card">
+                <h2>🔬 Scientist's Briefing</h2>
+                <p>Remember what we learned last week? Today we <strong>INVESTIGATE!</strong></p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                    <div style="background: rgba(52, 152, 219, 0.2); padding: 20px; border-radius: 15px;">
+                        <h3>📋 Fair Test Rules</h3>
+                        <p>To make it FAIR, we must:</p>
+                        <ul style="text-align: left; margin: 10px 0;">
+                            <li>Test each material the <strong>same way</strong></li>
+                            <li>Only change <strong>one thing</strong> (the material)</li>
+                            <li>Record our <strong>results</strong></li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(241, 196, 15, 0.2); padding: 20px; border-radius: 15px;">
+                        <h3>🎯 Today's Question</h3>
+                        <p style="font-size: 1.3rem; font-weight: bold; color: #f1c40f;">
+                            "Which materials change shape BEST?"
+                        </p>
+                        <p>We will test: BEND, STRETCH, TWIST, SQUASH</p>
+                    </div>
+                </div>
+
+                <div style="background: rgba(46, 204, 113, 0.2); padding: 20px; border-radius: 15px; margin: 10px 0;">
+                    <h3>📝 Scientist's Method</h3>
+                    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                        <div style="text-align: center;">
+                            <span style="font-size: 2rem;">1️⃣</span>
+                            <p><strong>PREDICT</strong><br>What do you think will happen?</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <span style="font-size: 2rem;">2️⃣</span>
+                            <p><strong>TEST</strong><br>Try it and see!</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <span style="font-size: 2rem;">3️⃣</span>
+                            <p><strong>RECORD</strong><br>Was your prediction right?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-gold" onclick="nextSlide()">Start Investigation! 🔬</button>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 3: Bend Challenge -->
+        <div class="slide">
+            <div class="card">
+                <h2>🏋️ Event 1: The Bend Challenge</h2>
+
+                <!-- Step 1: Select material -->
+                <div id="bendStep1">
+                    <h3>📋 Step 1: Pick a material to test</h3>
+                    <div class="materials-grid" id="bendMaterials">
+                        <div class="material-btn" onclick="selectBendMaterial('pipe', '🧹', 'Pipe Cleaner', true)">
+                            <span class="icon">🧹</span>
+                            <span class="name">Pipe Cleaner</span>
+                        </div>
+                        <div class="material-btn" onclick="selectBendMaterial('pencil', '✏️', 'Pencil', false)">
+                            <span class="icon">✏️</span>
+                            <span class="name">Pencil</span>
+                        </div>
+                        <div class="material-btn" onclick="selectBendMaterial('straw', '🥤', 'Drinking Straw', true)">
+                            <span class="icon">🥤</span>
+                            <span class="name">Drinking Straw</span>
+                        </div>
+                        <div class="material-btn" onclick="selectBendMaterial('cardboard', '📦', 'Cardboard', true)">
+                            <span class="icon">📦</span>
+                            <span class="name">Cardboard</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Make prediction -->
+                <div id="bendStep2" style="display: none;">
+                    <h3>🤔 Step 2: Make your PREDICTION</h3>
+                    <p>You selected: <strong id="bendSelectedName"></strong></p>
+                    <p>What do you think will happen when we try to BEND it?</p>
+                    <div style="display: flex; gap: 20px; justify-content: center; margin: 15px 0;">
+                        <button class="btn btn-green" onclick="makeBendPrediction('bend')"
+                            style="font-size: 1.5rem; padding: 20px 40px;">
+                            〰️ It will BEND
+                        </button>
+                        <button class="btn" onclick="makeBendPrediction('snap')"
+                            style="font-size: 1.5rem; padding: 20px 40px; background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                            💥 It will SNAP
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Test and see result -->
+                <div id="bendStep3" style="display: none;">
+                    <h3>🧪 Step 3: TEST it!</h3>
+                    <div class="test-stage">
+                        <div class="test-object" id="bendObject">❓</div>
+                    </div>
+                    <button class="btn btn-gold" onclick="runBendTest()" id="runBendBtn">Try to BEND it! 💪</button>
+                    <div class="result-display" id="bendResult" style="margin-top: 15px;">
+                        <p>Press the button to test!</p>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div style="margin-top: 20px;">
+                    <h3>📊 Scientist's Data Table</h3>
+                    <table class="data-table" id="bendDataTable">
+                        <tr>
+                            <th>Material</th>
+                            <th>Prediction</th>
+                            <th>Result</th>
+                            <th>Correct?</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <button class="btn btn-gold" onclick="nextSlide()" id="bendNext"
+                    style="display: none; margin-top: 15px;">
+                    On to Stretch Challenge! 🤸
+                </button>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 4: Stretch Challenge -->
+        <div class="slide">
+            <div class="card">
+                <h2>🤸 Event 2: The Stretch Challenge</h2>
+
+                <!-- Step 1: Select material -->
+                <div id="stretchStep1">
+                    <h3>📋 Step 1: Pick a material to test</h3>
+                    <div class="materials-grid">
+                        <div class="material-btn" onclick="selectStretchMaterial('rubber', '🔴', 'Rubber Band', true)">
+                            <span class="icon">🔴</span>
+                            <span class="name">Rubber Band</span>
+                        </div>
+                        <div class="material-btn" onclick="selectStretchMaterial('string', '🧵', 'String', false)">
+                            <span class="icon">🧵</span>
+                            <span class="name">String</span>
+                        </div>
+                        <div class="material-btn" onclick="selectStretchMaterial('balloon', '🎈', 'Balloon', true)">
+                            <span class="icon">🎈</span>
+                            <span class="name">Balloon</span>
+                        </div>
+                        <div class="material-btn" onclick="selectStretchMaterial('sock', '🧦', 'Sock', true)">
+                            <span class="icon">🧦</span>
+                            <span class="name">Sock</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Make prediction -->
+                <div id="stretchStep2" style="display: none;">
+                    <h3>🤔 Step 2: Make your PREDICTION</h3>
+                    <p>You selected: <strong id="stretchSelectedName"></strong></p>
+                    <p>What do you think will happen after we STRETCH it?</p>
+                    <div style="display: flex; gap: 20px; justify-content: center; margin: 15px 0;">
+                        <button class="btn btn-green" onclick="makeStretchPrediction('elastic')"
+                            style="font-size: 1.2rem; padding: 15px 25px;">
+                            🔄 It will BOUNCE BACK
+                        </button>
+                        <button class="btn" onclick="makeStretchPrediction('stays')"
+                            style="font-size: 1.2rem; padding: 15px 25px; background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                            ➡️ It will STAY stretched
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Test -->
+                <div id="stretchStep3" style="display: none;">
+                    <h3>🧪 Step 3: TEST it!</h3>
+                    <div class="test-stage">
+                        <div class="test-object" id="stretchObject">❓</div>
+                        <div class="stretch-meter">
+                            <div class="stretch-marker" id="stretchMarker"></div>
+                        </div>
+                        <div class="stretch-labels">
+                            <span>0 cm</span><span>5 cm</span><span>10 cm</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-gold" onclick="runStretchTest()" id="runStretchBtn">STRETCH it! ↔️</button>
+                    <div class="result-display" id="stretchResult" style="margin-top: 15px;">
+                        <p>Press the button to stretch!</p>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div style="margin-top: 20px;">
+                    <h3>📊 Scientist's Data Table</h3>
+                    <table class="data-table" id="stretchDataTable">
+                        <tr>
+                            <th>Material</th>
+                            <th>Prediction</th>
+                            <th>Result</th>
+                            <th>Correct?</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <button class="btn btn-gold" onclick="nextSlide()" id="stretchNext"
+                    style="display: none; margin-top: 15px;">
+                    On to Twist Challenge! 🌀
+                </button>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 5: Twist Challenge -->
+        <div class="slide">
+            <div class="card">
+                <h2>🌀 Event 3: The Twist Challenge</h2>
+
+                <!-- Step 1: Select material -->
+                <div id="twistStep1">
+                    <h3>📋 Step 1: Pick a material to test</h3>
+                    <div class="materials-grid">
+                        <div class="material-btn" onclick="selectTwistMaterial('wire', '🔩', 'Wire', 'twist')">
+                            <span class="icon">🔩</span>
+                            <span class="name">Wire</span>
+                        </div>
+                        <div class="material-btn" onclick="selectTwistMaterial('paper', '📄', 'Paper', 'tear')">
+                            <span class="icon">📄</span>
+                            <span class="name">Paper</span>
+                        </div>
+                        <div class="material-btn" onclick="selectTwistMaterial('tshirt', '👕', 'T-Shirt', 'elastic')">
+                            <span class="icon">👕</span>
+                            <span class="name">T-Shirt</span>
+                        </div>
+                        <div class="material-btn" onclick="selectTwistMaterial('chopstick', '🥢', 'Chopstick', 'snap')">
+                            <span class="icon">🥢</span>
+                            <span class="name">Chopstick</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Make prediction -->
+                <div id="twistStep2" style="display: none;">
+                    <h3>🤔 Step 2: Make your PREDICTION</h3>
+                    <p>You selected: <strong id="twistSelectedName"></strong></p>
+                    <p>What do you think will happen when we TWIST it?</p>
+                    <div style="display: flex; gap: 15px; justify-content: center; margin: 15px 0; flex-wrap: wrap;">
+                        <button class="btn btn-green" onclick="makeTwistPrediction('twist')"
+                            style="padding: 15px 20px;">
+                            🌀 It will TWIST
+                        </button>
+                        <button class="btn" onclick="makeTwistPrediction('snap')"
+                            style="padding: 15px 20px; background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                            💥 It will SNAP
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Test -->
+                <div id="twistStep3" style="display: none;">
+                    <h3>🧪 Step 3: TEST it!</h3>
+                    <div class="test-stage">
+                        <div class="test-object" id="twistObject">❓</div>
+                    </div>
+                    <button class="btn btn-gold" onclick="runTwistTest()" id="runTwistBtn">TWIST it! 🌀</button>
+                    <div class="result-display" id="twistResult" style="margin-top: 15px;">
+                        <p>Press the button to twist!</p>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div style="margin-top: 20px;">
+                    <h3>📊 Scientist's Data Table</h3>
+                    <table class="data-table" id="twistDataTable">
+                        <tr>
+                            <th>Material</th>
+                            <th>Prediction</th>
+                            <th>Result</th>
+                            <th>Correct?</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <button class="btn btn-gold" onclick="nextSlide()" id="twistNext"
+                    style="display: none; margin-top: 15px;">
+                    On to Squash Challenge! 👊
+                </button>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 6: Squash Challenge -->
+        <div class="slide">
+            <div class="card">
+                <h2>👊 Event 4: The Squash Challenge</h2>
+
+                <!-- Step 1: Select material -->
+                <div id="squashStep1">
+                    <h3>📋 Step 1: Pick a material to test</h3>
+                    <div class="materials-grid">
+                        <div class="material-btn" onclick="selectSquashMaterial('playdoh', '🔴', 'Play-Doh', 'stays')">
+                            <span class="icon">🔴</span>
+                            <span class="name">Play-Doh</span>
+                        </div>
+                        <div class="material-btn" onclick="selectSquashMaterial('sponge', '🧽', 'Sponge', 'elastic')">
+                            <span class="icon">🧽</span>
+                            <span class="name">Sponge</span>
+                        </div>
+                        <div class="material-btn" onclick="selectSquashMaterial('rock', '🪨', 'Rock', 'rigid')">
+                            <span class="icon">🪨</span>
+                            <span class="name">Rock</span>
+                        </div>
+                        <div class="material-btn" onclick="selectSquashMaterial('ball', '⚽', 'Rubber Ball', 'elastic')">
+                            <span class="icon">⚽</span>
+                            <span class="name">Rubber Ball</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Make prediction -->
+                <div id="squashStep2" style="display: none;">
+                    <h3>🤔 Step 2: Make your PREDICTION</h3>
+                    <p>You selected: <strong id="squashSelectedName"></strong></p>
+                    <p>What do you think will happen after we SQUASH it?</p>
+                    <div style="display: flex; gap: 15px; justify-content: center; margin: 15px 0; flex-wrap: wrap;">
+                        <button class="btn btn-green" onclick="makeSquashPrediction('elastic')"
+                            style="padding: 15px 20px;">
+                            🔄 It will BOUNCE BACK
+                        </button>
+                        <button class="btn" onclick="makeSquashPrediction('stays')"
+                            style="padding: 15px 20px; background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                            👊 It will STAY squashed
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Test -->
+                <div id="squashStep3" style="display: none;">
+                    <h3>🧪 Step 3: TEST it!</h3>
+                    <div class="test-stage">
+                        <div class="test-object" id="squashObject">❓</div>
+                    </div>
+                    <button class="btn btn-gold" onclick="runSquashTest()" id="runSquashBtn">SQUASH it! 👊</button>
+                    <div class="result-display" id="squashResult" style="margin-top: 15px;">
+                        <p>Press the button to squash!</p>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div style="margin-top: 20px;">
+                    <h3>📊 Scientist's Data Table</h3>
+                    <table class="data-table" id="squashDataTable">
+                        <tr>
+                            <th>Material</th>
+                            <th>Prediction</th>
+                            <th>Result</th>
+                            <th>Correct?</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <button class="btn btn-gold" onclick="nextSlide()" id="squashNext"
+                    style="display: none; margin-top: 15px;">
+                    See the Results! 🏆
+                </button>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 7: Medal Ceremony -->
+        <div class="slide">
+            <div class="card">
+                <h2>🏆 Medal Ceremony!</h2>
+                <p>Based on your tests, here are the <strong>Olympic Champions!</strong></p>
+                <div class="medal-display">
+                    <div class="medal">
+                        <div class="icon">🏋️</div>
+                        <div class="label">Best Bender</div>
+                        <div class="winner">🧶 Fabric</div>
+                    </div>
+                    <div class="medal">
+                        <div class="icon">🤸</div>
+                        <div class="label">Super Stretcher</div>
+                        <div class="winner">🔴 Rubber Band</div>
+                    </div>
+                    <div class="medal">
+                        <div class="icon">🌀</div>
+                        <div class="label">Twist Champion</div>
+                        <div class="winner">🔩 Wire</div>
+                    </div>
+                    <div class="medal">
+                        <div class="icon">👊</div>
+                        <div class="label">Squash Master</div>
+                        <div class="winner">🧽 Sponge</div>
+                    </div>
+                </div>
+                <div style="background: rgba(46, 204, 113, 0.2); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <h3>🔑 Key Discoveries</h3>
+                    <p><strong>ELASTIC</strong> materials (Rubber, Sponge) bounce back to their shape!</p>
+                    <p>Some materials (Play-Doh, Wire) <strong>keep their new shape</strong> - they don't bounce back!
+                    </p>
+                    <p><strong>RIGID</strong> materials (Rock, Wood) don't change - they might SNAP!</p>
+                </div>
+                <button class="btn btn-gold" onclick="nextSlide()">Take the Quiz! 📝</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Olympic Quiz -->
+        <div class="slide">
+            <div class="card">
+                <h2>📝 Olympic Quiz!</h2>
+                <div id="quizContainer">
+                    <p id="quizQuestion" style="font-size: 1.3rem; margin-bottom: 20px;"></p>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <p id="quizFeedback" style="font-size: 1.2rem; font-weight: bold; min-height: 30px;"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Victory -->
+        <div class="slide">
+            <div class="card">
+                <h1>🎉 VICTORY! 🎉</h1>
+                <div style="font-size: 6rem; margin: 20px 0;">🏅</div>
+                <h2>Congratulations, Material Scientist Emmanuel!</h2>
+                <p>You successfully investigated which materials can <strong>BEND, STRETCH, TWIST, and SQUASH!</strong>
+                </p>
+                <div style="background: rgba(241, 196, 15, 0.2); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <h3>🏠 Homework Challenge</h3>
+                    <p>Find <strong>3 things</strong> at home and test them:</p>
+                    <p>Can they BEND? STRETCH? TWIST? SQUASH?</p>
+                    <p>Are they <strong>Elastic</strong> (bounces back) or <strong>Rigid</strong> (doesn't change)?</p>
+                </div>
+                <div style="font-size: 3rem;">🐷🏆🐷🏆🐷</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="prevSlide()">⬅️</button>
+        <button class="nav-btn" onclick="nextSlide()">➡️</button>
+    </div>
+
+    <script>
+        // --- Audio Context ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+
+        function playTone(freq, type, duration) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            switch (type) {
+                case 'success':
+                    playTone(523, 'sine', 0.1);
+                    setTimeout(() => playTone(659, 'sine', 0.1), 100);
+                    setTimeout(() => playTone(784, 'sine', 0.2), 200);
+                    break;
+                case 'snap':
+                    playTone(200, 'sawtooth', 0.1);
+                    playTone(100, 'square', 0.15);
+                    break;
+                case 'click':
+                    playTone(800, 'sine', 0.05);
+                    break;
+                case 'stretch':
+                    playTone(300, 'sine', 0.3);
+                    setTimeout(() => playTone(500, 'sine', 0.3), 300);
+                    break;
+                case 'bounce':
+                    playTone(400, 'sine', 0.1);
+                    setTimeout(() => playTone(600, 'sine', 0.1), 100);
+                    break;
+            }
+        }
+
+        // --- Slide Navigation ---
+        let currentSlide = 0;
+        const totalSlides = 9;
+
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (i === index) s.classList.add('active');
+            });
+            document.getElementById('progressFill').style.width = ((index + 1) / totalSlides * 100) + '%';
+
+            // Initialize quiz when reaching that slide
+            if (index === 7) loadQuizQuestion();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+                playSound('click');
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+                playSound('click');
+            }
+        }
+
+        // --- Vocabulary Cards ---
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+            playSound('click');
+        }
+
+        // --- Challenge Trackers ---
+        let bendTested = 0;
+        let stretchTested = 0;
+        let twistTested = 0;
+        let squashTested = 0;
+
+        // --- Bend Challenge (Step-Based Investigation) ---
+        let currentBendMaterial = null;
+        let currentBendIcon = '';
+        let currentBendName = '';
+        let currentBendCanBend = false;
+        let currentBendPrediction = '';
+
+        function selectBendMaterial(material, icon, name, canBend) {
+            currentBendMaterial = material;
+            currentBendIcon = icon;
+            currentBendName = name;
+            currentBendCanBend = canBend;
+
+            // Update display
+            document.getElementById('bendSelectedName').innerText = icon + ' ' + name;
+            document.getElementById('bendObject').innerText = icon;
+
+            // Move to step 2
+            document.getElementById('bendStep1').style.display = 'none';
+            document.getElementById('bendStep2').style.display = 'block';
+            playSound('click');
+        }
+
+        function makeBendPrediction(prediction) {
+            currentBendPrediction = prediction;
+
+            // Move to step 3
+            document.getElementById('bendStep2').style.display = 'none';
+            document.getElementById('bendStep3').style.display = 'block';
+            playSound('click');
+        }
+
+        function runBendTest() {
+            const obj = document.getElementById('bendObject');
+            const result = document.getElementById('bendResult');
+            const actualResult = currentBendCanBend ? 'bend' : 'snap';
+            const predictionCorrect = currentBendPrediction === actualResult;
+
+            obj.className = 'test-object';
+
+            setTimeout(() => {
+                if (currentBendCanBend) {
+                    obj.classList.add('bend');
+                    result.className = 'result-display success';
+                    result.innerHTML = `<p>✅ <strong>${currentBendIcon} BENDS!</strong></p><p>This material is flexible - it curves without breaking!</p>`;
+                    playSound('success');
+                } else {
+                    obj.classList.add('snap');
+                    result.className = 'result-display fail';
+                    result.innerHTML = `<p>💥 <strong>${currentBendIcon} SNAPS!</strong></p><p>This material is RIGID - it breaks instead of bending!</p>`;
+                    playSound('snap');
+                }
+
+                // Add row to data table
+                const table = document.getElementById('bendDataTable');
+                const row = table.insertRow();
+                row.innerHTML = `
+                    <td>${currentBendIcon} ${currentBendName}</td>
+                    <td>${currentBendPrediction === 'bend' ? '〰️ Bend' : '💥 Snap'}</td>
+                    <td>${actualResult === 'bend' ? '〰️ Bend' : '💥 Snap'}</td>
+                    <td>${predictionCorrect ? '✅' : '❌'}</td>
+                `;
+
+                bendTested++;
+
+                // Reset for next material or show complete button
+                setTimeout(() => {
+                    if (bendTested >= 3) {
+                        document.getElementById('bendNext').style.display = 'inline-block';
+                    }
+
+                    // Reset to step 1 for next material
+                    document.getElementById('bendStep3').style.display = 'none';
+                    document.getElementById('bendStep1').style.display = 'block';
+                    document.getElementById('bendObject').innerText = '❓';
+                    result.innerHTML = '<p>Test another material!</p>';
+                }, 1500);
+            }, 500);
+
+            document.getElementById('runBendBtn').disabled = true;
+            setTimeout(() => {
+                document.getElementById('runBendBtn').disabled = false;
+            }, 2000);
+        }
+
+
+        // --- Stretch Challenge (Step-Based Investigation) ---
+        let currentStretchMaterial = null;
+        let currentStretchIcon = '';
+        let currentStretchName = '';
+        let currentStretchBouncesBack = false;
+        let currentStretchPrediction = '';
+
+        function selectStretchMaterial(material, icon, name, bouncesBack) {
+            currentStretchMaterial = material;
+            currentStretchIcon = icon;
+            currentStretchName = name;
+            currentStretchBouncesBack = bouncesBack;
+
+            document.getElementById('stretchSelectedName').innerText = icon + ' ' + name;
+            document.getElementById('stretchObject').innerText = icon;
+
+            document.getElementById('stretchStep1').style.display = 'none';
+            document.getElementById('stretchStep2').style.display = 'block';
+            playSound('click');
+        }
+
+        function makeStretchPrediction(prediction) {
+            currentStretchPrediction = prediction;
+            document.getElementById('stretchStep2').style.display = 'none';
+            document.getElementById('stretchStep3').style.display = 'block';
+            playSound('click');
+        }
+
+        function runStretchTest() {
+            const obj = document.getElementById('stretchObject');
+            const marker = document.getElementById('stretchMarker');
+            const result = document.getElementById('stretchResult');
+            const actualResult = currentStretchBouncesBack ? 'elastic' : 'stays';
+            const predictionCorrect = currentStretchPrediction === actualResult;
+
+            playSound('stretch');
+            marker.style.left = '70%';
+            obj.classList.add('stretch');
+
+            setTimeout(() => {
+                if (currentStretchBouncesBack) {
+                    obj.classList.remove('stretch');
+                    marker.style.left = '0%';
+                    result.className = 'result-display success';
+                    result.innerHTML = `<p>🔄 <strong>${currentStretchIcon} BOUNCED BACK!</strong></p><p>This material is ELASTIC!</p>`;
+                    playSound('bounce');
+                } else {
+                    result.className = 'result-display';
+                    result.innerHTML = `<p>➡️ <strong>${currentStretchIcon} stayed stretched!</strong></p><p>This material <strong>keeps its new shape</strong>!</p>`;
+                }
+
+                // Add to data table
+                const table = document.getElementById('stretchDataTable');
+                const row = table.insertRow();
+                row.innerHTML = `
+                    <td>${currentStretchIcon} ${currentStretchName}</td>
+                    <td>${currentStretchPrediction === 'elastic' ? '🔄 Bounces back' : '➡️ Stays'}</td>
+                    <td>${actualResult === 'elastic' ? '🔄 Bounced back' : '➡️ Stayed'}</td>
+                    <td>${predictionCorrect ? '✅' : '❌'}</td>
+                `;
+
+                stretchTested++;
+
+                setTimeout(() => {
+                    if (stretchTested >= 3) {
+                        document.getElementById('stretchNext').style.display = 'inline-block';
+                    }
+                    document.getElementById('stretchStep3').style.display = 'none';
+                    document.getElementById('stretchStep1').style.display = 'block';
+                    document.getElementById('stretchObject').innerText = '❓';
+                    marker.style.left = '0%';
+                }, 1500);
+            }, 800);
+        }
+
+        // --- Twist Challenge (Step-Based Investigation) ---
+        let currentTwistMaterial = null;
+        let currentTwistIcon = '';
+        let currentTwistName = '';
+        let currentTwistActualResult = '';
+        let currentTwistPrediction = '';
+
+        function selectTwistMaterial(material, icon, name, actualResult) {
+            currentTwistMaterial = material;
+            currentTwistIcon = icon;
+            currentTwistName = name;
+            currentTwistActualResult = actualResult;
+
+            document.getElementById('twistSelectedName').innerText = icon + ' ' + name;
+            document.getElementById('twistObject').innerText = icon;
+
+            document.getElementById('twistStep1').style.display = 'none';
+            document.getElementById('twistStep2').style.display = 'block';
+            playSound('click');
+        }
+
+        function makeTwistPrediction(prediction) {
+            currentTwistPrediction = prediction;
+            document.getElementById('twistStep2').style.display = 'none';
+            document.getElementById('twistStep3').style.display = 'block';
+            playSound('click');
+        }
+
+        function runTwistTest() {
+            const obj = document.getElementById('twistObject');
+            const result = document.getElementById('twistResult');
+            const predictionCorrect = currentTwistPrediction === currentTwistActualResult ||
+                (currentTwistPrediction === 'twist' && (currentTwistActualResult === 'twist' || currentTwistActualResult === 'elastic'));
+
+            setTimeout(() => {
+                if (currentTwistActualResult === 'elastic') {
+                    obj.classList.add('twist');
+                    result.className = 'result-display success';
+                    result.innerHTML = `<p>🔄 <strong>${currentTwistIcon} TWISTED and bounced back!</strong></p><p>ELASTIC material!</p>`;
+                    playSound('bounce');
+                } else if (currentTwistActualResult === 'twist') {
+                    obj.classList.add('twist');
+                    result.className = 'result-display';
+                    result.innerHTML = `<p>🌀 <strong>${currentTwistIcon} TWISTED and stayed!</strong></p><p>Keeps its new shape!</p>`;
+                } else if (currentTwistActualResult === 'tear') {
+                    obj.classList.add('snap');
+                    result.className = 'result-display fail';
+                    result.innerHTML = `<p>📄 <strong>${currentTwistIcon} TORE!</strong></p><p>Too thin to twist!</p>`;
+                    playSound('snap');
+                } else {
+                    obj.classList.add('snap');
+                    result.className = 'result-display fail';
+                    result.innerHTML = `<p>💥 <strong>${currentTwistIcon} SNAPPED!</strong></p><p>RIGID - too stiff!</p>`;
+                    playSound('snap');
+                }
+
+                const table = document.getElementById('twistDataTable');
+                const row = table.insertRow();
+                const resultText = currentTwistActualResult === 'elastic' ? '🔄 Twisted+bounced' :
+                    currentTwistActualResult === 'twist' ? '🌀 Twisted+stayed' : '💥 Broke';
+                row.innerHTML = `
+                    <td>${currentTwistIcon} ${currentTwistName}</td>
+                    <td>${currentTwistPrediction === 'twist' ? '🌀 Twist' : '💥 Snap'}</td>
+                    <td>${resultText}</td>
+                    <td>${predictionCorrect ? '✅' : '❌'}</td>
+                `;
+
+                twistTested++;
+
+                setTimeout(() => {
+                    if (twistTested >= 3) {
+                        document.getElementById('twistNext').style.display = 'inline-block';
+                    }
+                    document.getElementById('twistStep3').style.display = 'none';
+                    document.getElementById('twistStep1').style.display = 'block';
+                    document.getElementById('twistObject').innerText = '❓';
+                    obj.className = 'test-object';
+                }, 1500);
+            }, 500);
+        }
+
+        // --- Squash Challenge (Step-Based Investigation) ---
+        let currentSquashMaterial = null;
+        let currentSquashIcon = '';
+        let currentSquashName = '';
+        let currentSquashActualResult = '';
+        let currentSquashPrediction = '';
+
+        function selectSquashMaterial(material, icon, name, actualResult) {
+            currentSquashMaterial = material;
+            currentSquashIcon = icon;
+            currentSquashName = name;
+            currentSquashActualResult = actualResult;
+
+            document.getElementById('squashSelectedName').innerText = icon + ' ' + name;
+            document.getElementById('squashObject').innerText = icon;
+
+            document.getElementById('squashStep1').style.display = 'none';
+            document.getElementById('squashStep2').style.display = 'block';
+            playSound('click');
+        }
+
+        function makeSquashPrediction(prediction) {
+            currentSquashPrediction = prediction;
+            document.getElementById('squashStep2').style.display = 'none';
+            document.getElementById('squashStep3').style.display = 'block';
+            playSound('click');
+        }
+
+        function runSquashTest() {
+            const obj = document.getElementById('squashObject');
+            const result = document.getElementById('squashResult');
+            const predictionCorrect = currentSquashPrediction === currentSquashActualResult;
+
+            obj.classList.add('squash');
+
+            setTimeout(() => {
+                if (currentSquashActualResult === 'elastic') {
+                    obj.classList.remove('squash');
+                    obj.classList.add('bounce-back');
+                    result.className = 'result-display success';
+                    result.innerHTML = `<p>🔄 <strong>${currentSquashIcon} BOUNCED BACK!</strong></p><p>ELASTIC material!</p>`;
+                    playSound('bounce');
+                } else if (currentSquashActualResult === 'stays') {
+                    result.className = 'result-display';
+                    result.innerHTML = `<p>👊 <strong>${currentSquashIcon} stayed SQUASHED!</strong></p><p>Keeps its new shape!</p>`;
+                } else {
+                    obj.classList.remove('squash');
+                    result.className = 'result-display fail';
+                    result.innerHTML = `<p>🪨 <strong>${currentSquashIcon} didn't change!</strong></p><p>RIGID - too hard!</p>`;
+                    playSound('snap');
+                }
+
+                const table = document.getElementById('squashDataTable');
+                const row = table.insertRow();
+                const resultText = currentSquashActualResult === 'elastic' ? '🔄 Bounced back' :
+                    currentSquashActualResult === 'stays' ? '👊 Stayed flat' : '🪨 No change';
+                row.innerHTML = `
+                    <td>${currentSquashIcon} ${currentSquashName}</td>
+                    <td>${currentSquashPrediction === 'elastic' ? '🔄 Bounce back' : '👊 Stay squashed'}</td>
+                    <td>${resultText}</td>
+                    <td>${predictionCorrect ? '✅' : '❌'}</td>
+                `;
+
+                squashTested++;
+
+                setTimeout(() => {
+                    if (squashTested >= 3) {
+                        document.getElementById('squashNext').style.display = 'inline-block';
+                    }
+                    document.getElementById('squashStep3').style.display = 'none';
+                    document.getElementById('squashStep1').style.display = 'block';
+                    document.getElementById('squashObject').innerText = '❓';
+                    obj.className = 'test-object';
+                }, 1500);
+            }, 600);
+        }
+
+        // --- Quiz Logic (5+ Quality Curriculum-Aligned Questions) ---
+        const quizData = [
+            { q: "1. What does ELASTIC mean?", opts: ["The material breaks apart", "The material returns to its original shape", "The material stays in its new shape"], ans: 1 },
+            { q: "2. To make a test FAIR, we must:", opts: ["Test each material a different way", "Only change ONE thing at a time", "Guess the answer without testing"], ans: 1 },
+            { q: "3. A PREDICTION is:", opts: ["The final answer after testing", "A smart guess BEFORE testing", "A type of material"], ans: 1 },
+            { q: "4. A sponge bounces back after squashing. This means it is:", opts: ["Rigid", "Elastic", "Broken"], ans: 1 },
+            { q: "5. A rigid material will:", opts: ["Bend easily", "Return to its shape", "Not change shape or might snap"], ans: 2 },
+            { q: "6. Which is an example of BENDING?", opts: ["Pulling a rubber band longer", "Curving a pipe cleaner", "Pushing down on clay"], ans: 1 }
+        ];
+
+
+
+        let quizIdx = 0;
+        let score = 0;
+
+        function loadQuizQuestion() {
+            if (quizIdx >= quizData.length) {
+                finishQuiz();
+                return;
+            }
+
+            const q = quizData[quizIdx];
+            document.getElementById('quizQuestion').innerText = q.q;
+
+            const optionsDiv = document.getElementById('quizOptions');
+            optionsDiv.innerHTML = '';
+
+            q.opts.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(i);
+                optionsDiv.appendChild(btn);
+            });
+
+            document.getElementById('quizFeedback').innerText = '';
+        }
+
+        function checkAnswer(chosen) {
+            const isCorrect = chosen === quizData[quizIdx].ans;
+            const feedback = document.getElementById('quizFeedback');
+
+            if (isCorrect) {
+                score++;
+                feedback.style.color = '#2ecc71';
+                feedback.innerText = '✅ Correct! 🌟';
+                playSound('success');
+            } else {
+                feedback.style.color = '#e74c3c';
+                feedback.innerText = '❌ Not quite!';
+                playSound('snap');
+            }
+
+            quizIdx++;
+            setTimeout(loadQuizQuestion, 1500);
+        }
+
+        function finishQuiz() {
+            const container = document.getElementById('quizContainer');
+            const medal = score === 6 ? '🏆' : score >= 4 ? '🥈' : '🥉';
+            container.innerHTML = `
+                <h2>Quiz Complete!</h2>
+                <div style="font-size: 4rem;">${medal}</div>
+                <p style="font-size: 1.5rem;">You scored: <strong>${score} / 6</strong></p>
+                <button class="btn btn-gold" onclick="nextSlide()">Claim Your Medal! 🏅</button>
+            `;
+            playSound('success');
+        }
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+
+</html>
