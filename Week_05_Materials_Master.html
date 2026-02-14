@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 5: Materials Master</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f1c40f, #2ecc71);
+            transition: width 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+            padding: 15px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #f1c40f, #e67e22);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Slide Container */
+        .slide-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .slide {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.6);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #f1c40f, #f39c12);
+            box-shadow: 0 5px 20px rgba(241, 196, 15, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        /* Spoon Display */
+        .spoon-display {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        .spoon-item {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 25px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+            border: 3px solid transparent;
+        }
+
+        .spoon-item:hover {
+            transform: scale(1.05);
+            border-color: #3498db;
+        }
+
+        .spoon-item.revealed {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.2);
+        }
+
+        /* Spoon Shape CSS - Realistic 3D Spoon */
+        .spoon-shape {
+            width: 45px;
+            height: 110px;
+            margin: 0 auto 15px;
+            position: relative;
+            filter: drop-shadow(3px 5px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Spoon Handle */
+        .spoon-shape::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 65px;
+            background: inherit;
+            border-radius: 6px 6px 4px 4px;
+            box-shadow:
+                inset 2px 0 3px rgba(255, 255, 255, 0.3),
+                inset -2px 0 3px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Spoon Bowl */
+        .spoon-shape::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 42px;
+            height: 50px;
+            background: inherit;
+            border-radius: 50% 50% 45% 45% / 55% 55% 45% 45%;
+            box-shadow:
+                inset 0 8px 15px rgba(0, 0, 0, 0.2),
+                inset 0 -3px 8px rgba(255, 255, 255, 0.3),
+                inset 3px 0 6px rgba(0, 0, 0, 0.1),
+                inset -3px 0 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Metal Spoon - Shiny chrome look */
+        .metal-visual {
+            background: linear-gradient(145deg, #e8e8e8 0%, #c0c0c0 25%, #a8a8a8 50%, #d0d0d0 75%, #b8b8b8 100%);
+        }
+
+        .metal-visual::before,
+        .metal-visual::after {
+            background: linear-gradient(145deg, #e8e8e8 0%, #c0c0c0 25%, #a8a8a8 50%, #d0d0d0 75%, #b8b8b8 100%);
+        }
+
+        /* Wooden Spoon - Natural wood grain */
+        .wood-visual {
+            background: linear-gradient(180deg, #D2691E 0%, #CD853F 20%, #DEB887 40%, #CD853F 60%, #8B4513 80%, #A0522D 100%);
+        }
+
+        .wood-visual::before,
+        .wood-visual::after {
+            background: linear-gradient(180deg, #D2691E 0%, #CD853F 20%, #DEB887 40%, #CD853F 60%, #8B4513 80%, #A0522D 100%);
+        }
+
+        /* Plastic Spoon - Glossy plastic */
+        .plastic-visual {
+            background: linear-gradient(145deg, #5dade2 0%, #3498db 30%, #2980b9 60%, #4aa3df 80%, #3498db 100%);
+        }
+
+        .plastic-visual::before,
+        .plastic-visual::after {
+            background: linear-gradient(145deg, #5dade2 0%, #3498db 30%, #2980b9 60%, #4aa3df 80%, #3498db 100%);
+        }
+
+        /* Quiz Options */
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .quiz-btn {
+            background: rgba(52, 152, 219, 0.2);
+            border: 2px solid #3498db;
+            padding: 15px 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .quiz-btn:hover {
+            background: rgba(52, 152, 219, 0.3);
+            transform: translateX(5px);
+        }
+
+        .quiz-btn.correct {
+            background: rgba(46, 204, 113, 0.3);
+            border-color: #2ecc71;
+        }
+
+        .quiz-btn.incorrect {
+            background: rgba(231, 76, 60, 0.3);
+            border-color: #e74c3c;
+        }
+
+        /* Metal Detective Grid */
+        .metal-items-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metal-item {
+            background: rgba(189, 195, 199, 0.2);
+            padding: 20px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .metal-item:hover {
+            transform: scale(1.05);
+            border-color: #bdc3c7;
+        }
+
+        .metal-item.found {
+            background: rgba(46, 204, 113, 0.3);
+            border-color: #2ecc71;
+        }
+
+        .metal-item .icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Coin Shape */
+        .coin-shape {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffd700, #daa520, #b8860b);
+            border: 3px solid #b8860b;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.4);
+            margin: 0 auto 5px;
+            position: relative;
+        }
+
+        .coin-shape::after {
+            content: '\00A3';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(139, 69, 19, 0.5);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        /* Door Handle Shape */
+        .door-handle-shape {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 5px;
+            position: relative;
+        }
+
+        .door-handle-plate {
+            width: 30px;
+            height: 50px;
+            background: linear-gradient(to right, #bdc3c7, #fff, #bdc3c7);
+            border-radius: 4px;
+            margin: 5px auto;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .door-handle-lever {
+            width: 40px;
+            height: 10px;
+            background: linear-gradient(to bottom, #bdc3c7, #fff, #95a5a6);
+            position: absolute;
+            top: 35%;
+            left: 25px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Counter */
+        .counter {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(241, 196, 15, 0.2);
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin: 15px;
+        }
+
+        .counter-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #f1c40f;
+        }
+
+        .counter-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Feedback Area */
+        .feedback-area {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        /* Shed Builder - Properly Aligned */
+        .builder-area {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .shed-scene {
+            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 55%, #228B22 55%, #228B22 100%);
+            width: 380px;
+            height: 280px;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .sun-icon {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 2.5rem;
+        }
+
+        .shed-structure {
+            position: absolute;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+        }
+
+        /* Triangular Roof */
+        .shed-roof {
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-bottom: 60px solid #8B4513;
+            position: relative;
+            cursor: pointer;
+            transition: border-bottom-color 0.3s ease;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .shed-roof span {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+        }
+
+        /* Walls */
+        .shed-walls {
+            width: 180px;
+            height: 100px;
+            background: #DEB887;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #555;
+            position: relative;
+            transition: background 0.3s ease;
+            border-left: 5px solid #8B7355;
+            border-right: 5px solid #8B7355;
+        }
+
+        /* Window */
+        .shed-window {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(135, 206, 235, 0.7);
+            border: 3px solid #5D4037;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #333;
+            transition: background 0.3s ease;
+        }
+
+        /* Window pane dividers */
+        .shed-window::before,
+        .shed-window::after {
+            content: '';
+            position: absolute;
+            background: #5D4037;
+        }
+
+        .shed-window::before {
+            width: 100%;
+            height: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .shed-window::after {
+            width: 2px;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .materials-panel {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 300px;
+        }
+
+        /* Gardener Feedback Character - Below the scene */
+        .gardener {
+            display: flex;
+            align-items: flex-end;
+            max-width: 350px;
+            margin-top: 10px;
+        }
+
+        .gardener-img {
+            font-size: 4rem;
+            margin-right: -15px;
+            z-index: 2;
+        }
+
+        .bubble {
+            background: white;
+            padding: 15px 18px;
+            border-radius: 15px;
+            border-bottom-left-radius: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            font-size: 1rem;
+            flex: 1;
+            border: 3px solid #27ae60;
+            color: #333;
+        }
+
+        .mat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .mat-option {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .mat-option:hover {
+            border-color: #3498db;
+        }
+
+        .mat-option.selected {
+            border-color: #f1c40f;
+            background: rgba(241, 196, 15, 0.2);
+        }
+
+        /* Material Textures */
+        .mat-texture {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 5px;
+            border-radius: 12px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .material-brick {
+            background: repeating-linear-gradient(0deg,
+                    #A52A2A,
+                    #A52A2A 10px,
+                    #8B0000 10px,
+                    #8B0000 12px);
+        }
+
+        .material-slate {
+            background: linear-gradient(135deg, #4a4a4a 0%, #333 50%, #222 100%);
+        }
+
+        .material-wood-plank {
+            background: linear-gradient(90deg, #DEB887, #CD853F, #8B4513, #DEB887);
+        }
+
+        .material-glass-window {
+            background: linear-gradient(135deg, rgba(200, 230, 255, 0.8), rgba(255, 255, 255, 0.9));
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .material-tissue {
+            background: #fff;
+            background-image: radial-gradient(#eee 15%, transparent 16%);
+            background-size: 10px 10px;
+        }
+
+        .material-sponge {
+            background: #f1c40f;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.1) 15%, transparent 16%);
+            background-size: 10px 10px;
+        }
+
+        /* Inventor Grid */
+        .inventor-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .inventor-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .inventor-portrait {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        .invention-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Student Bubble */
+        .student-bubble {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .avatar {
+            font-size: 3rem;
+            flex-shrink: 0;
+        }
+
+        .speech-bubble {
+            background: rgba(46, 204, 113, 0.2);
+            padding: 15px 20px;
+            border-radius: 15px;
+            border-left: 4px solid #2ecc71;
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 10%;"></div>
+    </div>
+
+    <header class="header">
+        <h1>Week 5: Materials Master</h1>
+        <div class="badge-container">
+            <div class="badge">Application Week</div>
+            <div class="badge">Emmanuel</div>
+        </div>
+    </header>
+
+    <div class="slide-container">
+        <!-- SLIDE 1: Welcome -->
+        <div class="slide active">
+            <div class="card">
+                <h2>Welcome, Materials Master!</h2>
+                <div style="font-size: 5rem; margin: 20px;">&#127969;&#127803;&#128295;</div>
+                <p>Today you will prove you are a TRUE expert on materials!</p>
+                <div style="background: rgba(46, 204, 113, 0.2); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <h3 style="color: #2ecc71;">Today's Challenges:</h3>
+                    <div style="display: flex; justify-content: center; gap: 30px; margin-top: 15px; flex-wrap: wrap;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2.5rem;">&#129348;</div>
+                            <p style="margin: 5px 0; font-size: 0.95rem;">Spoon Challenge</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2.5rem;">&#128269;</div>
+                            <p style="margin: 5px 0; font-size: 0.95rem;">Metal Detective</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2.5rem;">&#127959;</div>
+                            <p style="margin: 5px 0; font-size: 0.95rem;">Shed Builder</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2.5rem;">&#127942;</div>
+                            <p style="margin: 5px 0; font-size: 0.95rem;">Inventors Hall of Fame</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-gold" onclick="nextSlide()">Let's Begin! &#128640;</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: Spoon Challenge -->
+        <div class="slide">
+            <div class="card">
+                <h2>&#129348; The Spoon Challenge</h2>
+                <p>Did you know? We can make spoons from DIFFERENT materials!</p>
+                <p><strong>But each material is chosen for a REASON.</strong></p>
+                <div class="spoon-display">
+                    <div class="spoon-item" onclick="revealSpoon(this, 'metal')">
+                        <div class="spoon-shape metal-visual"></div>
+                        <strong>Metal Spoon</strong>
+                        <p id="metal-reason" style="font-size: 0.9rem; margin-top: 10px; min-height: 60px;">Click to
+                            discover WHY!</p>
+                    </div>
+                    <div class="spoon-item" onclick="revealSpoon(this, 'wood')">
+                        <div class="spoon-shape wood-visual"></div>
+                        <strong>Wooden Spoon</strong>
+                        <p id="wood-reason" style="font-size: 0.9rem; margin-top: 10px; min-height: 60px;">Click to
+                            discover WHY!</p>
+                    </div>
+                    <div class="spoon-item" onclick="revealSpoon(this, 'plastic')">
+                        <div class="spoon-shape plastic-visual"></div>
+                        <strong>Plastic Spoon</strong>
+                        <p id="plastic-reason" style="font-size: 0.9rem; margin-top: 10px; min-height: 60px;">Click to
+                            discover WHY!</p>
+                    </div>
+                </div>
+                <div class="feedback-area" id="spoonFeedback">
+                    <p>&#128070; Click each spoon to learn why we use that material!</p>
+                </div>
+                <button class="btn" onclick="nextSlide()" id="spoonNext" style="opacity: 0.5;" disabled>Continue
+                    &#8594;</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Glass Spoon Question -->
+        <div class="slide">
+            <div class="card">
+                <h2>&#129300; The Big Question...</h2>
+                <p style="font-size: 1.5rem; margin: 30px 0;">Why don't we have <strong>GLASS</strong> spoons?</p>
+                <div style="font-size: 5rem; margin: 20px;">&#129348;&#10067;&#129695;</div>
+                <div class="quiz-options">
+                    <button class="quiz-btn" onclick="checkGlassAnswer(this, false)">A) Glass is too expensive to make
+                        spoons</button>
+                    <button class="quiz-btn" onclick="checkGlassAnswer(this, false)">B) Glass spoons would be too
+                        heavy</button>
+                    <button class="quiz-btn" onclick="checkGlassAnswer(this, true)">C) Glass breaks easily - it could
+                        SNAP and hurt your mouth!</button>
+                </div>
+                <div class="feedback-area" id="glassFeedback" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Metal Detective -->
+        <div class="slide">
+            <div class="card">
+                <h2>&#128269; Metal Detective Challenge</h2>
+                <p>Same material &#8594; MANY different uses!</p>
+                <p><strong>How many things can be made from METAL?</strong></p>
+                <div class="counter">
+                    <div class="counter-value" id="metalCount">0</div>
+                    <div class="counter-label">Items Found</div>
+                </div>
+                <div class="metal-items-grid">
+                    <div class="metal-item" onclick="findMetal(this, 'coin')">
+                        <div class="coin-shape"></div>
+                        <strong>Coins</strong>
+                    </div>
+                    <div class="metal-item" onclick="findMetal(this, 'key')">
+                        <div class="icon">&#128273;</div>
+                        <strong>Keys</strong>
+                    </div>
+                    <div class="metal-item" onclick="findMetal(this, 'fork')">
+                        <div class="icon">&#127860;</div>
+                        <strong>Cutlery</strong>
+                    </div>
+                    <div class="metal-item" onclick="findMetal(this, 'car')">
+                        <div class="icon">&#128663;</div>
+                        <strong>Cars</strong>
+                    </div>
+                    <div class="metal-item" onclick="findMetal(this, 'bike')">
+                        <div class="icon">&#128690;</div>
+                        <strong>Bikes</strong>
+                    </div>
+                    <div class="metal-item" onclick="findMetal(this, 'scissors')">
+                        <div class="icon">&#9986;&#65039;</div>
+                        <strong>Scissors</strong>
+                    </div>
+                    <div class="metal-item" onclick="findMetal(this, 'pan')">
+                        <div class="icon">&#127859;</div>
+                        <strong>Pans</strong>
+                    </div>
+                    <div class="metal-item" onclick="findMetal(this, 'door')">
+                        <div class="door-handle-shape">
+                            <div class="door-handle-plate"></div>
+                            <div class="door-handle-lever"></div>
+                        </div>
+                        <strong>Door Handles</strong>
+                    </div>
+                </div>
+                <div class="feedback-area" id="metalFeedback">
+                    <p>&#128070; Click each item to add it to your collection!</p>
+                </div>
+                <button class="btn" onclick="nextSlide()" id="metalNext" style="display: none;">Brilliant! Continue
+                    &#8594;</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Why Metal? -->
+        <div class="slide">
+            <div class="card">
+                <h2>&#128161; Why is METAL used for so many things?</h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 25px 0;">
+                    <div style="background: rgba(189,195,199,0.2); padding: 20px; border-radius: 15px;">
+                        <div style="font-size: 2.5rem;">&#128170;</div>
+                        <h3>STRONG</h3>
+                        <p style="font-size: 0.95rem;">Metal doesn't break easily</p>
+                    </div>
+                    <div style="background: rgba(189,195,199,0.2); padding: 20px; border-radius: 15px;">
+                        <div style="font-size: 2.5rem;">&#128295;</div>
+                        <h3>RIGID</h3>
+                        <p style="font-size: 0.95rem;">It keeps its shape</p>
+                    </div>
+                    <div style="background: rgba(189,195,199,0.2); padding: 20px; border-radius: 15px;">
+                        <div style="font-size: 2.5rem;">&#128167;</div>
+                        <h3>WATERPROOF</h3>
+                        <p style="font-size: 0.95rem;">Water doesn't soak in</p>
+                    </div>
+                    <div style="background: rgba(189,195,199,0.2); padding: 20px; border-radius: 15px;">
+                        <div style="font-size: 2.5rem;">&#128296;</div>
+                        <h3>CAN BE SHAPED</h3>
+                        <p style="font-size: 0.95rem;">Melted and moulded into anything!</p>
+                    </div>
+                </div>
+                <div class="student-bubble">
+                    <div class="avatar">&#128102;</div>
+                    <div class="speech-bubble">
+                        <p><strong>Key Learning:</strong> One material can be used for MANY things because of its useful
+                            PROPERTIES!</p>
+                    </div>
+                </div>
+                <button class="btn btn-gold" onclick="nextSlide()">Next Challenge! &#127959;</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Shed Builder -->
+        <div class="slide">
+            <div class="card" style="max-width: 1000px;">
+                <h2>&#127959; The Garden Shed Builder</h2>
+                <p>Build a shed that is <strong>STRONG</strong>, <strong>DRY</strong>, and <strong>BRIGHT</strong>!</p>
+                <div class="builder-area">
+                    <div class="shed-scene">
+                        <div class="sun-icon">&#9728;&#65039;</div>
+                        <div class="shed-structure">
+                            <!-- Roof above walls -->
+                            <div class="shed-roof" id="shedRoof" onclick="placePart('roof')">
+                                <span id="roofText">Roof?</span>
+                            </div>
+                            <!-- Walls with window inside -->
+                            <div class="shed-walls" id="shedWalls" onclick="placePart('walls')">
+                                <span id="wallsText">Walls?</span>
+                                <div class="shed-window" id="shedWindow"
+                                    onclick="event.stopPropagation(); placePart('window')">
+                                    <span id="windowText">?</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Gardener Feedback Character - Below Scene -->
+                    <div class="gardener">
+                        <div class="gardener-img">&#128104;&#8205;&#127806;</div>
+                        <div class="bubble" id="gardenerFeedback">Hello! Pick a material and tap where it should go!
+                        </div>
+                    </div>
+                    <div class="materials-panel">
+                        <h3 style="margin-bottom: 15px;">Pick a Material:</h3>
+                        <div class="mat-grid">
+                            <div class="mat-option" onclick="selectBuildMat(this, 'brick')">
+                                <div class="mat-texture material-brick"></div>
+                                <strong>Brick</strong>
+                            </div>
+                            <div class="mat-option" onclick="selectBuildMat(this, 'glass')">
+                                <div class="mat-texture material-glass-window"></div>
+                                <strong>Glass</strong>
+                            </div>
+                            <div class="mat-option" onclick="selectBuildMat(this, 'slate')">
+                                <div class="mat-texture material-slate"></div>
+                                <strong>Slate</strong>
+                            </div>
+                            <div class="mat-option" onclick="selectBuildMat(this, 'tissue')">
+                                <div class="mat-texture material-tissue"></div>
+                                <strong>Tissue</strong>
+                            </div>
+                            <div class="mat-option" onclick="selectBuildMat(this, 'sponge')">
+                                <div class="mat-texture material-sponge"></div>
+                                <strong>Sponge</strong>
+                            </div>
+                            <div class="mat-option" onclick="selectBuildMat(this, 'wood')">
+                                <div class="mat-texture material-wood-plank"></div>
+                                <strong>Wood</strong>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <button class="btn" style="font-size: 0.9rem; padding: 10px 20px; background: #e74c3c;"
+                                onclick="resetBuild()">&#128260; Reset</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="feedback-area" id="buildFeedback">
+                    <p>Select a material, then click where to place it!</p>
+                </div>
+                <button class="btn btn-gold" onclick="nextSlide()" id="buildNext" style="display: none;">Shed Complete!
+                    Continue &#8594;</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Inventors Hall of Fame -->
+        <div class="slide">
+            <div class="card">
+                <h2>&#127942; Inventors Hall of Fame</h2>
+                <p>These clever people solved BIG problems by inventing new materials!</p>
+                <div class="inventor-grid">
+                    <div class="inventor-card">
+                        <div class="inventor-portrait">&#128104;&#8205;&#128300;</div>
+                        <h3 style="color: #f1c40f;">John Dunlop</h3>
+                        <img src="images/tyres_tractor.png" alt="Rubber Tyres" class="invention-image">
+                        <p><strong>Problem:</strong> Bike rides were bumpy and uncomfortable!</p>
+                        <p style="color: #2ecc71;"><strong>Solution:</strong> Invented RUBBER tyres filled with air!</p>
+                        <p style="font-size: 0.85rem; color: #bdc3c7;">&#127919; He made them for his son's tricycle!
+                        </p>
+                    </div>
+                    <div class="inventor-card">
+                        <div class="inventor-portrait">&#129509;</div>
+                        <h3 style="color: #f1c40f;">Charles Macintosh</h3>
+                        <img src="images/raincoat_rain.png" alt="Raincoat" class="invention-image">
+                        <p><strong>Problem:</strong> People got wet in the rain!</p>
+                        <p style="color: #2ecc71;"><strong>Solution:</strong> Created WATERPROOF fabric using rubber!
+                        </p>
+                        <p style="font-size: 0.85rem; color: #bdc3c7;">&#127919; "Mac" raincoats are named after him!
+                        </p>
+                    </div>
+                    <div class="inventor-card">
+                        <div class="inventor-portrait">&#128739;&#65039;</div>
+                        <h3 style="color: #f1c40f;">John McAdam</h3>
+                        <img src="images/tarmac_road.png" alt="Tarmac Road" class="invention-image">
+                        <p><strong>Problem:</strong> Roads were muddy and bumpy!</p>
+                        <p style="color: #2ecc71;"><strong>Solution:</strong> Made smooth roads from crushed rocks!</p>
+                        <p style="font-size: 0.85rem; color: #bdc3c7;">&#127919; "Tarmac" comes from his name!</p>
+                    </div>
+                </div>
+                <button class="btn" onclick="nextSlide()">Journey Time! &#128694;</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Materials on Your Journey -->
+        <div class="slide">
+            <div class="card">
+                <h2>&#128694; Materials on Your Journey</h2>
+                <p>When you walk to school, you see materials EVERYWHERE!</p>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 25px 0;">
+                    <div style="background: rgba(52, 73, 94, 0.3); padding: 20px; border-radius: 15px;">
+                        <img src="images/tarmac_road.png" alt="Road" class="invention-image" style="height: 100px;">
+                        <h3>Roads</h3>
+                        <p style="font-size: 0.95rem;"><strong>TARMAC</strong> (crushed rock)</p>
+                        <p style="font-size: 0.85rem; color: #bdc3c7;">Remember John McAdam!</p>
+                    </div>
+                    <div style="background: rgba(52, 73, 94, 0.3); padding: 20px; border-radius: 15px;">
+                        <div style="font-size: 3rem;">&#127982;</div>
+                        <h3>Lamp Posts</h3>
+                        <p style="font-size: 0.95rem;"><strong>METAL</strong> (strong + rigid)</p>
+                        <p style="font-size: 0.85rem; color: #bdc3c7;">Won't blow over in wind!</p>
+                    </div>
+                    <div style="background: rgba(52, 73, 94, 0.3); padding: 20px; border-radius: 15px;">
+                        <div style="font-size: 3rem;">&#128655;</div>
+                        <h3>Bus Stops</h3>
+                        <p style="font-size: 0.95rem;"><strong>GLASS+METAL</strong></p>
+                        <p style="font-size: 0.85rem; color: #bdc3c7;">See-through + strong frame!</p>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 25px 0;">
+                    <div style="background: rgba(52, 73, 94, 0.3); padding: 20px; border-radius: 15px;">
+                        <div class="mat-texture material-glass-window" style="margin: 0 auto;"></div>
+                        <h3>House Windows</h3>
+                        <p style="font-size: 0.95rem;"><strong>GLASS</strong> (transparent)</p>
+                        <p style="font-size: 0.85rem; color: #bdc3c7;">Lets light in!</p>
+                    </div>
+                    <div style="background: rgba(52, 73, 94, 0.3); padding: 20px; border-radius: 15px;">
+                        <img src="images/cars_on_tarmac.png" alt="Cars" class="invention-image" style="height: 100px;">
+                        <h3>Cars</h3>
+                        <p style="font-size: 0.95rem;"><strong>METAL+GLASS+RUBBER</strong></p>
+                        <p style="font-size: 0.85rem; color: #bdc3c7;">Remember Dunlop's tyres!</p>
+                    </div>
+                    <div style="background: rgba(52, 73, 94, 0.3); padding: 20px; border-radius: 15px;">
+                        <div class="mat-texture material-brick" style="margin: 0 auto;"></div>
+                        <h3>Brick Walls</h3>
+                        <p style="font-size: 0.95rem;"><strong>BRICK</strong> (rigid + waterproof)</p>
+                        <p style="font-size: 0.85rem; color: #bdc3c7;">Strong for buildings!</p>
+                    </div>
+                </div>
+                <div class="student-bubble">
+                    <div class="avatar">&#128102;</div>
+                    <div class="speech-bubble">
+                        <p><strong>Think about it:</strong> Next time you go outside, look for materials! What materials
+                            can YOU spot?</p>
+                    </div>
+                </div>
+                <button class="btn btn-gold" onclick="nextSlide()">Final Quiz! &#129504;</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Final Quiz -->
+        <div class="slide">
+            <div class="card">
+                <h2>&#129504; Materials Master Quiz</h2>
+                <p id="quizQuestion">Loading question...</p>
+                <div class="quiz-options" id="quizOptions">
+                    <!-- Filled by JS -->
+                </div>
+                <div class="feedback-area" id="quizFeedback" style="display: none;"></div>
+                <div style="margin-top: 20px;">
+                    <span id="quizProgress">Question 1 of 5</span>
+                    <div class="counter" style="margin-left: 20px;">
+                        <div class="counter-value" id="quizScore">0</div>
+                        <div class="counter-label">Score</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: Victory -->
+        <div class="slide">
+            <div class="card">
+                <h2>&#127881; CONGRATULATIONS!</h2>
+                <div style="font-size: 6rem; margin: 20px;">&#127942;&#128079;&#127775;</div>
+                <p style="font-size: 1.5rem;">You are a TRUE <strong>Materials Master!</strong></p>
+                <div style="background: rgba(241, 196, 15, 0.2); padding: 25px; border-radius: 15px; margin: 25px 0;">
+                    <h3>Today You Learned:</h3>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; text-align: left;">
+                        <div>&#9989; Different materials can do the SAME job</div>
+                        <div>&#9989; ONE material can have MANY uses</div>
+                        <div>&#9989; How to choose the RIGHT material</div>
+                        <div>&#9989; Famous inventors who solved problems!</div>
+                    </div>
+                </div>
+                <div class="student-bubble">
+                    <div class="avatar">&#128104;&#8205;&#127891;</div>
+                    <div class="speech-bubble">
+                        <p><strong>Homework:</strong> Find 3 things in your house made of PLASTIC. Why was plastic
+                            chosen for each one?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="prevSlide()">&#11013;&#65039;</button>
+        <button class="nav-btn" onclick="nextSlide()">&#10145;&#65039;</button>
+    </div>
+
+    <script>
+        // Slide Navigation
+        let currentSlide = 0;
+        const totalSlides = 10;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(s => s.classList.remove('active'));
+            currentSlide = Math.max(0, Math.min(n, slides.length - 1));
+            slides[currentSlide].classList.add('active');
+            document.getElementById('progressFill').style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
+        }
+
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function prevSlide() { showSlide(currentSlide - 1); }
+
+        // Spoon Challenge
+        let spoonsRevealed = 0;
+        const spoonReasons = {
+            metal: "RESTAURANTS use metal spoons because they are STRONG, reusable, and look elegant!",
+            wood: "COOKING uses wooden spoons because wood doesn't get hot and won't scratch pans!",
+            plastic: "PARTIES use plastic spoons because they are cheap, light, and can be thrown away!"
+        };
+
+        function revealSpoon(el, type) {
+            if (el.classList.contains('revealed')) return;
+            el.classList.add('revealed');
+            document.getElementById(type + '-reason').textContent = spoonReasons[type];
+            spoonsRevealed++;
+            if (spoonsRevealed >= 3) {
+                document.getElementById('spoonNext').disabled = false;
+                document.getElementById('spoonNext').style.opacity = '1';
+                document.getElementById('spoonFeedback').innerHTML = '<p style="color: #2ecc71;"><strong>Excellent!</strong> Different materials are chosen for different PURPOSES!</p>';
+            }
+        }
+
+        // Glass Answer
+        function checkGlassAnswer(el, correct) {
+            const btns = document.querySelectorAll('.quiz-btn');
+            btns.forEach(b => b.disabled = true);
+            if (correct) {
+                el.classList.add('correct');
+                document.getElementById('glassFeedback').innerHTML = '<p style="color: #2ecc71;"><strong>Correct!</strong> Glass is too BRITTLE - it snaps easily and could hurt you! That\'s why we don\'t use it for spoons.</p>';
+            } else {
+                el.classList.add('incorrect');
+                document.getElementById('glassFeedback').innerHTML = '<p style="color: #e74c3c;">Not quite! The real reason is that glass BREAKS too easily. Imagine a glass spoon snapping in your mouth!</p>';
+            }
+            document.getElementById('glassFeedback').style.display = 'block';
+            setTimeout(() => nextSlide(), 3000);
+        }
+
+        // Metal Detective
+        let metalCount = 0;
+        function findMetal(el, item) {
+            if (el.classList.contains('found')) return;
+            el.classList.add('found');
+            metalCount++;
+            document.getElementById('metalCount').textContent = metalCount;
+            if (metalCount >= 8) {
+                document.getElementById('metalNext').style.display = 'inline-block';
+                document.getElementById('metalFeedback').innerHTML = '<p style="color: #2ecc71;"><strong>Amazing!</strong> Metal is used everywhere because of its useful properties!</p>';
+            }
+        }
+
+        // Audio System
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+        }
+
+        function playTone(freq, type, duration) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function playSound(name) {
+            initAudio();
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            if (name === 'click') playTone(600, 'sine', 0.1);
+            if (name === 'error') playTone(150, 'sawtooth', 0.3);
+            if (name === 'success') { playTone(400, 'sine', 0.1); setTimeout(() => playTone(600, 'sine', 0.2), 100); }
+            if (name === 'win') {
+                playTone(400, 'sine', 0.2);
+                setTimeout(() => playTone(500, 'sine', 0.2), 200);
+                setTimeout(() => playTone(800, 'sine', 0.4), 400);
+            }
+        }
+
+        // Shed Builder
+        let selectedMaterial = null;
+        let shedParts = { roof: null, walls: null, window: null };
+
+        function updateGardener(message) {
+            document.getElementById('gardenerFeedback').innerText = message;
+        }
+
+        function selectBuildMat(el, mat) {
+            document.querySelectorAll('.mat-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedMaterial = mat;
+            updateGardener(`You picked ${mat.toUpperCase()}! Now tap where it should go.`);
+            playSound('click');
+        }
+
+        function placePart(part) {
+            if (!selectedMaterial) {
+                // Describe what this part needs
+                const descriptions = {
+                    roof: "The ROOF needs a WATERPROOF material to keep rain out! ☔",
+                    walls: "The WALLS need a STRONG, RIGID material to hold the shed up! 💪",
+                    window: "The WINDOW needs a TRANSPARENT material so you can see outside! 👀"
+                };
+                updateGardener(descriptions[part] + " Now pick a material! 👉");
+                playSound('click');
+                return;
+            }
+            shedParts[part] = selectedMaterial;
+
+            // Feedback messages based on material and part
+            const feedback = getFeedback(part, selectedMaterial);
+            updateGardener(feedback.message);
+            playSound(feedback.sound);
+
+            const colors = {
+                brick: '#A52A2A', glass: 'rgba(135, 206, 235, 0.6)', slate: '#4a4a4a',
+                tissue: '#fff', sponge: '#f1c40f', wood: '#DEB887'
+            };
+
+            if (part === 'roof') {
+                document.getElementById('shedRoof').style.borderBottomColor = colors[selectedMaterial];
+                document.getElementById('roofText').textContent = selectedMaterial.charAt(0).toUpperCase() + selectedMaterial.slice(1);
+            } else if (part === 'walls') {
+                document.getElementById('shedWalls').style.background = colors[selectedMaterial];
+                document.getElementById('wallsText').textContent = selectedMaterial.charAt(0).toUpperCase() + selectedMaterial.slice(1);
+            } else if (part === 'window') {
+                document.getElementById('shedWindow').style.background = colors[selectedMaterial];
+                document.getElementById('windowText').textContent = selectedMaterial.charAt(0).toUpperCase() + selectedMaterial.slice(1);
+            }
+
+            checkShed();
+        }
+
+        function getFeedback(part, mat) {
+            // ROOF feedback - needs to be WATERPROOF
+            if (part === 'roof') {
+                if (mat === 'slate') return { message: "Perfect! Slate is WATERPROOF - rain slides right off! 🌧️", sound: 'success' };
+                if (mat === 'wood') return { message: "Wood ABSORBS water and can ROT over time! 🪵💧", sound: 'error' };
+                if (mat === 'brick') return { message: "Bricks are too HEAVY for a roof - it would collapse!", sound: 'error' };
+                if (mat === 'tissue') return { message: "Oh no! Tissue ABSORBS water - it's all soggy! 💦", sound: 'error' };
+                if (mat === 'sponge') return { message: "Disaster! Sponge ABSORBS all the rain! 💧", sound: 'error' };
+                if (mat === 'glass') return { message: "Glass IS waterproof, but it's FRAGILE and the shed would get too HOT! ☀️🥵", sound: 'error' };
+            }
+            // WALLS feedback
+            if (part === 'walls') {
+                if (mat === 'brick') return { message: "Excellent! Brick is STRONG and RIGID! 💪", sound: 'success' };
+                if (mat === 'wood') return { message: "Great! Wood is strong and sturdy! ✓", sound: 'success' };
+                if (mat === 'tissue') return { message: "Whoops! The wind blew the tissue away! 💨", sound: 'error' };
+                if (mat === 'sponge') return { message: "Sponge is too FLEXIBLE for walls - it wobbles!", sound: 'error' };
+                if (mat === 'glass') return { message: "Glass walls? Too BRITTLE - they'd crack!", sound: 'error' };
+                if (mat === 'slate') return { message: "Slate comes in thin FLAT tiles - you can't stack them into walls!", sound: 'error' };
+            }
+            // WINDOW feedback
+            if (part === 'window') {
+                if (mat === 'glass') return { message: "Perfect! Glass is TRANSPARENT - light shines through! ☀️", sound: 'success' };
+                if (mat === 'brick') return { message: "Brick is OPAQUE - it's too dark inside! 🌑", sound: 'error' };
+                if (mat === 'wood') return { message: "Wood blocks all the light - you can't see out!", sound: 'error' };
+                if (mat === 'tissue') return { message: "Tissue lets SOME light in, but it's not see-through!", sound: 'error' };
+                if (mat === 'sponge') return { message: "Sponge? That's not transparent at all!", sound: 'error' };
+                if (mat === 'slate') return { message: "Slate is opaque - no light gets through!", sound: 'error' };
+            }
+            return { message: "Interesting choice!", sound: 'click' };
+        }
+
+        function checkShed() {
+            if (shedParts.roof && shedParts.walls && shedParts.window) {
+                let feedback = '';
+                let correct = 0;
+
+                // Check roof (only SLATE is waterproof)
+                if (shedParts.roof === 'slate') {
+                    feedback += '<p style="color: #2ecc71;">Roof: Great choice! Slate is waterproof.</p>';
+                    correct++;
+                } else {
+                    feedback += '<p style="color: #e74c3c;">Roof: ' + shedParts.roof + ' won\'t keep the rain out!</p>';
+                }
+
+                // Check walls (should be brick or wood)
+                if (['brick', 'wood'].includes(shedParts.walls)) {
+                    feedback += '<p style="color: #2ecc71;">Walls: Perfect! ' + shedParts.walls + ' is strong and rigid.</p>';
+                    correct++;
+                } else {
+                    feedback += '<p style="color: #e74c3c;">Walls: ' + shedParts.walls + ' isn\'t strong enough for walls!</p>';
+                }
+
+                // Check window (should be glass)
+                if (shedParts.window === 'glass') {
+                    feedback += '<p style="color: #2ecc71;">Window: Excellent! Glass lets light in.</p>';
+                    correct++;
+                } else {
+                    feedback += '<p style="color: #e74c3c;">Window: ' + shedParts.window + ' won\'t let you see outside!</p>';
+                }
+
+                document.getElementById('buildFeedback').innerHTML = feedback;
+                if (correct >= 2) {
+                    document.getElementById('buildNext').style.display = 'inline-block';
+                }
+            }
+        }
+
+        function resetBuild() {
+            shedParts = { roof: null, walls: null, window: null };
+            document.getElementById('shedRoof').style.borderBottomColor = '#8B4513';
+            document.getElementById('roofText').textContent = 'Roof?';
+            document.getElementById('shedWalls').style.background = '#DEB887';
+            document.getElementById('wallsText').textContent = 'Walls?';
+            document.getElementById('shedWindow').style.background = 'rgba(135, 206, 235, 0.7)';
+            document.getElementById('windowText').textContent = '?';
+            document.getElementById('buildFeedback').innerHTML = '<p>Select a material, then click where to place it!</p>';
+            document.getElementById('buildNext').style.display = 'none';
+            document.querySelectorAll('.mat-option').forEach(o => o.classList.remove('selected'));
+            selectedMaterial = null;
+            updateGardener("Let's try again! Pick a material.");
+        }
+
+        // Final Quiz
+        const quizQuestions = [
+            {
+                q: "Why do we use METAL for coins?",
+                options: ["It's the cheapest material", "It's strong, rigid, and lasts a long time", "It's the lightest material"],
+                correct: 1
+            },
+            {
+                q: "Who invented rubber tyres?",
+                options: ["Charles Macintosh", "John McAdam", "John Dunlop"],
+                correct: 2
+            },
+            {
+                q: "Why is glass used for windows?",
+                options: ["It's the strongest material", "It's transparent so light can pass through", "It's the cheapest material"],
+                correct: 1
+            },
+            {
+                q: "What is TARMAC made from?",
+                options: ["Melted plastic", "Crushed rocks and tar", "Rubber and metal"],
+                correct: 1
+            },
+            {
+                q: "Why don't we make spoons from glass?",
+                options: ["Glass is too heavy", "Glass is too expensive", "Glass breaks easily and could hurt you"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestion = 0;
+        let quizScore = 0;
+
+        function loadQuestion() {
+            if (currentQuestion >= quizQuestions.length) {
+                showSlide(9); // Victory slide
+                return;
+            }
+            const q = quizQuestions[currentQuestion];
+            document.getElementById('quizQuestion').textContent = q.q;
+            document.getElementById('quizProgress').textContent = 'Question ' + (currentQuestion + 1) + ' of ' + quizQuestions.length;
+
+            let optionsHTML = '';
+            q.options.forEach((opt, i) => {
+                optionsHTML += '<button class="quiz-btn" onclick="checkQuizAnswer(' + i + ')">' + String.fromCharCode(65 + i) + ') ' + opt + '</button>';
+            });
+            document.getElementById('quizOptions').innerHTML = optionsHTML;
+            document.getElementById('quizFeedback').style.display = 'none';
+        }
+
+        function checkQuizAnswer(index) {
+            const q = quizQuestions[currentQuestion];
+            const btns = document.querySelectorAll('#quizOptions .quiz-btn');
+            btns.forEach(b => b.disabled = true);
+
+            if (index === q.correct) {
+                btns[index].classList.add('correct');
+                quizScore++;
+                document.getElementById('quizScore').textContent = quizScore;
+                document.getElementById('quizFeedback').innerHTML = '<p style="color: #2ecc71;"><strong>Correct!</strong> Well done!</p>';
+            } else {
+                btns[index].classList.add('incorrect');
+                btns[q.correct].classList.add('correct');
+                document.getElementById('quizFeedback').innerHTML = '<p style="color: #e74c3c;">Not quite. The answer was: ' + q.options[q.correct] + '</p>';
+            }
+            document.getElementById('quizFeedback').style.display = 'block';
+
+            currentQuestion++;
+            setTimeout(loadQuestion, 2000);
+        }
+
+        // Initialize quiz when reaching slide 9
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load first question when quiz slide becomes active
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.target.classList.contains('active') && currentSlide === 8) {
+                        loadQuestion();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.slide').forEach(slide => {
+                observer.observe(slide, { attributes: true, attributeFilter: ['class'] });
+            });
+        });
+    </script>
+</body>
+
+</html>
