@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 8: Germination Station! 🌱</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #FF9800;
+            --accent: #E91E63;
+            --bg: #F1F8E9;
+            --dark: #2E7D32;
+            --white: #FFFFFF;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Main Responsive Container --- */
+        #app-container {
+            width: 95vw;
+            height: 90vh;
+            max-width: 1200px;
+            max-height: 800px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 8px solid var(--primary);
+        }
+
+        /* --- Header Section --- */
+        header {
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            box-shadow: var(--shadow);
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- Slide Viewport --- */
+        #slide-viewport {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 1.5rem;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateX(50px);
+            overflow-y: auto;
+            /* Allow scrolling if content is too tall */
+            padding-bottom: 80px;
+            /* Safe space to avoid being cut off by nav bar */
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide.previous {
+            transform: translateX(-50px);
+        }
+
+        h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            line-height: 1.4;
+            max-width: 800px;
+            margin-bottom: 1rem;
+        }
+
+        /* --- Navigation Controls --- */
+        .controls {
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border-top: 4px solid var(--secondary);
+            z-index: 10;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            font-size: 1.2rem;
+            font-family: 'Fredoka One', cursive;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn.primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn.secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        #slide-counter {
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 8px;
+            background: var(--secondary);
+            transition: width 0.5s ease;
+            z-index: 11;
+        }
+
+        /* --- Interactive Components Styling --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 1rem;
+        }
+
+        .specimen-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            border: 3px solid #eee;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .specimen-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        /* --- Flip Cards --- */
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+            height: 180px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            padding: 1rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border: 4px solid white;
+            box-shadow: var(--shadow);
+        }
+
+        .flip-card-front {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .flip-card-back {
+            background-color: var(--primary);
+            color: white;
+            transform: rotateY(180deg);
+            font-size: 1rem;
+        }
+
+        /* --- Slider Styling --- */
+        .slider-container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- Germination Animation Canvas --- */
+        #germination-demo {
+            width: 300px;
+            height: 300px;
+            margin: 1rem auto;
+            background: #8D6E63;
+            /* Soil color */
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .soil-layer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50%;
+            background: #5D4037;
+        }
+
+        /* --- Drag and Drop Station --- */
+        .sorting-area {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            justify-content: space-around;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .basket {
+            width: 140px;
+            height: 120px;
+            border: 4px dashed var(--primary);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.5);
+            transition: var(--transition);
+            font-weight: 800;
+        }
+
+        .basket.over {
+            background: rgba(76, 175, 80, 0.2);
+            transform: scale(1.05);
+        }
+
+        .drag-item {
+            font-size: 1.8rem;
+            cursor: grab;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin: 5px;
+        }
+
+        /* --- Quiz Station --- */
+        .quiz-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 600px;
+            border: 4px solid var(--primary);
+            position: relative;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .gap-container {
+            font-size: 1.3rem;
+            margin: 20px 0;
+            line-height: 2;
+        }
+
+        .gap-box {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 3px dashed var(--primary);
+            padding: 0 10px;
+            margin: 0 5px;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .labelling-area {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .label-target {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px dashed #999;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .label-target.filled {
+            border-style: solid;
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* --- Modal Styling --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            max-width: 90%;
+            max-height: 85%;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 50vh;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 5px solid #f0f0f0;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #f44336;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+        }
+
+        .real-science-btn {
+            background: var(--secondary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-top: 15px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Fredoka One', cursive;
+            box-shadow: 0 4px 15px rgba(255, 112, 67, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .real-science-btn:hover {
+            transform: scale(1.05) rotate(-2deg);
+            background: #ff5722;
+        }
+
+        .option-item {
+            padding: 12px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .option-item:hover {
+            background: #e0e0e0;
+        }
+
+        .option-item.correct {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .option-item.wrong {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        /* --- Stars --- */
+        .stars-container {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+            justify-content: center;
+        }
+
+        .star {
+            font-size: 1.5rem;
+            color: #ddd;
+        }
+
+        .star.won {
+            color: #fbc02d;
+            animation: pop 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* --- AVATAR --- */
+        #avatar-container {
+            position: absolute;
+            right: 20px;
+            bottom: 80px;
+            width: 100px;
+            height: 100px;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            right: 110px;
+            bottom: 40px;
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            border: 3px solid var(--primary);
+            font-weight: bold;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: opacity 0.3s;
+            width: 200px;
+        }
+
+        .bubble::after {
+            content: '';
+            position: absolute;
+            right: -12px;
+            bottom: 20px;
+            border-left: 12px solid var(--primary);
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app-container">
+        <header>
+            <h1>🔬 Germination Station</h1>
+        </header>
+
+        <div id="slide-viewport">
+
+            <!-- Slide 1: Hook -->
+            <div id="slide-1" class="slide active">
+                <h2>The Sleeping Giants! 💤</h2>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                    <p>Did you know every tiny seed has a <strong>baby plant</strong> sleeping inside it? It's waiting
+                        for the right moment to "wake up"!</p>
+                    <div id="hook-seed-container"
+                        style="position: relative; width: 250px; height: 180px; cursor: pointer;" onclick="peelSeed()">
+                        <!-- SVG BEAN -->
+                        <svg viewBox="0 0 200 120" style="width: 100%; height: 100%;">
+                            <path id="embryo" d="M100,60 Q110,40 130,50 Q140,60 120,70 Q110,80 100,70" fill="#8BC34A"
+                                style="opacity: 0; transition: opacity 1s;" />
+
+                            <!-- Food Store (Initially Hidden) -->
+                            <path id="food-store" d="M50,80 Q20,60 50,30 Q80,20 120,30 Q160,50 140,90 Q120,110 80,100 Z"
+                                fill="#FFF9C4" style="opacity:0; transition: opacity 1s;" />
+
+                            <!-- Seed Coat (Top Layer) -->
+                            <path id="seed-coat" d="M40,85 Q10,60 40,35 Q70,10 120,25 Q170,40 150,95 Q130,120 70,110 Z"
+                                fill="#FFCA28" stroke="#F57F17" stroke-width="4"
+                                style="transition: transform 1s, opacity 1s; cursor: pointer;" />
+
+                            <text id="coat-label" x="80" y="25" font-family="Fredoka One" font-size="12" fill="#3E2723"
+                                text-anchor="middle">Tough Coat</text>
+
+                            <!-- Labels moved to end and positioned safely -->
+                            <text id="embryo-label" x="120" y="45" font-family="Fredoka One" font-size="11"
+                                fill="#2E7D32" style="opacity: 0;" text-anchor="middle">Embryo (Baby Plant!)</text>
+                            <text id="food-label" x="80" y="85" font-family="Fredoka One" font-size="11" fill="#F57F17"
+                                style="opacity: 0;" text-anchor="middle">Food Store (Seed Lunch!)</text>
+                        </svg>
+                    </div>
+                    <p id="hook-instruction" style="color: var(--secondary); font-weight: bold;">Tap the seed to peel
+                        it open and closed!</p>
+                    <button class="real-science-btn" onclick="openModal('seed')">
+                        <span>🔬</span> See Real Seed
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slide 2: Vocabulary -->
+            <div id="slide-2" class="slide">
+                <h2>Our Secret Lab Words 🔑</h2>
+                <p>To be an expert botanist, you need to know these secret codes!</p>
+                <div class="card-grid">
+                    <div class="flip-card" onclick="toggleFlip(this)">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">Germination</div>
+                            <div class="flip-card-back">The process by which a seed "wakes up" and bursts out of its
+                                shell! 💥</div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="toggleFlip(this)">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">Sprout</div>
+                            <div class="flip-card-back">When a seed or bulb first starts to put out green shoots. 🌱
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="toggleFlip(this)">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">Embryo</div>
+                            <div class="flip-card-back">The tiny baby plant that is sleeping inside every single seed!
+                                👶</div>
+                        </div>
+                    </div>
+                    <div class="flip-card" onclick="toggleFlip(this)">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">Radicle</div>
+                            <div class="flip-card-back">The very first root that grows out of a seed! It always points
+                                DOWN. ⬇️</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Growth Timeline -->
+            <div id="slide-3" class="slide">
+                <h2>Watch It Wake Up! 🎞️</h2>
+                <p>Use the slider to travel through time and see the bean grow!</p>
+                <div id="germination-demo" style="background: #4E342E;">
+                    <div class="soil-layer" style="height: 60%; background: #3E2723;"></div>
+                    <!-- SVG PLant Animation -->
+                    <svg viewBox="0 0 200 200" id="plant-svg"
+                        style="width: 100%; height: 100%; position: relative; z-index: 5;">
+                        <!-- Root (Radicle) -->
+                        <path id="grow-root" d="M100,120 Q100,120 100,120" stroke="#FFF59D" stroke-width="8" fill="none"
+                            stroke-linecap="round" />
+                        <!-- Shoot -->
+                        <path id="grow-shoot" d="M100,120 L100,120" stroke="#8BC34A" stroke-width="10" fill="none"
+                            stroke-linecap="round" />
+                        <!-- Leaves -->
+                        <g id="leaves" style="opacity: 0;">
+                            <ellipse cx="90" cy="50" rx="10" ry="15" fill="#4CAF50" transform="rotate(-30, 90, 50)" />
+                            <ellipse cx="110" cy="50" rx="10" ry="15" fill="#4CAF50" transform="rotate(30, 110, 50)" />
+                        </g>
+                        <!-- Seed -->
+                        <g id="seed-group">
+                            <ellipse id="anim-seed" cx="100" cy="120" rx="18" ry="12" fill="#FFCA28" stroke="#F57F17"
+                                stroke-width="2" />
+                            <!-- Visual Crack Line (Lightning-style zigzag) -->
+                            <path id="seed-crack" d="M96,108 L104,114 L96,120 L104,126" stroke="#3E2723"
+                                stroke-width="2" fill="none" style="opacity:0;" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="slider-container">
+                    <input type="range" id="growth-slider" min="0" max="100" value="0"
+                        oninput="updateGrowth(this.value)">
+                    <div style="font-weight: 800; margin-top: 10px;" id="day-counter">Day 0: Dormant</div>
+                </div>
+                <button class="real-science-btn" onclick="openModal('growth')">
+                    <span>📸</span> Real Growth Lab
+                </button>
+            </div>
+
+            <!-- Slide 4: Condition Basket -->
+            <div id="slide-4" class="slide">
+                <h2>What Makes It Wake Up? 💧</h2>
+                <p>Drag the things a seed needs to germinate into the <strong>"Wake Up! Bucket"</strong>. Throw the
+                    others into the bin!</p>
+                <div class="sorting-area">
+                    <div style="display: flex; flex-wrap: wrap; max-width: 300px; justify-content: center;"
+                        id="items-source">
+                        <div class="drag-item" draggable="true" id="item-water" data-correct="yes">💧</div>
+                        <div class="drag-item" draggable="true" id="item-warmth" data-correct="yes">🌡️</div>
+                        <div class="drag-item" draggable="true" id="item-soil" data-correct="no">🪵</div>
+                        <div class="drag-item" draggable="true" id="item-winter" data-correct="no">❄️</div>
+                        <div class="drag-item" draggable="true" id="item-sunlight" data-correct="yes">☀️</div>
+                        <div class="drag-item" draggable="true" id="item-dark" data-correct="yes">🌑</div>
+                    </div>
+                    <div id="target-bucket" class="basket">Wake Up Basket! 🧺</div>
+                    <div id="target-bin" class="basket" style="border-color: #f44336;">Bin 🗑️</div>
+                </div>
+                <!-- Final Sorting Summary (Initially Hidden) -->
+                <div id="sorting-summary"
+                    style="display: none; margin-top: 5px; padding: 10px; background: #E8F5E9; border: 3px dashed var(--primary); border-radius: 15px; max-width: 600px; text-align: left; opacity: 0; transition: opacity 1s ease;">
+                    <h3 style="color: var(--primary); margin-bottom: 5px; font-size: 1.1rem;">🎉 Mission Accomplished,
+                        Botanist!</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 5px;"><strong>Here's the science:</strong> Seeds are
+                        amazing! They have a tiny <b>embryo</b> (baby plant) and a <b>food store</b> tucked inside. To
+                        wake up, they only need <b>water</b> 💧 to soften their coat and <b>warmth</b> 🌡️ to tell them
+                        it's spring! They don't even need <b>soil</b> 🪵 or <b>sunlight</b> ☀️ to start sprouting—all
+                        their energy is already packed inside!
+                    </p>
+                    <button class="btn primary" style="font-size: 0.7rem; padding: 3px 8px;"
+                        onclick="resetSorting()">Try Again 🔄</button>
+                </div>
+                <div id="sorting-feedback" style="margin-top: 10px; font-weight: bold; color: var(--accent);"></div>
+            </div>
+
+            <!-- Slide 5: Prediction Station -->
+            <div id="slide-5" class="slide">
+                <h2>Prediction Station 🔮</h2>
+                <p>Look at these 3 plants. Based on their conditions, can you predict what will happen?</p>
+                <div
+                    style="display: flex; gap: 20px; width: 100%; justify-content: center; overflow-x: auto; padding-bottom: 20px;">
+                    <div class="specimen-card" id="p1" style="min-width: 250px; cursor: default;">
+                        <h3 style="font-size: 1rem;">Pot 1: Soil + Light + Air</h3>
+                        <p style="font-size: 0.9rem;">(But NO Water! ❌)</p>
+                        <div style="font-size: 3rem;">🏜️</div>
+                        <div class="prediction-buttons"
+                            style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
+                            <button class="btn primary" style="font-size: 0.8rem; padding: 5px 10px;"
+                                onclick="checkPrediction(1, true)">Grow!</button>
+                            <button class="btn secondary" style="font-size: 0.8rem; padding: 5px 10px;"
+                                onclick="checkPrediction(1, false)">Sleep</button>
+                        </div>
+                        <div class="prediction-text"
+                            style="font-style: italic; font-size: 0.9rem; margin-top: 10px; color: var(--accent);">What
+                            will happen?</div>
+                    </div>
+                    <div class="specimen-card" id="p2" style="min-width: 250px; cursor: default;">
+                        <h3 style="font-size: 1rem;">Pot 2: Soil + Water + Warmth</h3>
+                        <p style="font-size: 0.9rem;">(Perfect Conditions! ✅)</p>
+                        <div style="font-size: 3rem;">🌱</div>
+                        <div class="prediction-buttons"
+                            style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
+                            <button class="btn primary" style="font-size: 0.8rem; padding: 5px 10px;"
+                                onclick="checkPrediction(2, true)">Grow!</button>
+                            <button class="btn secondary" style="font-size: 0.8rem; padding: 5px 10px;"
+                                onclick="checkPrediction(2, false)">Sleep</button>
+                        </div>
+                        <div class="prediction-text"
+                            style="font-style: italic; font-size: 0.9rem; margin-top: 10px; color: var(--accent);">What
+                            will happen?</div>
+                    </div>
+                    <div class="specimen-card" id="p3" style="min-width: 250px; cursor: default;">
+                        <h3 style="font-size: 1rem;">Pot 3: Water + Soil + Air</h3>
+                        <p style="font-size: 0.9rem;">(But NO Warmth! ❄️)</p>
+                        <div style="font-size: 3rem;">🧊</div>
+                        <div class="prediction-buttons"
+                            style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
+                            <button class="btn primary" style="font-size: 0.8rem; padding: 5px 10px;"
+                                onclick="checkPrediction(3, true)">Grow!</button>
+                            <button class="btn secondary" style="font-size: 0.8rem; padding: 5px 10px;"
+                                onclick="checkPrediction(3, false)">Sleep</button>
+                        </div>
+                        <div class="prediction-text"
+                            style="font-style: italic; font-size: 0.9rem; margin-top: 10px; color: var(--accent);">What
+                            will happen?</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Quiz -->
+            <div id="slide-6" class="slide">
+                <h2>The Final Challenge! 🏆</h2>
+                <div class="stars-container" id="stars-row">
+                    <span class="star" id="s1">★</span>
+                    <span class="star" id="s2">★</span>
+                    <span class="star" id="s3">★</span>
+                    <span class="star" id="s4">★</span>
+                    <span class="star" id="s5">★</span>
+                    <span class="star" id="s6">★</span>
+                    <span class="star" id="s7">★</span>
+                    <span class="star" id="s8">★</span>
+                    <span class="star" id="s9">★</span>
+                    <span class="star" id="s10">★</span>
+                </div>
+                <div class="quiz-card">
+                    <h3 id="question-text" style="margin-bottom: 10px;">Question will appear here...</h3>
+                    <div id="quiz-content" style="width: 100%;">
+                        <!-- Dynamic Content (MCQ, Gap, or Labelling) -->
+                        <div id="options-container" class="options-list"></div>
+                    </div>
+                    <div id="quiz-feedback" style="margin-top: 10px; font-weight: bold;"></div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Homework -->
+            <div id="slide-7" class="slide">
+                <h2>Home Inspector Time! 🏠</h2>
+                <div class="specimen-card" style="width: 80%; cursor: default; border-color: var(--secondary);">
+                    <h3 style="color: var(--secondary); margin-bottom: 10px;">Your Mission:</h3>
+                    <p style="text-align: left;">1. Find a <strong>packet of seeds</strong> or some <strong>dried
+                            beans</strong> in your pantry.</p>
+                    <p style="text-align: left;">2. Put a few in a damp paper towel in a warm spot.</p>
+                    <p style="text-align: left;">3. Prediction: How many days will it take for the <strong>Seed
+                            Coat</strong> to crack open?</p>
+                    <p style="text-align: left; margin-top: 15px; padding-top: 15px; border-top: 2px dashed #ccc;">
+                        🗣️ <strong>Discussion Question:</strong> Why do you think seeds stay asleep in the packet for
+                        months, but wake up when you put them in a damp paper towel?
+                    </p>
+                    <div style="font-size: 4rem; margin-top: 20px;">🧪 🫘 📅</div>
+                </div>
+                <p style="margin-top: 20px; font-weight: bold;">Ask your Tutor to show you the Cress Seeds next lesson!
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="controls">
+            <button id="prev-btn" class="btn secondary" onclick="changeSlide(-1)" disabled>⬅️ Back</button>
+            <div id="slide-counter">1 / 7</div>
+            <button id="next-btn" class="btn primary" onclick="changeSlide(1)">Next ➡️</button>
+        </div>
+
+        <div class="progress-bar" id="progress-indicator" style="width: 14.28%;"></div>
+
+        <!-- Avatar & Bubble -->
+        <div id="avatar-container">
+            <div id="bubble-text" class="bubble">Let's find the sleeping baby plant!</div>
+            <div style="font-size: 3.5rem;">👦</div>
+        </div>
+
+        <!-- Real Science Modal -->
+        <div id="science-modal" class="modal-overlay" onclick="closeModal()">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <button class="close-modal" onclick="closeModal()">×</button>
+                <h2 id="modal-title" style="color: var(--secondary);">Real Science Discovery!</h2>
+                <img id="modal-img" src="" class="modal-image" alt="Real Botanical Bio-Photo">
+                <p id="modal-desc" style="font-size: 1.1rem; line-height: 1.6;"></p>
+                <button class="btn primary" onclick="closeModal()">Got it! 🧠</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Effects (Synthesized via Web Audio API) -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playTone(freq, type, duration) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.value = freq;
+            osc.type = type;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        const sounds = {
+            flip: () => playTone(600, 'sine', 0.1),
+            correct: () => { playTone(523, 'sine', 0.2); setTimeout(() => playTone(659, 'sine', 0.2), 100); },
+            wrong: () => playTone(150, 'sawtooth', 0.3),
+            success: () => { [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => playTone(f, 'sine', 0.4), i * 150)); },
+            slide: () => playTone(400, 'sine', 0.1)
+        };
+    </script>
+
+    <!-- App Logic -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 7;
+
+        function updateNav() {
+            document.getElementById('prev-btn').disabled = (currentSlide === 1);
+            document.getElementById('next-btn').disabled = (currentSlide === totalSlides);
+            document.getElementById('slide-counter').innerText = `${currentSlide} / ${totalSlides}`;
+            document.getElementById('progress-indicator').style.width = `${(currentSlide / totalSlides) * 100}%`;
+        }
+
+        function changeSlide(dir) {
+            const nextSlideNum = currentSlide + dir;
+            if (nextSlideNum < 1 || nextSlideNum > totalSlides) return;
+
+            document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+            if (dir > 0) document.getElementById(`slide-${currentSlide}`).classList.add('previous');
+
+            currentSlide = nextSlideNum;
+            const nextSlideEl = document.getElementById(`slide-${currentSlide}`);
+            nextSlideEl.classList.remove('previous');
+            nextSlideEl.classList.add('active');
+
+            sounds.slide();
+            updateNav();
+            updateAvatar();
+        }
+
+        /* --- SLIDE 1 LOGIC --- */
+        let seedPeeled = false;
+        function peelSeed() {
+            if (seedPeeled) {
+                // Reset to Closed
+                sounds.flip();
+                document.getElementById('seed-coat').style.transform = "translate(0, 0) rotate(0deg)";
+                document.getElementById('seed-coat').style.opacity = "1";
+                document.getElementById('embryo').style.opacity = "0";
+                document.getElementById('food-store').style.opacity = "0";
+                document.getElementById('embryo-label').style.opacity = "0";
+                document.getElementById('food-label').style.opacity = "0";
+                document.getElementById('coat-label').style.textDecoration = "none";
+                document.getElementById('hook-instruction').innerText = "The baby plant is safely sleeping again.";
+            } else {
+                // Peel Open
+                sounds.success();
+                document.getElementById('seed-coat').style.transform = "translate(-50px, -20px) rotate(-30deg)";
+                document.getElementById('seed-coat').style.opacity = "0.7";
+                document.getElementById('embryo').style.opacity = "1";
+                document.getElementById('food-store').style.opacity = "1";
+                document.getElementById('embryo-label').style.opacity = "1";
+                document.getElementById('food-label').style.opacity = "1";
+                document.getElementById('coat-label').style.textDecoration = "line-through";
+                document.getElementById('hook-instruction').innerText = "Look! The baby plant (embryo) was inside!";
+                speak("Wow! The embryo is the secret baby plant!");
+            }
+            seedPeeled = !seedPeeled;
+        }
+
+        /* --- SLIDE 2 LOGIC --- */
+        function toggleFlip(el) {
+            el.classList.toggle('flipped');
+            sounds.flip();
+        }
+
+        /* --- SLIDE 3 LOGIC --- */
+        function updateGrowth(val) {
+            const dayCounter = document.getElementById('day-counter');
+            const root = document.getElementById('grow-root');
+            const shoot = document.getElementById('grow-shoot');
+            const leaves = document.getElementById('leaves');
+            const seed = document.getElementById('anim-seed');
+            const crack = document.getElementById('seed-crack');
+
+            if (val == 0) {
+                dayCounter.innerText = "Day 0: Dormant (Sleeping)";
+                root.setAttribute('d', 'M100,120 Q100,120 100,120');
+                shoot.setAttribute('d', 'M100,120 L100,120');
+                leaves.style.opacity = 0;
+                crack.style.opacity = 0;
+            } else if (val < 30) {
+                dayCounter.innerText = "Day 3: Seed Coat cracks and the Radicle (first root) appears!";
+                seed.setAttribute('rx', 18 + (val / 10));
+                crack.style.opacity = 1;
+                // Shorter, more gradual root emergence
+                root.setAttribute('d', `M100,120 Q${100 + val / 10},${120 + val / 4} 100,${120 + val / 2}`);
+            } else if (val < 70) {
+                dayCounter.innerText = "Day 7: The Shoot goes UP!";
+                crack.style.opacity = 1;
+                shoot.setAttribute('d', `M100,120 Q${100 - (val - 30) / 4},${120 - (val - 30) / 2} 100,${120 - (val - 30)}`);
+                // Root growth continues from Day 3
+                const day3RootLen = 15; // val/2 at val=30
+                const curRootLen = day3RootLen + (val - 30) / 1.5;
+                root.setAttribute('d', `M100,120 Q${105 + (val - 30) / 8},${120 + curRootLen / 2} 100,${120 + curRootLen}`);
+                leaves.style.opacity = 0;
+            } else {
+                dayCounter.innerText = "Day 14: A Baby Seedling! 🌿";
+                crack.style.opacity = 1;
+                leaves.style.opacity = (val - 70) / 30;
+                shoot.setAttribute('d', `M100,120 Q95,100 100,${80 - (val - 70) / 1.5}`);
+                root.setAttribute('d', `M100,120 Q110,150 100,${170 + (val - 70) / 3}`);
+            }
+        }
+
+        /* --- SLIDE 4 LOGIC --- */
+        const draggables = document.querySelectorAll('.drag-item');
+        const baskets = document.querySelectorAll('.basket');
+
+        draggables.forEach(d => {
+            d.addEventListener('dragstart', () => { d.classList.add('dragging'); sounds.flip(); });
+            d.addEventListener('dragend', () => d.classList.remove('dragging'));
+        });
+
+        baskets.forEach(b => {
+            b.addEventListener('dragover', e => e.preventDefault());
+            b.addEventListener('dragenter', () => b.classList.add('over'));
+            b.addEventListener('dragleave', () => b.classList.remove('over'));
+            b.addEventListener('drop', e => {
+                const id = document.querySelector('.dragging').id;
+                const item = document.getElementById(id);
+                const isCorrect = item.dataset.correct === 'yes';
+                const isTargetBucket = b.id === 'target-bucket';
+
+                b.classList.remove('over');
+                if ((isTargetBucket && isCorrect) || (!isTargetBucket && !isCorrect)) {
+                    sounds.correct();
+                    b.appendChild(item);
+                    document.getElementById('sorting-feedback').innerText = "Great choice!";
+                    // Check if all items are sorted
+                    if (document.getElementById('items-source').children.length === 0) {
+                        document.getElementById('sorting-feedback').style.display = 'none';
+                        const summary = document.getElementById('sorting-summary');
+                        summary.style.display = 'block';
+                        setTimeout(() => summary.style.opacity = '1', 50);
+                        sounds.success();
+                        speak("Yay! You know exactly what a seed needs!");
+                    }
+                } else {
+                    sounds.wrong();
+                    document.getElementById('sorting-feedback').innerText = "Wait! Think again...";
+                }
+            });
+        });
+
+        function resetSorting() {
+            location.reload(); // Simple way to reset everything for now
+        }
+
+        /* --- SLIDE 5 LOGIC --- */
+        const predictionData = {
+            1: { grow: false, feedback: "Correct! Seeds need water to wake up. This one will stay asleep. 🏜️" },
+            2: { grow: true, feedback: "Yes! With water and warmth, it grows into a beautiful plant! 🌱" },
+            3: { grow: false, feedback: "Snap! It's too cold for this seed. It will stay asleep! ❄️" }
+        };
+        function checkPrediction(id, choseGrow) {
+            const data = predictionData[id];
+            const el = document.getElementById(`p${id}`);
+            const feedbackText = el.querySelector('.prediction-text');
+
+            if (choseGrow === data.grow) {
+                sounds.correct();
+                feedbackText.innerText = data.feedback;
+                feedbackText.style.color = "var(--primary)";
+            } else {
+                sounds.wrong();
+                feedbackText.innerText = "Close! Think about what's missing...";
+                feedbackText.style.color = "var(--accent)";
+            }
+            // Hide buttons after choice
+            el.querySelector('.prediction-buttons').style.display = 'none';
+        }
+
+        /* --- SLIDE 6 LOGIC --- */
+        const quizQuestions = [
+            { type: 'label', q: "Labelling: Find the Seed Coat!", diagram: 'seed', target: 'coat', options: ["Seed Coat", "Embryo", "Radicle"], correct: 0 },
+            { type: 'label', q: "Labelling: Find the Baby Plant!", diagram: 'seed', target: 'embryo', options: ["Leaves", "Embryo", "Shoot"], correct: 1 },
+            { type: 'label', q: "Labelling: Find the First Root!", diagram: 'seed', target: 'radicle', options: ["Stem", "Food Store", "Radicle"], correct: 2 },
+            { type: 'gap', q: "Fill in the gap:", sentence: "The seed _______ when it drinks water.", options: ["shrinks", "swells", "sleeps"], correct: 1 },
+            { type: 'gap', q: "Fill in the gap:", sentence: "The _______ points DOWN into the soil.", options: ["radicle", "shoot", "leaf"], correct: 0 },
+            { type: 'gap', q: "Fill in the gap:", sentence: "The baby plant eats the ______ store first.", options: ["sugar", "food", "pantry"], correct: 1 },
+            { type: 'mcq', q: "What two conditions does a seed need to wake up?", options: ["Wind and Rain", "Water and Warmth", "Sunlight and Soil"], correct: 1 },
+            { type: 'mcq', q: "True or False: Seeds need sunlight to germinate.", options: ["True!", "False!"], correct: 1 },
+            { type: 'mcq', q: "Which part grows UP towards the light second?", options: ["The Radicle", "The Shoot", "The Root"], correct: 1 },
+            { q: "What is the tough outer layer called?", options: ["The Tunic", "The Seed Coat", "The Scales"], correct: 1, type: 'mcq' }
+        ];
+
+        let quizIndex = 0;
+        function loadQuiz() {
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.innerText = "";
+            if (quizIndex >= quizQuestions.length) {
+                document.getElementById('question-text').innerText = "🏆 You are a Germination Genius!";
+                document.getElementById('quiz-content').innerHTML = "<h3>10/10 Gold Standard!</h3><div style='font-size:4rem;'>🌟🌿✨</div>";
+                sounds.success();
+                return;
+            }
+            const q = quizQuestions[quizIndex];
+            document.getElementById('question-text').innerText = q.q;
+            const container = document.getElementById('quiz-content');
+            container.innerHTML = "";
+
+            if (q.type === 'mcq') {
+                const optsDiv = document.createElement('div');
+                optsDiv.className = "options-list";
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('div');
+                    btn.className = "option-item";
+                    btn.innerText = opt;
+                    btn.onclick = () => checkQuiz(idx, btn);
+                    optsDiv.appendChild(btn);
+                });
+                container.appendChild(optsDiv);
+            } else if (q.type === 'gap') {
+                const gapDiv = document.createElement('div');
+                gapDiv.className = "gap-container";
+                const parts = q.sentence.split('_______');
+                gapDiv.innerHTML = `${parts[0]} <span class="gap-box" id="gap-field">?</span> ${parts[1]}`;
+                container.appendChild(gapDiv);
+
+                const optsDiv = document.createElement('div');
+                optsDiv.className = "options-list";
+                optsDiv.style.flexDirection = "row";
+                optsDiv.style.justifyContent = "center";
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('div');
+                    btn.className = "option-item";
+                    btn.style.width = "auto";
+                    btn.innerText = opt;
+                    btn.onclick = () => {
+                        if (idx === q.correct) {
+                            document.getElementById('gap-field').innerText = opt;
+                            checkQuiz(idx, btn);
+                        } else {
+                            checkQuiz(idx, btn);
+                        }
+                    };
+                    optsDiv.appendChild(btn);
+                });
+                container.appendChild(optsDiv);
+            } else if (q.type === 'label') {
+                const labelArea = document.createElement('div');
+                labelArea.className = "labelling-area";
+                // Simplified SVG for labelling
+                labelArea.innerHTML = `
+                    <svg viewBox="0 0 200 120" style="width:200px; height:120px;">
+                        <ellipse cx="100" cy="60" rx="60" ry="40" fill="#FFCA28" stroke="#F57F17" stroke-width="2" />
+                        <path d="M100,60 Q110,40 130,50" stroke="#8BC34A" stroke-width="4" fill="none" />
+                        <circle cx="100" cy="100" r="10" fill="none" stroke="#999" stroke-dasharray="2,2" id="target-circle" />
+                    </svg>
+                    <div id="label-marker" style="position:absolute; top:80px; left:90px; color:var(--primary); font-size:1.5rem;">🔘</div>
+                `;
+                container.appendChild(labelArea);
+
+                const optsDiv = document.createElement('div');
+                optsDiv.className = "options-list";
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('div');
+                    btn.className = "option-item";
+                    btn.innerText = opt;
+                    btn.onclick = () => checkQuiz(idx, btn);
+                    optsDiv.appendChild(btn);
+                });
+                container.appendChild(optsDiv);
+            }
+        }
+
+        function checkQuiz(idx, btn) {
+            const correct = quizQuestions[quizIndex].correct;
+            const feedback = document.getElementById('quiz-feedback');
+            if (idx === correct) {
+                sounds.correct();
+                btn.classList.add('correct');
+                feedback.innerText = "Correct! ✨";
+                feedback.style.color = "var(--primary)";
+                document.getElementById(`s${quizIndex + 1}`).classList.add('won');
+                setTimeout(() => {
+                    quizIndex++;
+                    loadQuiz();
+                }, 1200);
+            } else {
+                sounds.wrong();
+                btn.classList.add('wrong');
+                feedback.innerText = "Try again! ❌";
+                feedback.style.color = "var(--accent)";
+            }
+        }
+        loadQuiz();
+
+        /* --- AVATAR CHAT --- */
+        function speak(text) {
+            const bubble = document.getElementById('bubble-text');
+            bubble.innerText = text;
+            bubble.style.opacity = 1;
+            setTimeout(() => bubble.style.opacity = 0, 4000);
+        }
+
+        const phrases = [
+            "Let's wake up some seeds!",
+            "Did you know seeds have their own lunchbox? (The Food Store!)",
+            "Plants are so clever!",
+            "I wonder how big your beans will grow!",
+            "Ready for the next mission?"
+        ];
+        function updateAvatar() {
+            if (currentSlide === 1) speak(phrases[0]);
+            else if (currentSlide === totalSlides) speak(phrases[3]);
+            else speak(phrases[Math.floor(Math.random() * phrases.length)]);
+        }
+
+        // --- Modal Logic ---
+        const modalData = {
+            'seed': {
+                title: "Inside a Real Seed! 🔬",
+                img: "images/bean_seed_dissection_real.png",
+                desc: "Look closely! This is a real bean seed split open. Can you see the tiny <b>Embryo</b> (the white baby part) and the big <b>Food Store</b>? It's just like our drawing!"
+            },
+            'growth': {
+                title: "Real Germination Lab! 📸",
+                img: "images/germination_stages_real_comparison.png",
+                desc: "This photo shows seeds waking up! First, the <b>Seed Coat</b> cracks. Then the <b>Radicle</b> (the root) grows DOWN. Finally, the green <b>Shoot</b> grows UP! Isn't nature amazing?"
+            }
+        };
+
+        function openModal(type) {
+            const data = modalData[type];
+            document.getElementById('modal-title').innerHTML = data.title;
+            document.getElementById('modal-img').src = data.img;
+            document.getElementById('modal-desc').innerHTML = data.desc;
+            const modal = document.getElementById('science-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+            sounds.success();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('science-modal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 400);
+            sounds.flip();
+        }
+
+        // --- Keyboard Navigation ---
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+
+    </script>
+</body>
+
+</html>
