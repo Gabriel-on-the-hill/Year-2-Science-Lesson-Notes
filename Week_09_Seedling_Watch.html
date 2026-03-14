@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 9: Seedling Watch! 🌿</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&family=Outfit:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1B5E20; /* Darker Forest Green */
+            --secondary: #4CAF50; /* Vibrant Leaf Green */
+            --accent: #FBC02D; /* Bright Sun Yellow */
+            --bg: #F9FBE7; /* Soft Lime Wash */
+            --text: #002100; /* Near Black Green */
+            --card-bg: #FFFFFF;
+            --shadow: 0 15px 35px rgba(27, 94, 32, 0.15);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Outfit', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            background-image: radial-gradient(var(--secondary) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #slide-viewport {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            position: absolute;
+            width: 90%;
+            height: 85%;
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.6s ease;
+            overflow-y: auto;
+            border: 4px solid var(--secondary);
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        p.subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            max-width: 800px;
+            line-height: 1.6;
+        }
+
+        /* Interactive Elements */
+        .btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .btn.primary { background: var(--primary); color: white; }
+        .btn.primary:hover { transform: scale(1.05); background: var(--text); }
+        .btn.secondary { background: var(--secondary); color: white; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        
+        /* Anatomy Hotspots */
+        .anatomy-container { position: relative; width: 400px; height: 400px; margin: 0 auto; background: white; border-radius: 20px; border: 4px solid var(--secondary); padding: 20px; box-shadow: var(--shadow); }
+        .hotspot { position: absolute; width: 30px; height: 30px; background: var(--accent); border-radius: 50%; cursor: pointer; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.3s; z-index: 10; animation: pulse 2s infinite; }
+        .hotspot:hover { transform: scale(1.2); }
+        .hotspot-card { position: absolute; background: white; padding: 15px; border-radius: 15px; border: 3px solid var(--primary); box-shadow: var(--shadow); width: 220px; display: none; z-index: 20; font-size: 1rem; text-align: left;}
+        .hotspot.active + .hotspot-card { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 193, 7, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); } }
+
+        /* Reveal Logic (Slide 1) */
+        .reveal-container { display: flex; gap: 40px; align-items: center; justify-content: center; margin-top: 20px; }
+        .reveal-box { background: var(--bg); padding: 25px; border-radius: 25px; width: 380px; box-shadow: var(--shadow); border: 2px solid var(--secondary); }
+        .reveal-box img { width: 100%; height: 250px; object-fit: cover; border-radius: 20px; margin-bottom: 15px; border: 4px solid white; }
+        .reveal-card { position: relative; cursor: pointer; }
+        .hidden-item { filter: blur(20px); opacity: 0.3; transition: var(--transition); }
+        .revealed .hidden-item { filter: blur(0); opacity: 1; }
+        .reveal-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; border-radius: 25px; transition: 0.3s; }
+        .revealed .reveal-overlay { opacity: 0; pointer-events: none; }
+
+        /* Glossary Grid (Slide 2) */
+        .glossary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; width: 100%; max-width: 1000px; padding: 20px; }
+        .term-card { background: white; padding: 20px; border-radius: 20px; cursor: pointer; border: 3px solid #eee; transition: var(--transition); text-align: left; }
+        .term-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: var(--shadow); }
+        .term-card h4 { color: var(--primary); font-size: 1.4rem; font-family: 'Fredoka One', cursive; margin-bottom: 5px; }
+        .term-desc { font-size: 1.1rem; display: none; line-height: 1.4; color: var(--text); }
+        .term-card.active { border-color: var(--primary); background: var(--bg); }
+        .term-card.active .term-desc { display: block; animation: fadeIn 0.3s ease; }
+
+        
+        /* Fix Stage Visual Height and Visibility */
+        .stage-visual { height: 450px; overflow: visible; display: flex; align-items: center; justify-content: center; background: #8D6E63; }
+        #stage-emoji { margin-top: 0 !important; font-size: 10rem !important; transition: 0.3s; }
+        
+        /* Ensure diag images are visible */
+        .diag-card img { background: #f0f0f0; border: 1px solid #ddd; }
+
+        /* Stage Slider (Slide 3) */
+        .stage-visual { height: 350px; width: 100%; max-width: 600px; background: #8D6E63; border-radius: 30px; position: relative; overflow: hidden; margin-bottom: 30px; border: 8px solid var(--primary); box-shadow: inset 0 0 50px rgba(0,0,0,0.3); }
+        .soil-surface { position: absolute; top: 150px; width: 100%; height: 6px; background: rgba(0,0,0,0.2); }
+        input[type=range] { width: 100%; cursor: pointer; height: 15px; border-radius: 10px; background: #eee; outline: none; -webkit-appearance: none; appearance: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 30px; height: 30px; background: var(--primary); border-radius: 50%; border: 4px solid white; box-shadow: var(--shadow); }
+
+        /* Sorting (Slide 4) */
+        .sort-zones { display: flex; gap: 30px; width: 100%; justify-content: center; margin-top: 20px; }
+        .sort-zone { border: 5px dashed #ccc; padding: 25px; border-radius: 30px; width: 45%; min-height: 250px; transition: 0.3s; background: #fdfdfd; }
+        .sort-zone.active { border-color: var(--primary); background: var(--bg); }
+        .sort-zone h3 { font-family: 'Fredoka One', cursive; margin-bottom: 15px; }
+        .sort-item { padding: 12px 20px; background: white; border: 2px solid var(--secondary); border-radius: 15px; cursor: grab; font-weight: bold; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        /* Diagnosis (Slide 5) */
+        .diag-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; max-width: 900px; margin-top: 20px; }
+        .diag-card { background: white; border-radius: 25px; padding: 20px; border: 4px solid #eee; transition: var(--transition); cursor: pointer; }
+        .diag-card img { width: 100%; height: 180px; object-fit: contain; border-radius: 15px; margin-bottom: 15px; }
+        .diag-card:hover { border-color: var(--primary); transform: scale(1.02); }
+        .diag-card.correct { border-color: var(--primary); background: var(--bg); }
+        .diag-card.wrong { border-color: #f44336; background: #FFEBEE; }
+
+        /* Progression Controls */
+        .controls { padding: 25px 50px; display: flex; justify-content: space-between; align-items: center; background: white; border-top: 4px solid var(--secondary); z-index: 100; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); }
+        #slide-counter { font-family: 'Fredoka One', cursive; font-size: 1.4rem; color: var(--primary); }
+        .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 10px; background: #eee; z-index: 101; }
+        .progress-fill { height: 100%; background: linear-gradient(to right, var(--secondary), var(--primary)); width: 0%; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Avatar System */
+        #avatar-box { position: fixed; right: 40px; bottom: 130px; display: flex; align-items: flex-end; gap: 20px; pointer-events: none; z-index: 1000; }
+        .speech-bubble { background: white; padding: 25px; border-radius: 30px; border: 5px solid var(--primary); box-shadow: var(--shadow); max-width: 300px; font-weight: bold; position: relative; opacity: 0; transition: 0.4s; font-size: 1.2rem; color: var(--text); }
+        .speech-bubble::after { content: ''; position: absolute; right: -20px; bottom: 25px; border-left: 20px solid var(--primary); border-top: 15px solid transparent; border-bottom: 15px solid transparent; }
+        .slide-avatar { width: 120px; height: 120px; background: #FFCCBC; border-radius: 30%; border: 5px solid white; box-shadow: var(--shadow); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+
+<body>
+    <div class="presentation-container">
+        <header>
+            <h1>🌿 Week 9: Seedling Watch!</h1>
+            <div style="display:flex; gap:15px;">
+                <button class="btn primary" onclick="openOverview()">💡 Our Mission</button>
+            </div>
+        </header>
+
+        <div id="slide-viewport">
+            
+            <!-- Slide 1: Hook -->
+            <div class="slide active" id="slide-1">
+                <h2>The Big Reveal! 🔍</h2>
+                <p class="subtitle">Our seeds have been busy. And guess what? Most seeds don't need sunlight <strong>at first</strong> because they have their own food store! Let's see what happened to our coffee beans:</p>
+                <div class="reveal-container">
+                    <div class="reveal-box" style="border: 4px solid var(--primary);">
+                        <h3 style="margin-bottom:15px; font-family: 'Fredoka One';">Week 8: Sleeping</h3>
+                        <img src="file:///C:/Users/DELL/.gemini/antigravity/brain/9a078c66-aa41-45bb-919b-2e937965a93c/bean_seed_dissection_real_1772330920981.png" alt="Dormant Seed" style="border: 8px solid white; box-shadow: var(--shadow);">
+                        <p style="font-weight: bold; color: var(--text);">A quiet seed waiting for <strong>water</strong> and <strong>warmth</strong>.</p>
+                    </div>
+                    <div class="reveal-card" onclick="this.classList.add('revealed'); updateAvatar('seedling_reveal')">
+                        <div class="reveal-overlay" style="background: rgba(27, 94, 32, 0.8); border-radius: 30px;">
+                            <button class="btn accent" style="background: var(--accent); color: var(--text); padding: 20px 40px; font-size: 1.4rem;">Click to Reveal! ✨</button>
+                            <p style="margin-top:15px; font-weight:bold; font-size: 1.2rem; color: white;">What happens next?</p>
+                        </div>
+                        <div class="reveal-box hidden-item" style="border: 4px solid var(--secondary);">
+                            <h3 style="margin-bottom:15px; font-family: 'Fredoka One';">Week 9: Germination!</h3>
+                            <img src="file:///C:/Users/DELL/.gemini/antigravity/brain/9a078c66-aa41-45bb-919b-2e937965a93c/bean_seedling_emergence_real_1773411751316.png" alt="Emerging Seedling" style="border: 8px solid white; box-shadow: var(--shadow);">
+                            <p style="font-weight: bold; color: var(--primary);">Growth! The bean is pushed out of the ground.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <!-- Slide 2: Inside a Seed -->
+            <div class="slide" id="slide-2">
+                <h2>What's Inside a Seed? 🐚</h2>
+                <p class="subtitle">A seed is like a little spaceship packing everything a baby plant needs. Click the yellow spots to explore inside!</p>
+                <div class="anatomy-container">
+                    <!-- Seed SVG -->
+                    <svg viewBox="0 0 200 200" style="width:100%; height:100%;">
+                        <path d="M50,150 C30,100 80,20 120,40 C170,60 160,160 120,180 C80,200 70,190 50,150 Z" fill="#AED581" stroke="#558B2F" stroke-width="5" />
+                        <path d="M120,40 C100,50 90,80 120,100 C130,80 140,50 120,40 Z" fill="#81C784" stroke="#33691E" stroke-width="3" />
+                    </svg>
+                    
+                    <div class="hotspot" style="top:75%; left:25%;" onclick="this.classList.toggle('active')"></div>
+                    <div class="hotspot-card" style="top:60%; left:-50px;">
+                        <strong style="color:var(--primary);">Seed Coat</strong><br>
+                        Tough outer layer. It protects the seed from damage and stops it drying out!
+                    </div>
+
+                    <div class="hotspot" style="top:50%; left:45%;" onclick="this.classList.toggle('active')"></div>
+                    <div class="hotspot-card" style="top:35%; left:65%;">
+                        <strong style="color:var(--primary);">Food Store</strong><br>
+                        The lunchbox! The plant uses this food to start growing before it can make its own.
+                    </div>
+
+                    <div class="hotspot" style="top:35%; left:58%;" onclick="this.classList.toggle('active')"></div>
+                    <div class="hotspot-card" style="top:-15%; left:40%;">
+                        <strong style="color:var(--primary);">Baby Plant</strong><br>
+                        The tiny shoot and root waiting to wake up and push through the soil!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Glossary -->
+            <div class="slide" id="slide-3">
+                <h2>Botanist Brain Power 🧠</h2>
+                <p class="subtitle">To be real scientists, we need to use the right words. Click a word to unlock its secret meaning!</p>
+                <div class="glossary-grid" id="glossary-container">
+                    <!-- Injected by script -->
+                </div>
+            </div>
+
+            <!-- Slide 4: 8-Stage Life Cycle -->
+            <div class="slide" id="slide-4">
+                <h2>The 8-Stage Adventure 📽️</h2>
+                <p class="subtitle">Drag the slider to see how a plant changes. We've used real scientific observations for every step!</p>
+                <div class="stage-visual" style="height: 480px; width: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(to bottom, #E8F5E9 60%, #D7CCC8 40%); border: 8px solid var(--secondary); border-radius: 30px; position: relative; box-shadow: inset 0 0 40px rgba(0,0,0,0.1); overflow: hidden;">
+                    <svg id="stage-svg" viewBox="0 0 200 200" style="width: 100%; height: 100%; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));">
+                        
+                        <!-- Soil Line -->
+                        <path d="M0,120 Q50,115 100,120 T200,120" stroke="#8D6E63" stroke-width="4" fill="none"/>
+                        
+                        <!-- Stage 8: Decomposition -->
+                        <g id="s8" style="opacity: 0; transform-origin: center; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
+                            <path d="M100,120 Q90,50 120,60" stroke="#8D6E63" stroke-width="3" fill="none"/>
+                            <path d="M120,60 Q105,70 115,90 Q135,80 120,60" fill="#A1887F"/>
+                            <ellipse cx="80" cy="115" rx="5" ry="3" fill="#3E2723" />
+                            <!-- Old root -->
+                            <path d="M100,120 Q95,130 98,140 M100,120 Q105,125 102,135" stroke="#4E342E" stroke-width="2" fill="none"/>
+                        </g>
+
+                        <!-- Stage 7: Pods -->
+                        <g id="s7" style="opacity: 0; transform-origin: center; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
+                            <path d="M100,120 Q80,20 100,10" stroke="#1B5E20" stroke-width="4" fill="none"/>
+                            <path d="M95,80 Q60,70 65,45 Q85,40 95,80" fill="#2E7D32"/>
+                            <path d="M100,50 Q130,60 135,35 Q115,30 100,50" fill="#2E7D32"/>
+                            <!-- Pod -->
+                            <path d="M100,30 Q120,10 110,45" stroke="#4CAF50" stroke-width="10" stroke-linecap="round" fill="none"/>
+                            <path d="M100,120 Q95,140 100,165 M100,130 Q80,140 85,155 M100,140 Q120,150 115,165" stroke="#D7CCC8" stroke-width="2" fill="none"/>
+                        </g>
+                        
+                        <!-- Stage 6: Flowers -->
+                        <g id="s6" style="opacity: 0; transform-origin: center; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
+                            <path d="M100,120 Q80,30 100,20" stroke="#2E7D32" stroke-width="4" fill="none"/>
+                            <path d="M95,80 Q65,70 70,50 Q85,40 95,80" fill="#388E3C"/>
+                            <path d="M100,50 Q125,60 130,40 Q115,30 100,50" fill="#388E3C"/>
+                            <!-- Flower -->
+                            <circle cx="100" cy="20" r="12" fill="#FFEB3B"/>
+                            <circle cx="100" cy="20" r="5" fill="#F57F17"/>
+                            <path d="M100,120 Q95,140 100,165 M100,130 Q80,140 85,155 M100,140 Q120,150 115,165" stroke="#D7CCC8" stroke-width="2" fill="none"/>
+                        </g>
+
+                        <!-- Stage 5: Cotyledons (Seed Leaves) -->
+                        <g id="s5" style="opacity: 0; transform-origin: center; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
+                            <path d="M100,120 Q90,60 100,50" stroke="#4CAF50" stroke-width="4" fill="none"/>
+                            <path d="M100,120 Q95,140 100,160 M100,130 Q80,140 85,150 M100,140 Q120,150 115,160" stroke="#D7CCC8" stroke-width="2" fill="none"/>
+                            <!-- Cotyledons -->
+                            <ellipse cx="88" cy="55" rx="12" ry="6" transform="rotate(-30 88 55)" fill="#AED581"/>
+                            <ellipse cx="112" cy="55" rx="12" ry="6" transform="rotate(30 112 55)" fill="#AED581"/>
+                            <path d="M100,50 Q105,40 100,32" stroke="#4CAF50" stroke-width="2" fill="none"/>
+                            <!-- First true leaves -->
+                            <path d="M100,32 Q90,25 95,15 Q105,20 100,32" fill="#4CAF50"/>
+                        </g>
+                        
+                        <!-- Stage 4: Shoot -->
+                        <g id="s4" style="opacity: 0; transform-origin: center; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
+                            <path d="M100,120 Q80,70 100,85" stroke="#81C784" stroke-width="5" fill="none" stroke-linecap="round"/>
+                            <path d="M100,120 Q95,140 100,160 M100,130 Q80,140 85,150 M100,140 Q120,150 115,160" stroke="#D7CCC8" stroke-width="2" fill="none"/>
+                            <ellipse cx="100" cy="90" rx="8" ry="6" fill="#C5E1A5" transform="rotate(45 100 90)"/>
+                        </g>
+
+                        <!-- Stage 3: Root -->
+                        <g id="s3" style="opacity: 0; transform-origin: center; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
+                            <ellipse cx="100" cy="110" rx="12" ry="8" fill="#6D4C41"/>
+                            <path d="M100,110 Q95,130 100,160 M100,125 Q80,135 85,150 M100,135 Q120,145 115,155" stroke="#FFFFFF" stroke-dasharray="2,1" stroke-width="2" fill="none"/>
+                        </g>
+
+                        <!-- Stage 2: Germination -->
+                        <g id="s2" style="opacity: 0; transform-origin: center; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
+                            <ellipse cx="100" cy="110" rx="14" ry="10" fill="#5D4037"/>
+                            <path d="M90,110 Q70,120 75,135" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        </g>
+
+                        <!-- Stage 1: Seed -->
+                        <g id="s1" style="opacity: 1; transform-origin: center; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
+                            <ellipse cx="100" cy="110" rx="12" ry="8" fill="#3E2723"/>
+                            <path d="M93,107 Q100,113 107,107" fill="none" stroke="#5D4037" stroke-width="2"/>
+                        </g>
+                    </svg>
+                </div>
+                <div style="width: 80%; display: flex; flex-direction: column; align-items: center; margin-top: 25px;">
+                    <input type="range" id="growth-slider" min="1" max="8" value="1" oninput="updateStage(this.value)" style="height: 20px; background: #ddd; -webkit-appearance: none; appearance: none; border-radius: 10px; width: 100%;">
+                    <h3 id="stage-name" style="margin-top: 25px; color: var(--primary); font-family: 'Fredoka One'; font-size: 2.2rem;">Stage 1: The Seed</h3>
+                    <p id="stage-desc" style="font-size: 1.4rem; margin-top: 10px; color: var(--text); max-width: 600px;">Dormant and waiting. It has a tough skin and a lunchbox of energy inside.</p>
+                </div>
+            </div>
+
+            <!-- Slide 5: Annual vs Perennial -->
+            <div class="slide" id="slide-5">
+                <h2>Always Plants vs One-Timer Wonders 🌳</h2>
+                <p class="subtitle">Some plants live for hundreds of years, others only for one! Can you sort them into the right homes?</p>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;" id="sort-items">
+                    <div class="sort-item" draggable="true" ondragstart="drag(event)" id="bean">Bean Plant</div>
+                    <div class="sort-item" draggable="true" ondragstart="drag(event)" id="oak">Giant Oak Tree</div>
+                    <div class="sort-item" draggable="true" ondragstart="drag(event)" id="daffodil">Daffodil</div>
+                    <div class="sort-item" draggable="true" ondragstart="drag(event)" id="sunflower">Sunflower</div>
+                </div>
+                <div class="sort-zones">
+                    <div class="sort-zone" id="zone-annual" ondrop="drop(event, 'annual')" ondragover="allowDrop(event)">
+                        <h3 style="color: #FBC02D;">Annuals (1 Year)</h3>
+                        <p style="font-size: 1rem; color: #777;">They grow, seed, and die in one single year.</p>
+                        <hr style="margin: 15px 0;">
+                    </div>
+                    <div class="sort-zone" id="zone-perennial" ondrop="drop(event, 'perennial')" ondragover="allowDrop(event)">
+                        <h3 style="color: var(--primary);">Perennials (Many Years)</h3>
+                        <p style="font-size: 1rem; color: #777;">They keep coming back year after year!</p>
+                        <hr style="margin: 15px 0;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Plant Detective (W.A.L.T.S.) -->
+            <div class="slide" id="slide-6">
+                <h2>Plant Detective: Health Check 🕵️</h2>
+                <p class="subtitle">Emmanuel, some seedlings are looking sickly. Can you find the <strong>Healthy</strong> one and tell us what's wrong with the others?</p>
+                <div class="diag-grid">
+                    <div class="diag-card" onclick="diagnose('healthy', this)">
+                        <svg viewBox="0 0 100 100" style="width: 100%; height: 180px; background: #E8F5E9; border-radius: 15px; margin-bottom: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05);">
+    <rect x="0" y="80" width="100" height="20" fill="#795548"/>
+    <path d="M50,80 Q55,40 50,20" stroke="#2E7D32" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <path d="M50,60 Q20,50 30,30 Q45,20 50,60" fill="#4CAF50"/>
+    <path d="M52,40 Q80,30 70,10 Q55,5 52,40" fill="#4CAF50"/>
+</svg>
+                        <h3>Green & Strong</h3>
+                    </div>
+                    <div class="diag-card" onclick="diagnose('light', this)">
+                        <svg viewBox="0 0 100 100" style="width: 100%; height: 180px; background: #FFFDE7; border-radius: 15px; margin-bottom: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05);">
+    <rect x="0" y="80" width="100" height="20" fill="#795548"/>
+    <path d="M50,80 Q45,10 55,5" stroke="#CDDC39" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M55,15 Q40,10 45,5 Q50,-5 55,15" fill="#D4E157"/>
+    <path d="M55,5 Q70,0 65,-5 Q60,-15 55,5" fill="#D4E157"/>
+</svg>
+                        <h3>Yellow & Spindly</h3>
+                    </div>
+                    <div class="diag-card" onclick="diagnose('water', this)">
+                        <svg viewBox="0 0 100 100" style="width: 100%; height: 180px; background: #EFEBE9; border-radius: 15px; margin-bottom: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05);">
+    <rect x="0" y="80" width="100" height="20" fill="#795548"/>
+    <path d="M50,80 Q50,40 75,55" stroke="#8D6E63" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M50,70 Q30,60 40,85 Q50,85 50,70" fill="#A1887F"/>
+    <path d="M68,50 Q55,35 60,65 Q75,65 68,50" fill="#A1887F"/>
+</svg>
+                        <h3>Brown & Wilted</h3>
+                    </div>
+                </div>
+                <div id="diag-feedback" style="margin-top: 30px; font-size: 1.4rem; font-weight: bold; min-height: 2rem;"></div>
+            </div>
+
+            <!-- Slide 7: Adaptations -->
+            <div class="slide" id="slide-7">
+                <h2>Survival Secrets! 🌍</h2>
+                <p class="subtitle">Plants can't move to find a better home. They have special <strong>adaptations</strong> to survive where they grow. Tap a habitat!</p>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; max-width: 800px;">
+                    <div class="btn" style="background: #FBC02D; height: 120px; border-radius: 20px;" onclick="showAdapt('desert')">🌵 Desert</div>
+                    <div class="btn" style="background: #0288D1; height: 120px; border-radius: 20px;" onclick="showAdapt('arctic')">❄️ Arctic</div>
+                    <div class="btn" style="background: #2E7D32; height: 120px; border-radius: 20px;" onclick="showAdapt('rainforest')">🌳 Rainforest</div>
+                    <div class="btn" style="background: #00838F; height: 120px; border-radius: 20px;" onclick="showAdapt('ocean')">🌊 Ocean</div>
+                </div>
+                <div id="adapt-content" style="margin-top: 30px; padding: 25px; background: #f9f9f9; border-radius: 20px; display: none; width: 100%; max-width: 800px;">
+                    <h3 id="adapt-title" style="color: var(--primary); font-family: 'Fredoka One';"></h3>
+                    <p id="adapt-text" style="font-size: 1.2rem; margin-top: 10px;"></p>
+                </div>
+            </div>
+
+            
+            <!-- Slide 8: Labelling -->
+            <div class="slide" id="slide-8">
+                <h2>Pumpkin Plant Parts 🎃</h2>
+                <p class="subtitle">Remember our lesson? Can you drag the labels to the right parts of this Pumpkin plant?</p>
+                <div style="display: flex; gap: 40px; align-items: center; justify-content: center; width:100%;">
+                    <div style="width: 500px; height: 350px; background: #FFF3E0; border-radius: 30px; border: 4px solid var(--accent); position: relative; display: flex; align-items:flex-end;">
+                        <!-- Ground -->
+                        <div style="width:100%; height:80px; background:#8D6E63; position:absolute; bottom:0; border-radius: 0 0 25px 25px;"></div>
+                        
+                        <!-- Simple Pumpkin SVG -->
+                        <svg viewBox="0 0 300 200" style="position:absolute; bottom:20px; left:50px; width:400px; height:300px;">
+                            <!-- Roots -->
+                            <path d="M150,180 Q130,220 100,280 M150,180 Q150,230 150,290 M150,180 Q170,220 190,270" stroke="#4E342E" stroke-width="4" fill="none" />
+                            <!-- Stem -->
+                            <path d="M150,180 Q140,100 200,80 Q250,60 270,100" stroke="#4CAF50" stroke-width="12" fill="none" />
+                            <!-- Leaf -->
+                            <path d="M200,80 Q180,40 220,20 Q240,40 200,80 Z" fill="#2E7D32" />
+                            <path d="M170,120 Q120,80 140,50 Q180,60 170,120 Z" fill="#388E3C" />
+                            <!-- Flower -->
+                            <polygon points="270,100 290,70 280,110 310,120 280,130 270,160 260,130 230,120 260,110" fill="#FFEB3B" />
+                            <!-- Pumpkin Fruit -->
+                            <ellipse cx="140" cy="140" rx="40" ry="30" fill="#FF9800" stroke="#E65100" stroke-width="3"/>
+                            <path d="M140,110 Q140,140 140,170 M120,115 Q120,140 120,165 M160,115 Q160,140 160,165" stroke="#E65100" stroke-width="2" fill="none" />
+                        </svg>
+
+                        <!-- Targets -->
+                        <div class="target-box" style="top: 35%; right: 7%; width: 100px; height: 40px; border: 3px dashed #ccc; background: white; position: absolute; border-radius: 10px; z-index:10; opacity: 0.8;" id="target-flower" ondrop="labelDrop(event, 'flower')" ondragover="allowDrop(event)"></div>
+                        <div class="target-box" style="top: 15%; left: 45%; width: 100px; height: 40px; border: 3px dashed #ccc; background: white; position: absolute; border-radius: 10px; z-index:10; opacity: 0.8;" id="target-leaf" ondrop="labelDrop(event, 'leaf')" ondragover="allowDrop(event)"></div>
+                        <div class="target-box" style="top: 40%; right: 28%; width: 100px; height: 40px; border: 3px dashed #ccc; background: white; position: absolute; border-radius: 10px; z-index:10; opacity: 0.8;" id="target-stem" ondrop="labelDrop(event, 'stem')" ondragover="allowDrop(event)"></div>
+                        <div class="target-box" style="top: 60%; left: 18%; width: 100px; height: 40px; border: 3px dashed #ccc; background: white; position: absolute; border-radius: 10px; z-index:10; opacity: 0.8;" id="target-fruit" ondrop="labelDrop(event, 'fruit')" ondragover="allowDrop(event)"></div>
+                        <div class="target-box" style="bottom: 12%; left: 35%; width: 100px; height: 40px; border: 3px dashed #ccc; background: white; position: absolute; border-radius: 10px; z-index:10; opacity: 0.8;" id="target-root" ondrop="labelDrop(event, 'root')" ondragover="allowDrop(event)"></div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 12px;" id="label-bank">
+                        <div class="sort-item" draggable="true" ondragstart="drag(event)" id="label-root">Root</div>
+                        <div class="sort-item" draggable="true" ondragstart="drag(event)" id="label-stem">Stem</div>
+                        <div class="sort-item" draggable="true" ondragstart="drag(event)" id="label-leaf">Leaf</div>
+                        <div class="sort-item" draggable="true" ondragstart="drag(event)" id="label-flower">Flower</div>
+                        <div class="sort-item" draggable="true" ondragstart="drag(event)" id="label-fruit">Fruit</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Quiz -->
+            <div class="slide" id="slide-9">
+                <h2>The Final Challenge! 🏆</h2>
+                <div style="background: var(--bg); padding: 40px; border-radius: 30px; border: 8px solid var(--primary); width: 100%; max-width: 800px; text-align: left;">
+                    <div id="quiz-header" style="display:flex; justify-content:space-between; margin-bottom: 20px;">
+                        <span id="quiz-count" style="font-weight: bold; color: var(--primary);">Question 1 of 15</span>
+                        <span id="quiz-score" style="background: var(--accent); padding: 5px 15px; border-radius: 20px; font-weight: bold;">Score: 0</span>
+                    </div>
+                    <h3 id="quiz-q" style="font-size: 1.6rem; margin-bottom: 25px; line-height: 1.4;"></h3>
+                    <div id="quiz-options" style="display: grid; gap: 12px;">
+                        <!-- Injected -->
+                    </div>
+                    <div id="quiz-feedback" style="margin-top: 20px; font-weight: bold; min-height: 2rem;"></div>
+                </div>
+            </div>
+
+            <!-- Slide 10: Homework -->
+            <div class="slide" id="slide-10">
+                <h2>My Growth Window 🖼️</h2>
+                <p class="subtitle">Your mission: Watch the miracle of life at home! Follow these steps to set up your own 'Growth Window' investigation.</p>
+                <div style="background: white; border-radius: 25px; padding: 30px; border: 5px solid var(--primary); text-align: left; max-width: 850px; box-shadow: var(--shadow);">
+                    <div style="display: flex; gap: 30px;">
+                        <div style="flex: 1;">
+                            <h3 style="color: var(--primary); margin-bottom: 15px; font-family:'Fredoka One';">🎒 Pack Your Bag:</h3>
+                            <ul style="font-size: 1.1rem; line-height: 1.8; list-style-type: '🌱 '; padding-left: 10px;">
+                                <li><strong>Wet cotton balls:</strong> Not too dripping!</li>
+                                <li><strong>Clear Zip Bag:</strong> To see through.</li>
+                                <li><strong>Lucky Bean Seeds:</strong> 3 or 4 per bag.</li>
+                                <li><strong>Tape:</strong> To hang it up.</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1.5; background: var(--bg); padding: 20px; border-radius: 20px; border-left: 8px solid var(--accent);">
+                            <h3 style="color: var(--text); margin-bottom: 15px; font-family:'Fredoka One';">🗓️ Diary Mission:</h3>
+                            <p style="font-size: 1.1rem; line-height: 1.6;">Every morning, look at your bag. Draw a picture of any new roots or shoots. How long till they reach the top of the bag?</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn primary" style="margin-top:30px; transform: scale(1.2);" onclick="alert('Congratulations Scientist!')">🏁 Complete Lesson!</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn secondary" id="prevBtn" onclick="moveSlide(-1)">⬅️ Back</button>
+            <div id="slide-counter">Slide 1 / 10</div>
+            <button class="btn primary" id="nextBtn" onclick="moveSlide(1)">Next ➡️</button>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div id="avatar-box">
+            <div class="speech-bubble" id="speechBubble">Hello Scientist! Ready to explore our seedlings?</div>
+            <div class="slide-avatar">
+                <svg viewBox="0 0 100 100" style="width: 80%; margin: 10%;">
+                    <circle cx="50" cy="40" r="30" fill="#333" />
+                    <circle cx="50" cy="45" r="25" fill="#FFCCBC" />
+                    <circle cx="40" cy="40" r="3" fill="#333" />
+                    <circle cx="60" cy="40" r="3" fill="#333" />
+                    <path d="M40,55 Q50,65 60,55" fill="none" stroke="#333" stroke-width="2" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="overview-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center; padding:40px;">
+        <div style="background:white; padding:40px; border-radius:30px; max-width:700px; text-align:center;">
+            <h2 style="color:var(--primary); font-family:'Fredoka One';">Our Science Mission</h2>
+            <p style="font-size: 1.2rem; margin: 20px 0; text-align: left;">
+                ✅ Learn the 8 stages of a plant's life.<br>
+                ✅ Discover how seeds travel (Dispersal).<br>
+                ✅ Become a Plant Detective and spot sick seedlings.<br>
+                ✅ Uncover the survival secrets of plants in extreme places.<br>
+                ✅ Build your own Growth Window at home!
+            </p>
+            <button class="btn primary" onclick="closeOverview()">Let's Start! 🌟</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+
+        const glossary = [
+            { t: "Seedling", d: "A tiny young plant that has just burst out of its seed coat.", c: "Basics" },
+            { t: "Nutrition", d: "The 'plant power' (food and water) seeds need to stay healthy and grow big.", c: "Basics" },
+            { t: "Oxygen", d: "The gas that the baby plant breathes in to stay alive. Yes, plants breathe too!", c: "Basics" },
+            { t: "Conditions", d: "The things around a plant (like light, water, and space) that help it grow.", c: "The Needs" },
+            { t: "Decompose", d: "When a plant dies and turns back into rich soil to help new seeds grow!", c: "The Cycle" },
+            { t: "Dispersal", d: "How seeds travel far away from their parent plant to find a new home.", c: "The Journey" },
+            { t: "Germination", d: "The exact moment a seed wakes up and the first root pops out.", c: "The Journey" },
+            { t: "Habitat", d: "A plant's home! Some like cold snow, others like hot sand.", c: "The World" },
+            { t: "Excretion", d: "Waste removal! Plants don't poop, but their leaves remove gases they don't need.", c: "The Science" },
+            { t: "Reproduction", d: "To make more! Plants reproduce using seeds, bulbs (like daffodils), or runners.", c: "The Journey" },
+
+        ];
+
+        const stages = {
+            1: { n: "Stage 1: The Seed", d: "A quiet lunchbox of energy, protected by a tough seed coat. Waiting for water!", e: "🫘" },
+            2: { n: "Stage 2: Germination", d: "Water wakes it up! The seed coat bursts and the first part pops out.", e: "🌱" },
+            3: { n: "Stage 3: The Radicle (Root)", d: "The root grows DOWN first to anchor the plant and find water.", e: "🧶" },
+            4: { n: "Stage 4: The Plumule (Shoot)", d: "A tiny green hook stem starts to grow UP towards the sunlight.", e: "🌿" },
+            5: { n: "Stage 5: Seed Leaves", d: "Cotyledons unfold to feed the plant until the true leaves are ready.", e: "☘️" },
+            6: { n: "Stage 6: Growth & Flowers", d: "The plant grows tall and strong, making beautiful flowers.", e: "🌻" },
+            7: { n: "Stage 7: Fruit & Pods", d: "After pollination, the flowers turn into yummy pods with new seeds!", e: "🫛" },
+            8: { n: "Stage 8: Scattering Seeds", d: "The cycle is complete! Seeds scatter to start the adventure again.", e: "🌬️" }
+        };
+
+        const adaptations = {
+            desert: { t: "Desert Survivors", d: "Cactus plants have thick, waxy skin to trap water inside and sharp spines to stop thirsty animals from eating them!" },
+            arctic: { t: "Arctic Warriors", d: "Arctic plants grow very low to the ground and have fuzzy 'hair' to keep them warm during the freezing snowstorms." },
+            rainforest: { t: "Rainforest Giants", d: "Plants here grow HUGE waxy leaves with 'drip tips' so the heavy rain slides right off without snapping them!" },
+            ocean: { t: "Ocean Dancers", d: "Seaweed has 'air bladders' (tiny balloons) to help it float up toward the sunlight in the deep water." }
+        };
+
+        function initGlossary() {
+            const container = document.getElementById('glossary-container');
+            glossary.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'term-card';
+                card.innerHTML = `<h4>${item.t}</h4><p class="term-desc">${item.d}</p><p style="font-size:0.7rem; color:var(--primary); margin-top:5px; font-weight:bold;">Category: ${item.c}</p>`;
+                card.onclick = () => card.classList.toggle('active');
+                container.appendChild(card);
+            });
+        }
+
+        function updateStage(val) {
+            const data = stages[val];
+            document.getElementById('stage-name').innerText = data.n;
+            document.getElementById('stage-desc').innerText = data.d;
+            
+            // Hide all
+            for(let i=1; i<=8; i++) {
+                const el = document.getElementById('s'+i);
+                if(el){
+                    el.style.opacity = '0';
+                    el.style.transform = 'scale(0.8) translateY(20px)';
+                }
+            }
+            // Show new
+            const currentEl = document.getElementById('s'+val);
+            if(currentEl){
+                currentEl.style.opacity = '1';
+                currentEl.style.transform = 'scale(1) translateY(0)';
+            }
+        }
+
+        const quizData = [
+            { q: "What is 'nutrition' for a seedling?", o: ["Drinking fizzy juice", "Getting energy and food to grow", "Sleeping in the sun"], a: 1 },
+            { q: "Which part of the plant grows DOWN first?", o: ["The root", "The leaf", "The stem"], a: 0 },
+            { q: "Wait! What are the first special leaves called?", o: ["Solar panels", "Lunch stems", "Cotyledons"], a: 2 },
+            { q: "True or False: Seeds breathe oxygen just like you!", o: ["True", "False"], a: 0 },
+            { q: "How do ocean plants reach the sunlight?", o: ["They use ladders", "They have tiny air balloons (bladders)", "They jump"], a: 1 },
+            { q: "Which stage comes AFTER the shoot but BEFORE flowers?", o: ["Seed leaves", "Decomposition", "The Seed"], a: 0 },
+            { q: "Why do cacti have spines?", o: ["To look cool", "To catch rain", "To stop thirsty animals eating them"], a: 2 },
+            { q: "What is 'Dispersal'?", o: ["How seeds travel far away", "The plant's hair", "A type of root"], a: 0 },
+            { q: "What happens to a plant with NO light?", o: ["It turns deep blue", "It grows yellow and leggy", "It grows big leaves"], a: 1 },
+            { q: "What do we call a plant that lives for MANY years?", o: ["Annual", "Perennial", "Botanist"], a: 1 },
+            { q: "Stage 8 is called ____. It turns the plant back into soil.", o: ["Germination", "Decomposition", "Pollination"], a: 1 },
+            { q: "Where do rainforest plants grow?", o: ["In the sand", "In the snow", "In the wet jungle"], a: 2 },
+            { q: "What is the very first part of a plant that wakes up?", o: ["The shoot", "The radicle (root)", "The fruit"], a: 1 },
+            { q: "Arctic plants grow low to the ground to...", o: ["Hide from bears", "Stay warm and avoid wind", "Find extra water"], a: 1 },
+            { q: "Final Question: What is the baby plant called?", o: ["Seedling", "Sapling", "Botanist"], a: 0 }
+        ];
+
+        
+        let quizIdx = 0;
+        let score = 0;
+        let wrongAnswers = [];
+
+        function loadQuiz() {
+            const data = quizData[quizIdx];
+            document.getElementById('quiz-count').innerText = `Question ${quizIdx + 1} of ${quizData.length}`;
+            document.getElementById('quiz-q').innerText = data.q;
+            const container = document.getElementById('quiz-options');
+            container.innerHTML = "";
+            data.o.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "btn secondary";
+                btn.style.textAlign = "left";
+                btn.style.background = "white";
+                btn.style.color = "var(--text)";
+                btn.innerText = opt;
+                btn.onclick = () => checkQuiz(idx, btn);
+                container.appendChild(btn);
+            });
+            document.getElementById('quiz-feedback').innerText = "";
+        }
+
+        function checkQuiz(idx, btn) {
+            const data = quizData[quizIdx];
+            if(idx === data.a) {
+                btn.style.background = "#C8E6C9";
+                btn.style.borderColor = "#4CAF50";
+                score++;
+                document.getElementById('quiz-score').innerText = `Score: ${score}`;
+            } else {
+                btn.style.background = "#FFCDD2";
+                btn.style.borderColor = "#F44336";
+                // Record wrong answer
+                wrongAnswers.push({q: data.q, a: data.o[data.a], yours: data.o[idx]});
+            }
+            // Disable other buttons
+            document.querySelectorAll('#quiz-options button').forEach(b => b.disabled = true);
+            setTimeout(() => {
+                quizIdx++;
+                if(quizIdx < quizData.length) loadQuiz();
+                else showQuizResults();
+            }, 1000);
+        }
+        
+        function showQuizResults() {
+            document.getElementById('quiz-header').innerHTML = `<span style="font-weight: bold; color: var(--primary);">Quiz Complete!</span><span style="background: var(--accent); padding: 5px 15px; border-radius: 20px; font-weight: bold;">Score: ${score}/${quizData.length}</span>`;
+            document.getElementById('quiz-q').innerText = "Here's how you did:";
+            const container = document.getElementById('quiz-options');
+            container.innerHTML = "";
+            
+            if (wrongAnswers.length === 0) {
+                container.innerHTML = "<h3 style='color:var(--primary);'>Perfect Score! You are a Master Scientist! 🏅</h3>";
+            } else {
+                let html = "<ul style='padding-left: 20px; font-size: 1.1rem; line-height: 1.5;'>";
+                wrongAnswers.forEach(w => {
+                    html += `<li style="margin-bottom: 15px;"><strong>Q: ${w.q}</strong><br><span style="color:#F44336">You picked: ${w.yours}</span><br><span style="color:#4CAF50">Correct: ${w.a}</span></li>`;
+                });
+                html += "</ul>";
+                container.innerHTML = html;
+            }
+        }
+function moveSlide(dir) {
+            const next = currentSlide + dir;
+            if (next < 1 || next > totalSlides) return;
+            
+            document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+            currentSlide = next;
+            document.getElementById(`slide-${currentSlide}`).classList.add('active');
+            
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('slide-counter').innerText = `Slide ${currentSlide} / ${totalSlides}`;
+            document.getElementById('progressFill').style.width = `${(currentSlide/totalSlides)*100}%`;
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+            
+            updateAvatar();
+            if(currentSlide === 9) loadQuiz();
+        }
+
+        function updateAvatar(event) {
+            const bubble = document.getElementById('speechBubble');
+            bubble.style.opacity = 0;
+            setTimeout(() => {
+                const phrases = {
+                    1: "Look how our seeds have changed! Click to reveal!",
+                    2: "Scientists use special words. Can you learn them all?",
+                    3: "Every plant has a story. Use the slider to follow it!",
+                    4: "Annual vs Perennial sounds tricky, but you've got this!",
+                    5: "Put on your detective hat! What's wrong with these plants?",
+                    6: "Plants grow in cold Arctics and hot Deserts. How?",
+                    7: "Label the bits! This time there are NO hints!",
+                    8: "Quiz time! 15 questions to prove you are a Master!",
+                    9: "Don't forget your homework mission. Watch your seeds grow!"
+                };
+                if(event === 'seedling_reveal') {
+                    bubble.innerText = "Wow! It's so much bigger and greener! That's growth!";
+                } else {
+                    bubble.innerText = phrases[currentSlide] || "Keep exploring!";
+                }
+                bubble.style.opacity = 1;
+            }, 300);
+        }
+
+        // Sorting Logic
+        function allowDrop(ev) { ev.preventDefault(); }
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+        function drop(ev, type) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text");
+            const item = document.getElementById(data);
+            const corrects = {
+                annual: ['bean', 'sunflower'],
+                perennial: ['oak', 'daffodil']
+            };
+            if(corrects[type].includes(data)) {
+                ev.target.appendChild(item);
+                item.style.background = "#E8F5E9";
+                item.innerText += " ✅";
+            } else {
+                alert("Not quite! Think about how long they live.");
+            }
+        }
+
+        function labelDrop(ev, type) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text");
+            const item = document.getElementById(data);
+            if(data === `label-${type}`) {
+                ev.target.innerText = item.innerText;
+                ev.target.style.background = "#E8F5E9";
+                ev.target.style.borderColor = "#4CAF50";
+                item.style.display = "none";
+            } else {
+                alert("Incorrect label position.");
+            }
+        }
+
+        function diagnose(type, el) {
+            const fb = document.getElementById('diag-feedback');
+            document.querySelectorAll('.diag-card').forEach(c => c.className = 'diag-card');
+            if(type === 'healthy') {
+                el.classList.add('correct');
+                fb.innerText = "✅ Excellent! This seedling has water AND light.";
+                fb.style.color = "var(--primary)";
+            } else if(type === 'light') {
+                el.classList.add('wrong');
+                fb.innerText = "❌ Uh oh! This is 'leggy'. It is reaching for light!";
+                fb.style.color = "#f44336";
+            } else {
+                el.classList.add('wrong');
+                fb.innerText = "❌ Wilted! This seedling is thirsty for water.";
+                fb.style.color = "#f44336";
+            }
+        }
+
+        function openOverview() { document.getElementById('overview-modal').style.display = 'flex'; }
+        function closeOverview() { document.getElementById('overview-modal').style.display = 'none'; }
+        function showAdapt(type) {
+            const data = adaptations[type];
+            document.getElementById('adapt-title').innerText = data.t;
+            document.getElementById('adapt-text').innerText = data.d;
+            document.getElementById('adapt-content').style.display = 'block';
+        }
+
+        window.onload = () => {
+            initGlossary();
+            updateUI();
+        };
+    </script>
+</body>
+</html>
