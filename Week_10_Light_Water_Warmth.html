@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10: Light, Water, Warmth ☀️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&family=Outfit:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1B5E20;
+            --secondary: #4CAF50;
+            --accent: #FBC02D;
+            --bg: #F9FBE7;
+            --text: #002100;
+            --card-bg: #FFFFFF;
+            --shadow: 0 15px 35px rgba(27, 94, 32, 0.15);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Outfit', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            background-image: radial-gradient(var(--secondary) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #slide-viewport {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            position: absolute;
+            width: 90%;
+            height: 85%;
+            background: white;
+            border-radius: 30px;
+            padding: 40px 40px 160px 40px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.6s ease;
+            overflow-y: auto;
+            border: 4px solid var(--secondary);
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        p.subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            max-width: 800px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .btn.primary { background: var(--primary); color: white; }
+        .btn.primary:hover { transform: scale(1.05); background: var(--text); }
+        .btn.secondary { background: var(--secondary); color: white; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Slide 1: Cupboard Styles */
+        .cupboard-reveal {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: stretch;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .cupboard-panel {
+            flex: 1;
+            max-width: 400px;
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 25px;
+            border: 3px solid var(--secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cupboard-door-container {
+            position: relative;
+            width: 250px;
+            height: 300px;
+            background: #5D4037;
+            border-radius: 10px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .cupboard-door {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #8D6E63;
+            border: 4px solid #5D4037;
+            border-radius: 10px;
+            transform-origin: left;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 20px;
+        }
+
+        .door-handle {
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .cupboard-door-container.open .cupboard-door {
+            transform: rotateY(-120deg);
+        }
+
+        .cupboard-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #3E2723;
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        .window-panel {
+            width: 250px;
+            height: 300px;
+            background: #81D4FA;
+            border: 8px solid #90A4AE;
+            border-radius: 10px;
+            position: relative;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .sun-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        .leggy-plant {
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+        }
+
+        /* Slide 2: Sorting Styles */
+        .sort-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 30px;
+        }
+
+        .draggable-items {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .drag-card {
+            background: white;
+            border: 3px solid #ccc;
+            border-radius: 15px;
+            padding: 12px 25px;
+            cursor: grab;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .drag-card:hover { transform: translateY(-3px); border-color: var(--primary); }
+
+        .drop-zones {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .drop-zone {
+            flex: 1;
+            max-width: 400px;
+            min-height: 250px;
+            border: 5px dashed #ccc;
+            border-radius: 30px;
+            padding: 25px;
+            background: #fdfdfd;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .drop-zone.hover { border-color: var(--primary); background: var(--bg); }
+        .drop-zone.correct { border-color: var(--secondary); background: #E8F5E9; }
+
+        .drop-zone h3 { font-family: 'Fredoka One', cursive; margin-bottom: 10px; font-size: 1.4rem; }
+        .zone-germination { border-color: #FF9800; }
+        .zone-growth { border-color: #4CAF50; }
+
+        /* Slide 4: Measurement Styles */
+        .measurement-area {
+            display: flex;
+            gap: 40px;
+            align-items: flex-end;
+            justify-content: center;
+            width: 100%;
+            height: 400px;
+            position: relative;
+            padding-bottom: 50px;
+            background: #f5f5f5;
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+
+        .ruler {
+            position: absolute;
+            width: 60px;
+            height: 320px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 2px solid #555;
+            border-radius: 4px;
+            cursor: grab;
+            z-index: 10;
+            backdrop-filter: blur(2px);
+        }
+
+        .ruler-marks {
+            height: 100%;
+            width: 100%;
+            position: relative;
+        }
+
+        .ruler-cm {
+            position: absolute;
+            right: 0;
+            width: 15px;
+            height: 1px;
+            background: #333;
+        }
+
+        .ruler-cm.large { width: 30px; height: 2px; }
+        .ruler-label {
+            position: absolute;
+            right: 35px;
+            font-size: 12px;
+            transform: translateY(-50%);
+            font-weight: bold;
+        }
+
+        .plant-measure {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .measurement-input {
+            width: 80px;
+            padding: 10px;
+            border: 3px solid #eee;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .measurement-input.correct { border-color: var(--secondary); background: #E8F5E9; }
+        .measurement-input.wrong { border-color: #f44336; background: #FFEBEE; }
+
+        /* Mechanism Scenes (Slides 3, 4, 5) */
+        .mechanism-scene { 
+            width: 100%; 
+            height: 450px; 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: visible; 
+            border-radius: 30px; 
+            background: #ffffff; 
+            border: 4px solid #eee; 
+            margin-top: 20px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+        }
+        .mechanism-scene svg {
+            width: 100%;
+            height: 100%;
+            max-width: 600px;
+        }
+        .seed-main { transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .seed-base { fill: #8D6E63; stroke: #5D4037; stroke-width: 4; }
+        .seed-swell { animation: seedSwell 2s forwards; }
+        .seed-crack { stroke-dasharray: 100; stroke-dashoffset: 100; animation: seedCrack 1s 1.5s forwards; }
+        .root-grow { stroke-dasharray: 50; stroke-dashoffset: 50; animation: rootGrow 1s 2s forwards; }
+        
+        @keyframes seedSwell { 0% { transform: scale(1); } 100% { transform: scale(1.3); fill: #5D4037; } }
+        @keyframes seedCrack { 100% { stroke-dashoffset: 0; } }
+        @keyframes rootGrow { 100% { stroke-dashoffset: 0; } }
+
+        .particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; opacity: 0; pointer-events: none; }
+        .particle.active { animation: particleFloat 2s forwards; }
+        @keyframes particleFloat { 
+            0% { transform: translate(0,0) scale(0); opacity: 0; } 
+            50% { opacity: 0.8; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 0; } 
+        }
+
+        .radiance { position: absolute; inset: 0; background: radial-gradient(circle, rgba(255,235,59,0.2) 0%, transparent 70%); opacity: 0; transition: 1s; }
+        .radiance.active { opacity: 1; }
+
+        .leaf-transition { transition: fill 2s, filter 2s; }
+        .leaf-transition.pale { fill: #FFF59D; filter: saturate(0.5); }
+        .leaf-transition.healthy { fill: #4CAF50; filter: saturate(1.2); }
+
+        /* Slide 2: The Big Three Intro */
+        .orbit-container { width: 300px; height: 300px; position: relative; margin: 40px auto; }
+        .orbit-item { position: absolute; width: 80px; height: 80px; border-radius: 50%; background: white; border: 5px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; box-shadow: var(--shadow); transition: 0.5s; }
+        .orbit-water { top: 0; left: 50%; transform: translateX(-50%); animation: orbitFloat 3s infinite alternate; }
+        .orbit-warmth { bottom: 0; left: 0; animation: orbitFloat 4s infinite alternate -1s; }
+        .orbit-light { bottom: 0; right: 0; animation: orbitFloat 5s infinite alternate -2s; }
+        @keyframes orbitFloat { from { transform: translate(var(--tx, -50%), -10px); } to { transform: translate(var(--tx, -50%), 10px); } }
+
+        /* General UI */
+        .controls { padding: 25px 50px; display: flex; justify-content: space-between; align-items: center; background: white; border-top: 4px solid var(--secondary); z-index: 100; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); }
+        #slide-counter { font-family: 'Fredoka One', cursive; font-size: 1.4rem; color: var(--primary); }
+        .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 10px; background: #eee; z-index: 101; }
+        .progress-fill { height: 100%; background: linear-gradient(to right, var(--secondary), var(--primary)); width: 0%; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        #avatar-box { position: fixed; right: 40px; bottom: 130px; display: flex; align-items: flex-end; gap: 20px; pointer-events: none; z-index: 1000; }
+        .speech-bubble { background: white; padding: 25px; border-radius: 30px; border: 5px solid var(--primary); box-shadow: var(--shadow); max-width: 300px; font-weight: bold; position: relative; opacity: 1; transition: 0.4s; font-size: 1.2rem; color: var(--text); }
+        .speech-bubble::after { content: ''; position: absolute; right: -20px; bottom: 25px; border-left: 20px solid var(--primary); border-top: 15px solid transparent; border-bottom: 15px solid transparent; }
+        .slide-avatar { width: 120px; height: 120px; background: #FFCCBC; border-radius: 30%; border: 5px solid white; box-shadow: var(--shadow); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+
+        .success-banner {
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .real-life-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255,255,255,0.9);
+            border: 2px solid var(--secondary);
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .real-life-btn:hover { background: var(--secondary); color: white; }
+        .real-life-btn.active { background: #333; border-color: #333; color: white; }
+
+        .real-life-overlay {
+            position: absolute;
+            inset: 0;
+            background: white;
+            z-index: 15;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 26px;
+            animation: fadeIn 0.4s ease;
+        }
+        .real-life-overlay img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            object-fit: contain;
+        }
+        .real-life-overlay.active { display: flex; }
+    </style>
+</head>
+
+<body>
+    <div class="presentation-container">
+        <header>
+            <h1>☀️ Week 10: Light, Water, Warmth</h1>
+            <div id="slide-title" style="font-weight: bold; font-size: 1.2rem; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px;">The Great Plant Mystery</div>
+        </header>
+
+        <div id="slide-viewport">
+            <!-- Slide 1: The Cupboard Reveal -->
+            <div class="slide active" id="slide-1">
+                <h2>The Big Reveal! 🚪</h2>
+                <p class="subtitle">Both seeds had water and warmth. But one lived in the dark and one lived in the light. <strong>Click the cupboard</strong> to see what happened!</p>
+                <div class="cupboard-reveal">
+                    <div class="cupboard-panel">
+                        <h3>The Dark Cupboard</h3>
+                        <div class="cupboard-door-container" id="cupboard-door" onclick="checkSlide1('cupboard')">
+                            <div class="cupboard-door">
+                                <div class="door-handle"></div>
+                            </div>
+                            <div class="cupboard-content">
+                                <svg width="150" height="250" viewBox="0 0 150 250" class="leggy-plant">
+                                    <rect x="40" y="180" width="70" height="50" fill="#795548" />
+                                    <path d="M75,180 Q60,100 85,60" fill="none" stroke="#F0E68C" stroke-width="6" />
+                                    <path d="M85,60 Q75,50 80,45 Q90,50 85,60" fill="#D4E157" />
+                                    <path d="M85,75 Q95,65 100,70 Q95,80 85,75" fill="#D4E157" opacity="0.6"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <p style="font-weight: bold; color: #5D4037;">Grew in the DARK</p>
+                    </div>
+                    <div class="cupboard-panel">
+                        <h3>The Sunny Window</h3>
+                        <div class="window-panel" style="cursor: pointer; transition: 0.3s;" onclick="checkSlide1('window')">
+                            <div class="sun-icon"></div>
+                            <svg width="150" height="250" viewBox="0 0 150 250" style="transition: transform 0.3s;">
+                                <rect x="40" y="180" width="70" height="50" fill="#795548" />
+                                <path d="M75,180 Q75,150 75,130" fill="none" stroke="#2E7D32" stroke-width="8" />
+                                <path d="M75,130 Q50,110 40,120 Q50,140 75,130" fill="#4CAF50" />
+                                <path d="M75,140 Q100,120 110,130 Q100,150 75,140" fill="#4CAF50" />
+                            </svg>
+                        </div>
+                        <p style="font-weight: bold; color: var(--primary);">Grew in SUNLIGHT</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: The Big Three Intro -->
+            <div class="slide" id="slide-2">
+                <h2>The Big Three! 🌟</h2>
+                <p class="subtitle">Every seed is like a tiny explorer. To wake up and grow strong, it needs three pieces of equipment. Let's see what each one does!</p>
+                <div class="orbit-container">
+                    <div class="orbit-item orbit-water" style="--tx: -50%">💧</div>
+                    <div class="orbit-item orbit-warmth" style="--tx: 0%">🌡️</div>
+                    <div class="orbit-item orbit-light" style="--tx: 0%">☀️</div>
+                    <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 5rem;">🫘</div>
+                </div>
+                <div class="success-banner" style="display: block; background: #E1F5FE; color: #01579B; border-color: #03A9F4;">Which one should we look at first? Click next to meet **Water!**</div>
+            </div>
+
+            <!-- Slide 3: Water - The Softener -->
+            <div class="slide" id="slide-3">
+                <h2>💧 Water: The Softener</h2>
+                <p class="subtitle">A seed's coat is <strong>hard and tough</strong>. Click the rain cloud to give the seed a drink!</p>
+                <div class="mechanism-scene" style="background: linear-gradient(#e1f5fe, #ffffff);">
+                    <button class="real-life-btn" onclick="toggleRealLife(3, this)">📸 Real Life View</button>
+                    <div class="real-life-overlay" id="real-life-3">
+                        <img src="images/seed_swelling_macro.png" alt="Real life seed swelling">
+                    </div>
+                    <svg viewBox="0 0 200 200" id="water-svg">
+                        <!-- Background soil -->
+                        <rect x="0" y="140" width="200" height="60" fill="#795548" />
+                        <!-- Cloud -->
+                        <g id="rain-cloud" style="cursor: pointer;" onclick="animateWater()">
+                            <path d="M120,40 Q120,20 145,25 Q160,10 175,25 Q195,20 195,45 Z" fill="#90caf9" />
+                            <text x="140" y="65" font-size="20">🌧️</text>
+                            <circle cx="160" cy="40" r="40" fill="transparent" /> <!-- hit area -->
+                        </g>
+                        <!-- Seed -->
+                        <g id="seed-group-water" class="seed-main" transform="translate(100, 140)">
+                            <ellipse cx="0" cy="0" rx="35" ry="22" class="seed-base" />
+                            <path id="seed-crack-line" d="M-35,0 L-10,0" fill="none" class="seed-crack" stroke="#5D4037" stroke-width="3" style="opacity: 0; transition: 1s;" />
+                            <path id="root-line" d="M-35,0 Q-45,20 -35,50" fill="none" class="root-grow" stroke="#ffffff" stroke-width="6" style="opacity: 0; stroke-dasharray: 60; stroke-dashoffset: 60; transition: 1s;" />
+                        </g>
+                        <!-- Falling droplets (hidden initially) -->
+                        <g id="droplets" style="opacity: 0; transition: 0.5s;">
+                            <text x="135" y="80" font-size="20">💧</text>
+                            <text x="160" y="100" font-size="20">💧</text>
+                        </g>
+                    </svg>
+                </div>
+                <div id="water-text" style="margin-top:20px; font-size: 1.3rem; display: none; color: #0277bd;">
+                    <strong>SWISH!</strong> Water soaks in and makes the coat soft. The seed swells up until the baby root pushes through!
+                </div>
+            </div>
+
+            <!-- Slide 4: Warmth - The Alarm Clock -->
+            <div class="slide" id="slide-4">
+                <h2>🌡️ Warmth: The Alarm Clock</h2>
+                <p class="subtitle">In the cold, seeds stay asleep. Click the <strong>Warmometer</strong> to wake up the tiny helpers!</p>
+                <div class="mechanism-scene" style="background: linear-gradient(#fff9c4, #ffffff);">
+                    <button class="real-life-btn" onclick="toggleRealLife(4, this)">📸 Real Life View</button>
+                    <div class="real-life-overlay" id="real-life-4">
+                        <img src="images/warm_propagator.png" alt="Real life propagator">
+                    </div>
+                    <div class="radiance" id="warmth-glow" style="pointer-events: none; background: radial-gradient(circle, rgba(255,193,7,0.3) 0%, transparent 70%);"></div>
+                    <svg viewBox="0 0 200 200">
+                        <rect x="0" y="140" width="200" height="60" fill="#795548" />
+                        <g transform="translate(80, 140)">
+                            <ellipse cx="0" cy="0" rx="40" ry="25" class="seed-base" />
+                            <g id="helper-particles"></g>
+                        </g>
+                    </svg>
+                    <!-- Larger Thermometer -->
+                    <div style="position: absolute; right: 50px; height: 300px; width: 60px; background: white; border-radius: 30px; border: 5px solid #ffab91; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.1);" onclick="animateWarmth()">
+                        <div id="warm-level" style="position: absolute; bottom: 0; width: 100%; height: 20%; background: linear-gradient(#ff5252, #f44336); border-radius: 30px; transition: 1.5s cubic-bezier(0.19, 1, 0.22, 1);"></div>
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; z-index: 5;">🌡️</div>
+                    </div>
+                </div>
+                <div id="warmth-text" style="margin-top:20px; font-size: 1.3rem; display: none; color: #e64a19;">
+                    <strong>DING!</strong> Warmth is the alarm clock. It tells the tiny helpers inside that it's safe to start building the plant!
+                </div>
+            </div>
+
+            <!-- Slide 5: Light - The Kitchen -->
+            <div class="slide" id="slide-5">
+                <h2>☀️ Light: The Kitchen</h2>
+                <p class="subtitle">Once the plant pops up, it needs light to stay strong. Click the <strong>GLOWING SUN</strong>!</p>
+                <div class="mechanism-scene" style="background: linear-gradient(#fffde7, #ffffff);">
+                    <button class="real-life-btn" onclick="toggleRealLife(5, this)">📸 Real Life View</button>
+                    <div class="real-life-overlay" id="real-life-5">
+                        <img src="images/light_vs_dark_comparison.png" alt="Real life light vs dark">
+                    </div>
+                    <svg viewBox="0 0 200 200">
+                        <rect x="0" y="160" width="200" height="40" fill="#795548" />
+                        <g transform="translate(100, 160)">
+                            <path d="M0,0 L0,-100" fill="none" stroke="#2E7D32" stroke-width="8" />
+                            <path id="leaf-left" d="M0,-60 Q-50,-90 -20,-30 Z" class="leaf-transition pale" />
+                            <path id="leaf-right" d="M0,-80 Q50,-110 30,-50 Z" class="leaf-transition pale" />
+                        </g>
+                        <circle cx="160" cy="40" r="30" fill="#ffeb3b" style="cursor: pointer; filter: drop-shadow(0 0 20px #fbc02d);" onclick="animateLight()">
+                            <animateTransform attributeName="transform" type="scale" values="1;1.2;1" dur="3s" repeatCount="indefinite" />
+                        </circle>
+                        <g id="energy-beams"></g>
+                        <text x="145" y="55" font-size="30" style="pointer-events: none;">☀️</text>
+                    </svg>
+                </div>
+                <div id="light-text" style="margin-top:20px; font-size: 1.3rem; display: none; color: #388e3c;">
+                    <strong>BOOM!</strong> Sunlight is the plant's power source. It turns the leaves dark green and makes them strong!
+                    <div style="margin-top: 15px; background: #e8f5e9; border: 2px dashed #4caf50; padding: 10px; border-radius: 15px; font-size: 1.1rem; color: #1b5e20;">
+                        🌟 <strong>Discovery:</strong> Even if a plant turns yellow in the dark, it can turn green again if you bring it into the sun quickly!
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 6: Germination vs Growth Sort -->
+            <div class="slide" id="slide-6">
+                <h2>Germination vs Growth ⚖️</h2>
+                <p class="subtitle">What does a seed need to <strong>WAKE UP</strong>, and what does it need to <strong>KEEP GROWING</strong>? Drag the items to the right zones!</p>
+                <div class="sort-container">
+                    <div class="draggable-items" id="sort-bank">
+                        <div class="drag-card" draggable="true" ondragstart="drag(event)" id="card-sun">☀️ Sunlight</div>
+                        <div class="drag-card" draggable="true" ondragstart="drag(event)" id="card-water">💧 Water</div>
+                        <div class="drag-card" draggable="true" ondragstart="drag(event)" id="card-warmth">🌡️ Warmth</div>
+                        <div class="drag-card" draggable="true" ondragstart="drag(event)" id="card-food">🍱 Stored Food</div>
+                    </div>
+                    <div class="drop-zones">
+                        <div class="drop-zone zone-germination" ondrop="drop(event, 'germ')" ondragover="allowDrop(event)">
+                            <h3>Waking Up (Germination)</h3>
+                        </div>
+                        <div class="drop-zone zone-growth" ondrop="drop(event, 'grow')" ondragover="allowDrop(event)">
+                            <h3>Growing Strong (After)</h3>
+                        </div>
+                    </div>
+                    <div class="success-banner" id="sort-success">
+                        That's why the cupboard seed woke up — it had water and warmth. But it couldn't KEEP growing strong without sunlight!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: The Rule Breakers -->
+            <div class="slide" id="slide-7">
+                <h2>The Rule Breakers! 🌺</h2>
+                <div style="background: #FFF3E0; border: 3px solid #FFB74D; padding: 20px; border-radius: 20px; max-width: 800px; margin-bottom: 30px; text-align: left; display: flex; align-items: center; gap: 20px; position: relative;">
+                    <button class="real-life-btn" onclick="toggleRealLife(7, this)">📸 Real Life View</button>
+                    <div class="real-life-overlay" id="real-life-7">
+                        <img src="images/poppy_seed_scale.png" alt="Poppy seeds scale">
+                    </div>
+                    <div style="flex-shrink: 0; width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                        <svg viewBox="0 0 100 100" width="60" height="60">
+                            <!-- tiny seeds -->
+                            <circle cx="45" cy="45" r="2" fill="#222"/>
+                            <circle cx="55" cy="40" r="2" fill="#222"/>
+                            <circle cx="50" cy="55" r="2" fill="#222"/>
+                            <circle cx="35" cy="50" r="2" fill="#222"/>
+                            <circle cx="60" cy="50" r="2" fill="#222"/>
+                            <!-- magnifying glass -->
+                            <circle cx="50" cy="45" r="30" fill="none" stroke="#42A5F5" stroke-width="8" stroke-opacity="0.4"/>
+                            <line x1="70" y1="65" x2="90" y2="85" stroke="#757575" stroke-width="12" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 style="color: #E65100; margin-bottom: 5px;">What is a Poppy Seed?</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.5;">Poppy seeds are the tiny, crunchy blue-black seeds you sometimes see on bread! Because they are <strong>SO TINY</strong>, their "stored food lunchbox" is extremely small. If you bury them deep in the dark, they run out of food before reaching the surface. That's why they MUST sense sunlight to wake up!</p>
+                    </div>
+                </div>
+                <p class="subtitle" style="margin-bottom: 15px;">Now you be the scientist! See what happens when we bury them vs leave them on the surface:</p>
+                <div style="display: flex; gap: 40px; justify-content: center; width: 100%; margin-top: 5px;">
+                    <!-- Bury Panel -->
+                    <div style="flex: 1; background: #EFEBE9; padding: 25px; border-radius: 25px; border: 4px solid #D7CCC8;">
+                        <h3 style="margin-bottom: 15px;">Option A: Bury It</h3>
+                        <div id="bury-svg-container" style="height: 200px; background: #8D6E63; border-radius: 15px; position: relative; overflow: hidden; margin-bottom: 20px;">
+                             <div id="soil-top" style="position: absolute; top: 50px; width:100%; height: 150px; background: #5D4037; border-top: 5px solid #4E342E;"></div>
+                             <!-- Tiny poppy seed -->
+                             <circle id="poppy-bury" cx="125" cy="40" r="3" fill="red" style="position:absolute; left:122px; top:37px; transition: 1s cubic-bezier(0.4, 0, 0.2, 1);"></circle>
+                             <div id="bury-feedback" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3rem; opacity: 0;">❌</div>
+                        </div>
+                        <button class="btn secondary" onclick="poppyExperiment('bury', this)">Bury the Seed! 🕳️</button>
+                    </div>
+                    <!-- Scatter Panel -->
+                    <div style="flex: 1; background: #FFF9C4; padding: 25px; border-radius: 25px; border: 4px solid #FFF176;">
+                        <h3 style="margin-bottom: 15px;">Option B: Scatter It</h3>
+                        <div id="scatter-svg-container" style="height: 200px; background: skyblue; border-radius: 15px; position: relative; overflow: hidden; margin-bottom: 20px;">
+                             <div style="position: absolute; bottom: 0; width:100%; height: 50px; background: #5D4037; border-top: 5px solid #4E342E;"></div>
+                             <!-- Sun -->
+                             <circle cx="30" cy="30" r="15" fill="yellow" style="box-shadow: 0 0 10px yellow;"></circle>
+                             <!-- Tiny poppy seed on surface -->
+                             <div id="poppy-scatter" style="position: absolute; left: 120px; bottom: 50px; width: 6px; height: 6px; background: red; border-radius: 50%;"></div>
+                             <!-- Growing animation -->
+                             <path id="poppy-sprout" d="M123,150 Q120,130 123,110" fill="none" stroke="#4CAF50" stroke-width="3" style="opacity:0; stroke-dasharray: 50; stroke-dashoffset: 50; transition: 1.5s;" />
+                             <div id="scatter-feedback" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3rem; opacity: 0;">✅</div>
+                        </div>
+                        <button class="btn secondary" onclick="poppyExperiment('scatter', this)">Leave on Surface! ☀️</button>
+                    </div>
+                </div>
+                <div class="success-banner" id="poppy-success" style="margin-top: 30px;">
+                    Brilliant! Poppy seeds are RULE BREAKERS — they must be scattered on top where the sunlight can reach them!
+                </div>
+            </div>
+            <!-- Slide 8: Measurement Practice -->
+            <div class="slide" id="slide-8">
+                <h2>Measuring Masterclass 📏</h2>
+                <p class="subtitle">Scientists must be precise! Grab the <strong>translucent ruler</strong> and measure these three seedlings. Type the height in <strong>cm</strong>!</p>
+                <div class="measurement-area" id="measure-zone">
+                    <div class="ruler" id="ruler" style="left: 80%; top: 50px;">
+                        <div class="ruler-marks" id="ruler-marks"></div>
+                    </div>
+                    <div class="plant-measure">
+                        <svg width="100" height="250" viewBox="0 0 100 250">
+                            <rect x="10" y="200" width="80" height="40" fill="#795548" />
+                            <path d="M50,200 L50,140" fill="none" stroke="#2E7D32" stroke-width="5" />
+                            <path d="M50,140 Q40,130 50,120 Q60,130 50,140 Z" fill="#4CAF50" />
+                        </svg>
+                        <div style="font-weight: bold;">Plant A</div>
+                        <input type="number" class="measurement-input" id="input-A" placeholder="? cm" onchange="checkMeasure('A', 4)">
+                    </div>
+                    <div class="plant-measure">
+                        <svg width="100" height="250" viewBox="0 0 100 250">
+                            <rect x="10" y="200" width="80" height="40" fill="#795548" />
+                            <path d="M50,200 L50,60" fill="none" stroke="#2E7D32" stroke-width="5" />
+                            <path d="M50,60 Q40,50 50,40 Q60,50 50,60 Z" fill="#4CAF50" />
+                        </svg>
+                        <div style="font-weight: bold;">Plant B</div>
+                        <input type="number" class="measurement-input" id="input-B" placeholder="? cm" onchange="checkMeasure('B', 8)">
+                    </div>
+                    <div class="plant-measure">
+                        <svg width="100" height="250" viewBox="0 0 100 250">
+                            <rect x="10" y="200" width="80" height="40" fill="#795548" />
+                            <path d="M50,200 L50,30" fill="none" stroke="#2E7D32" stroke-width="5" />
+                            <circle cx="50" cy="30" r="10" fill="#4CAF50" />
+                        </svg>
+                        <div style="font-weight: bold;">Plant C</div>
+                        <input type="number" class="measurement-input" id="input-C" placeholder="? cm" onchange="checkMeasure('C', 9)">
+                    </div>
+                </div>
+                <div class="success-banner" id="measure-success" style="margin-top: 20px;">
+                    Scientific excellence! You've mastered digital measurement.
+                </div>
+            </div>
+
+            <!-- Slide 9: The Survival Quiz -->
+            <div class="slide" id="slide-9">
+                <h2>The Survival Quiz! 🏆</h2>
+                <div style="background: var(--bg); padding: 40px; border-radius: 30px; border: 8px solid var(--primary); width: 100%; max-width: 800px; text-align: left;">
+                    <div id="quiz-header" style="display:flex; justify-content:space-between; margin-bottom: 20px;">
+                        <span id="quiz-count" style="font-weight: bold; color: var(--primary);">Question 1 of 11</span>
+                        <span id="quiz-score" style="background: var(--accent); padding: 5px 15px; border-radius: 20px; font-weight: bold;">Score: 0</span>
+                    </div>
+                    <h3 id="quiz-q" style="font-size: 1.6rem; margin-bottom: 25px; line-height: 1.4;"></h3>
+                    <div id="quiz-options" style="display: grid; gap: 12px;"></div>
+                    <div id="quiz-feedback" style="margin-top: 20px; font-weight: bold; min-height: 2rem;"></div>
+                </div>
+            </div>
+
+            <!-- Slide 10: Homework -->
+            <div class="slide" id="slide-10">
+                <h2>Your Weekly Mission 📓</h2>
+                <p class="subtitle">Every scientist needs data! Record your plant growth daily.</p>
+                <div style="display: flex; gap: 30px; width: 100%; max-width: 900px; text-align: left;">
+                    <div style="flex: 1; background: white; padding: 25px; border-radius: 25px; border: 4px solid var(--primary); box-shadow: var(--shadow);">
+                        <h3 style="color: var(--primary); font-family: 'Fredoka One'; margin-bottom: 15px;">🎒 Daily Task:</h3>
+                        <ul style="font-size: 1.1rem; line-height: 1.8; list-style-type: '🌱 '; padding-left: 10px;">
+                            <li>Measure your Window Plant every morning.</li>
+                            <li>Measure your Cupboard Plant every morning.</li>
+                            <li>Write the height in cm in your chart.</li>
+                        </ul>
+                    </div>
+                    <div style="flex: 1.2; background: #FFF; padding: 25px; border-radius: 25px; border: 4px solid var(--accent); box-shadow: var(--shadow);">
+                        <h3 style="color: #E65100; font-family: 'Fredoka One'; margin-bottom: 15px;">📋 My Record Chart:</h3>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 1rem;">
+                            <thead>
+                                <tr style="background: #FFF3E0;">
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Day</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Window (cm)</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Cupboard (cm)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">Mon</td><td style="border: 1px solid #ddd; padding: 8px;"></td><td style="border: 1px solid #ddd; padding: 8px;"></td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">Tue</td><td style="border: 1px solid #ddd; padding: 8px;"></td><td style="border: 1px solid #ddd; padding: 8px;"></td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">Wed</td><td style="border: 1px solid #ddd; padding: 8px;"></td><td style="border: 1px solid #ddd; padding: 8px;"></td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">Thu</td><td style="border: 1px solid #ddd; padding: 8px;"></td><td style="border: 1px solid #ddd; padding: 8px;"></td></tr>
+                                <tr><td style="border: 1px solid #ddd; padding: 8px;">Fri</td><td style="border: 1px solid #ddd; padding: 8px;"></td><td style="border: 1px solid #ddd; padding: 8px;"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <button class="btn primary" style="margin-top: 30px; padding: 20px 50px; font-size: 1.4rem;" onclick="alert('Congratulations, Scientist Emmanuel!')">Finish Lesson 🎓</button>
+            </div>
+
+        </div>
+
+        <div class="controls">
+            <button class="btn secondary" id="prevBtn" onclick="moveSlide(-1)">⬅️ Back</button>
+            <div id="slide-counter">Slide 1 / 8</div>
+            <button class="btn primary" id="nextBtn" onclick="moveSlide(1)">Next ➡️</button>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div id="avatar-box">
+            <div class="speech-bubble" id="speechBubble">Hello Scientist! Ready to solve the mystery?</div>
+            <div class="slide-avatar">
+                <svg viewBox="0 0 100 100" style="width: 80%; margin: 10%;">
+                    <circle cx="50" cy="40" r="30" fill="#333" />
+                    <circle cx="50" cy="45" r="25" fill="#FFCCBC" />
+                    <circle cx="40" cy="40" r="3" fill="#333" />
+                    <circle cx="60" cy="40" r="3" fill="#333" />
+                    <path d="M40,55 Q50,65 60,55" fill="none" stroke="#333" stroke-width="2" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+        let sortedCount = 0;
+        let measuresCorrect = 0;
+
+        const slideTitles = [
+            "The Big Reveal!",
+            "The Big Three Intro",
+            "Water: The Softener",
+            "Warmth: The Alarm Clock",
+            "Light: The Kitchen",
+            "Germination vs Growth Sort",
+            "The Rule Breakers!",
+            "Measuring Masterclass",
+            "The Survival Quiz",
+            "Your Weekly Mission"
+        ];
+
+        const avatarPhrases = {
+            1: "Both seeds had water and warmth. But look at the difference! Why do you think that is?",
+            2: "A seed needs 3 main ingredients. We call them 'The Big Three'!",
+            3: "Water soaks into the tough seed coat. It's the very first step!",
+            4: "Inside the seed, tiny helpers are waiting for it to get warm enough to work.",
+            5: "Light is the plant's kitchen! Did you know a yellow plant can turn green again if it finds the sun?",
+            6: "Can you sort these? Some are for waking up, some are for growing strong!",
+            7: "Not all seeds follow the same rules. Meet the Poppy Seed!",
+            8: "Scientists use rulers to be precise. Try measuring these seedlings!",
+            9: "Time to show off what you've learned, Scientist!",
+            10: "Your mission is to record your own seed's journey. Good luck!"
+        };
+
+        function moveSlide(dir) {
+            const next = currentSlide + dir;
+            if (next < 1 || next > totalSlides) return;
+            document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+            currentSlide = next;
+            document.getElementById(`slide-${currentSlide}`).classList.add('active');
+            
+            if(currentSlide === 8) initRuler();
+            if(currentSlide === 9) loadQuiz();
+            
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('slide-counter').innerText = `Slide ${currentSlide} / ${totalSlides}`;
+            document.getElementById('progressFill').style.width = `${(currentSlide / totalSlides) * 100}%`;
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+            updateAvatar();
+            document.getElementById('slide-title').innerText = slideTitles[currentSlide - 1];
+        }
+
+        function updateAvatar(message = null) {
+            const bubble = document.getElementById('speechBubble');
+            bubble.style.opacity = 0;
+            setTimeout(() => {
+                bubble.innerText = message || avatarPhrases[currentSlide] || "Keep exploring!";
+                bubble.style.opacity = 1;
+            }, 300);
+        }
+
+        function toggleRealLife(slideNum, btn) {
+            const overlay = document.getElementById(`real-life-${slideNum}`);
+            overlay.classList.toggle('active');
+            btn.classList.toggle('active');
+            if (overlay.classList.contains('active')) {
+                btn.innerHTML = "🔙 Back to Animation";
+            } else {
+                btn.innerHTML = "📸 Real Life View";
+            }
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'PageDown') moveSlide(1);
+            if (e.key === 'ArrowLeft' || e.key === 'PageUp') moveSlide(-1);
+        });
+
+        /* Slide 1: Cupboard */
+        function checkSlide1(source) {
+            if (source === 'cupboard') {
+                const door = document.getElementById('cupboard-door');
+                door.classList.toggle('open');
+                if(door.classList.contains('open')) {
+                    updateAvatar("Wow! It's so tall and pale! It stretched up trying to find light.");
+                }
+            } else if (source === 'window') {
+                updateAvatar("Look how green and strong! Sunlight keeps the leaves healthy.");
+            }
+        }
+
+        /* Slide 3: Water Animation */
+        function animateWater() {
+            const droplets = document.getElementById('droplets');
+            droplets.style.opacity = "1";
+            // Simple drop animation via script for extra flair
+            const seed = document.getElementById('seed-group-water');
+            seed.style.transform = "translate(100px, 140px) scale(1.4)";
+            
+            setTimeout(() => {
+                document.getElementById('seed-crack-line').style.opacity = "1";
+                document.getElementById('root-line').style.opacity = "1";
+                document.getElementById('root-line').style.strokeDashoffset = "0";
+                document.getElementById('water-text').style.display = "block";
+                updateAvatar("The seed swallowed the water and swelled up! The baby root just broke through!");
+            }, 1000);
+        }
+
+        /* Slide 4: Warmth Animation */
+        function animateWarmth() {
+            document.getElementById('warm-level').style.height = "90%";
+            document.getElementById('warmth-glow').style.opacity = "1";
+            const particles = document.getElementById('helper-particles');
+            particles.innerHTML = ""; // Clear old
+            for(let i=0; i<15; i++) {
+                const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                c.setAttribute("cx", 0); c.setAttribute("cy", 0); c.setAttribute("r", 3);
+                c.setAttribute("fill", "#FFD54F");
+                c.innerHTML = `<animate attributeName="cx" values="0;${(Math.random()-0.5)*100}" dur="${1+Math.random()}s" repeatCount="indefinite" />
+                               <animate attributeName="cy" values="0;${(Math.random()-0.5)*100}" dur="${1+Math.random()}s" repeatCount="indefinite" />
+                               <animate attributeName="opacity" values="1;0" dur="${1+Math.random()}s" repeatCount="indefinite" />`;
+                particles.appendChild(c);
+            }
+            setTimeout(() => {
+                document.getElementById('warmth-text').style.display = "block";
+                updateAvatar("The warmth woke up the tiny helpers! They are busy turning food into energy.");
+            }, 1000);
+        }
+
+        /* Slide 5: Light Animation */
+        function animateLight() {
+            const leaves = [document.getElementById('leaf-left'), document.getElementById('leaf-right')];
+            leaves.forEach(l => {
+                l.classList.remove('pale');
+                l.classList.add('healthy');
+                l.style.fill = "#2E7D32";
+            });
+            
+            const beams = document.getElementById('energy-beams');
+            beams.innerHTML = "";
+            for(let i=0; i<8; i++) {
+                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line.setAttribute("x1", 160); line.setAttribute("y1", 40);
+                line.setAttribute("x2", 100); line.setAttribute("y2", 100);
+                line.setAttribute("stroke", "#FFF176"); line.setAttribute("stroke-width", "2");
+                line.style.opacity = "0.6";
+                line.innerHTML = `<animate attributeName="x2" values="80;120;100" dur="2s" repeatCount="indefinite" />
+                               <animate attributeName="stroke-dasharray" values="0,50;50,0" dur="1s" repeatCount="indefinite" />`;
+                beams.appendChild(line);
+            }
+            setTimeout(() => {
+                document.getElementById('light-text').style.display = "block";
+                updateAvatar("Sunlight is the ultimate energy! The leaves are now deep green and strong.");
+            }, 500);
+        }
+
+        /* Drag and Drop */
+        function allowDrop(ev) { ev.preventDefault(); ev.currentTarget.classList.add('hover'); }
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+
+        const correctSort = {
+            germ: ['card-water', 'card-warmth', 'card-food'],
+            grow: ['card-sun', 'card-water']
+        };
+
+        function drop(ev, zone) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('hover');
+            const data = ev.dataTransfer.getData("text");
+            const item = document.getElementById(data);
+            
+            if (correctSort[zone].includes(data)) {
+                if (!ev.currentTarget.contains(item)) {
+                    const cloned = item.cloneNode(true);
+                    cloned.id = data + "_placed_" + zone;
+                    cloned.setAttribute('draggable', 'false');
+                    cloned.style.background = "#E8F5E9";
+                    cloned.innerHTML += " ✅";
+                    ev.currentTarget.appendChild(cloned);
+                    if (data !== 'card-water') {
+                        item.style.opacity = "0.3";
+                        item.setAttribute('draggable', 'false');
+                    }
+                    sortedCount++;
+                    if (sortedCount >= 5) {
+                        document.getElementById('sort-success').style.display = 'block';
+                        updateAvatar("Perfect sorting! You know exactly what a plant needs.");
+                    }
+                }
+            } else {
+                ev.currentTarget.style.borderColor = "#f44336";
+                setTimeout(() => ev.currentTarget.style.borderColor = "", 500);
+                updateAvatar("Not quite! Think about what's needed for that stage.");
+            }
+        }
+
+        /* Slide 7: Poppy */
+        function poppyExperiment(choice, btn) {
+            btn.disabled = true;
+            if (choice === 'bury') {
+                document.getElementById('poppy-bury').setAttribute('cy', '100');
+                setTimeout(() => {
+                   document.getElementById('bury-feedback').style.opacity = "1";
+                   updateAvatar("It's too dark down there! The tiny poppy ran out of food.");
+                }, 1000);
+            } else {
+                document.getElementById('poppy-sprout').style.opacity = "1";
+                document.getElementById('poppy-sprout').style.strokeDashoffset = "0";
+                setTimeout(() => {
+                   document.getElementById('scatter-feedback').style.opacity = "1";
+                   document.getElementById('poppy-success').style.display = "block";
+                   updateAvatar("The sunlight reached the seed! It's awake!");
+                }, 1500);
+            }
+        }
+
+        /* Slide 8: Ruler */
+        function initRuler() {
+            const marks = document.getElementById('ruler-marks');
+            if(marks.children.length > 0) return;
+            for (let i = 0; i <= 15; i++) {
+                const div = document.createElement('div');
+                div.className = i % 5 === 0 ? "ruler-cm large" : "ruler-cm";
+                div.style.bottom = (i * 20) + "px";
+                marks.appendChild(div);
+                if (i % 5 === 0) {
+                    const label = document.createElement('div');
+                    label.className = "ruler-label";
+                    label.style.bottom = (i * 20) + "px";
+                    label.innerText = i;
+                    marks.appendChild(label);
+                }
+            }
+            dragElement(document.getElementById("ruler"));
+        }
+
+        function dragElement(elmnt) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            elmnt.onmousedown = (e) => {
+                e.preventDefault();
+                pos3 = e.clientX; pos4 = e.clientY;
+                document.onmouseup = () => { document.onmouseup = null; document.onmousemove = null; };
+                document.onmousemove = (e) => {
+                    e.preventDefault();
+                    pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX; pos4 = e.clientY;
+                    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                };
+            };
+        }
+
+        function checkMeasure(id, correct) {
+            const input = document.getElementById('input-' + id);
+            if (parseInt(input.value) === correct) {
+                input.className = "measurement-input correct";
+                measuresCorrect++;
+                if (measuresCorrect === 3) {
+                    document.getElementById('measure-success').style.display = "block";
+                    updateAvatar("Perfect matching! You're a pro Scientist.");
+                }
+            } else {
+                input.className = "measurement-input wrong";
+            }
+        }
+
+        /* Quiz */
+        const quizData = [
+            { q: "Both the cupboard and window plants germinated. What did they BOTH have?", o: ["Sunlight and soil", "Water and warmth", "Light and food"], a: 1 },
+            { q: "Water 'softens the seed coat'. What's a good way to remember this?", o: ["Like a biscuit in tea", "Like a rock in a pond", "Like ice in the sun"], a: 0 },
+            { q: "Why did the cupboard plant grow tall and yellow?", o: ["Searching for sunlight", "Too much water", "It was sleepy"], a: 0 },
+            { q: "What does warmth act like for a seed?", o: ["A warm blanket", "An alarm clock", "A tasty snack"], a: 1 },
+            { q: "Which of these does a seed NOT need to wake up (germinate)?", o: ["Water", "Warmth", "Sunlight"], a: 2 },
+            { q: "Poppy seeds are 'Rule Breakers' because they...", o: ["Need light to wake up", "Don't need water", "Grow in the dark"], a: 0 },
+            { q: "What happens to the tiny helpers inside a seed in the cold?", o: ["They work faster", "They freeze and sleep", "They leave the seed"], a: 1 },
+            { q: "Once a plant has leaves, light is its...", o: ["Kitchen", "Bed", "Suitcase"], a: 0 },
+            { q: "What tool does a scientist use to measure height?", o: ["Thermometer", "Ruler", "Magnifying glass"], a: 1 },
+            { q: "A seed has water and warmth but no light. Will it germinate?", o: ["Yes", "No"], a: 0 },
+            { q: "If a plant's leaves turn yellow and pale, what is likely missing?", o: ["Water", "Warmth", "Sunlight"], a: 2 }
+        ];
+
+        let quizIdx = 0; let score = 0; let wrongAnswers = [];
+
+        function loadQuiz() {
+            const data = quizData[quizIdx];
+            document.getElementById('quiz-count').innerText = `Question ${quizIdx + 1} of ${quizData.length}`;
+            document.getElementById('quiz-q').innerText = data.q;
+            const container = document.getElementById('quiz-options');
+            container.innerHTML = "";
+            data.o.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "btn secondary";
+                btn.innerText = opt;
+                btn.onclick = () => checkQuiz(idx, btn);
+                container.appendChild(btn);
+            });
+            document.getElementById('quiz-feedback').innerText = "";
+        }
+
+        function checkQuiz(idx, btn) {
+            const data = quizData[quizIdx];
+            if(idx === data.a) { btn.style.background = "#C8E6C9"; score++; }
+            else { btn.style.background = "#FFCDD2"; wrongAnswers.push({q: data.q, a: data.o[data.a], yours: data.o[idx]}); }
+            document.querySelectorAll('#quiz-options button').forEach(b => b.disabled = true);
+            setTimeout(() => {
+                quizIdx++;
+                if(quizIdx < quizData.length) loadQuiz();
+                else showQuizResults();
+            }, 1000);
+        }
+
+        function showQuizResults() {
+            document.getElementById('quiz-header').innerHTML = `<span>Results</span><span>Score: ${score}/${quizData.length}</span>`;
+            const container = document.getElementById('quiz-options');
+            container.innerHTML = (score === quizData.length) ? "<h3>Perfect! 🌟</h3>" : "<h3>Keep practicing!</h3>";
+        }
+    </script>
+</body>
+
+</html>
