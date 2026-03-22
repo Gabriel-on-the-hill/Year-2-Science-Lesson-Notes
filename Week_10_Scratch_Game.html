@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10: Scratch Game Studio! 🕹️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&family=Outfit:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Scratch Themed Colors */
+            --scratch-blue: #4C97FF; /* Motion */
+            --scratch-purple: #9966FF; /* Looks */
+            --scratch-yellow: #FFBF00; /* Events */
+            --scratch-orange: #FFAB19; /* Control */
+            
+            --bg: #F0F8FF; /* Alice Blue */
+            --text: #1C2833;
+            --card-bg: #FFFFFF;
+            --shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Outfit', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            background-image: radial-gradient(var(--scratch-blue) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        header {
+            background: var(--scratch-blue);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            letter-spacing: 1px;
+        }
+
+        #slide-viewport {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            position: absolute;
+            width: 90%;
+            height: 85%;
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.6s ease;
+            overflow-y: auto;
+            border: 4px solid var(--scratch-blue);
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            color: var(--scratch-purple);
+            margin-bottom: 20px;
+        }
+
+        p.subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            max-width: 800px;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        /* Interactive Elements */
+        .btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-family: 'Fredoka One', cursive;
+            color: white;
+        }
+
+        .btn.primary { background: var(--scratch-blue); }
+        .btn.primary:hover { transform: scale(1.05); background: #3a7bd5; }
+        .btn.secondary { background: var(--scratch-purple); }
+        .btn.secondary:hover { transform: scale(1.05); background: #7b4fcc; }
+        .btn.accent { background: var(--scratch-orange); }
+        .btn.accent:hover { transform: scale(1.05); background: #e09616; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Progression Controls */
+        .controls { padding: 25px 50px; display: flex; justify-content: space-between; align-items: center; background: white; border-top: 4px solid var(--scratch-blue); z-index: 100; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); }
+        #slide-counter { font-family: 'Fredoka One', cursive; font-size: 1.4rem; color: var(--scratch-blue); }
+        
+        /* Progress Bar */
+        .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 10px; background: #eee; z-index: 101; }
+        .progress-fill { height: 100%; background: linear-gradient(to right, var(--scratch-purple), var(--scratch-blue)); width: 0%; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Avatar System */
+        #avatar-box { position: fixed; right: 20px; bottom: 100px; display: flex; align-items: flex-end; gap: 10px; pointer-events: none; z-index: 1000; }
+        .speech-bubble { background: white; padding: 15px 20px; border-radius: 20px; border: 4px solid var(--scratch-yellow); box-shadow: var(--shadow); max-width: 250px; font-weight: bold; position: relative; opacity: 0; transition: 0.4s; font-size: 1rem; color: var(--text); }
+        .speech-bubble::after { content: ''; position: absolute; right: -15px; bottom: 20px; border-left: 15px solid var(--scratch-yellow); border-top: 10px solid transparent; border-bottom: 10px solid transparent; }
+        .slide-avatar { width: 90px; height: 90px; background: #FFF3E0; border-radius: 30%; border: 4px solid white; box-shadow: var(--shadow); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+
+        .term-card, .room-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #eee;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: left;
+        }
+        .term-card:hover, .room-card:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .term-card.active, .room-card.active { border-color: var(--scratch-blue); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+    </style>
+</head>
+
+<body>
+    <div class="presentation-container">
+        <header>
+            <h1>🎮 Week 10: Scratch Game Studio!</h1>
+            <div style="display:flex; gap:15px;">
+                <button class="btn accent" onclick="location.href='index.html'">🏠 Back to Hub</button>
+            </div>
+        </header>
+
+        <div id="slide-viewport">
+            <!-- Slide 1: Mission -->
+            <div class="slide active" id="slide-1">
+                <h2>The Ghost Catcher Mission! 👻</h2>
+                <p class="subtitle">Welcome to the Game Studio! Today, we aren't just animating... we are building a <strong>REAL GAME</strong> that you can play with your friends!</p>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;">
+                    <div style="font-size: 6rem; animation: float 3s ease-in-out infinite;">🎮</div>
+                    <div style="background: var(--bg); border: 4px solid var(--scratch-purple); padding: 30px; border-radius: 20px; max-width: 600px; text-align: left;">
+                        <h3 style="color: var(--scratch-purple); margin-bottom: 15px; font-family: 'Fredoka One';">Game Rules:</h3>
+                        <ul style="font-size: 1.2rem; line-height: 1.8; margin-left: 20px;">
+                            <li>A custom Ghost will keep disappearing and teleporting!</li>
+                            <li>You have to <strong>CLICK</strong> it before it vanishes!</li>
+                            <li>When caught, it will go <strong>POP!</strong> and change color!</li>
+                            <li>Take turns with your friends to see who can catch it the most in 30 seconds!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Vector vs Bitmap -->
+            <div class="slide" id="slide-2">
+                <h2>Vector vs. Bitmap 🎨</h2>
+                <p class="subtitle">Scratch has two ways to draw. Understanding the difference is your first <strong>Superpower</strong>!</p>
+                <div style="display: flex; gap: 30px; width: 100%; max-width: 900px; justify-content: center;">
+                    <div style="background: white; border: 4px solid var(--scratch-blue); padding: 20px; border-radius: 20px; flex: 1; position: relative;">
+                        <h3 style="color: var(--scratch-blue); margin-bottom: 10px;">Vector Mode</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: 15px;">Shapes made of "Control Points". You can stretch them forever!</p>
+                        <div style="height: 200px; background: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;" id="vector-demo">
+                            <svg viewBox="0 0 100 100" style="width: 100px; height: 100px;">
+                                <circle cx="50" cy="50" r="40" fill="var(--scratch-blue)" stroke="white" stroke-width="2" id="demo-circle-vector" />
+                            </svg>
+                            <div style="position: absolute; bottom: 5px; right: 5px; font-weight: bold; color: var(--scratch-blue);" id="vector-zoom-text">ZOOM: 100%</div>
+                        </div>
+                        <button class="btn primary" style="padding: 10px; margin-top: 15px; font-size: 0.9rem;" onclick="zoomIn('vector')">Click to Zoom! 🔍</button>
+                    </div>
+
+                    <div style="background: white; border: 4px solid #f44336; padding: 20px; border-radius: 20px; flex: 1; position: relative;">
+                        <h3 style="color: #f44336; margin-bottom: 10px;">Bitmap Mode</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: 15px;">Image made of "Pixels" (tiny squares). Like graph paper!</p>
+                        <div style="height: 200px; background: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;" id="bitmap-demo">
+                            <div style="width: 80px; height: 80px; background: #f44336; border-radius: 50%; border: 2px solid white;" id="demo-circle-bitmap"></div>
+                            <div style="position: absolute; bottom: 5px; right: 5px; font-weight: bold; color: #f44336;" id="bitmap-zoom-text">ZOOM: 100%</div>
+                        </div>
+                        <button class="btn" style="background: #f44336; padding: 10px; margin-top: 15px; font-size: 0.9rem;" onclick="zoomIn('bitmap')">Click to Zoom! 🔍</button>
+                    </div>
+                </div>
+                <div style="margin-top: 25px; font-weight: bold; font-size: 1.2rem; color: var(--scratch-purple); background: #f3e5f5; padding: 15px; border-radius: 15px; border: 2px dashed var(--scratch-purple);">
+                    🚨 Rule: Always START in Vector mode so you can reshape your characters!
+                </div>
+            </div>
+
+            <!-- Slide 3: Costume Lab: Drawing -->
+            <div class="slide" id="slide-3">
+                <h2>Costume Lab: Drawing ✍️</h2>
+                <p class="subtitle">Use the shapes to build your Ghost's body. Remember: overlaps are okay!</p>
+                <div style="display: flex; gap: 30px; width: 100%; max-width: 900px; margin-top: 20px;">
+                    <div style="width: 200px; background: #fafafa; border: 4px solid var(--scratch-purple); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 15px;">
+                        <button class="btn primary" style="padding:10px; font-size:0.9rem;" onclick="drawStep(1)">⚪ 1. Circle Tool</button>
+                        <button class="btn primary" style="padding:10px; font-size:0.9rem;" onclick="drawStep(2)">⬜ 2. Square Tool</button>
+                        <button class="btn primary" style="padding:10px; font-size:0.9rem;" onclick="drawStep(3)">👋 3. Reshape Tool</button>
+                        <button class="btn primary" style="padding:10px; font-size:0.9rem;" onclick="drawStep(4)">🎨 4. Fill Tool</button>
+                        <button class="btn accent" style="padding: 10px; font-size: 0.9rem; width: 100%;" onclick="resetGhost()">Reset 🔄</button>
+                    </div>
+                    <div style="flex: 1; height: 400px; background: #fff; background-image: radial-gradient(#ddd 1px, transparent 1px); background-size: 20px 20px; border: 4px dashed var(--scratch-purple); border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                        <svg viewBox="0 0 200 200" style="width: 300px; height: 300px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));" id="drawing-canvas">
+                            <circle cx="100" cy="70" r="40" fill="white" stroke="#333" stroke-width="5" id="ghost-head" style="opacity: 0; transition: 0.5s;" />
+                            <rect x="60" y="100" width="80" height="60" fill="white" stroke="#333" stroke-width="5" id="ghost-body" style="opacity: 0; transition: 0.5s;" />
+                            <path d="M 60,160 Q 100,180 140,160" stroke="#333" stroke-width="5" fill="none" id="ghost-tail" style="opacity: 0; transition: 0.5s;" />
+                            <g id="ghost-eyes" style="opacity: 0; transition: 0.5s;">
+                                <circle cx="85" cy="65" r="7" fill="#333" />
+                                <circle cx="115" cy="65" r="7" fill="#333" />
+                            </g>
+                        </svg>
+                        <div id="drawing-tip" style="position: absolute; bottom: 20px; color: var(--scratch-purple); font-weight: bold; background: rgba(255,255,255,0.8); padding: 5px 15px; border-radius: 20px;">Click the tools on the left!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Costume Lab: Editing -->
+            <div class="slide" id="slide-4">
+                <h2>Costume Lab: Editing 🎭</h2>
+                <p class="subtitle">Duplicating your costume lets you make small changes. Switch them fast to <strong>ANIMATE</strong>!</p>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 30px; margin-top: 20px;">
+                    <div style="display: flex; gap: 40px;">
+                        <div id="costume-1-thumb" style="padding: 10px; border: 4px solid var(--scratch-blue); border-radius: 15px; background: white;">
+                            <div style="font-size: 3rem;">👻</div>
+                            <p style="font-weight: bold; color: var(--scratch-blue);">Costume 1</p>
+                        </div>
+                        <div id="costume-2-thumb" style="padding: 10px; border: 4px solid #ccc; border-radius: 15px; background: white; opacity: 0.5;">
+                            <div style="font-size: 3rem;">😱</div>
+                            <p style="font-weight: bold; color: #666;">Costume 2</p>
+                        </div>
+                        <div id="costume-3-thumb" style="padding: 10px; border: 4px solid #ccc; border-radius: 15px; background: white; opacity: 0.5;">
+                            <div style="font-size: 3rem;">🤤</div>
+                            <p style="font-weight: bold; color: #666;">Costume 3</p>
+                        </div>
+                    </div>
+                    
+                    <div style="height: 250px; width: 400px; background: #f0f0f0; border: 4px solid var(--scratch-purple); border-radius: 30px; display: flex; align-items: center; justify-content: center; position: relative;">
+                        <div id="anim-stage" style="font-size: 8rem;">👻</div>
+                        <div id="anim-label" style="position: absolute; top: 10px; font-weight: bold; color: var(--scratch-purple);">Costume: Normal</div>
+                    </div>
+
+                    <div style="display: flex; gap: 20px;">
+                        <button class="btn secondary" onclick="duplicateCostume()">1. Duplicate! ➕</button>
+                        <button class="btn accent" onclick="toggleAnimation()">2. Play Animation! ▶️</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Backdrop Design -->
+            <div class="slide" id="slide-5">
+                <h2>The Haunted House 🏰</h2>
+                <p class="subtitle">The Stage has its own editor! Let's build 3 rooms for our Ghost to hide in.</p>
+                <div style="display: flex; gap: 30px; width: 100%; max-width: 900px; margin-top: 20px;">
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+                        <div id="room-1-btn" class="room-card active" onclick="switchRoom(1)" style="padding:15px; border-radius:15px; cursor:pointer; background:white; border: 4px solid var(--scratch-blue);">
+                            <h4 style="color: var(--scratch-blue);">1. The Kitchen</h4>
+                            <p style="font-size: 0.9rem;">Warm colors, a wooden table, and breakfast!</p>
+                        </div>
+                        <div id="room-2-btn" class="room-card" onclick="switchRoom(2)" style="padding:15px; border-radius:15px; cursor:pointer; background:white; border: 3px solid #eee;">
+                            <h4 style="color: var(--scratch-purple);">2. The Bedroom</h4>
+                            <p style="font-size: 0.9rem;">Soft blues, a cozy bed, and spooky shadows.</p>
+                        </div>
+                        <div id="room-3-btn" class="room-card" onclick="switchRoom(3)" style="padding:15px; border-radius:15px; cursor:pointer; background:white; border: 3px solid #eee;">
+                            <h4 style="color: #607D8B;">3. The Attic</h4>
+                            <p style="font-size: 0.9rem;">Dark, dusty, and full of old rafters!</p>
+                        </div>
+                    </div>
+                    <div style="width: 500px; height: 350px; background: white; border: 8px solid var(--scratch-blue); border-radius: 20px; position: relative; overflow: hidden; transition: 0.5s;" id="room-preview">
+                        <div id="room-1-content" style="position: absolute; inset: 0; background: #FFF9C4; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; transition: 0.5s;">
+                            <div style="width: 100%; height: 60px; background: #8D6E63;"></div>
+                            <div style="width: 150px; height: 80px; background: #A1887F; margin-bottom: 0; border-radius: 10px 10px 0 0; display: flex; align-items: center; justify-content: center; font-size: 2rem;">🥣</div>
+                            <div style="position: absolute; top: 20px; font-family: 'Fredoka One'; font-size: 1.5rem; color: #FBC02D;">THE KITCHEN</div>
+                        </div>
+                        <div id="room-2-content" style="position: absolute; inset: 0; background: #E1F5FE; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; opacity: 0; transition: 0.5s;">
+                            <div style="width: 100%; height: 60px; background: #1A237E;"></div>
+                            <div style="width: 200px; height: 100px; background: #3F51B5; border-radius: 20px 20px 0 0; display: flex; align-items: center; justify-content: center; font-size: 3rem;">🛏️</div>
+                            <div style="position: absolute; top: 20px; font-family: 'Fredoka One'; font-size: 1.5rem; color: #0288D1;">THE BEDROOM</div>
+                        </div>
+                        <div id="room-3-content" style="position: absolute; inset: 0; background: #263238; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; opacity: 0; transition: 0.5s;">
+                            <div style="width: 100%; height: 60px; background: #000;"></div>
+                            <div style="width: 150px; height: 120px; background: #37474F; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); display: flex; align-items: center; justify-content: center; font-size: 3rem; padding-top: 40px;">📦</div>
+                            <div style="position: absolute; top: 20px; font-family: 'Fredoka One'; font-size: 1.5rem; color: #90A4AE;">THE ATTIC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Algorithm Design -->
+            <div class="slide" id="slide-6">
+                <h2>Algorithm Translator 🧩</h2>
+                <p class="subtitle">An <strong>Algorithm</strong> is just a recipe. Can you match the human recipe to the Scratch code blocks?</p>
+                <div style="display: flex; gap: 40px; margin-top: 20px; width: 100%; max-width: 1000px;">
+                    <!-- Human Side -->
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 15px;">
+                        <h4 style="color: var(--scratch-purple); margin-bottom: 10px;">Human Recipe 👨🏽‍🍳</h4>
+                        <div class="term-card" id="recipe-1" onclick="selectRecipe(1)">1. "When the game starts, go to the Kitchen room."</div>
+                        <div class="term-card" id="recipe-2" onclick="selectRecipe(2)">2. "Keep doing this forever: Hide, Wait, Move, Show."</div>
+                        <div class="term-card" id="recipe-3" onclick="selectRecipe(3)">3. "When I get clicked, tell the game I was caught!"</div>
+                        <div class="term-card" id="recipe-4" onclick="selectRecipe(4)">4. "If I touch the edge of the screen, bounce away."</div>
+                    </div>
+                    
+                    <!-- Code Side -->
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+                        <h4 style="color: var(--scratch-blue); margin-bottom: 10px;">Scratch Blocks 📦</h4>
+                        <div class="term-card" id="block-B" onclick="selectBlock('B')" style="background: var(--scratch-yellow); color: #000; font-weight: bold; border-color: #B28500; font-family: sans-serif; text-align: left; padding: 8px;">
+                            <span style="border-radius: 10px 10px 0 0; background: #E6AC00; padding: 2px 8px;">when this sprite clicked</span><br>
+                            <span style="background: var(--scratch-yellow); color: #000; padding: 2px 8px; margin-left: 10px; border-radius: 4px;">broadcast [ghost-caught]</span>
+                        </div>
+                        <div class="term-card" id="block-D" onclick="selectBlock('D')" style="background: var(--scratch-blue); color: white; font-weight: bold; border-color: #3373CC; font-family: sans-serif; text-align: left; padding: 8px;">
+                            <span style="background: var(--scratch-blue); padding: 2px 8px; border-radius: 4px;">if on edge, bounce</span>
+                        </div>
+                        <div class="term-card" id="block-A" onclick="selectBlock('A')" style="background: var(--scratch-yellow); color: #000; font-weight: bold; border-color: #B28500; font-family: sans-serif; text-align: left; padding: 8px;">
+                            <span style="border-radius: 10px 10px 0 0; background: #E6AC00; padding: 2px 8px;">when GF clicked</span><br>
+                            <span style="background: var(--scratch-purple); color: white; padding: 2px 8px; margin-left: 10px; border-radius: 4px;">switch backdrop to [Kitchen]</span>
+                        </div>
+                        <div class="term-card" id="block-C" onclick="selectBlock('C')" style="background: var(--scratch-orange); color: #000; font-weight: bold; border-color: #B27710; font-family: sans-serif; text-align: left; padding: 8px;">
+                            <span style="border-radius: 10px 10px 0 0; background: #E69516; padding: 2px 8px;">forever</span><br>
+                            <span style="background: var(--scratch-purple); color: white; padding: 2px 8px; margin-left: 15px; border-radius: 4px;">hide</span><br>
+                            <span style="background: var(--scratch-blue); color: white; padding: 2px 8px; margin-left: 15px; border-radius: 4px;">go to (random position)</span><br>
+                            <span style="background: var(--scratch-purple); color: white; padding: 2px 8px; margin-left: 15px; border-radius: 4px;">show</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="translator-feedback" style="margin-top: 15px; font-weight: bold; font-size: 1.4rem; height: 1.5em; color: #333;"></div>
+            </div>
+
+            <!-- Slide 7: Coding: The Ghost -->
+            <div class="slide" id="slide-7">
+                <h2>Coding: The Ghost 👻</h2>
+                <p class="subtitle">Our Ghost needs to be smart! In the Attic, we use <strong>GLIDE</strong> to make it harder!</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 1000px; margin-top: 10px;">
+                    <div style="background: #FFF9E1; border: 3px solid #FFD54F; padding: 15px; border-radius: 20px; text-align: left;">
+                        <h4 style="color: #6D4C41; margin-bottom: 10px;">1. Teleport (Kitchen)</h4>
+                        <div style="background: var(--scratch-orange); padding: 10px; border-radius: 10px; font-family: monospace; font-weight: bold; font-size: 0.9rem;">
+                           when backdrop switches to [Kitchen]<br>
+                           forever<br>
+                           &nbsp;&nbsp;hide<br>
+                           &nbsp;&nbsp;wait (1.5) secs<br>
+                           &nbsp;&nbsp;go to (random position)<br>
+                           &nbsp;&nbsp;show<br>
+                           &nbsp;&nbsp;wait (1.5) secs
+                        </div>
+                    </div>
+                    <div style="background: #E8EAF6; border: 3px solid #7986CB; padding: 15px; border-radius: 20px; text-align: left;">
+                        <h4 style="color: #283593; margin-bottom: 10px;">2. Faster! (Bedroom)</h4>
+                        <div style="background: var(--scratch-orange); padding: 10px; border-radius: 10px; font-family: monospace; font-weight: bold; font-size: 0.9rem;">
+                           when backdrop switches to [Bedroom]<br>
+                           forever<br>
+                           &nbsp;&nbsp;hide<br>
+                           &nbsp;&nbsp;<span style="background: white; color: black; padding: 0 4px; border-radius: 4px;">wait (0.8) secs</span><br>
+                           &nbsp;&nbsp;go to (random position)<br>
+                           &nbsp;&nbsp;show<br>
+                           &nbsp;&nbsp;<span style="background: white; color: black; padding: 0 4px; border-radius: 4px;">wait (0.8) secs</span>
+                        </div>
+                    </div>
+                    <div style="background: #E3F2FD; border: 3px solid #64B5F6; padding: 15px; border-radius: 20px; text-align: left;">
+                        <h4 style="color: #1565C0; margin-bottom: 10px;">3. Boss Mode (Attic)</h4>
+                        <div style="background: var(--scratch-orange); padding: 10px; border-radius: 10px; font-family: monospace; font-weight: bold; font-size: 0.9rem;">
+                           when backdrop switches to [Attic]<br>
+                           forever<br>
+                           &nbsp;&nbsp;hide<br>
+                           &nbsp;&nbsp;wait (0.4) secs<br>
+                           &nbsp;&nbsp;<span style="background: var(--scratch-blue); color: white; padding: 2px 4px; border-radius: 4px;">glide (0.5) secs</span> to (random position)<br>
+                           &nbsp;&nbsp;show<br>
+                           &nbsp;&nbsp;wait (0.4) secs
+                        </div>
+                    </div>
+                    <div style="background: #F3E5F5; border: 3px solid #BA68C8; padding: 15px; border-radius: 20px; text-align: left;">
+                        <h4 style="color: #4A148C; margin-bottom: 10px;">4. Catch Me!</h4>
+                        <div style="background: #2a2a2a; padding: 10px; border-radius: 10px; font-family: monospace; font-weight: bold; font-size: 0.9rem; color: white;">
+                           <span style="background: var(--scratch-yellow); color: black; padding: 2px 4px; border-radius: 4px;">when this sprite clicked</span><br>
+                           &nbsp;&nbsp;<span style="background: #CF63CF; padding: 2px 4px; border-radius: 4px;">play sound [Pop] until done</span><br>
+                           &nbsp;&nbsp;<span style="background: var(--scratch-purple); padding: 2px 4px; border-radius: 4px;">next costume</span><br>
+                           &nbsp;&nbsp;<span style="background: var(--scratch-purple); padding: 2px 4px; border-radius: 4px;">hide</span><br>
+                           &nbsp;&nbsp;<span style="background: var(--scratch-yellow); color: black; padding: 2px 4px; border-radius: 4px;">broadcast [ghost-caught]</span>
+                        </div>
+                    </div>
+                    <div style="grid-column: 1 / span 2; background: #fff; border: 4px dashed var(--scratch-blue); padding: 15px; border-radius: 20px; display: flex; align-items: center; justify-content: space-around; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                        <h4 style="color: var(--scratch-blue); font-size: 1.2rem;">Simulate Code:</h4>
+                        <button class="btn" style="background: #FFD54F; color: #6D4C41; padding: 10px 20px;" onclick="simulateGhost(1500, false)">Test Kitchen</button>
+                        <button class="btn" style="background: #7986CB; color: white; padding: 10px 20px;" onclick="simulateGhost(800, false)">Test Bedroom</button>
+                        <button class="btn" style="background: #64B5F6; color: white; padding: 10px 20px;" onclick="simulateGhost(400, true)">Test Attic</button>
+                        <div id="sim-ghost-stage" style="width: 250px; height: 100px; background: #263238; border-radius: 10px; position: relative; overflow: hidden; border: 3px solid #ccc;">
+                            <div id="sim-ghost" style="position: absolute; font-size: 2.5rem; opacity: 0; left: 100px; top: 20px; cursor: pointer;" onclick="catchSimGhost()">👻</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Coding: Score & Rooms -->
+            <div class="slide" id="slide-8">
+                <h2>Coding: Score & Rooms 🏛️</h2>
+                <p class="subtitle">Broadcasts are like secret signals! We use them to update our score and change the level.</p>
+                
+                <div style="margin: 20px 0;">
+                    <button class="btn accent" style="font-size: 1.5rem; padding: 15px 40px; box-shadow: 0 0 20px rgba(255, 171, 25, 0.5);" onclick="triggerBroadcast()">📣 BROADCAST: [ghost-caught]</button>
+                </div>
+                
+                <div style="display: flex; gap: 40px; margin-top: 10px; width: 100%; max-width: 900px; justify-content: center;">
+                    <div id="broadcast-receiver-1" style="background: #fafafa; border: 6px solid var(--scratch-yellow); padding: 25px; border-radius: 30px; flex: 1; text-align: left; transition: 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3 style="color: var(--scratch-orange); margin: 0;">The Scoreboard</h3>
+                            <div id="tally-visual" style="font-size: 1.5rem; font-weight: bold; color: var(--scratch-blue);">Tally: 0</div>
+                        </div>
+                        <div style="background: var(--scratch-yellow); padding: 15px; border-radius: 10px; font-family: monospace; font-weight: bold; font-size: 1rem; color: #000;">
+                            when Green Flag clicked<br>
+                            &nbsp;&nbsp;switch costume to [tally-0]<br><br>
+                            <span style="background: #FFD600; padding: 2px 4px; border-radius: 4px;">when I receive [ghost-caught]</span><br>
+                            &nbsp;&nbsp;next costume
+                        </div>
+                    </div>
+                    
+                    <div id="broadcast-receiver-2" style="background: #fafafa; border: 6px solid var(--scratch-purple); padding: 25px; border-radius: 30px; flex: 1; text-align: left; transition: 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3 style="color: var(--scratch-purple); margin: 0;">Stage Control</h3>
+                            <div id="stage-visual" style="font-size: 1.5rem; font-weight: bold; color: var(--scratch-purple);">Room: 1</div>
+                        </div>
+                        <div style="background: var(--scratch-yellow); padding: 15px; border-radius: 10px; font-family: monospace; font-weight: bold; font-size: 1rem; color: #000;">
+                            when green flag clicked<br>
+                            &nbsp;&nbsp;switch backdrop to [Kitchen]<br><br>
+                            <span style="background: #FFD600; padding: 2px 4px; border-radius: 4px;">when I receive [ghost-caught]</span><br>
+                            &nbsp;&nbsp;wait (0.5) secs<br>
+                            &nbsp;&nbsp;next backdrop
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Master Blueprint -->
+            <div class="slide" id="slide-9">
+                <h2>The Master Blueprint 📋</h2>
+                <p class="subtitle">Here is what you will build! Use the checklist below to guide your creation.</p>
+                
+                <div style="display: flex; gap: 30px; align-items: stretch; max-width: 950px; width: 100%; margin-top: 10px;">
+                    
+                    <!-- Game Preview -->
+                    <div style="flex: 1; background: #263238; border: 6px solid var(--scratch-yellow); border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 20px; transition: background 0.5s;">
+                        <div id="preview-ghost" style="position: absolute; font-size: 4rem; transition: 0.4s; cursor: pointer; animation: float 2s ease-in-out infinite;" onclick="catchPreviewGhost()">👻</div>
+                        <div style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.6); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; border: 2px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">SCORE: <span id="preview-score">0</span></div>
+                        <div id="preview-msg" style="color: rgba(255,255,255,0.8); font-weight: bold; margin-top: auto; font-size: 1.1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Click the ghost to score!</div>
+                    </div>
+                    
+                    <!-- Checklist -->
+                    <div style="flex: 1.5; background: var(--bg); border: 4px solid var(--scratch-blue); padding: 25px; border-radius: 30px; text-align: left;">
+                        <h3 style="color: var(--scratch-blue); margin-bottom: 15px; font-family: 'Fredoka One';">Final Build Checklist:</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <p style="font-weight: bold; margin-bottom: 10px;">🎨 Design Mode:</p>
+                                <ul style="line-height: 1.6; font-size: 0.95rem;">
+                                    <li>Draw 1 Ghost (Vector mode!)</li>
+                                    <li>Duplicate to make 3 costumes</li>
+                                    <li>Design 3 house rooms</li>
+                                    <li>Create 1 Scoreboard sprite</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <p style="font-weight: bold; margin-bottom: 10px;">🚀 Coding Mode:</p>
+                                <ul style="line-height: 1.6; font-size: 0.95rem;">
+                                    <li>3 Ghost Loops (3 Speeds)</li>
+                                    <li>"When sprite clicked" → Broadcast</li>
+                                    <li>Scoreboard → Update on Signal</li>
+                                    <li>Stage → Next Backdrop on Signal</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px; text-align: center;">
+                    <button class="btn accent" style="padding: 15px 50px; font-size: 1.5rem; box-shadow: 0 10px 20px rgba(255, 171, 25, 0.4);" onclick="location.href='https://scratch.mit.edu/projects/editor/'" target="_blank">Launch Scratch Editor! 🚀</button>
+                    <p style="margin-top: 15px; font-weight: bold; color: var(--scratch-purple);">Extension Challenge: Can you add a Sound Effect when the room changes?</p>
+                </div>
+            </div>
+
+        </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 9;
+        
+        let zoomLevel = { vector: 1, bitmap: 1 };
+
+        function zoomIn(mode) {
+            const demo = document.getElementById(`${mode}-demo`);
+            const target = mode === 'vector' ? document.getElementById('demo-circle-vector').parentNode : document.getElementById('demo-circle-bitmap');
+            const zoomText = document.getElementById(`${mode}-zoom-text`);
+            
+            zoomLevel[mode] = zoomLevel[mode] === 1 ? 4 : 1;
+            
+            if (mode === 'vector') {
+                target.style.transform = `scale(${zoomLevel[mode]})`;
+                target.style.transition = '0.5s';
+            } else {
+                target.style.transform = `scale(${zoomLevel[mode]})`;
+                target.style.imageRendering = zoomLevel[mode] === 4 ? 'pixelated' : 'auto';
+                target.style.transition = '0.5s';
+            }
+            
+            zoomText.innerText = `ZOOM: ${zoomLevel[mode] * 100}%`;
+        }
+
+        const avatarPhrases = {
+            1: "Today we build a REAL game using only the blocks you know! No conditionals needed!",
+            2: "Vector mode is like clay — you can stretch it. Bitmap is like pixels!",
+            3: "Let's draw our ghost using the simple shapes first.",
+            4: "Duplicating costume 1 lets us make small changes for animation!",
+            5: "The stage needs 3 different haunted rooms for our levels.",
+            6: "Before we code, we need a 'recipe'. Let's translate ideas into blocks!",
+            7: "Our ghost needs 'Speed' loops for each room.",
+            8: "We'll use Broadcast to tell the Scoreboard when a ghost is caught!",
+            9: "Here is your master blueprint! You are ready to build it in Scratch!"
+        };
+
+        function updateUI() {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById(`slide-${currentSlide}`).classList.add('active');
+            
+            document.getElementById('slide-counter').innerText = `Slide ${currentSlide} / ${totalSlides}`;
+            document.getElementById('progress-bar').style.width = `${((currentSlide - 1) / (totalSlides - 1)) * 100}%`;
+            
+            document.getElementById('btn-back').disabled = currentSlide === 1;
+            document.getElementById('btn-next').disabled = currentSlide === totalSlides;
+            
+            // State resets
+            if (typeof animInterval !== 'undefined') {
+                clearInterval(animInterval);
+                isAnimating = false;
+                const btn = document.querySelector('[onclick="toggleAnimation()"]');
+                if(btn) btn.innerText = "Play Animation! ▶️";
+                const stage = document.getElementById('anim-stage');
+                if(stage) stage.innerText = '👻';
+            }
+            if (typeof simInterval !== 'undefined') clearInterval(simInterval);
+            if (typeof simTimeout !== 'undefined') clearTimeout(simTimeout);
+            
+            // Reset Algorithm Translator
+            document.querySelectorAll('.slide#slide-6 .term-card').forEach(c => {
+                c.classList.remove('active');
+                if(c.id.startsWith('block-')) {
+                    c.style.borderColor = "";
+                    c.style.background = "";
+                }
+            });
+            const feedback = document.getElementById('translator-feedback');
+            if(feedback) feedback.innerText = "";
+            
+            updateAvatar();
+        }
+
+        // Slide 3: Drawing Logic
+        let drawPhase = 0;
+        function drawStep(step) {
+            console.log("Drawing step:", step);
+            drawPhase = step;
+            if (step >= 1) { 
+                const el = document.getElementById('ghost-head');
+                if(el) el.style.opacity = "1";
+                updateAvatar("First, we draw the head with the Circle tool.");
+            }
+            if (step >= 2) {
+                const el = document.getElementById('ghost-body');
+                if(el) el.style.opacity = "1";
+                updateAvatar("Then we add a Rectangle for the body.");
+            }
+            if (step >= 3) {
+                const el = document.getElementById('ghost-tail');
+                if(el) {
+                    el.style.opacity = "1";
+                    el.setAttribute('fill', 'white');
+                }
+                updateAvatar("Now use the Reshape tool to pull the corners and make a wavy tail!");
+            }
+            if (step >= 4) {
+                const color = "#80DEEA";
+                const head = document.getElementById('ghost-head');
+                const body = document.getElementById('ghost-body');
+                const tail = document.getElementById('ghost-tail');
+                const eyes = document.getElementById('ghost-eyes');
+                
+                if(head) head.setAttribute('fill', color);
+                if(body) body.setAttribute('fill', color);
+                if(tail) tail.setAttribute('fill', color);
+                if(eyes) eyes.style.opacity = "1";
+                updateAvatar("Finally, use the Fill bucket to color him and add eyes. Boo!");
+            }
+        }
+
+        function resetGhost() {
+            drawPhase = 0;
+            const items = ['ghost-head', 'ghost-body', 'ghost-tail', 'ghost-eyes'];
+            items.forEach(id => {
+                const el = document.getElementById(id);
+                el.style.opacity = 0;
+                if (id !== 'ghost-eyes') el.setAttribute('fill', 'white');
+            });
+            updateAvatar("Starting fresh! Click the tools on the left.");
+        }
+
+        // Slide 4: Animation Logic
+        let duplicatedCount = 1;
+        let isAnimating = false;
+        let animInterval;
+
+        function duplicateCostume() {
+            if (duplicatedCount < 3) {
+                duplicatedCount++;
+                document.getElementById(`costume-${duplicatedCount}-thumb`).style.opacity = 1;
+                document.getElementById(`costume-${duplicatedCount}-thumb`).style.borderColor = 'var(--scratch-blue)';
+                updateAvatar(`Costume ${duplicatedCount} created! We tweaked his face to make it look different.`);
+            }
+        }
+
+        function toggleAnimation() {
+            if (duplicatedCount < 2) {
+                updateAvatar("Wait! We need at least 2 costumes to animate. Duplicate it first!");
+                return;
+            }
+            isAnimating = !isAnimating;
+            const btn = document.querySelector('[onclick="toggleAnimation()"]');
+            const stage = document.getElementById('anim-stage');
+            const label = document.getElementById('anim-label');
+            
+            if (isAnimating) {
+                btn.innerText = "Stop Animation! ⏹️";
+                let frame = 1;
+                const emojis = {1: '👻', 2: '😱', 3: '🤤'};
+                const names = {1: 'Normal', 2: 'Scared', 3: 'Funny'};
+                animInterval = setInterval(() => {
+                    frame = (frame % duplicatedCount) + 1;
+                    stage.innerText = emojis[frame];
+                    label.innerText = `Costume: ${names[frame]}`;
+                }, 300);
+            } else {
+                btn.innerText = "Play Animation! ▶️";
+                clearInterval(animInterval);
+                stage.innerText = '👻';
+                label.innerText = 'Costume: Normal';
+            }
+        }
+
+        function updateAvatar(message = null) {
+            const bubble = document.getElementById('speechBubble');
+            bubble.style.opacity = 0;
+            setTimeout(() => {
+                bubble.innerText = message || avatarPhrases[currentSlide] || "Keep going!";
+                bubble.style.opacity = 1;
+            }, 300);
+        }
+
+        // Slide 5: Room Logic
+        function switchRoom(roomNum) {
+            document.querySelectorAll('#room-preview > div').forEach(d => d.style.opacity = 0);
+            document.querySelectorAll('.room-card').forEach(c => {
+                c.classList.remove('active');
+                c.style.border = '3px solid #eee';
+            });
+            
+            const content = document.getElementById(`room-${roomNum}-content`);
+            const btn = document.getElementById(`room-${roomNum}-btn`);
+            content.style.opacity = 1;
+            btn.classList.add('active');
+            
+            const colors = {1: 'var(--scratch-blue)', 2: 'var(--scratch-purple)', 3: '#607D8B'};
+            btn.style.border = `4px solid ${colors[roomNum]}`;
+            document.getElementById('room-preview').style.borderColor = colors[roomNum];
+            
+            const tips = {
+                1: "Use the Rectangle tool to draw a table. Don't forget the floor!",
+                2: "The Fill tool's Brightness slider can make colors look darker for nighttime.",
+                3: "Triangles for rafters! Use the Reshape tool on a square to delete one corner."
+            };
+            updateAvatar(tips[roomNum]);
+        }
+
+        // Slide 6: Translator Logic
+        let selectedRecipe = null;
+        const correctMatches = { 1: 'A', 2: 'C', 3: 'B', 4: 'D' };
+
+        function selectRecipe(id) {
+            selectedRecipe = id;
+            document.querySelectorAll('.slide#slide-6 .term-card').forEach(c => c.classList.remove('active'));
+            document.getElementById(`recipe-${id}`).classList.add('active');
+            updateAvatar("Now click the matching Scratch block on the right!");
+        }
+
+        function selectBlock(id) {
+            if (!selectedRecipe) {
+                updateAvatar("Choose a recipe sentence on the left first!");
+                return;
+            }
+            const feedback = document.getElementById('translator-feedback');
+            if (correctMatches[selectedRecipe] === id) {
+                feedback.innerText = "MATCH! 🎯 Perfect Translation.";
+                feedback.style.color = "#27ae60";
+                document.getElementById(`block-${id}`).style.borderColor = "#27ae60";
+                document.getElementById(`block-${id}`).style.background = "#C8E6C9";
+                updateAvatar("Excellent! You're thinking like a programmer.");
+            } else {
+                feedback.innerText = "Try Again! ❌ Not quite.";
+                feedback.style.color = "#e74c3c";
+                setTimeout(() => feedback.innerText = "", 1500);
+                updateAvatar("Check the colors! Control blocks are orange, Events are yellow.");
+            }
+        }
+
+        // Slide 1: Intro Ghost Logic
+        let introInterval;
+        function startIntroGhost() {
+            clearInterval(introInterval);
+            const ghost = document.getElementById('intro-ghost');
+            if(!ghost) return;
+            introInterval = setInterval(() => {
+                const x = Math.random() * 200;
+                const y = Math.random() * 80;
+                ghost.style.transform = `translate(${x - 100}px, ${y - 40}px)`;
+            }, 1000);
+        }
+        function catchIntroGhost() {
+            const ghost = document.getElementById('intro-ghost');
+            const msg = document.getElementById('intro-message');
+            if(ghost) {
+                ghost.innerText = "💥";
+                msg.innerText = "GOT HIM!";
+                msg.style.color = "#27ae60";
+                setTimeout(() => {
+                    ghost.innerText = "👻";
+                    msg.innerText = "CATCH THE GHOST!";
+                    msg.style.color = "var(--scratch-yellow)";
+                }, 1000);
+            }
+        }
+        startIntroGhost();
+
+        // Slide 7: Simulate Ghost Logic
+        let simInterval, simTimeout;
+        function simulateGhost(speed, isGlide) {
+            clearInterval(simInterval);
+            clearTimeout(simTimeout);
+            const ghost = document.getElementById('sim-ghost');
+            if(!ghost) return;
+            ghost.style.transition = '0.2s';
+            ghost.style.opacity = 0;
+            
+            simInterval = setInterval(() => {
+                const x = Math.random() * 180;
+                const y = Math.random() * 50;
+                
+                ghost.style.transition = isGlide ? `all ${speed/1000}s linear` : 'none';
+                ghost.style.transform = `translate(${x}px, ${y}px)`;
+                
+                if(!isGlide) {
+                    ghost.style.opacity = 1;
+                    simTimeout = setTimeout(() => { ghost.style.opacity = 0; }, speed);
+                } else {
+                    ghost.style.opacity = 1;
+                }
+            }, speed * 2.5);
+            updateAvatar("Watch the ghost! The speed changes based on the room's wait block.");
+        }
+        
+        function catchSimGhost() {
+            clearInterval(simInterval);
+            clearTimeout(simTimeout);
+            const ghost = document.getElementById('sim-ghost');
+            if(ghost) {
+                ghost.innerText = "💥";
+                setTimeout(() => {
+                    ghost.style.opacity = 0;
+                    ghost.innerText = "👻";
+                }, 500);
+            }
+            updateAvatar("Pop! You caught the simulated ghost!");
+        }
+
+        // Slide 8: Broadcast Logic
+        let tallyCount = 0;
+        let roomCount = 1;
+        function triggerBroadcast() {
+            tallyCount++;
+            roomCount = (roomCount % 3) + 1;
+            
+            const r1 = document.getElementById('broadcast-receiver-1');
+            const r2 = document.getElementById('broadcast-receiver-2');
+            const tVis = document.getElementById('tally-visual');
+            const sVis = document.getElementById('stage-visual');
+            
+            // Flash effect
+            r1.style.background = "#FFF9C4"; r1.style.transform = "scale(1.02)";
+            r2.style.background = "#E1F5FE"; r2.style.transform = "scale(1.02)";
+            
+            setTimeout(() => {
+                r1.style.background = "#fafafa"; r1.style.transform = "scale(1)";
+                r2.style.background = "#fafafa"; r2.style.transform = "scale(1)";
+                tVis.innerText = `Tally: ${tallyCount}`;
+                sVis.innerText = `Room: ${roomCount}`;
+                updateAvatar("The signal was received! Both scripts ran at exactly the same time.");
+            }, 300);
+        }
+
+        function moveSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 1) currentSlide = 1;
+            if (currentSlide > totalSlides) currentSlide = totalSlides;
+            updateUI();
+        }
+
+        // Slide 9: Preview Ghost Logic
+        let previewInterval;
+        let pScore = 0;
+        function startPreviewGhost() {
+            clearInterval(previewInterval);
+            const ghost = document.getElementById('preview-ghost');
+            if(!ghost) return;
+            previewInterval = setInterval(() => {
+                const container = ghost.parentElement;
+                const x = Math.random() * (container.offsetWidth - 80);
+                const y = Math.random() * (container.offsetHeight - 80);
+                ghost.style.transform = `translate(${x - container.offsetWidth/2 + 40}px, ${y - container.offsetHeight/2 + 40}px)`;
+            }, 1200);
+        }
+        function catchPreviewGhost() {
+            const ghost = document.getElementById('preview-ghost');
+            if(ghost) {
+                pScore++;
+                document.getElementById('preview-score').innerText = pScore;
+                ghost.innerText = "💥";
+                const bgColors = ['#263238', '#1A237E', '#3E2723'];
+                ghost.parentElement.style.background = bgColors[pScore % 3];
+                setTimeout(() => { ghost.innerText = "👻"; }, 400);
+            }
+        }
+        startPreviewGhost();
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'PageDown') moveSlide(1);
+            if (e.key === 'ArrowLeft' || e.key === 'PageUp') moveSlide(-1);
+        });
+
+        // Initialize
+        updateUI();
+    </script>
+</body>
+</html>
