@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 13: Ghost Catcher 2.0 — Mastery! 🚀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --motion: #4C97FF;
+            --looks: #9966FF;
+            --sound: #CF63CF;
+            --events: #FFBF00;
+            --control: #FFAB19;
+            --sensing: #5CB1D6;
+            --operators: #59C059;
+            --variables: #FF8C1A;
+            --bg: #F0F8FF;
+            --text: #1C2833;
+            --shadow: 0 12px 30px rgba(0,0,0,0.1);
+            --bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        * { box-sizing: border-box; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; user-select: none; }
+        body { background: var(--bg); color: var(--text); overflow: hidden; background-image: radial-gradient(var(--variables) 1px, transparent 1px); background-size: 30px 30px; }
+        .app { width: 100vw; height: 100vh; display: flex; flex-direction: column; }
+        header { background: var(--variables); color: white; padding: 12px 30px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 100; }
+        h1 { font-family: 'Fredoka One', cursive; font-size: 1.6rem; letter-spacing: 1px; }
+        #viewport { flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .slide { position: absolute; width: 92%; height: 88%; background: white; border-radius: 25px; padding: 30px 35px; display: none; flex-direction: column; align-items: center; text-align: center; box-shadow: var(--shadow); animation: pop 0.5s ease; overflow-y: auto; border: 3px solid var(--variables); }
+        .slide.active { display: flex; }
+        @keyframes pop { from { opacity: 0; transform: scale(0.96) translateY(15px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        h2 { font-family: 'Fredoka One', cursive; font-size: 2.2rem; color: var(--variables); margin-bottom: 10px; }
+        .sub { font-size: 1.15rem; margin-bottom: 20px; max-width: 800px; line-height: 1.5; color: #555; }
+        .btn { padding: 12px 28px; border: none; border-radius: 50px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: var(--bounce); display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-family: 'Fredoka One', cursive; color: white; }
+        .btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .btn-blue { background: var(--motion); }
+        .btn-purple { background: var(--looks); }
+        .btn-orange { background: var(--variables); }
+        .btn-green { background: var(--operators); }
+        .btn-sensing { background: var(--sensing); }
+        .btn-sound { background: var(--sound); }
+        .btn-control { background: var(--control); }
+        .controls { padding: 18px 40px; display: flex; justify-content: space-between; align-items: center; background: white; border-top: 3px solid var(--variables); z-index: 100; }
+        #counter { font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: var(--variables); }
+        .pbar { position: absolute; bottom: 0; left: 0; width: 100%; height: 8px; background: #eee; z-index: 101; }
+        .pfill { height: 100%; background: linear-gradient(to right, var(--variables), var(--sensing), var(--sound)); width: 0%; transition: 0.5s ease; }
+        #avatar-box { position: fixed; right: 15px; bottom: 90px; display: flex; align-items: flex-end; gap: 8px; pointer-events: none; z-index: 1000; }
+        .bubble { background: white; padding: 12px 16px; border-radius: 18px; border: 3px solid var(--events); box-shadow: var(--shadow); max-width: 230px; font-weight: bold; font-size: 0.95rem; color: var(--text); transition: 0.3s; }
+        .bubble::after { content: ''; position: absolute; right: -12px; bottom: 18px; border-left: 12px solid var(--events); border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
+        .avatar { width: 80px; height: 80px; background: #FFF3E0; border-radius: 28%; border: 3px solid white; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+
+        /* Scratch Block System */
+        .sb { padding: 6px 12px; border-radius: 6px; font-family: monospace; font-weight: bold; font-size: 0.9rem; color: white; display: inline-block; margin: 2px 0; text-align: left; }
+        .sb-hat { border-radius: 15px 15px 6px 6px; padding-top: 8px; }
+        .sb-bool { border-radius: 10px; padding: 3px 10px; font-size: 0.85rem; }
+        .sb-var { border-radius: 12px; padding: 2px 10px; font-size: 0.85rem; background: var(--variables); }
+        .sb-events { background: var(--events); color: #000; }
+        .sb-control { background: var(--control); color: #000; }
+        .sb-variables { background: var(--variables); }
+        .sb-sensing { background: var(--sensing); }
+        .sb-looks { background: var(--looks); }
+        .sb-sound { background: var(--sound); }
+        .sb-motion { background: var(--motion); }
+        .sb-operators { background: var(--operators); }
+        .sb-indent { margin-left: 18px; }
+        .code-stack { background: #f5f5f5; padding: 15px; border-radius: 14px; border: 3px solid #ddd; text-align: left; display: inline-block; margin: 8px; }
+
+        /* Comparison Cards */
+        .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; margin-top: 15px; }
+        .card { background: #fafafa; border: 3px dashed #ccc; padding: 15px; border-radius: 16px; text-align: left; }
+        .card.gc { border-color: var(--variables); border-style: solid; }
+        .card.ps { border-color: var(--motion); border-style: solid; }
+        .card h4 { margin-bottom: 6px; }
+
+        .heart { font-size: 1.8rem; transition: 0.3s; display: inline-block; }
+        .heart.lost { opacity: 0.15; transform: scale(0.7); }
+        .var-display { background: var(--variables); color: white; padding: 8px 18px; border-radius: 5px; font-family: 'Fredoka One'; display: inline-block; margin: 6px; box-shadow: 3px 3px 0 rgba(0,0,0,0.1); font-size: 1.1rem; }
+
+        .ghost-arena { width: 100%; max-width: 500px; height: 160px; background: #1a1a2e; border-radius: 16px; position: relative; overflow: hidden; border: 3px solid #333; margin: 10px auto; }
+        .ghost-arena .ghost { position: absolute; font-size: 2.5rem; cursor: pointer; transition: 0.3s; }
+        .timer-bar { position: absolute; bottom: 0; left: 0; height: 6px; background: #ff4757; transition: width linear; }
+
+        .checklist li { cursor: pointer; padding: 4px 0; transition: 0.2s; }
+        .checklist li.done { text-decoration: line-through; opacity: 0.5; }
+        .checklist li.done::before { content: '✅ '; }
+        .checklist li:not(.done)::before { content: '⬜ '; }
+    </style>
+</head>
+<body>
+<div class="app">
+    <header>
+        <h1>👻 Week 13: Ghost Catcher 2.0 — Mastery!</h1>
+        <button class="btn btn-orange" style="padding:8px 16px;" onclick="location.href='index.html'">🏠 Hub</button>
+    </header>
+    <div id="viewport">
+
+        <!-- SLIDE 1: Welcome -->
+        <div class="slide active" id="s1">
+            <h2>Welcome Back, Game Dev! 🚀</h2>
+            <p class="sub">Emmanuel, you've already built Ghost Catcher 1.0. Now we upgrade it with <strong>3 powerful new skills</strong> — and you'll use them to build your <strong>own</strong> game!</p>
+            <div style="display:flex; gap:20px; margin-top:15px; width:100%; max-width:700px;">
+                <div style="flex:1; background:#FFF8E1; border:4px solid var(--variables); border-radius:20px; padding:20px;">
+                    <h3 style="color:var(--variables);">🏫 Practice Ground</h3>
+                    <div style="font-size:3.5rem;">👻</div>
+                    <p><strong>Ghost Catcher 2.0</strong><br>We build together in class!</p>
+                </div>
+                <div style="font-size:2.5rem; display:flex; align-items:center;">➡️</div>
+                <div style="flex:1; background:#E3F2FD; border:4px solid var(--motion); border-radius:20px; padding:20px;">
+                    <h3 style="color:var(--motion);">⚽ Your Project</h3>
+                    <div style="font-size:3.5rem;">⚽</div>
+                    <p><strong>Penalty Shootout</strong><br>You build it on your own!</p>
+                </div>
+            </div>
+            <div style="margin-top:15px; background:#f0f0f0; padding:12px 20px; border-radius:12px; max-width:600px;">
+                <strong>Today's Skills:</strong> 📦 Variables → 🧠 Conditionals → 📡 Sensing → 🔊 Sound
+            </div>
+        </div>
+
+        <!-- SLIDE 2: What is a Variable? -->
+        <div class="slide" id="s2">
+            <h2>What is a Variable? 📦</h2>
+            <p class="sub">A <strong>Variable</strong> is a labelled box that holds a number. The game uses it to <strong>remember</strong> things — like your score!</p>
+            <div style="display:flex; gap:30px; align-items:flex-start; width:100%; max-width:800px;">
+                <div style="flex:1;">
+                    <div style="background:#FFF3E0; border:3px solid var(--variables); padding:15px; border-radius:16px; margin-bottom:12px;">
+                        <h4 style="color:var(--variables);">Where to find it in Scratch:</h4>
+                        <p>Click the <span class="sb sb-variables" style="font-size:0.8rem;">Variables</span> palette (dark orange) → Click <strong>"Make a Variable"</strong> → Type a name like <strong>Score</strong></p>
+                    </div>
+                    <div class="var-display" id="demo-score">Score: <span id="sv">0</span></div>
+                    <div style="margin-top:10px;">
+                        <button class="btn btn-blue" onclick="demoScore(1)">Catch Ghost! (+1)</button>
+                        <button class="btn btn-orange" onclick="demoScore(-999)" style="padding:8px 16px; font-size:0.85rem;">Reset</button>
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <h4 style="margin-bottom:8px;">The Scratch Blocks:</h4>
+                    <div class="code-stack">
+                        <div class="sb sb-hat sb-events">when 🏴 clicked</div><br>
+                        <div class="sb sb-variables">set [Score v] to (0)</div>
+                    </div>
+                    <div class="code-stack" style="margin-top:5px;">
+                        <div class="sb sb-hat sb-events">when this sprite clicked</div><br>
+                        <div class="sb sb-variables">change [Score v] by (1)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="compare">
+                <div class="card gc"><h4 style="color:var(--variables);">👻 Ghost Catcher:</h4><p>We use <span class="sb-var">Score</span> to count catches.</p></div>
+                <div class="card ps"><h4 style="color:var(--motion);">⚽ Penalty Shootout:</h4><p>You will use <span class="sb-var">Goals</span> to count goals scored!</p></div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Lives — Counting Down -->
+        <div class="slide" id="s3">
+            <h2>Lives: Counting Down ❤️</h2>
+            <p class="sub">Games also track <strong>bad things</strong>. When a ghost escapes, you lose a life. The variable goes <strong>down</strong> by using a <strong>negative number</strong>!</p>
+            <div style="display:flex; gap:30px; align-items:flex-start; width:100%; max-width:800px;">
+                <div style="flex:1; text-align:center;">
+                    <div class="var-display">Lives: <span id="lv">3</span></div>
+                    <div id="hearts" style="margin:10px 0;">
+                        <span class="heart">❤️</span>
+                        <span class="heart">❤️</span>
+                        <span class="heart">❤️</span>
+                    </div>
+                    <button class="btn btn-orange" onclick="loseLife()">Ghost Escaped! (−1)</button>
+                    <button class="btn btn-purple" onclick="resetLives()" style="padding:8px 14px; font-size:0.85rem; margin-top:6px;">Reset Lives</button>
+                </div>
+                <div style="flex:1;">
+                    <h4 style="margin-bottom:8px;">The Scratch Blocks:</h4>
+                    <div class="code-stack">
+                        <div class="sb sb-hat sb-events">when 🏴 clicked</div><br>
+                        <div class="sb sb-variables">set [Lives v] to (3)</div>
+                    </div>
+                    <div class="code-stack" style="margin-top:5px;">
+                        <span style="font-size:0.8rem; color:#999;">When ghost escapes:</span><br>
+                        <div class="sb sb-variables">change [Lives v] by (-1)</div>
+                    </div>
+                    <div style="background:#FFF3E0; padding:10px; border-radius:10px; margin-top:10px; border:2px dashed var(--variables);">
+                        <strong>Key Insight:</strong> <code>change by (1)</code> = goes UP. <code>change by (-1)</code> = goes DOWN!
+                    </div>
+                </div>
+            </div>
+            <div class="compare">
+                <div class="card gc"><h4 style="color:var(--variables);">👻 Ghost Catcher:</h4><p><span class="sb-var">Lives</span> starts at 3 and goes down when a ghost escapes.</p></div>
+                <div class="card ps"><h4 style="color:var(--motion);">⚽ Penalty Shootout:</h4><p><span class="sb-var">Kicks</span> starts at 5 and goes down after each kick attempt.</p></div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: The Ghost Escape (CRITICAL NEW SLIDE) -->
+        <div class="slide" id="s4">
+            <h2>The Ghost Escape! 💨</h2>
+            <p class="sub">This is <strong>how</strong> the ghost makes you lose a life. It appears, waits, and if you don't click it in time... it <strong>escapes</strong>!</p>
+            <div style="display:flex; gap:20px; width:100%; max-width:850px; align-items:flex-start;">
+                <div style="flex:1;">
+                    <h4>The Full Ghost Loop:</h4>
+                    <div class="code-stack" style="width:100%;">
+                        <div class="sb sb-hat sb-events">when 🏴 clicked</div><br>
+                        <div class="sb sb-control">forever</div><br>
+                        <div class="sb sb-indent sb-motion">go to (random position)</div><br>
+                        <div class="sb sb-indent sb-looks">show</div><br>
+                        <div class="sb sb-indent sb-control">wait (2) secs</div>
+                        <span style="font-size:0.75rem; color:#e74c3c;"> ← escape timer!</span><br>
+                        <div class="sb sb-indent sb-looks">hide</div><br>
+                        <div class="sb sb-indent sb-variables">change [Lives v] by (-1)</div>
+                        <span style="font-size:0.75rem; color:#e74c3c;"> ← ghost escaped!</span><br>
+                        <div class="sb sb-control">end</div>
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <h4>Try it! Click the ghost before time runs out:</h4>
+                    <div class="ghost-arena" id="arena">
+                        <div class="ghost" id="sim-ghost" onclick="catchGhost()" style="opacity:0;">👻</div>
+                        <div class="timer-bar" id="timer-bar"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                        <div class="var-display" style="font-size:0.9rem;">Score: <span id="sim-score">0</span></div>
+                        <div class="var-display" style="font-size:0.9rem; background:#ff4757;">Lives: <span id="sim-lives">3</span></div>
+                    </div>
+                    <button class="btn btn-green" onclick="startEscapeSim()" style="margin-top:8px;">▶️ Start Simulation</button>
+                    <button class="btn btn-orange" onclick="resetEscapeSim()" style="padding:6px 14px; font-size:0.8rem; margin-top:4px;">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: IF/THEN Conditionals -->
+        <div class="slide" id="s5">
+            <h2>IF / THEN: Game Over! 🛑</h2>
+            <p class="sub">We need the game to <strong>stop automatically</strong> when lives reach zero. The <strong>IF block</strong> checks a condition every time the loop runs.</p>
+            <div style="display:flex; gap:25px; width:100%; max-width:850px; align-items:flex-start;">
+                <div style="flex:1;">
+                    <h4>The Scratch Block:</h4>
+                    <div class="code-stack" style="width:100%;">
+                        <div class="sb sb-control">if &lt;<span class="sb sb-operators" style="padding:2px 6px;">(Lives) = (0)</span>&gt; then</div><br>
+                        <div class="sb sb-indent sb-looks">say [Game Over!] for (2) secs</div><br>
+                        <div class="sb sb-indent sb-control">stop [all v]</div><br>
+                        <div class="sb sb-control">end</div>
+                    </div>
+                    <div style="background:#E8F5E9; padding:10px; border-radius:10px; margin-top:10px; border:2px solid var(--operators); text-align:left;">
+                        <strong>Where does this go?</strong> Inside your <code>forever</code> loop, right after <code>change [Lives] by (-1)</code>. It checks <strong>every time</strong> a ghost escapes!
+                    </div>
+                </div>
+                <div style="flex:1; text-align:center;">
+                    <h4>Test the Condition:</h4>
+                    <div style="font-size:1.3rem; font-weight:bold; margin:8px 0;">
+                        Lives = <span id="if-lives" style="color:#e74c3c; font-size:2rem;">3</span>
+                    </div>
+                    <button class="btn btn-orange" onclick="ifLoseLife()" style="padding:8px 18px;">Ghost Escaped! (−1)</button>
+                    <div id="if-block-visual" style="background:var(--control); padding:12px; border-radius:10px; margin-top:12px; font-weight:bold; font-family:monospace; transition:0.3s;">
+                        if <span style="background:white; color:black; padding:2px 6px; border-radius:6px;" id="if-cond">Lives = 0 ?</span> then<br>
+                        <div id="if-inner" style="background:white; margin:6px 0 0 15px; padding:6px 10px; border-radius:4px; color:black;">
+                            stop all 🛑
+                        </div>
+                    </div>
+                    <p id="if-msg" style="margin-top:8px; font-weight:bold; height:1.5em;"></p>
+                    <button class="btn btn-purple" onclick="ifReset()" style="padding:6px 14px; font-size:0.8rem;">Reset</button>
+                </div>
+            </div>
+            <div class="compare">
+                <div class="card gc"><h4 style="color:var(--variables);">👻 Ghost Catcher:</h4><p><strong>IF</strong> Lives = 0, <strong>THEN</strong> say "Game Over!" and stop all.</p></div>
+                <div class="card ps"><h4 style="color:var(--motion);">⚽ Penalty Shootout:</h4><p><strong>IF</strong> Kicks = 0, <strong>THEN</strong> say "Full Time!" and show final score.</p></div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Sensing -->
+        <div class="slide" id="s6">
+            <h2>Sensing: Detecting Contact 📡</h2>
+            <p class="sub">How does the ball know it scored? <strong>Sensing</strong> blocks (light blue) can detect when sprites are <strong>touching</strong>!</p>
+            <div style="display:flex; gap:25px; width:100%; max-width:850px; align-items:flex-start;">
+                <div style="flex:1;">
+                    <h4>The Scratch Block:</h4>
+                    <div class="code-stack" style="width:100%;">
+                        <div class="sb sb-control">if &lt;<span class="sb sb-sensing" style="padding:2px 6px;">touching [Net v] ?</span>&gt; then</div><br>
+                        <div class="sb sb-indent sb-variables">change [Goals v] by (1)</div><br>
+                        <div class="sb sb-indent sb-sound">play sound [Cheer v] until done</div><br>
+                        <div class="sb sb-control">end</div>
+                    </div>
+                    <div style="background:#E1F5FE; padding:10px; border-radius:10px; margin-top:10px; border:2px solid var(--sensing); text-align:left;">
+                        <strong>Note:</strong> In Ghost Catcher we used <span class="sb sb-events" style="font-size:0.75rem; padding:2px 6px;">when this sprite clicked</span> — that's an <strong>Event</strong> (yellow). Sensing is different — it detects <strong>touching</strong> automatically!
+                    </div>
+                </div>
+                <div style="flex:1; text-align:center;">
+                    <h4>Shoot the ball!</h4>
+                    <div style="position:relative; height:130px; width:100%; background:#2d5a27; border-radius:12px; overflow:hidden; border:3px solid #1b3d15;">
+                        <div id="s-net" style="position:absolute; right:0; width:45px; height:100%; background:rgba(255,255,255,0.3); border-left:4px solid white; display:flex; align-items:center; justify-content:center; font-weight:bold; color:white; font-size:0.8rem;">NET</div>
+                        <div id="s-ball" style="position:absolute; left:20px; top:50%; transform:translateY(-50%); font-size:2rem; transition:0.5s;">⚽</div>
+                        <div id="s-result" style="position:absolute; top:10px; left:50%; transform:translateX(-50%); font-weight:bold; color:white; font-size:1.3rem; opacity:0; transition:0.3s;"></div>
+                    </div>
+                    <button class="btn btn-sensing" onclick="shootBall()" style="margin-top:10px;">Shoot! 🚀</button>
+                </div>
+            </div>
+            <div class="compare">
+                <div class="card gc"><h4 style="color:var(--variables);">👻 Ghost Catcher:</h4><p>Uses <span class="sb sb-events" style="font-size:0.75rem; padding:2px 6px;">when this sprite clicked</span> (an <strong>Event</strong> trigger).</p></div>
+                <div class="card ps"><h4 style="color:var(--motion);">⚽ Penalty Shootout:</h4><p>Uses <span class="sb sb-sensing" style="font-size:0.75rem; padding:2px 6px;">touching [Net v] ?</span> (a <strong>Sensing</strong> check inside IF).</p></div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Sound & Polish -->
+        <div class="slide" id="s7">
+            <h2>Sound & Polish ✨</h2>
+            <p class="sub">The difference between a "project" and a <strong>GAME</strong> is the <strong>juice</strong>! Every big moment needs a <strong>sound</strong> and a <strong>visual flash</strong>.</p>
+            <div style="display:flex; gap:25px; width:100%; max-width:850px; align-items:flex-start;">
+                <div style="flex:1;">
+                    <h4>The Scratch Blocks:</h4>
+                    <div class="code-stack" style="width:100%;">
+                        <span style="font-size:0.8rem; color:#999;">When ghost is caught:</span><br>
+                        <div class="sb sb-sound">play sound [Pop v] until done</div><br>
+                        <div class="sb sb-looks">set [color v] effect to (25)</div><br>
+                        <div class="sb sb-looks">set size to (150) %</div><br>
+                        <div class="sb sb-control">wait (0.2) secs</div><br>
+                        <div class="sb sb-looks">set size to (100) %</div><br>
+                        <div class="sb sb-looks">clear graphic effects</div>
+                    </div>
+                    <div style="background:#FCE4EC; padding:10px; border-radius:10px; margin-top:10px; border:2px solid var(--sound); text-align:left;">
+                        <strong>Pro Tip:</strong> Go to the <strong>Sounds tab</strong> → Click 🔊 to browse Scratch's sound library. Pick sounds that match the emotion!
+                    </div>
+                </div>
+                <div style="flex:1; text-align:center;">
+                    <h4>Feel the Juice!</h4>
+                    <div id="juice-stage" style="width:100%; height:130px; background:#1a1a2e; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:4rem; border:3px solid #333; transition:0.1s; position:relative;">
+                        <span id="juice-ghost">👻</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px;">
+                        <button class="btn btn-sound" onclick="juiceEffect('pop')" style="padding:8px 12px; font-size:0.9rem;">💥 Pop!</button>
+                        <button class="btn btn-sound" onclick="juiceEffect('cheer')" style="padding:8px 12px; font-size:0.9rem;">🎉 Goal Cheer!</button>
+                        <button class="btn btn-sound" onclick="juiceEffect('buzz')" style="padding:8px 12px; font-size:0.9rem;">📢 Buzzer!</button>
+                        <button class="btn btn-sound" onclick="juiceEffect('grow')" style="padding:8px 12px; font-size:0.9rem;">🫧 Size Bounce</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Full Blueprint -->
+        <div class="slide" id="s8">
+            <h2>The Master Blueprint 📋</h2>
+            <p class="sub">Here is the <strong>complete code</strong> for Ghost Catcher 2.0. This is everything you built today!</p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; max-width:900px;">
+                <div class="code-stack" style="margin:0;">
+                    <h4 style="color:var(--variables); margin-bottom:6px;">👻 Ghost Sprite:</h4>
+                    <div class="sb sb-hat sb-events">when 🏴 clicked</div><br>
+                    <div class="sb sb-variables">set [Score v] to (0)</div><br>
+                    <div class="sb sb-variables">set [Lives v] to (3)</div><br>
+                    <div class="sb sb-control">forever</div><br>
+                    <div class="sb sb-indent sb-motion">go to (random position)</div><br>
+                    <div class="sb sb-indent sb-looks">show</div><br>
+                    <div class="sb sb-indent sb-control">wait (2) secs</div><br>
+                    <div class="sb sb-indent sb-looks">hide</div><br>
+                    <div class="sb sb-indent sb-variables">change [Lives v] by (-1)</div><br>
+                    <div class="sb sb-indent sb-control">if &lt;(Lives)=(0)&gt; then</div><br>
+                    <div class="sb sb-indent sb-indent sb-control">stop [all v]</div><br>
+                    <div class="sb sb-control">end end</div>
+                </div>
+                <div class="code-stack" style="margin:0;">
+                    <h4 style="color:var(--events); margin-bottom:6px;">👻 When Caught:</h4>
+                    <div class="sb sb-hat sb-events">when this sprite clicked</div><br>
+                    <div class="sb sb-variables">change [Score v] by (1)</div><br>
+                    <div class="sb sb-sound">play sound [Pop v]</div><br>
+                    <div class="sb sb-looks">hide</div>
+                    <br><br>
+                    <h4 style="color:var(--motion); margin-bottom:6px; margin-top:10px;">⚽ Your Penalty Shootout:</h4>
+                    <div class="sb sb-hat sb-events">when 🏴 clicked</div><br>
+                    <div class="sb sb-variables">set [Goals v] to (0)</div><br>
+                    <div class="sb sb-variables">set [Kicks v] to (5)</div><br>
+                    <div class="sb sb-control">forever</div><br>
+                    <div class="sb sb-indent sb-control">if &lt;<span class="sb sb-sensing" style="padding:1px 4px; font-size:0.75rem;">touching [Net]?</span>&gt; then</div><br>
+                    <div class="sb sb-indent sb-indent sb-variables">change [Goals v] by (1)</div><br>
+                    <div class="sb sb-indent sb-indent sb-sound">play sound [Cheer v]</div><br>
+                    <div class="sb sb-control">end end</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Mission Brief -->
+        <div class="slide" id="s9">
+            <h2>Your Mission Brief ⚽</h2>
+            <p class="sub">Emmanuel, here is your <strong>Penalty Shootout</strong> checklist. Build these <strong>before our next session</strong>. Click each one when done!</p>
+            <div style="text-align:left; background:#E3F2FD; border:4px solid var(--motion); padding:25px; border-radius:25px; width:100%; max-width:750px;">
+                <h3 style="color:var(--motion); font-family:'Fredoka One'; margin-bottom:15px;">🏆 Independent Goals:</h3>
+                <ul class="checklist" style="font-size:1.15rem; line-height:2.2; list-style:none; padding:0;">
+                    <li onclick="this.classList.toggle('done')">Create <span class="sb-var">Goals</span> and <span class="sb-var">Kicks</span> variables</li>
+                    <li onclick="this.classList.toggle('done')">Set Goals to 0 and Kicks to 5 when 🏴 clicked</li>
+                    <li onclick="this.classList.toggle('done')">Make the Goalkeeper glide back and forth (forever loop!)</li>
+                    <li onclick="this.classList.toggle('done')">IF <span class="sb sb-sensing" style="font-size:0.8rem; padding:2px 6px;">touching [Net]?</span> THEN Goals +1 and play Cheer</li>
+                    <li onclick="this.classList.toggle('done')">After each kick: change Kicks by (−1)</li>
+                    <li onclick="this.classList.toggle('done')">IF Kicks = 0, THEN say "Full Time!" and stop all</li>
+                </ul>
+            </div>
+            <p style="margin-top:15px; font-weight:bold; color:var(--looks); font-size:1.1rem;">You can do this! I believe in you, Emmanuel! 💪</p>
+        </div>
+
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-purple" id="btn-b" onclick="go(-1)">◀️ Back</button>
+        <div id="counter">1 / 9</div>
+        <button class="btn btn-blue" id="btn-n" onclick="go(1)">Next ▶️</button>
+    </div>
+    <div class="pbar"><div class="pfill" id="pbar"></div></div>
+    <div id="avatar-box">
+        <div class="bubble" id="bub">Hello Emmanuel! Ready to level up?</div>
+        <div class="avatar">👨🏽‍🏫</div>
+    </div>
+</div>
+
+<script>
+let cur = 1; const tot = 9;
+let sScore = 0, sLives = 3;
+const tips = {
+    1: "Today we master three powerful skills. Whatever we learn in Ghost Catcher, you'll use in your Football game!",
+    2: "Remember — a Variable is just a name for a number. Where do you find Variables in Scratch?",
+    3: "Change by (-1) makes the number go DOWN. That negative sign is the secret!",
+    4: "Watch the timer! If you don't click in time, the ghost escapes and you lose a life. This is the CORE of your game!",
+    5: "The IF block asks a question EVERY loop. When the answer is YES, the code inside runs!",
+    6: "Sensing blocks are LIGHT BLUE in Scratch. They can detect touching, mouse position, and more!",
+    7: "Sound + Visual = Game Juice! Always pair them together for maximum impact.",
+    8: "This is your complete blueprint. Both games use the same logic — just different sprites!",
+    9: "This is YOUR checklist. Try to build these before next week. You are a Game Developer now!"
+};
+
+function updateUI() {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.getElementById(`s${cur}`).classList.add('active');
+    document.getElementById('counter').innerText = `${cur} / ${tot}`;
+    document.getElementById('pbar').style.width = `${((cur-1)/(tot-1))*100}%`;
+    document.getElementById('btn-b').disabled = cur === 1;
+    document.getElementById('btn-n').disabled = cur === tot;
+    say();
+    // Stop sim when leaving slide 4
+    if (cur !== 4) { clearTimeout(escTimer); clearInterval(escLoop); }
+}
+function say(msg) {
+    const b = document.getElementById('bub');
+    b.style.opacity = 0;
+    setTimeout(() => { b.innerText = msg || tips[cur] || "Keep going!"; b.style.opacity = 1; }, 250);
+}
+function go(d) { cur += d; cur = Math.max(1, Math.min(tot, cur)); updateUI(); }
+
+// Slide 2: Score demo
+let dScore = 0;
+function demoScore(n) {
+    if (n < -1) dScore = 0; else dScore += n;
+    if (dScore < 0) dScore = 0;
+    document.getElementById('sv').innerText = dScore;
+    say(n > 0 ? "The variable went UP by 1! That's what 'change by (1)' does." : "Reset! That's what 'set to (0)' does at the start.");
+}
+
+// Slide 3: Lives
+let dLives = 3;
+function loseLife() {
+    if (dLives <= 0) return;
+    dLives--;
+    document.getElementById('lv').innerText = dLives;
+    const h = document.querySelectorAll('.heart');
+    h[dLives].classList.add('lost');
+    say(dLives > 0 ? `Lives went DOWN to ${dLives}. That's 'change by (-1)'!` : "Zero lives! Now go to the next slide to see what happens…");
+}
+function resetLives() {
+    dLives = 3;
+    document.getElementById('lv').innerText = 3;
+    document.querySelectorAll('.heart').forEach(h => h.classList.remove('lost'));
+}
+
+// Slide 4: Ghost Escape Simulation
+let escTimer, escLoop, simScore = 0, simLives = 3, simRunning = false;
+function startEscapeSim() {
+    if (simRunning || simLives <= 0) return;
+    simRunning = true;
+    spawnGhost();
+}
+function spawnGhost() {
+    if (simLives <= 0) { simRunning = false; say("Game Over! All lives lost. Press Reset to try again."); return; }
+    const g = document.getElementById('sim-ghost');
+    const arena = document.getElementById('arena');
+    const bar = document.getElementById('timer-bar');
+    g.style.opacity = 1;
+    g.style.left = (Math.random() * (arena.offsetWidth - 60)) + 'px';
+    g.style.top = (Math.random() * (arena.offsetHeight - 60)) + 'px';
+    bar.style.width = '100%';
+    bar.style.transition = 'width 2s linear';
+    requestAnimationFrame(() => { bar.style.width = '0%'; });
+    escTimer = setTimeout(() => {
+        g.style.opacity = 0;
+        simLives--;
+        document.getElementById('sim-lives').innerText = simLives;
+        say("Ghost escaped! Lives changed by (-1)!");
+        if (simLives > 0) setTimeout(spawnGhost, 600);
+        else { simRunning = false; say("Game Over! The IF block would fire: stop all!"); }
+    }, 2000);
+}
+function catchGhost() {
+    if (!simRunning) return;
+    clearTimeout(escTimer);
+    const g = document.getElementById('sim-ghost');
+    g.innerText = '💥'; g.style.opacity = 1;
+    simScore++;
+    document.getElementById('sim-score').innerText = simScore;
+    say("Caught! Score changed by (+1)! Next ghost incoming...");
+    setTimeout(() => { g.innerText = '👻'; g.style.opacity = 0; setTimeout(spawnGhost, 400); }, 500);
+}
+function resetEscapeSim() {
+    clearTimeout(escTimer); simRunning = false;
+    simScore = 0; simLives = 3;
+    document.getElementById('sim-score').innerText = 0;
+    document.getElementById('sim-lives').innerText = 3;
+    document.getElementById('sim-ghost').style.opacity = 0;
+    document.getElementById('sim-ghost').innerText = '👻';
+    document.getElementById('timer-bar').style.transition = 'none';
+    document.getElementById('timer-bar').style.width = '0%';
+}
+
+// Slide 5: IF/THEN
+let ifLives = 3;
+function ifLoseLife() {
+    if (ifLives <= 0) return;
+    ifLives--;
+    document.getElementById('if-lives').innerText = ifLives;
+    const cond = document.getElementById('if-cond');
+    const inner = document.getElementById('if-inner');
+    const msg = document.getElementById('if-msg');
+    if (ifLives === 0) {
+        cond.style.background = '#27ae60'; cond.style.color = 'white'; cond.innerText = 'TRUE ✅';
+        inner.style.background = '#ff4757'; inner.style.color = 'white';
+        msg.innerText = 'Condition is TRUE! The code inside RUNS!'; msg.style.color = '#27ae60';
+        say("Lives hit zero! The IF block fires — STOP ALL!");
+    } else {
+        cond.style.background = 'white'; cond.style.color = 'black'; cond.innerText = `${ifLives} = 0? NO`;
+        msg.innerText = `Condition is FALSE. Code inside is skipped.`; msg.style.color = '#e74c3c';
+        say(`Lives = ${ifLives}. Not zero yet, so the IF block does nothing.`);
+    }
+}
+function ifReset() {
+    ifLives = 3;
+    document.getElementById('if-lives').innerText = 3;
+    document.getElementById('if-cond').style.background = 'white';
+    document.getElementById('if-cond').style.color = 'black';
+    document.getElementById('if-cond').innerText = 'Lives = 0 ?';
+    document.getElementById('if-inner').style.background = 'white';
+    document.getElementById('if-inner').style.color = 'black';
+    document.getElementById('if-msg').innerText = '';
+}
+
+// Slide 6: Sensing ball
+function shootBall() {
+    const ball = document.getElementById('s-ball');
+    const result = document.getElementById('s-result');
+    ball.style.transform = 'translateX(280px) translateY(-50%)';
+    setTimeout(() => {
+        result.innerText = '⚽ GOAL!'; result.style.opacity = 1; result.style.color = '#4CAF50';
+        say("TOUCHING detected! The Sensing block says TRUE, so the IF block runs and Goals goes up!");
+        setTimeout(() => { ball.style.transform = 'translateX(0px) translateY(-50%)'; result.style.opacity = 0; }, 1500);
+    }, 550);
+}
+
+// Slide 7: Juice effects
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function beep(freq, dur) {
+    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value = freq; o.type = 'sine';
+    g.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+    o.start(); o.stop(audioCtx.currentTime + dur);
+}
+function juiceEffect(type) {
+    const stage = document.getElementById('juice-stage');
+    const ghost = document.getElementById('juice-ghost');
+    if (type === 'pop') {
+        beep(800, 0.15); beep(400, 0.1);
+        ghost.innerText = '💥';
+        stage.style.background = '#ff4757';
+        setTimeout(() => { ghost.innerText = '👻'; stage.style.background = '#1a1a2e'; }, 300);
+        say("Pop! Sound + color flash = satisfying feedback!");
+    } else if (type === 'cheer') {
+        beep(523, 0.1); setTimeout(() => beep(659, 0.1), 100); setTimeout(() => beep(784, 0.2), 200);
+        stage.style.background = '#27ae60';
+        ghost.innerText = '🎉';
+        setTimeout(() => { ghost.innerText = '👻'; stage.style.background = '#1a1a2e'; }, 500);
+        say("Goal celebration! Three rising notes + green flash!");
+    } else if (type === 'buzz') {
+        beep(150, 0.4);
+        stage.style.background = '#e74c3c';
+        ghost.innerText = '😵';
+        setTimeout(() => { ghost.innerText = '👻'; stage.style.background = '#1a1a2e'; }, 400);
+        say("Buzzer for misses! Low sound + red flash = game tension.");
+    } else if (type === 'grow') {
+        beep(600, 0.2);
+        ghost.style.transform = 'scale(1.5)';
+        setTimeout(() => { ghost.style.transform = 'scale(1)'; }, 250);
+        say("Size bounce! set size to 150% → wait → set size to 100%.");
+    }
+}
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') go(1);
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(-1);
+});
+updateUI();
+</script>
+</body>
+</html>
