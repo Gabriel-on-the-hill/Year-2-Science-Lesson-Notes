@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Year 2 Maths: Summer Block 1 — Fractions</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --half-color: #3B82F6;
+    --quarter-color: #10B981;
+    --third-color: #F59E0B;
+    --whole-color: #8B5CF6;
+    --success: #10B981;
+    --error: #EF4444;
+    --bg-start: #0F172A;
+    --bg-end: #1E293B;
+    --card-bg: rgba(255,255,255,0.07);
+    --card-border: rgba(255,255,255,0.12);
+    --text: #F1F5F9;
+    --text-dim: #94A3B8;
+    --accent: #8B5CF6;
+    --accent-light: #A78BFA;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-start),var(--bg-end));color:var(--text);min-height:100vh;overflow:hidden;user-select:none}
+
+/* SLIDE SYSTEM */
+.slide{display:none;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:30px 30px 90px;position:relative;animation:fadeIn .5s ease}
+.slide.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+.nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(15,23,42,.92);backdrop-filter:blur(20px);border-top:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between;padding:12px 30px}
+.nav-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.nav-btn:hover{background:var(--accent-light);transform:translateY(-2px)}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.nav-btn.back{background:rgba(255,255,255,.1)}
+.slide-counter{color:var(--text-dim);font-size:.9rem;font-weight:500}
+.progress-bar-container{position:fixed;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,.05);z-index:101}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--half-color));transition:width .4s ease;border-radius:0 2px 2px 0}
+
+/* BADGES */
+.week-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid var(--card-border);border-radius:100px;padding:6px 16px;font-size:.8rem;color:var(--text-dim);margin-bottom:16px;backdrop-filter:blur(10px)}
+.week-badge .dot{width:8px;height:8px;border-radius:50%}
+.dot.w1{background:var(--half-color)}.dot.w2{background:var(--quarter-color)}.dot.w3{background:var(--third-color)}.dot.w4{background:var(--whole-color)}
+
+/* CARDS */
+.glass-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:32px;backdrop-filter:blur(20px);max-width:920px;width:100%}
+.slide-title{font-size:2rem;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,#fff,var(--text-dim));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.slide-subtitle{color:var(--text-dim);font-size:1.05rem;margin-bottom:24px;line-height:1.7}
+
+/* FRACTION SHAPES */
+.shape-row{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin:20px 0}
+.shape-box{text-align:center}
+.shape-box .label{margin-top:8px;font-size:.9rem;color:var(--text-dim);font-weight:500}
+
+/* FRACTION BAR */
+.frac-bar{display:flex;border-radius:12px;overflow:hidden;border:2px solid var(--card-border);height:60px;max-width:500px;margin:0 auto}
+.frac-bar .segment{flex:1;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;transition:all .4s;cursor:pointer}
+.frac-bar .segment.shaded{opacity:1}.frac-bar .segment.unshaded{opacity:.2}
+
+/* COUNTER DOTS */
+.counter-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}
+.counter-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;transition:all .3s;border:2px solid rgba(255,255,255,.15)}
+.counter-dot.active{border-color:var(--half-color);box-shadow:0 0 12px rgba(59,130,246,.3)}
+.counter-dot.grouped{border-color:var(--success)}
+
+/* BAR MODEL */
+.bar-model{max-width:500px;margin:16px auto;border-radius:12px;overflow:hidden;border:2px solid var(--card-border)}
+.bar-model .whole-bar{height:50px;display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,.15);font-weight:700;font-size:1.2rem;color:var(--accent-light);border-bottom:2px solid var(--card-border)}
+.bar-model .parts-bar{display:flex;height:50px}
+.bar-model .part{flex:1;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;transition:all .3s}
+.bar-model .part:not(:last-child){border-right:2px solid var(--card-border)}
+
+/* SENTENCE STEM */
+.sentence-stem{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:14px;padding:16px 24px;font-size:1.1rem;text-align:center;margin-top:16px;line-height:1.7;color:var(--accent-light);font-weight:500}
+.hl-half{color:var(--half-color);font-weight:700}
+.hl-quarter{color:var(--quarter-color);font-weight:700}
+.hl-third{color:var(--third-color);font-weight:700}
+.hl-whole{color:var(--whole-color);font-weight:700}
+
+/* BUTTONS */
+.action-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;border:2px solid transparent;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;color:#fff}
+.action-btn:hover{transform:scale(1.05)}
+.action-btn.check-btn{background:var(--success)}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+
+/* QUIZ */
+.quiz-question{background:rgba(255,255,255,.04);border:1px solid var(--card-border);border-radius:16px;padding:24px;margin-bottom:16px}
+.quiz-question .q-text{font-size:1.1rem;font-weight:600;margin-bottom:16px;line-height:1.6}
+.quiz-options{display:flex;flex-direction:column;gap:10px}
+.quiz-opt{padding:14px 20px;border-radius:12px;cursor:pointer;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.1);font-size:1rem;transition:all .2s;text-align:left;font-family:inherit;color:var(--text);font-weight:500}
+.quiz-opt:hover{border-color:var(--accent);background:rgba(139,92,246,.1)}
+.quiz-opt.correct{border-color:var(--success);background:rgba(16,185,129,.15);color:var(--success)}
+.quiz-opt.wrong{border-color:var(--error);background:rgba(239,68,68,.1);color:var(--error)}
+.quiz-opt.disabled{pointer-events:none}
+.quiz-feedback{margin-top:12px;padding:12px 18px;border-radius:10px;font-size:.95rem;font-weight:500;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct-fb{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--success)}
+.quiz-feedback.wrong-fb{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--error)}
+
+/* ROADBLOCK */
+.roadblock-card{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(239,68,68,.1));border:2px solid rgba(245,158,11,.3);border-radius:20px;padding:32px;text-align:center;max-width:600px}
+.roadblock-card h2{color:var(--third-color);font-size:1.8rem;margin-bottom:16px}
+.roadblock-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:1.05rem;text-align:left}
+.roadblock-item:last-child{border-bottom:none}
+
+/* HOMEWORK */
+.homework-card{background:linear-gradient(135deg,rgba(59,130,246,.05),rgba(139,92,246,.08));border:2px dashed rgba(139,92,246,.3);border-radius:20px;padding:32px;max-width:700px;width:100%}
+.homework-card h3{color:var(--accent-light);margin-bottom:16px}
+.homework-item{padding:8px 0;font-size:1.05rem;color:var(--text);display:flex;gap:10px;line-height:1.6}
+
+/* NUMBER LINE */
+.nl-container{width:100%;max-width:600px;margin:20px auto;position:relative}
+.nl-line{width:100%;height:6px;background:rgba(255,255,255,.15);border-radius:3px;position:relative;margin:40px 0 30px}
+.nl-tick{position:absolute;top:-8px;width:2px;height:22px;background:rgba(255,255,255,.4);border-radius:1px}
+.nl-label{position:absolute;top:20px;font-size:.85rem;color:var(--text-dim);transform:translateX(-50%);font-weight:600}
+.nl-frac-label{position:absolute;top:-30px;font-size:.8rem;color:var(--accent-light);transform:translateX(-50%);font-weight:600;background:rgba(139,92,246,.15);padding:2px 8px;border-radius:6px}
+
+/* RESULTS */
+.results-card{text-align:center;padding:40px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:24px;backdrop-filter:blur(20px);max-width:500px}
+.score-circle{width:140px;height:140px;border-radius:50%;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;font-weight:900;color:#fff}
+.score-circle.gold{background:linear-gradient(135deg,#F59E0B,#D97706);box-shadow:0 8px 30px rgba(245,158,11,.4)}
+.score-circle.silver{background:linear-gradient(135deg,#94A3B8,#64748B);box-shadow:0 8px 30px rgba(148,163,184,.3)}
+.score-circle.bronze{background:linear-gradient(135deg,#F97316,#C2410C);box-shadow:0 8px 30px rgba(249,115,22,.3)}
+
+/* EQUIVALENCE */
+.equiv-visual{display:flex;gap:30px;align-items:center;justify-content:center;flex-wrap:wrap;margin:20px 0}
+.equiv-box{text-align:center}
+.equiv-box .label{margin-top:8px;font-weight:700;font-size:1.2rem}
+.equiv-equals{font-size:2.5rem;font-weight:900;color:var(--accent)}
+
+/* MISC */
+.flex-center{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+.mt-16{margin-top:16px}.mt-24{margin-top:24px}.mb-16{margin-bottom:16px}
+.text-center{text-align:center}
+.hidden{display:none!important}
+.big-number{font-size:4rem;font-weight:900}
+.slide-content{max-height:calc(100vh - 100px);overflow-y:auto;width:100%;max-width:920px;padding-bottom:20px}
+.slide-content::-webkit-scrollbar{width:6px}
+.slide-content::-webkit-scrollbar-track{background:transparent}
+.slide-content::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px}
+
+/* FRAC DISPLAY */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px;line-height:1}
+.frac .num{border-bottom:2px solid currentColor;padding:0 4px 2px;font-weight:700}
+.frac .den{padding:2px 4px 0;font-weight:700}
+
+/* INTERACTIVE SHAPE CLICK */
+.click-shape{cursor:pointer;transition:all .2s}
+.click-shape:hover{filter:brightness(1.3)}
+
+/* TITLE */
+.title-slide h1{font-size:3.5rem;font-weight:900;text-align:center;line-height:1.2;background:linear-gradient(135deg,var(--half-color),var(--accent),var(--third-color));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.title-meta{color:var(--text-dim);font-size:1.1rem;margin-top:12px;text-align:center}
+
+@media(max-width:600px){
+    .slide{padding:16px 16px 90px}.title-slide h1{font-size:2.2rem}.slide-title{font-size:1.5rem}.glass-card{padding:20px}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- ===== SLIDE 0: TITLE ===== -->
+<div class="slide active title-slide" id="slide-0">
+<div class="slide-content flex-center" style="flex-direction:column;min-height:80vh;">
+    <div style="margin-bottom:20px;">
+        <svg width="200" height="80" viewBox="0 0 200 80">
+            <rect x="5" y="5" width="70" height="70" rx="10" fill="rgba(59,130,246,0.2)" stroke="#3B82F6" stroke-width="2"/>
+            <line x1="40" y1="5" x2="40" y2="75" stroke="#3B82F6" stroke-width="2" stroke-dasharray="4"/>
+            <rect x="5" y="5" width="35" height="70" rx="10" fill="rgba(59,130,246,0.35)"/>
+            <text x="40" y="50" text-anchor="middle" fill="#93C5FD" font-size="16" font-weight="800" font-family="Inter">½</text>
+            <rect x="95" y="5" width="100" height="70" rx="10" fill="rgba(16,185,129,0.2)" stroke="#10B981" stroke-width="2"/>
+            <line x1="120" y1="5" x2="120" y2="75" stroke="#10B981" stroke-width="1.5" stroke-dasharray="3"/>
+            <line x1="145" y1="5" x2="145" y2="75" stroke="#10B981" stroke-width="1.5" stroke-dasharray="3"/>
+            <line x1="170" y1="5" x2="170" y2="75" stroke="#10B981" stroke-width="1.5" stroke-dasharray="3"/>
+            <rect x="95" y="5" width="25" height="70" rx="10" fill="rgba(16,185,129,0.35)"/>
+            <text x="145" y="50" text-anchor="middle" fill="#6EE7B7" font-size="14" font-weight="800" font-family="Inter">¼</text>
+        </svg>
+    </div>
+    <h1>Fractions</h1>
+    <p class="title-meta">Year 2 Mathematics — Summer Term, Block 1 (Weeks 1–4)</p>
+    <p class="title-meta" style="margin-top:8px;font-size:.95rem;">🍕 Equal Parts · Halves · Quarters · Thirds · Equivalence</p>
+</div>
+</div>
+
+<!-- ===== SLIDE 1: WEEK 1 HOOK ===== -->
+<div class="slide" id="slide-1">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🪄 Is This Fair Sharing?</div>
+        <div class="slide-subtitle">Two children want to share a chocolate bar equally.<br>Which bar has been split <strong>fairly</strong>?</div>
+        <div class="shape-row">
+            <div class="shape-box">
+                <svg width="200" height="80" viewBox="0 0 200 80" class="click-shape" onclick="hookAnswer(this,false)">
+                    <rect x="2" y="2" width="196" height="76" rx="12" fill="rgba(239,68,68,0.15)" stroke="rgba(239,68,68,0.4)" stroke-width="2"/>
+                    <line x1="130" y1="2" x2="130" y2="78" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-dasharray="5"/>
+                    <text x="66" y="48" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="600" font-family="Inter">BIG piece</text>
+                    <text x="165" y="48" text-anchor="middle" fill="var(--text-dim)" font-size="12" font-weight="500" font-family="Inter">small</text>
+                </svg>
+                <div class="label">Bar A</div>
+            </div>
+            <div class="shape-box">
+                <svg width="200" height="80" viewBox="0 0 200 80" class="click-shape" onclick="hookAnswer(this,true)">
+                    <rect x="2" y="2" width="196" height="76" rx="12" fill="rgba(16,185,129,0.15)" stroke="rgba(16,185,129,0.4)" stroke-width="2"/>
+                    <line x1="100" y1="2" x2="100" y2="78" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-dasharray="5"/>
+                    <text x="50" y="48" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="600" font-family="Inter">Equal</text>
+                    <text x="150" y="48" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="600" font-family="Inter">Equal</text>
+                </svg>
+                <div class="label">Bar B</div>
+            </div>
+        </div>
+        <div id="hookFb" class="quiz-feedback mt-16"></div>
+        <div class="sentence-stem mt-16" id="hookStem" style="opacity:0;transition:opacity .4s;">
+            Fractions are about <strong>equal parts</strong>. If the parts are not the same size, it is <strong>not</strong> a fraction!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 2: EQUAL PARTS ===== -->
+<div class="slide" id="slide-2">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">✂️ Making Equal Parts</div>
+        <div class="slide-subtitle">A fraction only exists when something is divided into <strong>equal</strong> parts.<br>Click each shape to see if it shows equal parts or not.</div>
+        <div class="shape-row" id="equalPartsArea"></div>
+        <div class="sentence-stem mt-16">
+            <strong>Key Rule:</strong> Every part <em>must</em> be the same size. If they are not equal, we <strong>cannot</strong> write a fraction.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 3: FINDING A HALF (SHAPE) ===== -->
+<div class="slide" id="slide-3">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🔵 Finding a Half</div>
+        <div class="slide-subtitle">A <span class="hl-half">half</span> means <strong>2 equal parts</strong>. We shade <strong>1</strong> of the 2 parts.</div>
+        <div class="shape-row">
+            <div class="shape-box">
+                <svg width="140" height="140" viewBox="0 0 140 140">
+                    <circle cx="70" cy="70" r="60" fill="rgba(59,130,246,0.15)" stroke="#3B82F6" stroke-width="2.5"/>
+                    <path d="M70 10 A60 60 0 0 1 70 130 Z" fill="rgba(59,130,246,0.45)"/>
+                    <line x1="70" y1="10" x2="70" y2="130" stroke="#3B82F6" stroke-width="2"/>
+                </svg>
+                <div class="label">Circle: <span class="hl-half">½</span> shaded</div>
+            </div>
+            <div class="shape-box">
+                <svg width="140" height="100" viewBox="0 0 140 100">
+                    <rect x="5" y="5" width="130" height="90" rx="10" fill="rgba(59,130,246,0.15)" stroke="#3B82F6" stroke-width="2.5"/>
+                    <rect x="5" y="5" width="65" height="90" rx="10" fill="rgba(59,130,246,0.45)"/>
+                    <line x1="70" y1="5" x2="70" y2="95" stroke="#3B82F6" stroke-width="2"/>
+                </svg>
+                <div class="label">Rectangle: <span class="hl-half">½</span> shaded</div>
+            </div>
+            <div class="shape-box">
+                <svg width="140" height="130" viewBox="0 0 140 130">
+                    <polygon points="70,10 130,120 10,120" fill="rgba(59,130,246,0.15)" stroke="#3B82F6" stroke-width="2.5"/>
+                    <polygon points="70,10 70,120 10,120" fill="rgba(59,130,246,0.45)"/>
+                    <line x1="70" y1="10" x2="70" y2="120" stroke="#3B82F6" stroke-width="2"/>
+                </svg>
+                <div class="label">Triangle: <span class="hl-half">½</span> shaded</div>
+            </div>
+        </div>
+        <div class="sentence-stem">
+            <span class="hl-half">½</span> means <strong>1 out of 2</strong> equal parts. The bottom number (2) tells us how many parts. The top number (1) tells us how many are shaded.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 4: HALF OF A QUANTITY ===== -->
+<div class="slide" id="slide-4">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🍪 Half of a Quantity</div>
+        <div class="slide-subtitle">Finding <span class="hl-half">½</span> of a number is the <strong>same</strong> as dividing by 2!<br>Click "Share!" to split the counters into 2 equal groups.</div>
+        <div style="margin:8px 0;">
+            <span style="color:var(--text-dim);">Find half of:</span>
+            <span class="big-number" style="color:var(--half-color);font-size:3rem;" id="halfQtyNum">12</span>
+        </div>
+        <div id="halfQtyArea"></div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:var(--half-color);" onclick="shareHalf()" id="halfShareBtn">🤝 Share into 2 groups!</button>
+            <button class="action-btn" style="background:var(--accent);" onclick="newHalfQty()">🎲 New Number</button>
+        </div>
+        <div class="sentence-stem mt-16" id="halfQtyStem">
+            <span class="hl-half">½</span> of <strong id="hqWhole">12</strong> = <strong id="hqAnswer">?</strong>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 5: ROADBLOCK 1 ===== -->
+<div class="slide" id="slide-5">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+    <div class="roadblock-card">
+        <h2>🚧 Roadblock 1</h2>
+        <p style="color:var(--text-dim);margin-bottom:20px;">You <strong>must master</strong> these before moving to Week 2:</p>
+        <div class="roadblock-item"><span>✅</span> Understands that fractions need <strong>equal parts</strong></div>
+        <div class="roadblock-item"><span>✅</span> Can identify a half of a shape</div>
+        <div class="roadblock-item"><span>✅</span> Can find a half of a quantity (dividing by 2)</div>
+        <div class="roadblock-item"><span>✅</span> Knows the fraction notation: ½ = 1 out of 2</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 6: MINI TEST 1 ===== -->
+<div class="slide" id="slide-6">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+    <div class="glass-card">
+        <div class="slide-title">📝 Mini Test 1</div>
+        <div class="slide-subtitle">Answer all questions to check your mastery!</div>
+        <div id="miniTest1"></div>
+        <div id="mt1Result" class="hidden mt-24 text-center"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 7: HOMEWORK 1 ===== -->
+<div class="slide" id="slide-7">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+    <div class="homework-card">
+        <h3>🏠 Homework 1: Halves Hunt</h3>
+        <div class="homework-item"><span>✏️</span> Draw 3 shapes (circle, rectangle, triangle) and shade <strong>exactly half</strong> of each.</div>
+        <div class="homework-item"><span>🍪</span> Find half of: <strong>8, 14, 20, 6</strong>. Show your working by drawing counters split into 2 groups.</div>
+        <div class="homework-item"><span>🔍</span> Scavenger Hunt: Find 3 things at home that are split into halves (e.g. a sandwich cut in half).</div>
+        <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> If you cut a pizza into 2 pieces but one piece is bigger, is it halves? Why not?</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 8: WEEK 2 HOOK ===== -->
+<div class="slide" id="slide-8">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🪄 What if we share between MORE people?</div>
+        <div class="slide-subtitle">Last week we shared into <strong>2</strong> groups (halves).<br>But what if there are <strong>3</strong> friends? Or <strong>4</strong> friends?</div>
+        <div class="shape-row">
+            <div class="shape-box">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="55" fill="rgba(59,130,246,0.15)" stroke="#3B82F6" stroke-width="2"/>
+                    <line x1="60" y1="5" x2="60" y2="115" stroke="#3B82F6" stroke-width="2"/>
+                    <path d="M60 5 A55 55 0 0 1 60 115 Z" fill="rgba(59,130,246,0.4)"/>
+                </svg>
+                <div class="label"><span class="hl-half">½</span> = 2 parts</div>
+            </div>
+            <div class="shape-box">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="55" fill="rgba(245,158,11,0.15)" stroke="#F59E0B" stroke-width="2"/>
+                    <line x1="60" y1="5" x2="60" y2="60" stroke="#F59E0B" stroke-width="2"/>
+                    <line x1="60" y1="60" x2="12" y2="87" stroke="#F59E0B" stroke-width="2"/>
+                    <line x1="60" y1="60" x2="108" y2="87" stroke="#F59E0B" stroke-width="2"/>
+                    <path d="M60 5 A55 55 0 0 1 108 87 L60 60 Z" fill="rgba(245,158,11,0.4)"/>
+                </svg>
+                <div class="label"><span class="hl-third">⅓</span> = 3 parts</div>
+            </div>
+            <div class="shape-box">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="55" fill="rgba(16,185,129,0.15)" stroke="#10B981" stroke-width="2"/>
+                    <line x1="60" y1="5" x2="60" y2="115" stroke="#10B981" stroke-width="2"/>
+                    <line x1="5" y1="60" x2="115" y2="60" stroke="#10B981" stroke-width="2"/>
+                    <path d="M60 5 A55 55 0 0 1 115 60 L60 60 Z" fill="rgba(16,185,129,0.4)"/>
+                </svg>
+                <div class="label"><span class="hl-quarter">¼</span> = 4 parts</div>
+            </div>
+        </div>
+        <div class="sentence-stem">
+            The <strong>bottom number</strong> (denominator) tells us how many <strong>equal parts</strong>. More parts = <strong>smaller</strong> pieces!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 9: QUARTERS ===== -->
+<div class="slide" id="slide-9">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🟢 Finding a Quarter</div>
+        <div class="slide-subtitle">A <span class="hl-quarter">quarter</span> means <strong>4 equal parts</strong>. Finding ¼ is the same as <strong>dividing by 4</strong>!</div>
+        <div style="margin:8px 0;">
+            <span style="color:var(--text-dim);">Find one quarter of:</span>
+            <span class="big-number" style="color:var(--quarter-color);font-size:3rem;" id="quarterNum">12</span>
+        </div>
+        <div id="quarterArea"></div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:var(--quarter-color);" onclick="shareQuarter()" id="quarterShareBtn">🤝 Share into 4 groups!</button>
+            <button class="action-btn" style="background:var(--accent);" onclick="newQuarterQty()">🎲 New Number</button>
+        </div>
+        <div class="sentence-stem mt-16" id="quarterStem">
+            <span class="hl-quarter">¼</span> of <strong id="qqWhole">12</strong> = <strong id="qqAnswer">?</strong>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 10: THIRDS ===== -->
+<div class="slide" id="slide-10">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🟡 Finding a Third</div>
+        <div class="slide-subtitle">A <span class="hl-third">third</span> means <strong>3 equal parts</strong>. Finding ⅓ is the same as <strong>dividing by 3</strong>!</div>
+        <div style="margin:8px 0;">
+            <span style="color:var(--text-dim);">Find one third of:</span>
+            <span class="big-number" style="color:var(--third-color);font-size:3rem;" id="thirdNum">9</span>
+        </div>
+        <div id="thirdArea"></div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:var(--third-color);color:#000;" onclick="shareThird()" id="thirdShareBtn">🤝 Share into 3 groups!</button>
+            <button class="action-btn" style="background:var(--accent);" onclick="newThirdQty()">🎲 New Number</button>
+        </div>
+        <div class="sentence-stem mt-16" id="thirdStem">
+            <span class="hl-third">⅓</span> of <strong id="tqWhole">9</strong> = <strong id="tqAnswer">?</strong>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 11: FIND THE WHOLE ===== -->
+<div class="slide" id="slide-11">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🔄 Finding the Whole</div>
+        <div class="slide-subtitle">If we know a <em>part</em>, we can find the <em>whole</em>!</div>
+        <div id="findWholeArea" style="margin:20px 0;"></div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:var(--accent);" onclick="newFindWhole()">🎲 New Question</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 12: ROADBLOCK 2 ===== -->
+<div class="slide" id="slide-12">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+    <div class="roadblock-card">
+        <h2>🚧 Roadblock 2</h2>
+        <p style="color:var(--text-dim);margin-bottom:20px;">You <strong>must master</strong> these before moving to Week 3:</p>
+        <div class="roadblock-item"><span>✅</span> Can find ¼ of a shape and a quantity (÷4)</div>
+        <div class="roadblock-item"><span>✅</span> Can find ⅓ of a shape and a quantity (÷3)</div>
+        <div class="roadblock-item"><span>✅</span> Understands: more parts = smaller pieces</div>
+        <div class="roadblock-item"><span>✅</span> Can find the whole when given a fraction part</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 13: MINI TEST 2 ===== -->
+<div class="slide" id="slide-13">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+    <div class="glass-card">
+        <div class="slide-title">📝 Mini Test 2</div>
+        <div class="slide-subtitle">Answer all questions to check your mastery!</div>
+        <div id="miniTest2"></div>
+        <div id="mt2Result" class="hidden mt-24 text-center"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 14: HOMEWORK 2 ===== -->
+<div class="slide" id="slide-14">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+    <div class="homework-card">
+        <h3>🏠 Homework 2: Quarters & Thirds</h3>
+        <div class="homework-item"><span>🍕</span> Draw a pizza and divide it into <strong>4 equal slices</strong>. Shade 1 slice. What fraction is shaded?</div>
+        <div class="homework-item"><span>🍪</span> Find ¼ of: <strong>8, 16, 20, 24</strong>. Draw counters in 4 groups.</div>
+        <div class="homework-item"><span>🎂</span> Find ⅓ of: <strong>6, 12, 15, 18</strong>. Draw counters in 3 groups.</div>
+        <div class="homework-item"><span>🔄</span> <strong>Challenge:</strong> If ¼ of a number is 5, what is the whole number?</div>
+        <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Which is bigger — ½ of a pizza or ¼ of a pizza? Why?</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 15: UNIT vs NON-UNIT ===== -->
+<div class="slide" id="slide-15">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🔢 Unit vs Non-Unit Fractions</div>
+        <div class="slide-subtitle">A <strong>unit fraction</strong> has a 1 on top (e.g. ½, ⅓, ¼).<br>A <strong>non-unit fraction</strong> has a number bigger than 1 on top (e.g. ²⁄₄, ³⁄₄).</div>
+        <div class="shape-row">
+            <div class="shape-box">
+                <svg width="160" height="60" viewBox="0 0 160 60">
+                    <rect x="2" y="2" width="156" height="56" rx="8" fill="rgba(59,130,246,0.1)" stroke="rgba(59,130,246,0.3)" stroke-width="2"/>
+                    <rect x="2" y="2" width="39" height="56" rx="8" fill="rgba(59,130,246,0.45)"/>
+                    <line x1="41" y1="2" x2="41" y2="58" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                    <line x1="80" y1="2" x2="80" y2="58" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                    <line x1="119" y1="2" x2="119" y2="58" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                </svg>
+                <div class="label"><span class="hl-quarter">¼</span> — Unit ✓</div>
+            </div>
+            <div class="shape-box">
+                <svg width="160" height="60" viewBox="0 0 160 60">
+                    <rect x="2" y="2" width="156" height="56" rx="8" fill="rgba(245,158,11,0.1)" stroke="rgba(245,158,11,0.3)" stroke-width="2"/>
+                    <rect x="2" y="2" width="117" height="56" rx="8" fill="rgba(245,158,11,0.45)"/>
+                    <line x1="41" y1="2" x2="41" y2="58" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                    <line x1="80" y1="2" x2="80" y2="58" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                    <line x1="119" y1="2" x2="119" y2="58" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+                </svg>
+                <div class="label"><span class="hl-third">¾</span> — Non-Unit ✗</div>
+            </div>
+        </div>
+        <div class="sentence-stem">
+            The <strong>top number</strong> (numerator) tells us how many parts are shaded.<br>
+            If it's <strong>1</strong>, it's a unit fraction. If it's <strong>more than 1</strong>, it's a non-unit fraction.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 16: EQUIVALENCE ===== -->
+<div class="slide" id="slide-16">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">⚖️ Equivalence: ½ = ²⁄₄</div>
+        <div class="slide-subtitle">These two fractions look different but they are the <strong>same amount</strong>!</div>
+        <div class="equiv-visual">
+            <div class="equiv-box">
+                <svg width="160" height="80" viewBox="0 0 160 80">
+                    <rect x="2" y="2" width="156" height="76" rx="10" fill="rgba(59,130,246,0.1)" stroke="#3B82F6" stroke-width="2.5"/>
+                    <rect x="2" y="2" width="78" height="76" rx="10" fill="rgba(59,130,246,0.45)"/>
+                    <line x1="80" y1="2" x2="80" y2="78" stroke="#3B82F6" stroke-width="2.5"/>
+                </svg>
+                <div class="label hl-half">½</div>
+            </div>
+            <div class="equiv-equals">=</div>
+            <div class="equiv-box">
+                <svg width="160" height="80" viewBox="0 0 160 80">
+                    <rect x="2" y="2" width="156" height="76" rx="10" fill="rgba(16,185,129,0.1)" stroke="#10B981" stroke-width="2.5"/>
+                    <rect x="2" y="2" width="78" height="76" rx="10" fill="rgba(16,185,129,0.45)"/>
+                    <line x1="41" y1="2" x2="41" y2="78" stroke="#10B981" stroke-width="1.5"/>
+                    <line x1="80" y1="2" x2="80" y2="78" stroke="#10B981" stroke-width="2.5"/>
+                    <line x1="119" y1="2" x2="119" y2="78" stroke="#10B981" stroke-width="1.5"/>
+                </svg>
+                <div class="label hl-quarter">²⁄₄</div>
+            </div>
+        </div>
+        <div class="sentence-stem">
+            <span class="hl-half">½</span> = <span class="hl-quarter">²⁄₄</span>. They are <strong>equivalent</strong>. The <em>same amount</em> is shaded — we just cut the bar into more pieces!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 17: THREE QUARTERS ===== -->
+<div class="slide" id="slide-17">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🟢 Finding Three Quarters</div>
+        <div class="slide-subtitle">¾ means <strong>3 out of 4</strong> equal parts. To find ¾ of a number:<br>Step 1: Find ¼ (divide by 4). Step 2: Multiply by 3!</div>
+        <div style="margin:8px 0;">
+            <span style="color:var(--text-dim);">Find ¾ of:</span>
+            <span class="big-number" style="color:var(--quarter-color);font-size:3rem;" id="tqNum">12</span>
+        </div>
+        <div id="threeQuarterArea"></div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:var(--quarter-color);" onclick="showThreeQuarters()" id="tqBtn">🔍 Show me!</button>
+            <button class="action-btn" style="background:var(--accent);" onclick="newThreeQuarter()">🎲 New Number</button>
+        </div>
+        <div class="sentence-stem mt-16" id="tqStemResult" style="opacity:0;transition:opacity .4s;"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 18: ROADBLOCK 3 ===== -->
+<div class="slide" id="slide-18">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+    <div class="roadblock-card">
+        <h2>🚧 Roadblock 3</h2>
+        <p style="color:var(--text-dim);margin-bottom:20px;">You <strong>must master</strong> these before moving to Week 4:</p>
+        <div class="roadblock-item"><span>✅</span> Knows unit fraction (1 on top) vs non-unit fraction</div>
+        <div class="roadblock-item"><span>✅</span> Can prove that ½ = ²⁄₄ using a diagram</div>
+        <div class="roadblock-item"><span>✅</span> Can find ¾ of a quantity (÷4, then ×3)</div>
+        <div class="roadblock-item"><span>✅</span> Can identify and shade non-unit fractions on shapes</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 19: MINI TEST 3 ===== -->
+<div class="slide" id="slide-19">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+    <div class="glass-card">
+        <div class="slide-title">📝 Mini Test 3</div>
+        <div class="slide-subtitle">Answer all questions to check your mastery!</div>
+        <div id="miniTest3"></div>
+        <div id="mt3Result" class="hidden mt-24 text-center"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 20: HOMEWORK 3 ===== -->
+<div class="slide" id="slide-20">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+    <div class="homework-card">
+        <h3>🏠 Homework 3: Equivalence & Three Quarters</h3>
+        <div class="homework-item"><span>✏️</span> Draw two identical bars. Shade ½ of one and ²⁄₄ of the other. Are they equal?</div>
+        <div class="homework-item"><span>🍪</span> Find ¾ of: <strong>8, 12, 16, 20</strong>. Show Step 1 (÷4) and Step 2 (×3).</div>
+        <div class="homework-item"><span>🔢</span> Sort these into unit and non-unit fractions: <strong>½, ²⁄₃, ¼, ³⁄₄, ⅓, ²⁄₄</strong></div>
+        <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Why does ½ = ²⁄₄? Can you explain it to someone using a picture?</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 21: COUNTING IN FRACTIONS ===== -->
+<div class="slide" id="slide-21">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w4"></span> Week 4</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📏 Counting in Fractions</div>
+        <div class="slide-subtitle">We can count in fractions just like counting in whole numbers!<br>Look at this number line — fractions live <strong>between</strong> the whole numbers.</div>
+        <div id="fracNumberLine" style="margin:20px 0;"></div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:var(--half-color);" onclick="showFracNL('half')">Count in halves</button>
+            <button class="action-btn" style="background:var(--quarter-color);" onclick="showFracNL('quarter')">Count in quarters</button>
+            <button class="action-btn" style="background:var(--third-color);color:#000;" onclick="showFracNL('third')">Count in thirds</button>
+        </div>
+        <div class="sentence-stem mt-16" id="fracNLStem"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 22: FRACTIONS OF QUANTITIES (BAR MODELS) ===== -->
+<div class="slide" id="slide-22">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w4"></span> Week 4</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📊 Bar Models: Fractions of Quantities</div>
+        <div class="slide-subtitle">Bar models help us <strong>see</strong> fractions of numbers. Each part of the bar shows one equal group.</div>
+        <div id="barModelArea" style="margin:20px 0;"></div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:var(--accent);" onclick="newBarModel()">🎲 New Question</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 23: ROADBLOCK 4 ===== -->
+<div class="slide" id="slide-23">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w4"></span> Week 4</div>
+    <div class="roadblock-card">
+        <h2>🚧 Roadblock 4</h2>
+        <p style="color:var(--text-dim);margin-bottom:20px;">You <strong>must master</strong> these before the Final Test:</p>
+        <div class="roadblock-item"><span>✅</span> Can count in halves, quarters, and thirds past 1</div>
+        <div class="roadblock-item"><span>✅</span> Can use bar models to find fractions of quantities</div>
+        <div class="roadblock-item"><span>✅</span> Can explain: finding ½ = dividing by 2, ¼ = dividing by 4</div>
+        <div class="roadblock-item"><span>✅</span> Can place fractions on a number line</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 24: MINI TEST 4 ===== -->
+<div class="slide" id="slide-24">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w4"></span> Week 4</div>
+    <div class="glass-card">
+        <div class="slide-title">📝 Mini Test 4</div>
+        <div class="slide-subtitle">Answer all questions to check your mastery!</div>
+        <div id="miniTest4"></div>
+        <div id="mt4Result" class="hidden mt-24 text-center"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 25: HOMEWORK 4 ===== -->
+<div class="slide" id="slide-25">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w4"></span> Week 4</div>
+    <div class="homework-card">
+        <h3>🏠 Homework 4: Fractions Master Practice</h3>
+        <div class="homework-item"><span>📏</span> Draw a number line from 0 to 2. Mark on it: <strong>½, 1, 1½, 2</strong></div>
+        <div class="homework-item"><span>📊</span> Use bar models to find: ½ of 18, ¼ of 20, ⅓ of 15, ¾ of 16</div>
+        <div class="homework-item"><span>🍰</span> Draw a cake split into 4 parts. Shade ¾. How much is left unshaded? Write the fraction.</div>
+        <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Is ½ of 10 the same as ¼ of 20? Prove it!</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 26: FINAL ASSESSMENT ===== -->
+<div class="slide" id="slide-26">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="glass-card" style="border:2px solid var(--third-color);">
+        <div class="slide-title text-center">🏆 Final Mastery Assessment</div>
+        <div class="slide-subtitle text-center">10 questions covering everything from Weeks 1–4. Good luck!</div>
+        <div id="finalTest"></div>
+        <div id="finalResult" class="hidden mt-24 text-center"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 27: CERTIFICATE ===== -->
+<div class="slide" id="slide-27">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;">
+    <div class="results-card">
+        <div style="font-size:3rem;margin-bottom:12px;">🎓</div>
+        <h2 style="font-size:1.8rem;margin-bottom:8px;" id="certTitle">Fractions Master!</h2>
+        <p style="color:var(--text-dim);margin-bottom:24px;" id="certSubtitle">You've completed Summer Block 1</p>
+        <div class="score-circle gold" id="certScore">—</div>
+        <p style="margin-top:20px;font-size:1.1rem;" id="certMessage">Complete the Final Assessment to see your score here.</p>
+    </div>
+</div>
+</div>
+
+<!-- NAV BAR -->
+<div class="nav-bar">
+    <button class="nav-btn back" onclick="prevSlide()" id="backBtn">← Back</button>
+    <span class="slide-counter" id="slideCounter">1 / 28</span>
+    <button class="nav-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
+</div>
+
+<script>
+// ============ SOUND ============
+const AudioCtx=window.AudioContext||window.webkitAudioContext;let audioCtx;
+function ensureAudio(){if(!audioCtx)audioCtx=new AudioCtx()}
+function playSound(t){ensureAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);const now=audioCtx.currentTime;
+if(t==='correct'){o.frequency.setValueAtTime(523,now);o.frequency.setValueAtTime(659,now+.1);g.gain.setValueAtTime(.15,now);g.gain.exponentialRampToValueAtTime(.001,now+.4);o.start();o.stop(now+.4)}
+else if(t==='wrong'){o.type='sawtooth';o.frequency.setValueAtTime(200,now);g.gain.setValueAtTime(.1,now);g.gain.exponentialRampToValueAtTime(.001,now+.3);o.start();o.stop(now+.3)}
+else if(t==='success'){o.frequency.setValueAtTime(523,now);o.frequency.setValueAtTime(659,now+.15);o.frequency.setValueAtTime(784,now+.3);g.gain.setValueAtTime(.15,now);g.gain.exponentialRampToValueAtTime(.001,now+.6);o.start();o.stop(now+.6)}
+else if(t==='click'){o.frequency.setValueAtTime(800,now);g.gain.setValueAtTime(.08,now);g.gain.exponentialRampToValueAtTime(.001,now+.08);o.start();o.stop(now+.08)}}
+
+// ============ SLIDES ============
+let cur=0;const total=28;
+function showSlide(n){document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));document.getElementById('slide-'+n).classList.add('active');cur=n;
+document.getElementById('slideCounter').textContent=(n+1)+' / '+total;
+document.getElementById('progressBar').style.width=((n+1)/total*100)+'%';
+document.getElementById('backBtn').disabled=n===0;
+// Init
+if(n===2&&!initFlags.equalParts){initEqualParts();initFlags.equalParts=true}
+if(n===4&&!initFlags.halfQty){newHalfQty();initFlags.halfQty=true}
+if(n===6&&!initFlags.mt1){buildMT1();initFlags.mt1=true}
+if(n===9&&!initFlags.quarterQty){newQuarterQty();initFlags.quarterQty=true}
+if(n===10&&!initFlags.thirdQty){newThirdQty();initFlags.thirdQty=true}
+if(n===11&&!initFlags.findWhole){newFindWhole();initFlags.findWhole=true}
+if(n===13&&!initFlags.mt2){buildMT2();initFlags.mt2=true}
+if(n===17&&!initFlags.tq){newThreeQuarter();initFlags.tq=true}
+if(n===19&&!initFlags.mt3){buildMT3();initFlags.mt3=true}
+if(n===21&&!initFlags.fracNL){showFracNL('half');initFlags.fracNL=true}
+if(n===22&&!initFlags.barModel){newBarModel();initFlags.barModel=true}
+if(n===24&&!initFlags.mt4){buildMT4();initFlags.mt4=true}
+if(n===26&&!initFlags.ft){buildFinalTest();initFlags.ft=true}
+}
+const initFlags={};
+function nextSlide(){if(cur<total-1){playSound('click');showSlide(cur+1)}}
+function prevSlide(){if(cur>0){playSound('click');showSlide(cur-1)}}
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide()});
+
+// ============ HOOK ============
+function hookAnswer(el,correct){
+    const fb=document.getElementById('hookFb');
+    if(correct){fb.className='quiz-feedback show correct-fb';fb.textContent='🎉 Correct! Bar B has 2 EQUAL parts — that\'s a half!';playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.textContent='❌ Bar A is NOT fair! The pieces are different sizes. That\'s NOT a fraction.';playSound('wrong')}
+    document.getElementById('hookStem').style.opacity='1';
+}
+
+// ============ EQUAL PARTS ============
+function initEqualParts(){
+    const shapes=[
+        {svg:'<rect x="2" y="2" width="120" height="80" rx="8" fill="rgba(16,185,129,0.15)" stroke="#10B981" stroke-width="2"/><line x1="62" y1="2" x2="62" y2="82" stroke="#10B981" stroke-width="2"/>',equal:true,label:'Rectangle split into 2 equal parts ✅'},
+        {svg:'<rect x="2" y="2" width="120" height="80" rx="8" fill="rgba(239,68,68,0.15)" stroke="#EF4444" stroke-width="2"/><line x1="40" y1="2" x2="40" y2="82" stroke="#EF4444" stroke-width="2"/>',equal:false,label:'NOT equal parts ❌'},
+        {svg:'<circle cx="45" cy="45" r="40" fill="rgba(59,130,246,0.15)" stroke="#3B82F6" stroke-width="2"/><line x1="45" y1="5" x2="45" y2="85" stroke="#3B82F6" stroke-width="2"/><line x1="5" y1="45" x2="85" y2="45" stroke="#3B82F6" stroke-width="2"/>',equal:true,label:'Circle split into 4 equal parts ✅'},
+        {svg:'<circle cx="45" cy="45" r="40" fill="rgba(245,158,11,0.15)" stroke="#F59E0B" stroke-width="2"/><line x1="45" y1="5" x2="45" y2="85" stroke="#F59E0B" stroke-width="2"/><line x1="5" y1="30" x2="85" y2="30" stroke="#F59E0B" stroke-width="2"/>',equal:false,label:'NOT equal parts ❌'},
+    ];
+    let html='';
+    shapes.forEach((s,i)=>{
+        html+='<div class="shape-box"><svg width="130" height="90" viewBox="0 0 130 90" class="click-shape" onclick="revealEP('+i+')">'+s.svg+'</svg><div class="label" id="ep-label-'+i+'" style="opacity:0;transition:opacity .3s;">'+s.label+'</div></div>';
+    });
+    document.getElementById('equalPartsArea').innerHTML=html;
+}
+function revealEP(i){document.getElementById('ep-label-'+i).style.opacity='1';playSound('click')}
+
+// ============ HALF OF QUANTITY ============
+let halfQtyNum=12;
+function newHalfQty(){
+    const nums=[6,8,10,12,14,16,18,20];
+    halfQtyNum=nums[Math.floor(Math.random()*nums.length)];
+    document.getElementById('halfQtyNum').textContent=halfQtyNum;
+    document.getElementById('hqWhole').textContent=halfQtyNum;
+    document.getElementById('hqAnswer').textContent='?';
+    document.getElementById('halfShareBtn').disabled=false;
+    renderCounters('halfQtyArea',halfQtyNum,'unshared');
+    playSound('click');
+}
+function shareHalf(){
+    renderCounters('halfQtyArea',halfQtyNum,'half');
+    document.getElementById('hqAnswer').textContent=halfQtyNum/2;
+    document.getElementById('halfShareBtn').disabled=true;
+    playSound('success');
+}
+function renderCounters(areaId,total,mode){
+    const area=document.getElementById(areaId);
+    const half=total/2;
+    if(mode==='unshared'){
+        let html='<div class="counter-row">';
+        for(let i=0;i<total;i++) html+='<div class="counter-dot" style="background:rgba(59,130,246,0.2);">🍪</div>';
+        html+='</div>';area.innerHTML=html;
+    } else if(mode==='half'){
+        let html='<div style="display:flex;gap:30px;justify-content:center;flex-wrap:wrap;">';
+        html+='<div style="text-align:center;"><div style="font-size:.85rem;color:var(--half-color);font-weight:600;margin-bottom:8px;">Group 1</div><div class="counter-row">';
+        for(let i=0;i<half;i++) html+='<div class="counter-dot active" style="background:rgba(59,130,246,0.25);">🍪</div>';
+        html+='</div></div>';
+        html+='<div style="text-align:center;"><div style="font-size:.85rem;color:var(--half-color);font-weight:600;margin-bottom:8px;">Group 2</div><div class="counter-row">';
+        for(let i=0;i<half;i++) html+='<div class="counter-dot active" style="background:rgba(59,130,246,0.25);">🍪</div>';
+        html+='</div></div></div>';
+        area.innerHTML=html;
+    }
+}
+
+// ============ QUARTER OF QUANTITY ============
+let quarterQtyNum=12;
+function newQuarterQty(){
+    const nums=[8,12,16,20,24];
+    quarterQtyNum=nums[Math.floor(Math.random()*nums.length)];
+    document.getElementById('quarterNum').textContent=quarterQtyNum;
+    document.getElementById('qqWhole').textContent=quarterQtyNum;
+    document.getElementById('qqAnswer').textContent='?';
+    document.getElementById('quarterShareBtn').disabled=false;
+    renderCountersN('quarterArea',quarterQtyNum,4,false);
+    playSound('click');
+}
+function shareQuarter(){
+    renderCountersN('quarterArea',quarterQtyNum,4,true);
+    document.getElementById('qqAnswer').textContent=quarterQtyNum/4;
+    document.getElementById('quarterShareBtn').disabled=true;
+    playSound('success');
+}
+
+// ============ THIRD OF QUANTITY ============
+let thirdQtyNum=9;
+function newThirdQty(){
+    const nums=[6,9,12,15,18];
+    thirdQtyNum=nums[Math.floor(Math.random()*nums.length)];
+    document.getElementById('thirdNum').textContent=thirdQtyNum;
+    document.getElementById('tqWhole').textContent=thirdQtyNum;
+    document.getElementById('tqAnswer').textContent='?';
+    document.getElementById('thirdShareBtn').disabled=false;
+    renderCountersN('thirdArea',thirdQtyNum,3,false);
+    playSound('click');
+}
+function shareThird(){
+    renderCountersN('thirdArea',thirdQtyNum,3,true);
+    document.getElementById('tqAnswer').textContent=thirdQtyNum/3;
+    document.getElementById('thirdShareBtn').disabled=true;
+    playSound('success');
+}
+
+function renderCountersN(areaId,total,groups,shared){
+    const area=document.getElementById(areaId);
+    const perGroup=total/groups;
+    const colors=['rgba(59,130,246,0.25)','rgba(16,185,129,0.25)','rgba(245,158,11,0.25)','rgba(139,92,246,0.25)'];
+    const borderColors=['var(--half-color)','var(--quarter-color)','var(--third-color)','var(--accent)'];
+    if(!shared){
+        let html='<div class="counter-row">';
+        for(let i=0;i<total;i++) html+='<div class="counter-dot" style="background:rgba(255,255,255,0.06);">🍪</div>';
+        html+='</div>';area.innerHTML=html;
+    } else {
+        let html='<div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">';
+        for(let g=0;g<groups;g++){
+            html+='<div style="text-align:center;"><div style="font-size:.8rem;color:'+borderColors[g]+';font-weight:600;margin-bottom:6px;">Group '+(g+1)+'</div><div class="counter-row" style="max-width:120px;">';
+            for(let i=0;i<perGroup;i++) html+='<div class="counter-dot active" style="background:'+colors[g]+';">🍪</div>';
+            html+='</div></div>';
+        }
+        html+='</div>';area.innerHTML=html;
+    }
+}
+
+// ============ FIND THE WHOLE ============
+function newFindWhole(){
+    const scenarios=[
+        {frac:'½',part:5,whole:10,denom:2,text:'If ½ of a number is 5, what is the whole number?'},
+        {frac:'¼',part:3,whole:12,denom:4,text:'If ¼ of a number is 3, what is the whole number?'},
+        {frac:'⅓',part:4,whole:12,denom:3,text:'If ⅓ of a number is 4, what is the whole number?'},
+        {frac:'½',part:8,whole:16,denom:2,text:'If ½ of a number is 8, what is the whole number?'},
+        {frac:'¼',part:5,whole:20,denom:4,text:'If ¼ of a number is 5, what is the whole number?'},
+    ];
+    const s=scenarios[Math.floor(Math.random()*scenarios.length)];
+    const area=document.getElementById('findWholeArea');
+    area.innerHTML='<div class="quiz-question"><div class="q-text">'+s.text+'</div>'+
+        '<div class="sentence-stem mb-16">Think: '+s.frac+' means ÷'+s.denom+'. So to find the whole, we multiply by '+s.denom+'!</div>'+
+        '<div class="flex-center"><span style="font-size:1.2rem;">'+s.part+' × '+s.denom+' = </span>'+
+        '<input type="text" class="quiz-input" id="fwInput" style="width:80px;" maxlength="3">'+
+        '<button class="action-btn check-btn" onclick="checkFindWhole('+s.whole+')">✓</button></div>'+
+        '<div class="quiz-feedback mt-16" id="fwFb"></div></div>';
+    playSound('click');
+}
+function checkFindWhole(answer){
+    const val=parseInt(document.getElementById('fwInput').value);
+    const fb=document.getElementById('fwFb');
+    if(val===answer){fb.className='quiz-feedback show correct-fb';fb.textContent='🎉 Correct! The whole is '+answer+'!';playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.textContent='❌ Not quite. The answer is '+answer+'.';playSound('wrong')}
+}
+
+// ============ THREE QUARTERS ============
+let tqCurrentNum=12;
+function newThreeQuarter(){
+    const nums=[8,12,16,20,24];
+    tqCurrentNum=nums[Math.floor(Math.random()*nums.length)];
+    document.getElementById('tqNum').textContent=tqCurrentNum;
+    document.getElementById('tqBtn').disabled=false;
+    document.getElementById('tqStemResult').style.opacity='0';
+    // Show bar
+    const area=document.getElementById('threeQuarterArea');
+    const q=tqCurrentNum/4;
+    area.innerHTML='<div class="bar-model"><div class="whole-bar">'+tqCurrentNum+'</div><div class="parts-bar">'+
+        '<div class="part" style="background:rgba(16,185,129,0.15);color:var(--text-dim);">?</div>'.repeat(4)+
+        '</div></div>';
+    playSound('click');
+}
+function showThreeQuarters(){
+    const q=tqCurrentNum/4;const tq=q*3;
+    const area=document.getElementById('threeQuarterArea');
+    area.innerHTML='<div class="bar-model"><div class="whole-bar">'+tqCurrentNum+'</div><div class="parts-bar">'+
+        '<div class="part" style="background:rgba(16,185,129,0.4);color:var(--success);font-weight:800;">'+q+'</div>'+
+        '<div class="part" style="background:rgba(16,185,129,0.4);color:var(--success);font-weight:800;">'+q+'</div>'+
+        '<div class="part" style="background:rgba(16,185,129,0.4);color:var(--success);font-weight:800;">'+q+'</div>'+
+        '<div class="part" style="background:rgba(255,255,255,0.04);color:var(--text-dim);">'+q+'</div>'+
+        '</div></div>';
+    const stem=document.getElementById('tqStemResult');
+    stem.innerHTML='Step 1: ¼ of '+tqCurrentNum+' = '+tqCurrentNum+' ÷ 4 = <span class="hl-quarter">'+q+'</span><br>Step 2: ¾ of '+tqCurrentNum+' = '+q+' × 3 = <strong style="font-size:1.3rem;">'+tq+'</strong> 🎉';
+    stem.style.opacity='1';
+    document.getElementById('tqBtn').disabled=true;
+    playSound('success');
+}
+
+// ============ FRACTION NUMBER LINE ============
+function showFracNL(type){
+    playSound('click');
+    const container=document.getElementById('fracNumberLine');
+    const stem=document.getElementById('fracNLStem');
+    let w=600,h=100;
+    let svg='<svg width="100%" viewBox="0 0 '+w+' '+h+'" style="max-width:600px;">';
+    // Main line
+    const y=50,x1=40,x2=w-40,lineW=x2-x1;
+    svg+='<line x1="'+x1+'" y1="'+y+'" x2="'+x2+'" y2="'+y+'" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-linecap="round"/>';
+    if(type==='half'){
+        const labels=['0','½','1','1½','2'];
+        const positions=[0,0.25,0.5,0.75,1];
+        positions.forEach((p,i)=>{
+            const x=x1+p*lineW;
+            svg+='<line x1="'+x+'" y1="'+(y-12)+'" x2="'+x+'" y2="'+(y+12)+'" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>';
+            if(i%2===0) svg+='<text x="'+x+'" y="'+(y+30)+'" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="700" font-family="Inter">'+labels[i]+'</text>';
+            else svg+='<text x="'+x+'" y="'+(y+30)+'" text-anchor="middle" fill="#93C5FD" font-size="13" font-weight="700" font-family="Inter">'+labels[i]+'</text>';
+            if(i>0) svg+='<circle cx="'+x+'" cy="'+y+'" r="6" fill="#3B82F6"/>';
+        });
+        stem.innerHTML='Count in halves: <span class="hl-half">0, ½, 1, 1½, 2</span> — Each jump is one half!';
+    } else if(type==='quarter'){
+        const labels=['0','¼','½','¾','1','1¼','1½','1¾','2'];
+        const positions=[0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1];
+        positions.forEach((p,i)=>{
+            const x=x1+p*lineW;
+            const isMajor=i%4===0;
+            svg+='<line x1="'+x+'" y1="'+(y-(isMajor?12:8))+'" x2="'+x+'" y2="'+(y+(isMajor?12:8))+'" stroke="rgba(255,255,255,'+(isMajor?0.5:0.25)+')" stroke-width="'+(isMajor?2:1.5)+'"/>';
+            if(isMajor) svg+='<text x="'+x+'" y="'+(y+30)+'" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="700" font-family="Inter">'+labels[i]+'</text>';
+            else svg+='<text x="'+x+'" y="'+(y-20)+'" text-anchor="middle" fill="#6EE7B7" font-size="11" font-weight="600" font-family="Inter">'+labels[i]+'</text>';
+            if(i>0) svg+='<circle cx="'+x+'" cy="'+y+'" r="'+(isMajor?5:4)+'" fill="#10B981"/>';
+        });
+        stem.innerHTML='Count in quarters: <span class="hl-quarter">0, ¼, ½, ¾, 1, 1¼, 1½, 1¾, 2</span>';
+    } else {
+        const labels=['0','⅓','⅔','1','1⅓','1⅔','2'];
+        const positions=[0,1/6,2/6,3/6,4/6,5/6,1];
+        positions.forEach((p,i)=>{
+            const x=x1+p*lineW;
+            const isMajor=i%3===0;
+            svg+='<line x1="'+x+'" y1="'+(y-(isMajor?12:8))+'" x2="'+x+'" y2="'+(y+(isMajor?12:8))+'" stroke="rgba(255,255,255,'+(isMajor?0.5:0.25)+')" stroke-width="'+(isMajor?2:1.5)+'"/>';
+            if(isMajor) svg+='<text x="'+x+'" y="'+(y+30)+'" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="700" font-family="Inter">'+labels[i]+'</text>';
+            else svg+='<text x="'+x+'" y="'+(y-20)+'" text-anchor="middle" fill="#FCD34D" font-size="11" font-weight="600" font-family="Inter">'+labels[i]+'</text>';
+            if(i>0) svg+='<circle cx="'+x+'" cy="'+y+'" r="'+(isMajor?5:4)+'" fill="#F59E0B"/>';
+        });
+        stem.innerHTML='Count in thirds: <span class="hl-third">0, ⅓, ⅔, 1, 1⅓, 1⅔, 2</span>';
+    }
+    svg+='</svg>';
+    container.innerHTML=svg;
+}
+
+// ============ BAR MODELS ============
+function newBarModel(){
+    const scenarios=[
+        {frac:'½',whole:14,denom:2,num:1},
+        {frac:'¼',whole:20,denom:4,num:1},
+        {frac:'⅓',whole:15,denom:3,num:1},
+        {frac:'¾',whole:16,denom:4,num:3},
+        {frac:'½',whole:18,denom:2,num:1},
+        {frac:'⅓',whole:12,denom:3,num:1},
+        {frac:'¾',whole:20,denom:4,num:3},
+    ];
+    const s=scenarios[Math.floor(Math.random()*scenarios.length)];
+    const perPart=s.whole/s.denom;const answer=perPart*s.num;
+    const area=document.getElementById('barModelArea');
+    const colors=['rgba(59,130,246,0.4)','rgba(16,185,129,0.4)','rgba(245,158,11,0.4)','rgba(139,92,246,0.4)'];
+    let partsHtml='';
+    for(let i=0;i<s.denom;i++){
+        const shaded=i<s.num;
+        partsHtml+='<div class="part" style="background:'+(shaded?colors[i%4]:'rgba(255,255,255,0.04)')+';color:'+(shaded?'#fff':'var(--text-dim)')+';font-weight:700;">'+perPart+'</div>';
+    }
+    area.innerHTML='<div class="quiz-question"><div class="q-text">Find '+s.frac+' of '+s.whole+'</div>'+
+        '<div class="bar-model mb-16"><div class="whole-bar">'+s.whole+'</div><div class="parts-bar">'+partsHtml+'</div></div>'+
+        '<div class="flex-center"><span style="font-size:1.1rem;">'+s.frac+' of '+s.whole+' = </span>'+
+        '<input type="text" class="quiz-input" id="bmInput" style="width:80px;" maxlength="3">'+
+        '<button class="action-btn check-btn" onclick="checkBarModel('+answer+')">✓</button></div>'+
+        '<div class="quiz-feedback mt-16" id="bmFb"></div></div>';
+    playSound('click');
+}
+function checkBarModel(answer){
+    const val=parseInt(document.getElementById('bmInput').value);
+    const fb=document.getElementById('bmFb');
+    if(val===answer){fb.className='quiz-feedback show correct-fb';fb.textContent='🎉 Correct! The answer is '+answer+'!';playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.textContent='❌ Not quite. The answer is '+answer+'. Look at the shaded parts of the bar!';playSound('wrong')}
+}
+
+// ============ QUIZ BUILDER ============
+function buildQuiz(cId,qs,rId,name,isFinal){
+    const c=document.getElementById(cId);let html='';
+    qs.forEach((q,qi)=>{
+        html+='<div class="quiz-question" id="'+cId+'-q'+qi+'"><div class="q-text">'+q.q+'</div><div class="quiz-options">';
+        q.opts.forEach((opt,oi)=>{html+='<button class="quiz-opt" data-qi="'+qi+'" data-oi="'+oi+'" data-correct="'+q.correct+'" onclick="handleAns(this,\''+cId+'\',\''+rId+'\','+qs.length+','+!!isFinal+')">'+opt+'</button>'});
+        html+='</div><div class="quiz-feedback" id="'+cId+'-fb'+qi+'"></div></div>';
+    });
+    c.innerHTML=html;c.dataset.score='0';c.dataset.answered='0';c.dataset.total=qs.length;c.dataset.testName=name;
+}
+function handleAns(btn,cId,rId,total,isFinal){
+    const qi=+btn.dataset.qi,oi=+btn.dataset.oi,correct=+btn.dataset.correct;
+    const c=document.getElementById(cId),fb=document.getElementById(cId+'-fb'+qi);
+    const qDiv=document.getElementById(cId+'-q'+qi);
+    qDiv.querySelectorAll('.quiz-opt').forEach(o=>o.classList.add('disabled'));
+    if(oi===correct){btn.classList.add('correct');fb.className='quiz-feedback show correct-fb';fb.textContent='✅ Correct!';c.dataset.score=+c.dataset.score+1;playSound('correct')}
+    else{btn.classList.add('wrong');qDiv.querySelectorAll('.quiz-opt')[correct].classList.add('correct');fb.className='quiz-feedback show wrong-fb';fb.textContent='❌ The correct answer is: '+qDiv.querySelectorAll('.quiz-opt')[correct].textContent;playSound('wrong')}
+    c.dataset.answered=+c.dataset.answered+1;
+    if(+c.dataset.answered===total){setTimeout(()=>{const r=document.getElementById(rId);r.classList.remove('hidden');const sc=+c.dataset.score;const pct=Math.round(sc/total*100);let emoji=pct>=90?'🌟':pct>=70?'👍':'💪';r.innerHTML='<div style="font-size:2rem;">'+emoji+'</div><div style="font-size:1.5rem;font-weight:800;margin:8px 0;">'+sc+' / '+total+'</div><div style="color:var(--text-dim);">'+c.dataset.testName+' Complete!</div>';if(isFinal)updateCert(sc,total);playSound('success')},1e3)}
+}
+function updateCert(sc,total){
+    const pct=Math.round(sc/total*100);
+    document.getElementById('certScore').textContent=sc+'/'+total;
+    if(pct>=90){document.getElementById('certTitle').textContent='🌟 Fractions Master!';document.getElementById('certScore').className='score-circle gold';document.getElementById('certMessage').textContent='Outstanding! You have mastered Fractions. Ready for Block 2: Time!'}
+    else if(pct>=70){document.getElementById('certTitle').textContent='👍 Great Work!';document.getElementById('certScore').className='score-circle silver';document.getElementById('certMessage').textContent='Good progress! Review the tricky areas, then try again.'}
+    else{document.getElementById('certTitle').textContent='💪 Keep Practising!';document.getElementById('certScore').className='score-circle bronze';document.getElementById('certMessage').textContent='You need more practice. Go back through the lessons and try the tests again.'}
+}
+
+// ============ MINI TESTS ============
+function buildMT1(){buildQuiz('miniTest1',[
+    {q:'What does "half" mean?',opts:['2 equal parts','2 different parts','1 whole part','3 equal parts'],correct:0},
+    {q:'Which shape shows ½ correctly?',opts:['A circle split into 2 equal parts with 1 shaded','A circle split into 3 parts with 1 shaded','A circle with all parts shaded','A circle not split at all'],correct:0},
+    {q:'What is ½ of 10?',opts:['2','5','10','3'],correct:1},
+    {q:'Finding ½ of a number is the same as:',opts:['Adding 2','Multiplying by 2','Dividing by 2','Subtracting 2'],correct:2},
+    {q:'What is ½ of 16?',opts:['6','4','16','8'],correct:3},
+    {q:'True or False: If a shape is split into 2 parts but one is bigger, it shows ½.',opts:['True','False'],correct:1},
+],'mt1Result','Mini Test 1')}
+
+function buildMT2(){buildQuiz('miniTest2',[
+    {q:'What is ¼ of 12?',opts:['4','6','3','2'],correct:2},
+    {q:'What is ⅓ of 15?',opts:['3','5','15','10'],correct:1},
+    {q:'Which is bigger: ½ of a pizza or ¼ of the same pizza?',opts:['¼ is bigger','They are the same','½ is bigger'],correct:2},
+    {q:'If ⅓ of a number is 4, what is the whole number?',opts:['7','8','12','4'],correct:2},
+    {q:'How many equal parts does a quarter split something into?',opts:['2','3','4','5'],correct:2},
+    {q:'What is ¼ of 20?',opts:['4','5','10','20'],correct:1},
+],'mt2Result','Mini Test 2')}
+
+function buildMT3(){buildQuiz('miniTest3',[
+    {q:'Which is a unit fraction?',opts:['¾','²⁄₃','¼','²⁄₄'],correct:2},
+    {q:'½ is equivalent to which fraction?',opts:['¼','⅓','²⁄₄','¾'],correct:2},
+    {q:'What is ¾ of 12?',opts:['3','6','9','4'],correct:2},
+    {q:'A non-unit fraction has:',opts:['1 on top','0 on top','A number bigger than 1 on top','Nothing on top'],correct:2},
+    {q:'How do you find ¾ of 20?',opts:['20 ÷ 3','20 ÷ 4 = 5, then 5 × 3 = 15','20 × 4','20 − 4'],correct:1},
+    {q:'Why does ½ = ²⁄₄?',opts:['Because 1+1=2','Because they shade the same amount','Because 4 is double 2','They are NOT the same'],correct:1},
+],'mt3Result','Mini Test 3')}
+
+function buildMT4(){buildQuiz('miniTest4',[
+    {q:'What comes next: ½, 1, 1½, ___?',opts:['1¾','2½','2','3'],correct:2},
+    {q:'Use a bar model: ½ of 18 =?',opts:['6','9','12','18'],correct:1},
+    {q:'⅓ of 21 = ?',opts:['3','6','7','9'],correct:2},
+    {q:'¾ of 16 = ?',opts:['4','8','12','14'],correct:2},
+    {q:'On a number line, where is ½?',opts:['At the start','Halfway between 0 and 1','At 1','After 1'],correct:1},
+    {q:'What is ¼ of 24?',opts:['4','6','8','12'],correct:1},
+],'mt4Result','Mini Test 4')}
+
+function buildFinalTest(){buildQuiz('finalTest',[
+    {q:'1. A fraction must have:',opts:['Equal parts','Different sized parts','Only one part','No parts'],correct:0},
+    {q:'2. What is ½ of 14?',opts:['4','6','7','8'],correct:2},
+    {q:'3. What is ¼ of 16?',opts:['2','4','6','8'],correct:1},
+    {q:'4. What is ⅓ of 18?',opts:['3','6','9','12'],correct:1},
+    {q:'5. Which is a non-unit fraction?',opts:['½','¼','⅓','¾'],correct:3},
+    {q:'6. ½ = ?/4',opts:['1','2','3','4'],correct:1},
+    {q:'7. What is ¾ of 20?',opts:['5','10','15','20'],correct:2},
+    {q:'8. If ¼ of a number is 6, what is the whole?',opts:['12','18','24','10'],correct:2},
+    {q:'9. Count in halves: 0, ½, 1, 1½, ___',opts:['1¾','2','2½','3'],correct:1},
+    {q:'10. Which is bigger: ⅓ of 12 or ¼ of 12?',opts:['⅓ of 12 (=4)','¼ of 12 (=3)','They are equal','Cannot tell'],correct:0},
+],'finalResult','Final Mastery Assessment',true)}
+
+// ============ INIT ============
+showSlide(0);
+</script>
+</body>
+</html>
