@@ -300,6 +300,58 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 </div>
 </div>
 
+<!-- ===== NEW: W1 MANY FACES OF ½ (Part-Whole + Translate) ===== -->
+<div class="slide" id="slide-w1-faces">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w1"></span> Week 1 · Stretch</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🪞 The Many Faces of ½</div>
+        <div class="slide-subtitle">A real expert can see ½ in <strong>lots</strong> of ways. Click each card to reveal what model it is.<br>This card on the left is a <strong>part-whole model</strong> — a brand new tool!</div>
+        <div id="manyFacesArea" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:20px 0;width:100%;"></div>
+        <div class="sentence-stem mt-16">
+            <strong>Part-whole model:</strong> the whole circle is split into its parts. The shaded part shows the fraction.<br>
+            <strong>Challenge:</strong> can you spot the SAME amount of blue in every card?
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W1 FRACTION OF A LENGTH ===== -->
+<div class="slide" id="slide-w1-length">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📏 Fractions of a Length</div>
+        <div class="slide-subtitle">Fractions aren't only for shapes and groups — we can also find a fraction of a <strong>length</strong>, like a ribbon or a stick.<br>Click each button to split the <strong>12 cm</strong> ribbon.</div>
+        <div id="lengthArea" style="margin:20px 0;"></div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:var(--half-color);" onclick="splitLength(2)">½ (2 parts)</button>
+            <button class="action-btn" style="background:var(--third-color);color:#000;" onclick="splitLength(3)">⅓ (3 parts)</button>
+            <button class="action-btn" style="background:var(--quarter-color);" onclick="splitLength(4)">¼ (4 parts)</button>
+        </div>
+        <div class="sentence-stem mt-16" id="lengthStem">
+            Pick a button above to split the ribbon. Each part must be <strong>equal</strong> — just like with shapes!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W1 WORD PROBLEMS (HALVES) ===== -->
+<div class="slide" id="slide-w1-wp">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w1"></span> Week 1 · Word Problems</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📖 Fraction Stories</div>
+        <div class="slide-subtitle">Now we use fractions in real stories. Read each problem, work it out, and type the answer.</div>
+        <div id="wp1Area"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newWordProblem(1)">🎲 New Story</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Tip:</strong> find the important numbers first. Then ask yourself: "What fraction do I need?"
+        </div>
+    </div>
+</div>
+</div>
+
 <!-- ===== SLIDE 5: ROADBLOCK 1 ===== -->
 <div class="slide" id="slide-5">
 <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
@@ -338,6 +390,8 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div class="homework-item"><span>🍪</span> Find half of: <strong>8, 14, 20, 6</strong>. Show your working by drawing counters split into 2 groups.</div>
         <div class="homework-item"><span>🔍</span> Scavenger Hunt: Find 3 things at home that are split into halves (e.g. a sandwich cut in half).</div>
         <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> If you cut a pizza into 2 pieces but one piece is bigger, is it halves? Why not?</div>
+        <div class="homework-item"><span>🕵️</span> <strong>Spot the mistake:</strong> Toby cuts his pancake into 2 pieces and gives the <em>smaller</em> piece to his sister. He says "I've given her half." Is he right? Explain.</div>
+        <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> Ben has 10 grapes. He eats half of them. How many does he eat? How many are left?</div>
     </div>
 </div>
 </div>
@@ -446,6 +500,37 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 </div>
 </div>
 
+<!-- ===== NEW: W2 WHICH MODEL IS BEST? ===== -->
+<div class="slide" id="slide-w2-which">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2 · Stretch</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🧠 Which Model is Best?</div>
+        <div class="slide-subtitle">There is no single "best" model — but some models make some questions <strong>easier</strong>. For each question below, pick the model <em>you</em> would use.</div>
+        <div id="whichModelArea" style="text-align:left;"></div>
+        <div class="sentence-stem mt-16">
+            Being able to <strong>choose</strong> the right model is what real mathematicians do. Knowing <em>why</em> you chose it is the real skill.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W2 WORD PROBLEMS ===== -->
+<div class="slide" id="slide-w2-wp">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2 · Word Problems</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📖 Quarters & Thirds in Real Life</div>
+        <div class="slide-subtitle">Real problems use quarters, thirds — and sometimes ask you to find the whole!</div>
+        <div id="wp2Area"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newWordProblem(2)">🎲 New Story</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Tip:</strong> "¼ of" means ÷4. "⅓ of" means ÷3. Look for clue words like <em>share, each, split</em>.
+        </div>
+    </div>
+</div>
+</div>
+
 <!-- ===== SLIDE 12: ROADBLOCK 2 ===== -->
 <div class="slide" id="slide-12">
 <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
@@ -485,6 +570,8 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div class="homework-item"><span>🎂</span> Find ⅓ of: <strong>6, 12, 15, 18</strong>. Draw counters in 3 groups.</div>
         <div class="homework-item"><span>🔄</span> <strong>Challenge:</strong> If ¼ of a number is 5, what is the whole number?</div>
         <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Which is bigger — ½ of a pizza or ¼ of a pizza? Why?</div>
+        <div class="homework-item"><span>🕵️</span> <strong>Spot the mistake:</strong> Alice says "¼ of 12 is 6, because 12 ÷ 2 = 6." What did she do wrong? Write the correct answer.</div>
+        <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> There are 16 children in a class. ¼ of them wear glasses. How many wear glasses? How many do NOT?</div>
     </div>
 </div>
 </div>
@@ -582,6 +669,37 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 </div>
 </div>
 
+<!-- ===== NEW: W3 SPOT THE MISTAKE ===== -->
+<div class="slide" id="slide-w3-mistake">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3 · Stretch</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🕵️ Spot the Mistake</div>
+        <div class="slide-subtitle">Each card shows a child's <strong>wrong</strong> answer. Click "Show the mistake" to check your reasoning — then explain it out loud to someone.</div>
+        <div id="mistakeArea" style="text-align:left;"></div>
+        <div class="sentence-stem mt-16">
+            If you can explain why someone else is wrong, you really understand the rule. <strong>Teaching is harder than answering.</strong>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W3 WORD PROBLEMS ===== -->
+<div class="slide" id="slide-w3-wp">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3 · Word Problems</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📖 ¾ Stories & Equivalence</div>
+        <div class="slide-subtitle">These stories need ¾ of a quantity — find ¼ first, then multiply by 3. Some ask you to spot equivalent fractions.</div>
+        <div id="wp3Area"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newWordProblem(3)">🎲 New Story</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Tip:</strong> For "¾ of" — divide by 4, then multiply by 3. Draw a bar if you get stuck!
+        </div>
+    </div>
+</div>
+</div>
+
 <!-- ===== SLIDE 18: ROADBLOCK 3 ===== -->
 <div class="slide" id="slide-18">
 <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
@@ -620,6 +738,8 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div class="homework-item"><span>🍪</span> Find ¾ of: <strong>8, 12, 16, 20</strong>. Show Step 1 (÷4) and Step 2 (×3).</div>
         <div class="homework-item"><span>🔢</span> Sort these into unit and non-unit fractions: <strong>½, ²⁄₃, ¼, ³⁄₄, ⅓, ²⁄₄</strong></div>
         <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Why does ½ = ²⁄₄? Can you explain it to someone using a picture?</div>
+        <div class="homework-item"><span>👩‍🏫</span> <strong>Teach-back:</strong> Explain to someone at home why ²⁄₄ is the same as ½, using a drawing. Record any question they ask you.</div>
+        <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> A cake is cut into 12 equal slices. ¾ of the slices are eaten. How many slices are eaten? How many are left?</div>
     </div>
 </div>
 </div>
@@ -636,8 +756,10 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
             <button class="action-btn" style="background:var(--half-color);" onclick="showFracNL('half')">Count in halves</button>
             <button class="action-btn" style="background:var(--quarter-color);" onclick="showFracNL('quarter')">Count in quarters</button>
             <button class="action-btn" style="background:var(--third-color);color:#000;" onclick="showFracNL('third')">Count in thirds</button>
+            <button class="action-btn" style="background:var(--whole-color);" onclick="showFracNL('past')">🚀 Past 2!</button>
         </div>
         <div class="sentence-stem mt-16" id="fracNLStem"></div>
+        <div id="fracNLChallenge" class="mt-16" style="display:none;"></div>
     </div>
 </div>
 </div>
@@ -652,6 +774,38 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div id="barModelArea" style="margin:20px 0;"></div>
         <div class="btn-row">
             <button class="action-btn" style="background:var(--accent);" onclick="newBarModel()">🎲 New Question</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W4 BACKWARDS FRACTIONS (Inversion) ===== -->
+<div class="slide" id="slide-w4-invert">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w4"></span> Week 4 · Stretch</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🔄 Backwards Fractions</div>
+        <div class="slide-subtitle">Most questions ask "what is ¼ of 12?". These questions go the <strong>other way</strong>: you already know the answer — find the <em>question</em>.</div>
+        <div id="invertArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newInvert()">🎲 New Puzzle</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Trick:</strong> if ½ of a number is 7, multiply 7 by 2 to find the whole. Working backwards uses the same maths — in reverse.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W4 WORD PROBLEMS (MIXED) ===== -->
+<div class="slide" id="slide-w4-wp">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w4"></span> Week 4 · Word Problems</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📖 Mixed Fraction Stories</div>
+        <div class="slide-subtitle">These stories mix halves, thirds, and quarters — and sometimes need two steps. Read carefully!</div>
+        <div id="wp4Area"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newWordProblem(4)">🎲 New Story</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Two-step trick:</strong> If a story has TWO fractions, solve them one at a time. Then add or compare at the end.
         </div>
     </div>
 </div>
@@ -695,6 +849,8 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div class="homework-item"><span>📊</span> Use bar models to find: ½ of 18, ¼ of 20, ⅓ of 15, ¾ of 16</div>
         <div class="homework-item"><span>🍰</span> Draw a cake split into 4 parts. Shade ¾. How much is left unshaded? Write the fraction.</div>
         <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Is ½ of 10 the same as ¼ of 20? Prove it!</div>
+        <div class="homework-item"><span>🔄</span> <strong>Open-middle:</strong> Find three different fractions of 12 that give a whole-number answer. Which gives the biggest answer? Which the smallest?</div>
+        <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> Sam has 20 stickers. He gives ½ to his friend and ¼ to his brother. How many stickers does he give away altogether? How many does he keep?</div>
     </div>
 </div>
 </div>
@@ -727,7 +883,7 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 <!-- NAV BAR -->
 <div class="nav-bar">
     <button class="nav-btn back" onclick="prevSlide()" id="backBtn">← Back</button>
-    <span class="slide-counter" id="slideCounter">1 / 28</span>
+    <span class="slide-counter" id="slideCounter">1 / 37</span>
     <button class="nav-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
 </div>
 
@@ -742,25 +898,37 @@ else if(t==='success'){o.frequency.setValueAtTime(523,now);o.frequency.setValueA
 else if(t==='click'){o.frequency.setValueAtTime(800,now);g.gain.setValueAtTime(.08,now);g.gain.exponentialRampToValueAtTime(.001,now+.08);o.start();o.stop(now+.08)}}
 
 // ============ SLIDES ============
-let cur=0;const total=28;
-function showSlide(n){document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));document.getElementById('slide-'+n).classList.add('active');cur=n;
-document.getElementById('slideCounter').textContent=(n+1)+' / '+total;
-document.getElementById('progressBar').style.width=((n+1)/total*100)+'%';
-document.getElementById('backBtn').disabled=n===0;
-// Init
-if(n===2&&!initFlags.equalParts){initEqualParts();initFlags.equalParts=true}
-if(n===4&&!initFlags.halfQty){newHalfQty();initFlags.halfQty=true}
-if(n===6&&!initFlags.mt1){buildMT1();initFlags.mt1=true}
-if(n===9&&!initFlags.quarterQty){newQuarterQty();initFlags.quarterQty=true}
-if(n===10&&!initFlags.thirdQty){newThirdQty();initFlags.thirdQty=true}
-if(n===11&&!initFlags.findWhole){newFindWhole();initFlags.findWhole=true}
-if(n===13&&!initFlags.mt2){buildMT2();initFlags.mt2=true}
-if(n===17&&!initFlags.tq){newThreeQuarter();initFlags.tq=true}
-if(n===19&&!initFlags.mt3){buildMT3();initFlags.mt3=true}
-if(n===21&&!initFlags.fracNL){showFracNL('half');initFlags.fracNL=true}
-if(n===22&&!initFlags.barModel){newBarModel();initFlags.barModel=true}
-if(n===24&&!initFlags.mt4){buildMT4();initFlags.mt4=true}
-if(n===26&&!initFlags.ft){buildFinalTest();initFlags.ft=true}
+let cur=0;const total=37;
+function showSlide(n){
+    const slides=document.querySelectorAll('.slide');
+    slides.forEach(s=>s.classList.remove('active'));
+    slides[n].classList.add('active');
+    cur=n;
+    document.getElementById('slideCounter').textContent=(n+1)+' / '+total;
+    document.getElementById('progressBar').style.width=((n+1)/total*100)+'%';
+    document.getElementById('backBtn').disabled=n===0;
+    if(n===2&&!initFlags.equalParts){initEqualParts();initFlags.equalParts=true}
+    if(n===4&&!initFlags.halfQty){newHalfQty();initFlags.halfQty=true}
+    if(n===5&&!initFlags.manyFaces){initManyFaces();initFlags.manyFaces=true}
+    if(n===6&&!initFlags.fracLength){initFracLength();initFlags.fracLength=true}
+    if(n===7&&!initFlags.wp1){newWordProblem(1);initFlags.wp1=true}
+    if(n===9&&!initFlags.mt1){buildMT1();initFlags.mt1=true}
+    if(n===12&&!initFlags.quarterQty){newQuarterQty();initFlags.quarterQty=true}
+    if(n===13&&!initFlags.thirdQty){newThirdQty();initFlags.thirdQty=true}
+    if(n===14&&!initFlags.findWhole){newFindWhole();initFlags.findWhole=true}
+    if(n===15&&!initFlags.whichModel){initWhichModel();initFlags.whichModel=true}
+    if(n===16&&!initFlags.wp2){newWordProblem(2);initFlags.wp2=true}
+    if(n===18&&!initFlags.mt2){buildMT2();initFlags.mt2=true}
+    if(n===22&&!initFlags.tq){newThreeQuarter();initFlags.tq=true}
+    if(n===23&&!initFlags.mistakes){initMistakes();initFlags.mistakes=true}
+    if(n===24&&!initFlags.wp3){newWordProblem(3);initFlags.wp3=true}
+    if(n===26&&!initFlags.mt3){buildMT3();initFlags.mt3=true}
+    if(n===28&&!initFlags.fracNL){showFracNL('half');initFlags.fracNL=true}
+    if(n===29&&!initFlags.barModel){newBarModel();initFlags.barModel=true}
+    if(n===30&&!initFlags.invert){newInvert();initFlags.invert=true}
+    if(n===31&&!initFlags.wp4){newWordProblem(4);initFlags.wp4=true}
+    if(n===33&&!initFlags.mt4){buildMT4();initFlags.mt4=true}
+    if(n===35&&!initFlags.ft){buildFinalTest();initFlags.ft=true}
 }
 const initFlags={};
 function nextSlide(){if(cur<total-1){playSound('click');showSlide(cur+1)}}
@@ -949,6 +1117,8 @@ function showFracNL(type){
     playSound('click');
     const container=document.getElementById('fracNumberLine');
     const stem=document.getElementById('fracNLStem');
+    const challenge=document.getElementById('fracNLChallenge');
+    if(challenge) challenge.style.display='none';
     let w=600,h=100;
     let svg='<svg width="100%" viewBox="0 0 '+w+' '+h+'" style="max-width:600px;">';
     // Main line
@@ -977,7 +1147,7 @@ function showFracNL(type){
             if(i>0) svg+='<circle cx="'+x+'" cy="'+y+'" r="'+(isMajor?5:4)+'" fill="#10B981"/>';
         });
         stem.innerHTML='Count in quarters: <span class="hl-quarter">0, ¼, ½, ¾, 1, 1¼, 1½, 1¾, 2</span>';
-    } else {
+    } else if(type==='third'){
         const labels=['0','⅓','⅔','1','1⅓','1⅔','2'];
         const positions=[0,1/6,2/6,3/6,4/6,5/6,1];
         positions.forEach((p,i)=>{
@@ -989,9 +1159,41 @@ function showFracNL(type){
             if(i>0) svg+='<circle cx="'+x+'" cy="'+y+'" r="'+(isMajor?5:4)+'" fill="#F59E0B"/>';
         });
         stem.innerHTML='Count in thirds: <span class="hl-third">0, ⅓, ⅔, 1, 1⅓, 1⅔, 2</span>';
+    } else if(type==='past'){
+        const labels=['0','½','1','1½','2','2½','3','3½','4'];
+        const positions=[0,1/8,2/8,3/8,4/8,5/8,6/8,7/8,1];
+        positions.forEach((p,i)=>{
+            const x=x1+p*lineW;
+            const isMajor=i%2===0;
+            svg+='<line x1="'+x+'" y1="'+(y-(isMajor?12:8))+'" x2="'+x+'" y2="'+(y+(isMajor?12:8))+'" stroke="rgba(255,255,255,'+(isMajor?0.5:0.25)+')" stroke-width="'+(isMajor?2:1.5)+'"/>';
+            if(isMajor) svg+='<text x="'+x+'" y="'+(y+30)+'" text-anchor="middle" fill="var(--text)" font-size="13" font-weight="700" font-family="Inter">'+labels[i]+'</text>';
+            else svg+='<text x="'+x+'" y="'+(y-20)+'" text-anchor="middle" fill="#C4B5FD" font-size="11" font-weight="600" font-family="Inter">'+labels[i]+'</text>';
+            if(i>0) svg+='<circle cx="'+x+'" cy="'+y+'" r="'+(isMajor?5:4)+'" fill="#8B5CF6"/>';
+        });
+        stem.innerHTML='Fractions can go <strong>past 2</strong>! Count: <span class="hl-whole">0, ½, 1, 1½, 2, 2½, 3, 3½, 4</span> — you could keep going all the way to 10!';
+        // Continue-the-sequence challenge (starting from non-zero)
+        const ch=document.getElementById('fracNLChallenge');
+        const seqs=[
+            {start:'2¼, 2½, 2¾, ?',answer:'3',hint:'Add one more quarter!'},
+            {start:'3, 3½, 4, ?',answer:'4½',hint:'Each jump is half.'},
+            {start:'1⅔, 2, 2⅓, ?',answer:'2⅔',hint:'Each jump is one third.'},
+            {start:'5, 5½, 6, 6½, ?',answer:'7',hint:'Each jump is half.'},
+        ];
+        const s=seqs[Math.floor(Math.random()*seqs.length)];
+        ch.style.display='block';
+        ch.innerHTML='<div class="quiz-question"><div class="q-text">🚀 Continue the sequence (starting from any number):<br><strong style="font-size:1.3rem;">'+s.start+'</strong></div>'+
+            '<div class="flex-center"><input type="text" id="seqInput" style="width:100px;font-size:1.2rem;padding:8px;border-radius:10px;border:2px solid var(--card-border);background:rgba(255,255,255,0.06);color:var(--text);text-align:center;font-family:inherit;font-weight:700;" maxlength="4">'+
+            '<button class="action-btn check-btn" onclick="checkSeq(\''+s.answer+'\',\''+s.hint+'\')">✓ Check</button></div>'+
+            '<div class="quiz-feedback" id="seqFb"></div></div>';
     }
     svg+='</svg>';
     container.innerHTML=svg;
+}
+function checkSeq(answer,hint){
+    const val=(document.getElementById('seqInput').value||'').trim().replace(/\s+/g,'');
+    const fb=document.getElementById('seqFb');
+    if(val===answer){fb.className='quiz-feedback show correct-fb';fb.textContent='🎉 Correct! '+answer+' is next.';playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.textContent='❌ The answer is '+answer+'. '+hint;playSound('wrong')}
 }
 
 // ============ BAR MODELS ============
@@ -1033,11 +1235,29 @@ function checkBarModel(answer){
 function buildQuiz(cId,qs,rId,name,isFinal){
     const c=document.getElementById(cId);let html='';
     qs.forEach((q,qi)=>{
-        html+='<div class="quiz-question" id="'+cId+'-q'+qi+'"><div class="q-text">'+q.q+'</div><div class="quiz-options">';
-        q.opts.forEach((opt,oi)=>{html+='<button class="quiz-opt" data-qi="'+qi+'" data-oi="'+oi+'" data-correct="'+q.correct+'" onclick="handleAns(this,\''+cId+'\',\''+rId+'\','+qs.length+','+!!isFinal+')">'+opt+'</button>'});
-        html+='</div><div class="quiz-feedback" id="'+cId+'-fb'+qi+'"></div></div>';
+        html+='<div class="quiz-question" id="'+cId+'-q'+qi+'">';
+        if(q.type==='explain'){
+            html+='<div class="q-text">✍️ '+q.q+'</div>'+
+                '<textarea id="'+cId+'-ex'+qi+'" rows="3" placeholder="Type your explanation here..." style="width:100%;padding:12px;border-radius:10px;border:2px solid var(--card-border);background:rgba(255,255,255,0.06);color:var(--text);font-family:inherit;font-size:.95rem;resize:vertical;box-sizing:border-box;"></textarea>'+
+                '<div class="btn-row" style="justify-content:flex-start;margin-top:10px;"><button class="action-btn" style="background:var(--accent);" onclick="revealExplain(this,\''+cId+'\',\''+rId+'\','+qs.length+','+!!isFinal+','+qi+')">🔍 Show model answer</button></div>'+
+                '<div class="quiz-feedback" id="'+cId+'-fb'+qi+'" data-model="'+q.model.replace(/"/g,'&quot;').replace(/'/g,'&#39;')+'"></div>';
+        } else {
+            html+='<div class="q-text">'+q.q+'</div><div class="quiz-options">';
+            q.opts.forEach((opt,oi)=>{html+='<button class="quiz-opt" data-qi="'+qi+'" data-oi="'+oi+'" data-correct="'+q.correct+'" onclick="handleAns(this,\''+cId+'\',\''+rId+'\','+qs.length+','+!!isFinal+')">'+opt+'</button>'});
+            html+='</div><div class="quiz-feedback" id="'+cId+'-fb'+qi+'"></div>';
+        }
+        html+='</div>';
     });
     c.innerHTML=html;c.dataset.score='0';c.dataset.answered='0';c.dataset.total=qs.length;c.dataset.testName=name;
+}
+function finishTest(cId,rId,total,isFinal){
+    const c=document.getElementById(cId);
+    const r=document.getElementById(rId);r.classList.remove('hidden');
+    const sc=+c.dataset.score;const pct=Math.round(sc/total*100);
+    let emoji=pct>=90?'🌟':pct>=70?'👍':'💪';
+    r.innerHTML='<div style="font-size:2rem;">'+emoji+'</div><div style="font-size:1.5rem;font-weight:800;margin:8px 0;">'+sc+' / '+total+'</div><div style="color:var(--text-dim);">'+c.dataset.testName+' Complete!</div>';
+    if(isFinal)updateCert(sc,total);
+    playSound('success');
 }
 function handleAns(btn,cId,rId,total,isFinal){
     const qi=+btn.dataset.qi,oi=+btn.dataset.oi,correct=+btn.dataset.correct;
@@ -1047,7 +1267,21 @@ function handleAns(btn,cId,rId,total,isFinal){
     if(oi===correct){btn.classList.add('correct');fb.className='quiz-feedback show correct-fb';fb.textContent='✅ Correct!';c.dataset.score=+c.dataset.score+1;playSound('correct')}
     else{btn.classList.add('wrong');qDiv.querySelectorAll('.quiz-opt')[correct].classList.add('correct');fb.className='quiz-feedback show wrong-fb';fb.textContent='❌ The correct answer is: '+qDiv.querySelectorAll('.quiz-opt')[correct].textContent;playSound('wrong')}
     c.dataset.answered=+c.dataset.answered+1;
-    if(+c.dataset.answered===total){setTimeout(()=>{const r=document.getElementById(rId);r.classList.remove('hidden');const sc=+c.dataset.score;const pct=Math.round(sc/total*100);let emoji=pct>=90?'🌟':pct>=70?'👍':'💪';r.innerHTML='<div style="font-size:2rem;">'+emoji+'</div><div style="font-size:1.5rem;font-weight:800;margin:8px 0;">'+sc+' / '+total+'</div><div style="color:var(--text-dim);">'+c.dataset.testName+' Complete!</div>';if(isFinal)updateCert(sc,total);playSound('success')},1e3)}
+    if(+c.dataset.answered===total){setTimeout(()=>finishTest(cId,rId,total,isFinal),1e3)}
+}
+function revealExplain(btn,cId,rId,total,isFinal,qi){
+    const c=document.getElementById(cId);
+    const fb=document.getElementById(cId+'-fb'+qi);
+    const ta=document.getElementById(cId+'-ex'+qi);
+    const hasAttempt=ta.value.trim().length>=5;
+    btn.disabled=true;btn.style.opacity='0.5';
+    ta.disabled=true;
+    fb.className='quiz-feedback show '+(hasAttempt?'correct-fb':'wrong-fb');
+    fb.innerHTML=(hasAttempt?'✅ <strong>Good effort!</strong> Here\'s a model answer:<br><br>':'💡 <strong>Try writing at least one sentence next time.</strong> Here\'s a model answer:<br><br>')+'<em>'+fb.dataset.model+'</em>';
+    if(hasAttempt)c.dataset.score=+c.dataset.score+1;
+    c.dataset.answered=+c.dataset.answered+1;
+    playSound(hasAttempt?'correct':'click');
+    if(+c.dataset.answered===total){setTimeout(()=>finishTest(cId,rId,total,isFinal),1e3)}
 }
 function updateCert(sc,total){
     const pct=Math.round(sc/total*100);
@@ -1063,8 +1297,9 @@ function buildMT1(){buildQuiz('miniTest1',[
     {q:'Which shape shows ½ correctly?',opts:['A circle split into 2 equal parts with 1 shaded','A circle split into 3 parts with 1 shaded','A circle with all parts shaded','A circle not split at all'],correct:0},
     {q:'What is ½ of 10?',opts:['2','5','10','3'],correct:1},
     {q:'Finding ½ of a number is the same as:',opts:['Adding 2','Multiplying by 2','Dividing by 2','Subtracting 2'],correct:2},
-    {q:'What is ½ of 16?',opts:['6','4','16','8'],correct:3},
+    {q:'A box has 16 sweets. Ben eats half. How many does he eat?',opts:['6','4','16','8'],correct:3},
     {q:'True or False: If a shape is split into 2 parts but one is bigger, it shows ½.',opts:['True','False'],correct:1},
+    {type:'explain',q:'Explain in your own words why a shape split into 2 unequal parts is NOT showing ½.',model:'A half means 2 EQUAL parts. If the two parts are different sizes, one is bigger and one is smaller — so they are not halves. A fraction only works when every part is the same size.'},
 ],'mt1Result','Mini Test 1')}
 
 function buildMT2(){buildQuiz('miniTest2',[
@@ -1073,16 +1308,18 @@ function buildMT2(){buildQuiz('miniTest2',[
     {q:'Which is bigger: ½ of a pizza or ¼ of the same pizza?',opts:['¼ is bigger','They are the same','½ is bigger'],correct:2},
     {q:'If ⅓ of a number is 4, what is the whole number?',opts:['7','8','12','4'],correct:2},
     {q:'How many equal parts does a quarter split something into?',opts:['2','3','4','5'],correct:2},
-    {q:'What is ¼ of 20?',opts:['4','5','10','20'],correct:1},
+    {q:'A class has 20 children. ¼ wear glasses. How many wear glasses?',opts:['4','5','10','20'],correct:1},
+    {type:'explain',q:'Explain why ¼ of 12 is smaller than ½ of 12.',model:'¼ means splitting 12 into 4 equal groups, so each group is 3. ½ means splitting 12 into 2 equal groups, so each group is 6. More parts means smaller pieces, so ¼ is always smaller than ½.'},
 ],'mt2Result','Mini Test 2')}
 
 function buildMT3(){buildQuiz('miniTest3',[
     {q:'Which is a unit fraction?',opts:['¾','²⁄₃','¼','²⁄₄'],correct:2},
     {q:'½ is equivalent to which fraction?',opts:['¼','⅓','²⁄₄','¾'],correct:2},
-    {q:'What is ¾ of 12?',opts:['3','6','9','4'],correct:2},
+    {q:'A cake has 12 slices. Tom eats ¾ of them. How many slices does he eat?',opts:['3','6','9','4'],correct:2},
     {q:'A non-unit fraction has:',opts:['1 on top','0 on top','A number bigger than 1 on top','Nothing on top'],correct:2},
     {q:'How do you find ¾ of 20?',opts:['20 ÷ 3','20 ÷ 4 = 5, then 5 × 3 = 15','20 × 4','20 − 4'],correct:1},
     {q:'Why does ½ = ²⁄₄?',opts:['Because 1+1=2','Because they shade the same amount','Because 4 is double 2','They are NOT the same'],correct:1},
+    {type:'explain',q:'Explain why ½ and ²⁄₄ are the same amount, using the idea of cutting a bar.',model:'If you cut a bar in half you get 2 equal pieces and shade one — that is ½. If you cut each of those pieces in half again, you now have 4 equal pieces but the SAME amount is still shaded — that is ²⁄₄. The bar did not grow or shrink, so ½ and ²⁄₄ must be the same amount.'},
 ],'mt3Result','Mini Test 3')}
 
 function buildMT4(){buildQuiz('miniTest4',[
@@ -1091,7 +1328,8 @@ function buildMT4(){buildQuiz('miniTest4',[
     {q:'⅓ of 21 = ?',opts:['3','6','7','9'],correct:2},
     {q:'¾ of 16 = ?',opts:['4','8','12','14'],correct:2},
     {q:'On a number line, where is ½?',opts:['At the start','Halfway between 0 and 1','At 1','After 1'],correct:1},
-    {q:'What is ¼ of 24?',opts:['4','6','8','12'],correct:1},
+    {q:'A shop has 24 balloons. ¼ are red. How many red balloons are there?',opts:['4','6','8','12'],correct:1},
+    {type:'explain',q:'Explain how to find ¾ of a number, step by step.',model:'Step 1: Divide the number by 4 to find one quarter. Step 2: Multiply that quarter by 3 to find three quarters. For example, ¾ of 16: 16 ÷ 4 = 4, then 4 × 3 = 12. So ¾ of 16 is 12.'},
 ],'mt4Result','Mini Test 4')}
 
 function buildFinalTest(){buildQuiz('finalTest',[
@@ -1101,11 +1339,193 @@ function buildFinalTest(){buildQuiz('finalTest',[
     {q:'4. What is ⅓ of 18?',opts:['3','6','9','12'],correct:1},
     {q:'5. Which is a non-unit fraction?',opts:['½','¼','⅓','¾'],correct:3},
     {q:'6. ½ = ?/4',opts:['1','2','3','4'],correct:1},
-    {q:'7. What is ¾ of 20?',opts:['5','10','15','20'],correct:2},
+    {q:'7. Sam has 20 sweets. He gives ¾ of them to his friends. How many does he give away?',opts:['5','10','15','20'],correct:2},
     {q:'8. If ¼ of a number is 6, what is the whole?',opts:['12','18','24','10'],correct:2},
     {q:'9. Count in halves: 0, ½, 1, 1½, ___',opts:['1¾','2','2½','3'],correct:1},
     {q:'10. Which is bigger: ⅓ of 12 or ¼ of 12?',opts:['⅓ of 12 (=4)','¼ of 12 (=3)','They are equal','Cannot tell'],correct:0},
+    {type:'explain',q:'11. Explain which is bigger — ⅓ of 12 or ¼ of 12 — and WHY. Use the idea of equal groups.',model:'⅓ of 12 is bigger. ⅓ means splitting 12 into 3 equal groups, so each group has 4. ¼ means splitting 12 into 4 equal groups, so each group has only 3. The more groups you split something into, the smaller each group becomes — so ⅓ (3 groups) gives a bigger piece than ¼ (4 groups).'},
 ],'finalResult','Final Mastery Assessment',true)}
+
+// ============ W1: MANY FACES OF ½ ============
+function initManyFaces(){
+    const area=document.getElementById('manyFacesArea');
+    const faces=[
+        {label:'Part-Whole',svg:'<svg viewBox="0 0 140 140" width="100%" style="max-width:120px;"><circle cx="70" cy="70" r="60" fill="rgba(59,130,246,0.15)" stroke="#3B82F6" stroke-width="3"/><path d="M70 10 A60 60 0 0 1 70 130 Z" fill="rgba(59,130,246,0.55)"/><line x1="70" y1="10" x2="70" y2="130" stroke="#3B82F6" stroke-width="2.5"/></svg>'},
+        {label:'Counters',svg:'<svg viewBox="0 0 200 70" width="100%" style="max-width:160px;"><circle cx="30" cy="35" r="16" fill="rgba(59,130,246,0.55)" stroke="#3B82F6" stroke-width="2"/><circle cx="70" cy="35" r="16" fill="rgba(59,130,246,0.55)" stroke="#3B82F6" stroke-width="2"/><circle cx="115" cy="35" r="16" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.25)" stroke-width="2"/><circle cx="155" cy="35" r="16" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.25)" stroke-width="2"/></svg>'},
+        {label:'Bar Model',svg:'<svg viewBox="0 0 200 60" width="100%" style="max-width:160px;"><rect x="2" y="2" width="196" height="56" rx="8" fill="rgba(59,130,246,0.1)" stroke="#3B82F6" stroke-width="2.5"/><rect x="2" y="2" width="98" height="56" rx="8" fill="rgba(59,130,246,0.55)"/><line x1="100" y1="2" x2="100" y2="58" stroke="#3B82F6" stroke-width="2.5"/></svg>'},
+        {label:'Number Line',svg:'<svg viewBox="0 0 200 70" width="100%" style="max-width:160px;"><line x1="20" y1="35" x2="180" y2="35" stroke="rgba(255,255,255,0.35)" stroke-width="3" stroke-linecap="round"/><line x1="20" y1="25" x2="20" y2="45" stroke="#fff" stroke-width="2"/><line x1="180" y1="25" x2="180" y2="45" stroke="#fff" stroke-width="2"/><circle cx="100" cy="35" r="7" fill="#3B82F6"/><text x="20" y="60" text-anchor="middle" fill="#94A3B8" font-size="12" font-family="Inter">0</text><text x="100" y="60" text-anchor="middle" fill="#93C5FD" font-size="13" font-weight="700" font-family="Inter">½</text><text x="180" y="60" text-anchor="middle" fill="#94A3B8" font-size="12" font-family="Inter">1</text></svg>'},
+        {label:'Symbol',svg:'<svg viewBox="0 0 140 140" width="100%" style="max-width:120px;"><text x="70" y="108" text-anchor="middle" fill="#3B82F6" font-size="110" font-weight="900" font-family="Inter">½</text></svg>'},
+    ];
+    let html='';
+    faces.forEach((f,i)=>{
+        html+='<div class="click-shape" onclick="revealFace('+i+')" style="background:rgba(59,130,246,0.08);border:2px solid rgba(59,130,246,0.25);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;"><div style="height:110px;display:flex;align-items:center;justify-content:center;">'+f.svg+'</div><div id="face-label-'+i+'" style="margin-top:10px;font-size:.9rem;font-weight:700;color:var(--half-color);opacity:0;transition:opacity .3s;">'+f.label+'</div></div>';
+    });
+    area.innerHTML=html;
+}
+function revealFace(i){document.getElementById('face-label-'+i).style.opacity='1';playSound('click')}
+
+// ============ W2: WHICH MODEL IS BEST? ============
+function initWhichModel(){
+    const area=document.getElementById('whichModelArea');
+    const qs=[
+        {q:'Find ⅓ of 15 cookies',opts:['Number line','Counters (sharing)','Bar model','Symbols only'],best:1,why:'Counters are perfect for sharing — split 15 into 3 equal piles.'},
+        {q:'Is ½ closer to 0 or to 1?',opts:['Number line','Counters','Part-whole circle','Symbols only'],best:0,why:'A number line shows position and distance — perfect for "closer to" questions.'},
+        {q:'Show that ²⁄₄ = ½ (equivalence)',opts:['Counters','Number line','Bar model','Symbols only'],best:2,why:'Two bars side by side make the equal shading obvious.'},
+    ];
+    let html='';
+    qs.forEach((q,qi)=>{
+        html+='<div class="quiz-question"><div class="q-text">'+q.q+'</div><div class="quiz-options" id="wm-opts-'+qi+'">';
+        q.opts.forEach((o,oi)=>{html+='<button class="quiz-opt" onclick="checkWhichModel('+qi+','+oi+','+q.best+')">'+o+'</button>'});
+        html+='</div><div class="quiz-feedback" id="wm-fb-'+qi+'"></div></div>';
+    });
+    area.innerHTML=html;
+    area.dataset.whys=JSON.stringify(qs.map(q=>q.why));
+}
+function checkWhichModel(qi,oi,correct){
+    const opts=document.getElementById('wm-opts-'+qi).querySelectorAll('.quiz-opt');
+    opts.forEach(o=>o.classList.add('disabled'));
+    const fb=document.getElementById('wm-fb-'+qi);
+    const whys=JSON.parse(document.getElementById('whichModelArea').dataset.whys);
+    if(oi===correct){opts[oi].classList.add('correct');fb.className='quiz-feedback show correct-fb';fb.textContent='✅ '+whys[qi];playSound('correct')}
+    else{opts[oi].classList.add('wrong');opts[correct].classList.add('correct');fb.className='quiz-feedback show wrong-fb';fb.textContent='Better choice: '+opts[correct].textContent+'. '+whys[qi];playSound('wrong')}
+}
+
+// ============ W3: SPOT THE MISTAKE ============
+function initMistakes(){
+    const area=document.getElementById('mistakeArea');
+    const cases=[
+        {kid:'Sarah',claim:'⅓ of 12 = 6',visual:'',why:'Sarah divided by 2 instead of 3. ⅓ means split into <strong>3</strong> equal groups: 12 ÷ 3 = 4.'},
+        {kid:'Tom',claim:'This shape shows ½',visual:'<svg viewBox="0 0 200 60" width="100%" style="max-width:200px;"><rect x="2" y="2" width="196" height="56" rx="8" fill="rgba(239,68,68,0.1)" stroke="#EF4444" stroke-width="2"/><line x1="65" y1="2" x2="65" y2="58" stroke="#EF4444" stroke-width="2"/><rect x="2" y="2" width="63" height="56" rx="8" fill="rgba(239,68,68,0.4)"/></svg>',why:'The two parts are <strong>not equal</strong>. A half needs two parts of the <em>same</em> size.'},
+        {kid:'Mia',claim:'¼ is bigger than ½ because 4 is bigger than 2',visual:'',why:'More parts means <strong>smaller</strong> pieces! Splitting a pizza into 4 makes each slice smaller than splitting into 2. So ½ is bigger.'},
+    ];
+    let html='';
+    cases.forEach((c,i)=>{
+        html+='<div class="quiz-question"><div class="q-text"><strong>'+c.kid+' says:</strong> "'+c.claim+'"</div>';
+        if(c.visual) html+='<div style="margin:12px 0;text-align:center;">'+c.visual+'</div>';
+        html+='<div class="btn-row" style="justify-content:flex-start;"><button class="action-btn" style="background:var(--error);" onclick="revealMistake('+i+')">🚨 Show the mistake</button></div>';
+        html+='<div class="quiz-feedback" id="mistake-fb-'+i+'" style="margin-top:12px;">'+c.why+'</div></div>';
+    });
+    area.innerHTML=html;
+}
+function revealMistake(i){
+    const fb=document.getElementById('mistake-fb-'+i);
+    fb.classList.add('show','correct-fb');
+    playSound('correct');
+}
+
+// ============ W4: BACKWARDS FRACTIONS (INVERSION) ============
+let invertAnswer=0,invertHint='';
+function newInvert(){
+    const puzzles=[
+        {clue:'<strong>½</strong> of my number is <strong>7</strong>.',answer:14,hint:'7 × 2 = 14'},
+        {clue:'<strong>¼</strong> of my number is <strong>6</strong>.',answer:24,hint:'6 × 4 = 24'},
+        {clue:'<strong>⅓</strong> of my number is <strong>5</strong>.',answer:15,hint:'5 × 3 = 15'},
+        {clue:'<strong>½</strong> of my number is <strong>11</strong>.',answer:22,hint:'11 × 2 = 22'},
+        {clue:'<strong>¼</strong> of my number is <strong>8</strong>.',answer:32,hint:'8 × 4 = 32'},
+        {clue:'<strong>⅓</strong> of my number is <strong>7</strong>.',answer:21,hint:'7 × 3 = 21'},
+    ];
+    const p=puzzles[Math.floor(Math.random()*puzzles.length)];
+    invertAnswer=p.answer;invertHint=p.hint;
+    const area=document.getElementById('invertArea');
+    area.innerHTML='<div class="quiz-question"><div class="q-text">I am thinking of a number.<br>'+p.clue+'<br>What is my number?</div>'+
+        '<div class="flex-center mt-16"><input type="number" id="invInput" style="width:100px;font-size:1.3rem;padding:10px;border-radius:10px;border:2px solid var(--card-border);background:rgba(255,255,255,0.06);color:var(--text);text-align:center;font-family:inherit;font-weight:700;" maxlength="3">'+
+        '<button class="action-btn check-btn" onclick="checkInvert()">✓ Check</button></div>'+
+        '<div class="quiz-feedback" id="invFb"></div></div>';
+    playSound('click');
+}
+function checkInvert(){
+    const val=parseInt(document.getElementById('invInput').value);
+    const fb=document.getElementById('invFb');
+    if(val===invertAnswer){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+invertHint;playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. Hint: '+invertHint;playSound('wrong')}
+}
+
+// ============ W1: FRACTION OF A LENGTH ============
+function initFracLength(){splitLength(0)}
+function splitLength(parts){
+    const area=document.getElementById('lengthArea');
+    const stem=document.getElementById('lengthStem');
+    const totalCm=12;
+    const ribbonW=480,ribbonH=60,x0=40;
+    let svg='<svg viewBox="0 0 '+(ribbonW+80)+' '+(ribbonH+50)+'" style="width:100%;max-width:560px;">';
+    // Base ribbon
+    svg+='<rect x="'+x0+'" y="10" width="'+ribbonW+'" height="'+ribbonH+'" rx="8" fill="rgba(139,92,246,0.18)" stroke="#8B5CF6" stroke-width="2.5"/>';
+    if(parts===0){
+        svg+='<text x="'+(x0+ribbonW/2)+'" y="'+(ribbonH/2+18)+'" text-anchor="middle" fill="#C4B5FD" font-size="18" font-weight="700" font-family="Inter">12 cm ribbon</text>';
+        stem.innerHTML='Pick a button above to split the ribbon. Each part must be <strong>equal</strong> — just like with shapes!';
+    } else {
+        const perPart=totalCm/parts;
+        const segW=ribbonW/parts;
+        const colors=['rgba(59,130,246,0.45)','rgba(16,185,129,0.45)','rgba(245,158,11,0.45)','rgba(139,92,246,0.45)'];
+        for(let i=0;i<parts;i++){
+            svg+='<rect x="'+(x0+i*segW)+'" y="10" width="'+segW+'" height="'+ribbonH+'" fill="'+colors[i%4]+'"/>';
+            if(i>0) svg+='<line x1="'+(x0+i*segW)+'" y1="10" x2="'+(x0+i*segW)+'" y2="'+(10+ribbonH)+'" stroke="#fff" stroke-width="2"/>';
+            svg+='<text x="'+(x0+i*segW+segW/2)+'" y="'+(ribbonH/2+18)+'" text-anchor="middle" fill="#fff" font-size="16" font-weight="800" font-family="Inter">'+perPart+' cm</text>';
+        }
+        // cm labels
+        svg+='<text x="'+x0+'" y="'+(ribbonH+35)+'" text-anchor="middle" fill="#94A3B8" font-size="12" font-family="Inter">0 cm</text>';
+        svg+='<text x="'+(x0+ribbonW)+'" y="'+(ribbonH+35)+'" text-anchor="middle" fill="#94A3B8" font-size="12" font-family="Inter">12 cm</text>';
+        const fracSym=parts===2?'½':parts===3?'⅓':'¼';
+        const colorClass=parts===2?'hl-half':parts===3?'hl-third':'hl-quarter';
+        stem.innerHTML='<span class="'+colorClass+'">'+fracSym+'</span> of 12 cm = 12 ÷ '+parts+' = <strong style="font-size:1.3rem;">'+perPart+' cm</strong>. Each equal part is the same length!';
+        playSound('success');
+    }
+    svg+='</svg>';
+    area.innerHTML=svg;
+}
+
+// ============ WORD PROBLEMS (W1-W4) ============
+const wordProblemBanks={
+    1:[
+        {story:'Ben has <strong>10 grapes</strong>. He eats <strong>half</strong> of them. How many grapes does he eat?',answer:5,hint:'½ of 10 = 10 ÷ 2'},
+        {story:'There are <strong>8 children</strong> in a team. <strong>Half</strong> of them are girls. How many girls are in the team?',answer:4,hint:'½ of 8 = 8 ÷ 2'},
+        {story:'A pizza has <strong>6 slices</strong>. Tom eats <strong>half</strong>. How many slices does Tom eat?',answer:3,hint:'½ of 6 = 6 ÷ 2'},
+        {story:'A cake has <strong>14 candles</strong>. <strong>Half</strong> of them are lit. How many candles are lit?',answer:7,hint:'½ of 14 = 14 ÷ 2'},
+        {story:'Mum buys <strong>20 apples</strong>. She gives <strong>half</strong> to Gran. How many apples does she give away?',answer:10,hint:'½ of 20 = 20 ÷ 2'},
+    ],
+    2:[
+        {story:'A class has <strong>16 children</strong>. <strong>¼</strong> of them wear glasses. How many wear glasses?',answer:4,hint:'¼ of 16 = 16 ÷ 4'},
+        {story:'There are <strong>15 flowers</strong>. <strong>⅓</strong> are red. How many red flowers are there?',answer:5,hint:'⅓ of 15 = 15 ÷ 3'},
+        {story:'A ribbon is <strong>12 cm</strong> long. Sarah cuts it into <strong>3 equal pieces</strong>. How long is each piece?',answer:4,hint:'⅓ of 12 cm = 12 ÷ 3'},
+        {story:'If <strong>¼</strong> of a number is <strong>5</strong>, what is the whole number?',answer:20,hint:'5 × 4 = whole'},
+        {story:'A box has <strong>24 chocolates</strong>. Jen eats <strong>¼</strong>. How many chocolates does she eat?',answer:6,hint:'¼ of 24 = 24 ÷ 4'},
+        {story:'Tom shares <strong>18 sweets</strong> equally between <strong>3 friends</strong>. How many does each friend get?',answer:6,hint:'⅓ of 18 = 18 ÷ 3'},
+    ],
+    3:[
+        {story:'A cake has <strong>12 slices</strong>. Tom eats <strong>¾</strong>. How many slices does he eat?',answer:9,hint:'¼ of 12 = 3, then 3 × 3 = 9'},
+        {story:'A book has <strong>20 pages</strong>. Mia reads <strong>¾</strong>. How many pages has she read?',answer:15,hint:'¼ of 20 = 5, then 5 × 3 = 15'},
+        {story:'<strong>½</strong> of the class = <strong>10 children</strong>. How many children are in the class altogether?',answer:20,hint:'10 × 2 = whole class'},
+        {story:'A shop has <strong>16 balloons</strong>. <strong>¾</strong> are red. How many red balloons?',answer:12,hint:'¼ of 16 = 4, then 4 × 3 = 12'},
+        {story:'Ali scores <strong>²⁄₄</strong> of the team\'s <strong>8 goals</strong>. How many goals did Ali score? (hint: ²⁄₄ = ½)',answer:4,hint:'²⁄₄ = ½, so ½ of 8 = 4'},
+    ],
+    4:[
+        {story:'Sam has <strong>20 stickers</strong>. He gives <strong>½</strong> to his friend. How many stickers does he give away?',answer:10,hint:'½ of 20 = 10'},
+        {story:'A chocolate bar has <strong>12 squares</strong>. Liam eats <strong>¼</strong>, then Noor eats <strong>⅓</strong> of what remains. How many squares does Noor eat? <em>(Tip: ¼ of 12 = 3 eaten, leaves 9; ⅓ of 9 = ?)</em>',answer:3,hint:'12 − 3 = 9 left. ⅓ of 9 = 3'},
+        {story:'A pizza has <strong>8 slices</strong>. Dad eats <strong>½</strong>, Mum eats <strong>¼</strong>. How many slices did they eat altogether?',answer:6,hint:'½ of 8 = 4, ¼ of 8 = 2, so 4 + 2 = 6'},
+        {story:'Count in halves past 2: <strong>2½, 3, 3½, ?</strong> What whole number comes next after this? <em>(Type the whole number only.)</em>',answer:4,hint:'Each jump is half. 3½ + ½ = 4'},
+        {story:'If <strong>⅓</strong> of a number is <strong>7</strong>, what is the whole number?',answer:21,hint:'7 × 3 = 21'},
+        {story:'There are <strong>24 sweets</strong>. Ben takes <strong>¼</strong> and Sam takes <strong>¼</strong>. How many sweets are left?',answer:12,hint:'¼ of 24 = 6, so 6 + 6 = 12 taken, 24 − 12 = 12 left'},
+    ]
+};
+let wpCurrent={};
+function newWordProblem(week){
+    const bank=wordProblemBanks[week];
+    const p=bank[Math.floor(Math.random()*bank.length)];
+    wpCurrent[week]=p;
+    const area=document.getElementById('wp'+week+'Area');
+    area.innerHTML='<div class="quiz-question"><div class="q-text">'+p.story+'</div>'+
+        '<div class="flex-center mt-16"><input type="number" id="wp'+week+'Input" style="width:110px;font-size:1.3rem;padding:10px;border-radius:10px;border:2px solid var(--card-border);background:rgba(255,255,255,0.06);color:var(--text);text-align:center;font-family:inherit;font-weight:700;" maxlength="3">'+
+        '<button class="action-btn check-btn" onclick="checkWordProblem('+week+')">✓ Check</button></div>'+
+        '<div class="quiz-feedback" id="wp'+week+'Fb"></div></div>';
+    playSound('click');
+}
+function checkWordProblem(week){
+    const p=wpCurrent[week];
+    const val=parseInt(document.getElementById('wp'+week+'Input').value);
+    const fb=document.getElementById('wp'+week+'Fb');
+    if(val===p.answer){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! Answer: <strong>'+p.answer+'</strong>. ('+p.hint+')';playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The answer is <strong>'+p.answer+'</strong>. Working: '+p.hint;playSound('wrong')}
+}
 
 // ============ INIT ============
 showSlide(0);
