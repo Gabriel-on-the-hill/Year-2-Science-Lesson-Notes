@@ -336,6 +336,27 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 </div>
 </div>
 
+<!-- ===== NEW: W1 SHADE YOUR OWN ===== -->
+<div class="slide" id="slide-w1-shade">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w1"></span> Week 1 · Construct</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🖌️ Shade Your Own</div>
+        <div class="slide-subtitle">Now YOU shade the fraction. Click squares to turn them <strong>blue</strong>. Click again to un-shade. Then press <strong>Check</strong>.</div>
+        <div id="shadeTarget" style="font-size:1.2rem;color:var(--accent-light);margin:8px 0;font-weight:700;"></div>
+        <div id="shadeArea" style="margin:20px 0;display:flex;justify-content:center;"></div>
+        <div class="btn-row">
+            <button class="action-btn check-btn" onclick="checkShade()">✓ Check</button>
+            <button class="action-btn" style="background:var(--accent);" onclick="newShade()">🎲 New Shape</button>
+        </div>
+        <div class="quiz-feedback mt-16" id="shadeFb"></div>
+        <div class="sentence-stem mt-16">
+            <strong>Tip:</strong> count the TOTAL squares first, then work out how many need to be shaded.
+        </div>
+    </div>
+</div>
+</div>
+
 <!-- ===== NEW: W1 WORD PROBLEMS (HALVES) ===== -->
 <div class="slide" id="slide-w1-wp">
 <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
@@ -439,6 +460,51 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 </div>
 </div>
 
+<!-- ===== NEW: W2 RECOGNISE A QUARTER ===== -->
+<div class="slide" id="slide-w2-recq">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🟢 Recognising a Quarter</div>
+        <div class="slide-subtitle">A <span class="hl-quarter">quarter</span> (<strong>¼</strong>) means <strong>4 equal parts</strong>. We shade <strong>1</strong> of the 4 parts.</div>
+        <div class="shape-row">
+            <div class="shape-box">
+                <svg width="140" height="140" viewBox="0 0 140 140">
+                    <circle cx="70" cy="70" r="60" fill="rgba(16,185,129,0.15)" stroke="#10B981" stroke-width="2.5"/>
+                    <line x1="70" y1="10" x2="70" y2="130" stroke="#10B981" stroke-width="2"/>
+                    <line x1="10" y1="70" x2="130" y2="70" stroke="#10B981" stroke-width="2"/>
+                    <path d="M70 10 A60 60 0 0 1 130 70 L70 70 Z" fill="rgba(16,185,129,0.5)"/>
+                </svg>
+                <div class="label">Circle: <span class="hl-quarter">¼</span> shaded</div>
+            </div>
+            <div class="shape-box">
+                <svg width="140" height="100" viewBox="0 0 140 100">
+                    <rect x="5" y="5" width="130" height="90" rx="10" fill="rgba(16,185,129,0.15)" stroke="#10B981" stroke-width="2.5"/>
+                    <rect x="5" y="5" width="32.5" height="90" fill="rgba(16,185,129,0.5)"/>
+                    <line x1="37.5" y1="5" x2="37.5" y2="95" stroke="#10B981" stroke-width="2"/>
+                    <line x1="70" y1="5" x2="70" y2="95" stroke="#10B981" stroke-width="2"/>
+                    <line x1="102.5" y1="5" x2="102.5" y2="95" stroke="#10B981" stroke-width="2"/>
+                </svg>
+                <div class="label">Rectangle: <span class="hl-quarter">¼</span> shaded</div>
+            </div>
+            <div class="shape-box">
+                <svg width="130" height="130" viewBox="0 0 130 130">
+                    <rect x="5" y="5" width="120" height="120" rx="8" fill="rgba(16,185,129,0.15)" stroke="#10B981" stroke-width="2.5"/>
+                    <line x1="65" y1="5" x2="65" y2="125" stroke="#10B981" stroke-width="2"/>
+                    <line x1="5" y1="65" x2="125" y2="65" stroke="#10B981" stroke-width="2"/>
+                    <rect x="5" y="5" width="60" height="60" fill="rgba(16,185,129,0.5)"/>
+                </svg>
+                <div class="label">Square: <span class="hl-quarter">¼</span> shaded</div>
+            </div>
+        </div>
+        <div class="sentence-stem">
+            <span class="hl-quarter">¼</span> = <strong>1 out of 4</strong> equal parts.<br>
+            Bottom number <strong>4</strong> = how many parts. Top number <strong>1</strong> = how many are shaded.
+        </div>
+    </div>
+</div>
+</div>
+
 <!-- ===== SLIDE 9: QUARTERS ===== -->
 <div class="slide" id="slide-9">
 <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
@@ -457,6 +523,66 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         </div>
         <div class="sentence-stem mt-16" id="quarterStem">
             <span class="hl-quarter">¼</span> of <strong id="qqWhole">12</strong> = <strong id="qqAnswer">?</strong>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W2 DIFFERENT-LOOKING QUARTERS ===== -->
+<div class="slide" id="slide-w2-diffq">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2 · Stretch</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🧩 Different-looking Quarters</div>
+        <div class="slide-subtitle">All FOUR squares below have <span class="hl-quarter">¼</span> shaded — even though they look different!<br>Click each one to reveal <em>why</em> it still counts.</div>
+        <div id="diffQArea" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin:20px 0;width:100%;"></div>
+        <div class="sentence-stem mt-16">
+            <strong>Big idea:</strong> the parts must be the <em>same size</em> — but they don't have to be the <em>same shape</em>. All four shaded areas above cover <strong>exactly ¼</strong> of the square.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W2 RECOGNISE A THIRD ===== -->
+<div class="slide" id="slide-w2-rect">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🟡 Recognising a Third</div>
+        <div class="slide-subtitle">A <span class="hl-third">third</span> (<strong>⅓</strong>) means <strong>3 equal parts</strong>. We shade <strong>1</strong> of the 3 parts.</div>
+        <div class="shape-row">
+            <div class="shape-box">
+                <svg width="140" height="140" viewBox="0 0 140 140">
+                    <circle cx="70" cy="70" r="60" fill="rgba(245,158,11,0.15)" stroke="#F59E0B" stroke-width="2.5"/>
+                    <line x1="70" y1="10" x2="70" y2="70" stroke="#F59E0B" stroke-width="2"/>
+                    <line x1="70" y1="70" x2="18" y2="100" stroke="#F59E0B" stroke-width="2"/>
+                    <line x1="70" y1="70" x2="122" y2="100" stroke="#F59E0B" stroke-width="2"/>
+                    <path d="M70 10 A60 60 0 0 1 122 100 L70 70 Z" fill="rgba(245,158,11,0.5)"/>
+                </svg>
+                <div class="label">Circle: <span class="hl-third">⅓</span> shaded</div>
+            </div>
+            <div class="shape-box">
+                <svg width="140" height="100" viewBox="0 0 140 100">
+                    <rect x="5" y="5" width="130" height="90" rx="10" fill="rgba(245,158,11,0.15)" stroke="#F59E0B" stroke-width="2.5"/>
+                    <rect x="5" y="5" width="43" height="90" fill="rgba(245,158,11,0.5)"/>
+                    <line x1="48" y1="5" x2="48" y2="95" stroke="#F59E0B" stroke-width="2"/>
+                    <line x1="91" y1="5" x2="91" y2="95" stroke="#F59E0B" stroke-width="2"/>
+                </svg>
+                <div class="label">Rectangle: <span class="hl-third">⅓</span> shaded</div>
+            </div>
+            <div class="shape-box">
+                <svg width="140" height="100" viewBox="0 0 140 100">
+                    <rect x="5" y="5" width="130" height="90" rx="10" fill="rgba(245,158,11,0.15)" stroke="#F59E0B" stroke-width="2.5"/>
+                    <rect x="5" y="5" width="130" height="30" fill="rgba(245,158,11,0.5)"/>
+                    <line x1="5" y1="35" x2="135" y2="35" stroke="#F59E0B" stroke-width="2"/>
+                    <line x1="5" y1="65" x2="135" y2="65" stroke="#F59E0B" stroke-width="2"/>
+                </svg>
+                <div class="label">Bar: <span class="hl-third">⅓</span> shaded</div>
+            </div>
+        </div>
+        <div class="sentence-stem">
+            <span class="hl-third">⅓</span> = <strong>1 out of 3</strong> equal parts.<br>
+            A third is smaller than a half — more parts means smaller pieces.
         </div>
     </div>
 </div>
@@ -602,12 +728,45 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
                     <line x1="80" y1="2" x2="80" y2="58" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
                     <line x1="119" y1="2" x2="119" y2="58" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
                 </svg>
-                <div class="label"><span class="hl-third">¾</span> — Non-Unit ✗</div>
+                <div class="label"><span class="hl-quarter">¾</span> — Non-Unit ✗</div>
             </div>
         </div>
         <div class="sentence-stem">
             The <strong>top number</strong> (numerator) tells us how many parts are shaded.<br>
             If it's <strong>1</strong>, it's a unit fraction. If it's <strong>more than 1</strong>, it's a non-unit fraction.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W3 WRITE THE FRACTION ===== -->
+<div class="slide" id="slide-w3-write">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">✍️ Write the Fraction</div>
+        <div class="slide-subtitle">Look at the shaded shape. Type the <strong>top</strong> (shaded parts) and the <strong>bottom</strong> (total equal parts).</div>
+        <div id="writeFracArea" style="margin:20px 0;"></div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:var(--accent);" onclick="newWriteFraction()">🎲 New Shape</button>
+        </div>
+        <div class="sentence-stem mt-16">
+            <strong>Top =</strong> how many parts are shaded. <strong>Bottom =</strong> how many equal parts in total.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W3 FRACTION WALL ===== -->
+<div class="slide" id="slide-w3-wall">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🧱 The Fraction Wall</div>
+        <div class="slide-subtitle">Every row is the <strong>same size</strong> — they're all ONE whole. The only difference is how many equal pieces we chop it into.<br>Click a piece to see what it's worth.</div>
+        <div id="fractionWall" style="margin:20px 0;width:100%;max-width:560px;"></div>
+        <div class="sentence-stem mt-16" id="wallStem">
+            Look carefully: two ¼s line up with one ½ exactly. That's why <span class="hl-half">½</span> = <span class="hl-quarter">²⁄₄</span>. More parts = smaller pieces.
         </div>
     </div>
 </div>
@@ -665,6 +824,22 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
             <button class="action-btn" style="background:var(--accent);" onclick="newThreeQuarter()">🎲 New Number</button>
         </div>
         <div class="sentence-stem mt-16" id="tqStemResult" style="opacity:0;transition:opacity .4s;"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W3 COMPARE & ORDER ===== -->
+<div class="slide" id="slide-w3-compare">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3 · Stretch</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">⚖️ Compare & Order</div>
+        <div class="slide-subtitle">Which is bigger? Imagine the <strong>same cake</strong> cut each way — who gets more?</div>
+        <div id="compareArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newCompare()">🎲 New Question</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Rule:</strong> when the whole is the same, <em>more parts means smaller pieces</em>. So <span class="hl-half">½</span> &gt; <span class="hl-third">⅓</span> &gt; <span class="hl-quarter">¼</span>.
+        </div>
     </div>
 </div>
 </div>
@@ -757,6 +932,7 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
             <button class="action-btn" style="background:var(--quarter-color);" onclick="showFracNL('quarter')">Count in quarters</button>
             <button class="action-btn" style="background:var(--third-color);color:#000;" onclick="showFracNL('third')">Count in thirds</button>
             <button class="action-btn" style="background:var(--whole-color);" onclick="showFracNL('past')">🚀 Past 2!</button>
+            <button class="action-btn" style="background:var(--error);" onclick="showFracNL('back')">⬅️ Count backwards</button>
         </div>
         <div class="sentence-stem mt-16" id="fracNLStem"></div>
         <div id="fracNLChallenge" class="mt-16" style="display:none;"></div>
@@ -790,6 +966,22 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newInvert()">🎲 New Puzzle</button></div>
         <div class="sentence-stem mt-16">
             <strong>Trick:</strong> if ½ of a number is 7, multiply 7 by 2 to find the whole. Working backwards uses the same maths — in reverse.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== NEW: W4 FRACTIONS OF DIFFERENT WHOLES ===== -->
+<div class="slide" id="slide-w4-diff">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w4"></span> Week 4 · Stretch</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🧠 The Whole Matters!</div>
+        <div class="slide-subtitle">A tricky idea for expert mathematicians:<br>Sometimes <strong>¼ of a big number</strong> is <em>bigger</em> than <strong>½ of a small number</strong>.<br>Work out both amounts — which wins?</div>
+        <div id="diffWholesArea" style="margin:20px 0;"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newDiffWholes()">🎲 New Puzzle</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Key idea:</strong> the fraction is only half the story — the <em>size of the whole</em> matters too. Always compare the actual amounts.
         </div>
     </div>
 </div>
@@ -855,6 +1047,59 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 </div>
 </div>
 
+<!-- ===== NEW: W4 GLOSSARY ===== -->
+<div class="slide" id="slide-w4-glossary">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w4"></span> Review</div>
+    <div class="glass-card">
+        <div class="slide-title text-center">📚 Fraction Vocabulary</div>
+        <div class="slide-subtitle text-center">All the words you need to know. Read each one aloud — if you can explain them all, you're ready for the final test.</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:16px;">
+            <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:14px;">
+                <strong style="color:var(--half-color);">Whole</strong><br>
+                <span style="color:var(--text-dim);font-size:.95rem;">The full thing before we split it (e.g. 1 whole pizza, 1 whole bar, 12 sweets).</span>
+            </div>
+            <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:12px;padding:14px;">
+                <strong style="color:var(--quarter-color);">Equal parts</strong><br>
+                <span style="color:var(--text-dim);font-size:.95rem;">Pieces that are all the <em>same size</em>. Without equal parts, we can't write a fraction.</span>
+            </div>
+            <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:12px;padding:14px;">
+                <strong style="color:var(--accent-light);">Numerator</strong><br>
+                <span style="color:var(--text-dim);font-size:.95rem;">The <em>top</em> number — how many equal parts we have.</span>
+            </div>
+            <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:12px;padding:14px;">
+                <strong style="color:var(--third-color);">Denominator</strong><br>
+                <span style="color:var(--text-dim);font-size:.95rem;">The <em>bottom</em> number — how many equal parts the whole is split into.</span>
+            </div>
+            <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:14px;">
+                <strong style="color:var(--half-color);">Unit fraction</strong><br>
+                <span style="color:var(--text-dim);font-size:.95rem;">A fraction with <strong>1</strong> on top. Like <strong>½, ⅓, ¼</strong>.</span>
+            </div>
+            <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:12px;padding:14px;">
+                <strong style="color:var(--quarter-color);">Non-unit fraction</strong><br>
+                <span style="color:var(--text-dim);font-size:.95rem;">A fraction with a number <strong>bigger than 1</strong> on top. Like <strong>²⁄₄</strong> or <strong>¾</strong>.</span>
+            </div>
+            <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:12px;padding:14px;">
+                <strong style="color:var(--accent-light);">Equivalent</strong><br>
+                <span style="color:var(--text-dim);font-size:.95rem;">Different fractions that show the <em>same amount</em>. Like <strong>½ = ²⁄₄</strong>.</span>
+            </div>
+            <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:12px;padding:14px;">
+                <strong style="color:var(--third-color);">Half / Quarter / Third</strong><br>
+                <span style="color:var(--text-dim);font-size:.95rem;"><strong>½</strong> = 2 equal parts, <strong>¼</strong> = 4 equal parts, <strong>⅓</strong> = 3 equal parts.</span>
+            </div>
+            <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:14px;">
+                <strong style="color:var(--half-color);">Find a fraction of</strong><br>
+                <span style="color:var(--text-dim);font-size:.95rem;">½ of 10 = 10 ÷ 2. ¼ of 12 = 12 ÷ 4. ⅓ of 9 = 9 ÷ 3.</span>
+            </div>
+            <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:12px;padding:14px;">
+                <strong style="color:var(--quarter-color);">Find ¾</strong><br>
+                <span style="color:var(--text-dim);font-size:.95rem;">Step 1: ÷ 4 (find ¼). Step 2: × 3. So ¾ of 16 = 4, then × 3 = 12.</span>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
 <!-- ===== SLIDE 26: FINAL ASSESSMENT ===== -->
 <div class="slide" id="slide-26">
 <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
@@ -883,7 +1128,7 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 <!-- NAV BAR -->
 <div class="nav-bar">
     <button class="nav-btn back" onclick="prevSlide()" id="backBtn">← Back</button>
-    <span class="slide-counter" id="slideCounter">1 / 37</span>
+    <span class="slide-counter" id="slideCounter">1 / 46</span>
     <button class="nav-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
 </div>
 
@@ -898,39 +1143,50 @@ else if(t==='success'){o.frequency.setValueAtTime(523,now);o.frequency.setValueA
 else if(t==='click'){o.frequency.setValueAtTime(800,now);g.gain.setValueAtTime(.08,now);g.gain.exponentialRampToValueAtTime(.001,now+.08);o.start();o.stop(now+.08)}}
 
 // ============ SLIDES ============
-let cur=0;const total=37;
+let cur=0;let total=46;
 function showSlide(n){
     const slides=document.querySelectorAll('.slide');
+    total=slides.length;
     slides.forEach(s=>s.classList.remove('active'));
     slides[n].classList.add('active');
     cur=n;
     document.getElementById('slideCounter').textContent=(n+1)+' / '+total;
     document.getElementById('progressBar').style.width=((n+1)/total*100)+'%';
     document.getElementById('backBtn').disabled=n===0;
-    if(n===2&&!initFlags.equalParts){initEqualParts();initFlags.equalParts=true}
-    if(n===4&&!initFlags.halfQty){newHalfQty();initFlags.halfQty=true}
-    if(n===5&&!initFlags.manyFaces){initManyFaces();initFlags.manyFaces=true}
-    if(n===6&&!initFlags.fracLength){initFracLength();initFlags.fracLength=true}
-    if(n===7&&!initFlags.wp1){newWordProblem(1);initFlags.wp1=true}
-    if(n===9&&!initFlags.mt1){buildMT1();initFlags.mt1=true}
-    if(n===12&&!initFlags.quarterQty){newQuarterQty();initFlags.quarterQty=true}
-    if(n===13&&!initFlags.thirdQty){newThirdQty();initFlags.thirdQty=true}
-    if(n===14&&!initFlags.findWhole){newFindWhole();initFlags.findWhole=true}
-    if(n===15&&!initFlags.whichModel){initWhichModel();initFlags.whichModel=true}
-    if(n===16&&!initFlags.wp2){newWordProblem(2);initFlags.wp2=true}
-    if(n===18&&!initFlags.mt2){buildMT2();initFlags.mt2=true}
-    if(n===22&&!initFlags.tq){newThreeQuarter();initFlags.tq=true}
-    if(n===23&&!initFlags.mistakes){initMistakes();initFlags.mistakes=true}
-    if(n===24&&!initFlags.wp3){newWordProblem(3);initFlags.wp3=true}
-    if(n===26&&!initFlags.mt3){buildMT3();initFlags.mt3=true}
-    if(n===28&&!initFlags.fracNL){showFracNL('half');initFlags.fracNL=true}
-    if(n===29&&!initFlags.barModel){newBarModel();initFlags.barModel=true}
-    if(n===30&&!initFlags.invert){newInvert();initFlags.invert=true}
-    if(n===31&&!initFlags.wp4){newWordProblem(4);initFlags.wp4=true}
-    if(n===33&&!initFlags.mt4){buildMT4();initFlags.mt4=true}
-    if(n===35&&!initFlags.ft){buildFinalTest();initFlags.ft=true}
+    const id=slides[n].id;
+    if(slideInit[id]&&!initFlags[id]){slideInit[id]();initFlags[id]=true}
 }
 const initFlags={};
+const slideInit={
+    'slide-2':()=>initEqualParts(),
+    'slide-4':()=>newHalfQty(),
+    'slide-w1-faces':()=>initManyFaces(),
+    'slide-w1-length':()=>initFracLength(),
+    'slide-w1-shade':()=>newShade(),
+    'slide-w1-wp':()=>newWordProblem(1),
+    'slide-6':()=>buildMT1(),
+    'slide-9':()=>newQuarterQty(),
+    'slide-w2-diffq':()=>initDiffQuarters(),
+    'slide-10':()=>newThirdQty(),
+    'slide-11':()=>newFindWhole(),
+    'slide-w2-which':()=>initWhichModel(),
+    'slide-w2-wp':()=>newWordProblem(2),
+    'slide-13':()=>buildMT2(),
+    'slide-w3-wall':()=>initFractionWall(),
+    'slide-w3-write':()=>newWriteFraction(),
+    'slide-17':()=>newThreeQuarter(),
+    'slide-w3-mistake':()=>initMistakes(),
+    'slide-w3-compare':()=>newCompare(),
+    'slide-w3-wp':()=>newWordProblem(3),
+    'slide-19':()=>buildMT3(),
+    'slide-21':()=>showFracNL('half'),
+    'slide-22':()=>newBarModel(),
+    'slide-w4-invert':()=>newInvert(),
+    'slide-w4-diff':()=>newDiffWholes(),
+    'slide-w4-wp':()=>newWordProblem(4),
+    'slide-24':()=>buildMT4(),
+    'slide-26':()=>buildFinalTest(),
+};
 function nextSlide(){if(cur<total-1){playSound('click');showSlide(cur+1)}}
 function prevSlide(){if(cur>0){playSound('click');showSlide(cur-1)}}
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide()});
@@ -1313,11 +1569,11 @@ function buildMT2(){buildQuiz('miniTest2',[
 ],'mt2Result','Mini Test 2')}
 
 function buildMT3(){buildQuiz('miniTest3',[
-    {q:'Which is a unit fraction?',opts:['¾','²⁄₃','¼','²⁄₄'],correct:2},
+    {q:'Which is a non-unit fraction?',opts:['½','⅓','¼','¾'],correct:3},
     {q:'½ is equivalent to which fraction?',opts:['¼','⅓','²⁄₄','¾'],correct:2},
     {q:'A cake has 12 slices. Tom eats ¾ of them. How many slices does he eat?',opts:['3','6','9','4'],correct:2},
     {q:'A non-unit fraction has:',opts:['1 on top','0 on top','A number bigger than 1 on top','Nothing on top'],correct:2},
-    {q:'How do you find ¾ of 20?',opts:['20 ÷ 3','20 ÷ 4 = 5, then 5 × 3 = 15','20 × 4','20 − 4'],correct:1},
+    {q:'How do you find ¾ of 20?',opts:['20 ÷ 3','20 ÷ 4, then × 3','20 × 4','20 − 4'],correct:1},
     {q:'Why does ½ = ²⁄₄?',opts:['Because 1+1=2','Because they shade the same amount','Because 4 is double 2','They are NOT the same'],correct:1},
     {type:'explain',q:'Explain why ½ and ²⁄₄ are the same amount, using the idea of cutting a bar.',model:'If you cut a bar in half you get 2 equal pieces and shade one — that is ½. If you cut each of those pieces in half again, you now have 4 equal pieces but the SAME amount is still shaded — that is ²⁄₄. The bar did not grow or shrink, so ½ and ²⁄₄ must be the same amount.'},
 ],'mt3Result','Mini Test 3')}
