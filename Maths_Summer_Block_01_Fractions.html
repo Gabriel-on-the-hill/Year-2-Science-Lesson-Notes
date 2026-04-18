@@ -110,6 +110,13 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 .homework-card{background:linear-gradient(135deg,rgba(59,130,246,.05),rgba(139,92,246,.08));border:2px dashed rgba(139,92,246,.3);border-radius:20px;padding:32px;max-width:700px;width:100%}
 .homework-card h3{color:var(--accent-light);margin-bottom:16px}
 .homework-item{padding:8px 0;font-size:1.05rem;color:var(--text);display:flex;gap:10px;line-height:1.6}
+.answer-key{margin-top:20px;border-top:1px dashed rgba(255,255,255,.12);padding-top:16px}
+.answer-key summary{cursor:pointer;color:var(--third-color);font-weight:700;padding:10px 14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;list-style:none;font-size:.95rem}
+.answer-key summary::-webkit-details-marker{display:none}
+.answer-key summary::before{content:'🔑 ';margin-right:4px}
+.answer-key[open] summary{margin-bottom:12px}
+.answer-key .ak-item{padding:6px 0;font-size:.95rem;color:var(--text-dim);line-height:1.6}
+.answer-key .ak-item strong{color:var(--text)}
 
 /* NUMBER LINE */
 .nl-container{width:100%;max-width:600px;margin:20px auto;position:relative}
@@ -383,6 +390,8 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div class="roadblock-item"><span>✅</span> Understands that fractions need <strong>equal parts</strong></div>
         <div class="roadblock-item"><span>✅</span> Can identify a half of a shape</div>
         <div class="roadblock-item"><span>✅</span> Can find a half of a quantity (dividing by 2)</div>
+        <div class="roadblock-item"><span>✅</span> Can find a half of a <strong>length</strong> (e.g. ½ of 12 cm)</div>
+        <div class="roadblock-item"><span>✅</span> Can <strong>shade</strong> a fraction on their own</div>
         <div class="roadblock-item"><span>✅</span> Knows the fraction notation: ½ = 1 out of 2</div>
     </div>
 </div>
@@ -413,6 +422,15 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> If you cut a pizza into 2 pieces but one piece is bigger, is it halves? Why not?</div>
         <div class="homework-item"><span>🕵️</span> <strong>Spot the mistake:</strong> Toby cuts his pancake into 2 pieces and gives the <em>smaller</em> piece to his sister. He says "I've given her half." Is he right? Explain.</div>
         <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> Ben has 10 grapes. He eats half of them. How many does he eat? How many are left?</div>
+        <details class="answer-key">
+            <summary>Answer key (for parents / teachers)</summary>
+            <div class="ak-item"><strong>Shapes:</strong> any drawing with 2 equal parts, 1 shaded. Accept diagonal / horizontal / vertical cuts.</div>
+            <div class="ak-item"><strong>Halves:</strong> ½ of 8 = <strong>4</strong>, ½ of 14 = <strong>7</strong>, ½ of 20 = <strong>10</strong>, ½ of 6 = <strong>3</strong>.</div>
+            <div class="ak-item"><strong>Scavenger:</strong> examples — sandwich, apple cut in half, folded paper, book opened flat, a pair of socks.</div>
+            <div class="ak-item"><strong>Discussion:</strong> No — halves must be <em>equal</em>. If one piece is bigger, the parts aren't the same size, so it isn't a half.</div>
+            <div class="ak-item"><strong>Spot the mistake:</strong> No. A half must be an EQUAL piece. The smaller piece is less than half, and the bigger piece is more than half.</div>
+            <div class="ak-item"><strong>Word problem:</strong> Ben eats <strong>5</strong> grapes; <strong>5</strong> are left. (½ of 10 = 10 ÷ 2 = 5.)</div>
+        </details>
     </div>
 </div>
 </div>
@@ -664,8 +682,9 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
     <div class="roadblock-card">
         <h2>🚧 Roadblock 2</h2>
         <p style="color:var(--text-dim);margin-bottom:20px;">You <strong>must master</strong> these before moving to Week 3:</p>
-        <div class="roadblock-item"><span>✅</span> Can find ¼ of a shape and a quantity (÷4)</div>
-        <div class="roadblock-item"><span>✅</span> Can find ⅓ of a shape and a quantity (÷3)</div>
+        <div class="roadblock-item"><span>✅</span> Can <strong>recognise</strong> ¼ and ⅓ on a shape</div>
+        <div class="roadblock-item"><span>✅</span> Can find ¼ of a quantity (÷4) and ⅓ (÷3)</div>
+        <div class="roadblock-item"><span>✅</span> Knows different-looking quarters can be equal</div>
         <div class="roadblock-item"><span>✅</span> Understands: more parts = smaller pieces</div>
         <div class="roadblock-item"><span>✅</span> Can find the whole when given a fraction part</div>
     </div>
@@ -698,6 +717,16 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Which is bigger — ½ of a pizza or ¼ of a pizza? Why?</div>
         <div class="homework-item"><span>🕵️</span> <strong>Spot the mistake:</strong> Alice says "¼ of 12 is 6, because 12 ÷ 2 = 6." What did she do wrong? Write the correct answer.</div>
         <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> There are 16 children in a class. ¼ of them wear glasses. How many wear glasses? How many do NOT?</div>
+        <details class="answer-key">
+            <summary>Answer key (for parents / teachers)</summary>
+            <div class="ak-item"><strong>Pizza:</strong> any drawing with 4 equal slices, 1 shaded. Fraction shaded = <strong>¼</strong>.</div>
+            <div class="ak-item"><strong>Quarters:</strong> ¼ of 8 = <strong>2</strong>, ¼ of 16 = <strong>4</strong>, ¼ of 20 = <strong>5</strong>, ¼ of 24 = <strong>6</strong>.</div>
+            <div class="ak-item"><strong>Thirds:</strong> ⅓ of 6 = <strong>2</strong>, ⅓ of 12 = <strong>4</strong>, ⅓ of 15 = <strong>5</strong>, ⅓ of 18 = <strong>6</strong>.</div>
+            <div class="ak-item"><strong>Challenge:</strong> If ¼ of a number = 5, the whole = 5 × 4 = <strong>20</strong>.</div>
+            <div class="ak-item"><strong>Discussion:</strong> ½ is bigger than ¼. Splitting a pizza into 2 gives bigger slices than splitting it into 4. More parts = smaller pieces.</div>
+            <div class="ak-item"><strong>Spot the mistake:</strong> Alice divided by 2 instead of 4. ¼ means split into <strong>4</strong>: 12 ÷ 4 = <strong>3</strong>.</div>
+            <div class="ak-item"><strong>Word problem:</strong> ¼ of 16 = <strong>4</strong> wear glasses. <strong>12</strong> do NOT (16 − 4).</div>
+        </details>
     </div>
 </div>
 </div>
@@ -883,9 +912,10 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <h2>🚧 Roadblock 3</h2>
         <p style="color:var(--text-dim);margin-bottom:20px;">You <strong>must master</strong> these before moving to Week 4:</p>
         <div class="roadblock-item"><span>✅</span> Knows unit fraction (1 on top) vs non-unit fraction</div>
-        <div class="roadblock-item"><span>✅</span> Can prove that ½ = ²⁄₄ using a diagram</div>
+        <div class="roadblock-item"><span>✅</span> Can <strong>write</strong> a fraction from a shaded shape</div>
+        <div class="roadblock-item"><span>✅</span> Can read a <strong>fraction wall</strong> and use it to prove ½ = ²⁄₄</div>
         <div class="roadblock-item"><span>✅</span> Can find ¾ of a quantity (÷4, then ×3)</div>
-        <div class="roadblock-item"><span>✅</span> Can identify and shade non-unit fractions on shapes</div>
+        <div class="roadblock-item"><span>✅</span> Can <strong>compare & order</strong> ¼ &lt; ⅓ &lt; ½ &lt; ¾</div>
     </div>
 </div>
 </div>
@@ -915,6 +945,15 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Why does ½ = ²⁄₄? Can you explain it to someone using a picture?</div>
         <div class="homework-item"><span>👩‍🏫</span> <strong>Teach-back:</strong> Explain to someone at home why ²⁄₄ is the same as ½, using a drawing. Record any question they ask you.</div>
         <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> A cake is cut into 12 equal slices. ¾ of the slices are eaten. How many slices are eaten? How many are left?</div>
+        <details class="answer-key">
+            <summary>Answer key (for parents / teachers)</summary>
+            <div class="ak-item"><strong>Equivalence bars:</strong> Yes — the shaded region should be the same length on both bars. ½ = ²⁄₄.</div>
+            <div class="ak-item"><strong>Three quarters:</strong> ¾ of 8 = <strong>6</strong> (8÷4=2, 2×3=6) · ¾ of 12 = <strong>9</strong> · ¾ of 16 = <strong>12</strong> · ¾ of 20 = <strong>15</strong>.</div>
+            <div class="ak-item"><strong>Sort:</strong> Unit → <strong>½, ¼, ⅓</strong>. Non-unit → <strong>²⁄₃, ¾, ²⁄₄</strong>.</div>
+            <div class="ak-item"><strong>Discussion:</strong> Cut a bar in half — that's ½. Now cut each half in half again — you now have 4 pieces, and 2 of them cover the same area as the original ½. So ½ = ²⁄₄.</div>
+            <div class="ak-item"><strong>Teach-back:</strong> Listen for equal-area reasoning. A clear drawing with two identical bars is the goal.</div>
+            <div class="ak-item"><strong>Word problem:</strong> ¾ of 12 = <strong>9</strong> slices eaten. <strong>3</strong> slices left (12 − 9).</div>
+        </details>
     </div>
 </div>
 </div>
@@ -1011,8 +1050,10 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <h2>🚧 Roadblock 4</h2>
         <p style="color:var(--text-dim);margin-bottom:20px;">You <strong>must master</strong> these before the Final Test:</p>
         <div class="roadblock-item"><span>✅</span> Can count in halves, quarters, and thirds past 1</div>
+        <div class="roadblock-item"><span>✅</span> Can count <strong>backwards</strong> in halves (4, 3½, 3…)</div>
         <div class="roadblock-item"><span>✅</span> Can use bar models to find fractions of quantities</div>
-        <div class="roadblock-item"><span>✅</span> Can explain: finding ½ = dividing by 2, ¼ = dividing by 4</div>
+        <div class="roadblock-item"><span>✅</span> Can solve <strong>backwards</strong> problems (½ of ? = 7)</div>
+        <div class="roadblock-item"><span>✅</span> Understands the <strong>whole matters</strong> (¼ of 20 &gt; ½ of 8)</div>
         <div class="roadblock-item"><span>✅</span> Can place fractions on a number line</div>
     </div>
 </div>
@@ -1043,6 +1084,15 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Is ½ of 10 the same as ¼ of 20? Prove it!</div>
         <div class="homework-item"><span>🔄</span> <strong>Open-middle:</strong> Find three different fractions of 12 that give a whole-number answer. Which gives the biggest answer? Which the smallest?</div>
         <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> Sam has 20 stickers. He gives ½ to his friend and ¼ to his brother. How many stickers does he give away altogether? How many does he keep?</div>
+        <details class="answer-key">
+            <summary>Answer key (for parents / teachers)</summary>
+            <div class="ak-item"><strong>Number line:</strong> 0 — ½ (halfway between 0 and 1) — 1 — 1½ (halfway between 1 and 2) — 2, in equal jumps.</div>
+            <div class="ak-item"><strong>Bar models:</strong> ½ of 18 = <strong>9</strong> · ¼ of 20 = <strong>5</strong> · ⅓ of 15 = <strong>5</strong> · ¾ of 16 = <strong>12</strong>.</div>
+            <div class="ak-item"><strong>Cake:</strong> ¾ shaded means 3 parts shaded, 1 part left. Fraction left = <strong>¼</strong>.</div>
+            <div class="ak-item"><strong>Discussion:</strong> Yes! ½ of 10 = 5 and ¼ of 20 = 5. Both give <strong>5</strong>, so they are equal — but the <em>wholes</em> were different.</div>
+            <div class="ak-item"><strong>Open-middle:</strong> ½ of 12 = <strong>6</strong> (biggest) · ⅓ of 12 = <strong>4</strong> · ¼ of 12 = <strong>3</strong> (smallest) · ¾ of 12 = 9 also works.</div>
+            <div class="ak-item"><strong>Word problem:</strong> ½ of 20 = 10 to friend. ¼ of 20 = 5 to brother. Given away = <strong>15</strong>. Kept = <strong>5</strong> (20 − 15).</div>
+        </details>
     </div>
 </div>
 </div>
@@ -1415,6 +1465,19 @@ function showFracNL(type){
             if(i>0) svg+='<circle cx="'+x+'" cy="'+y+'" r="'+(isMajor?5:4)+'" fill="#F59E0B"/>';
         });
         stem.innerHTML='Count in thirds: <span class="hl-third">0, ⅓, ⅔, 1, 1⅓, 1⅔, 2</span>';
+    } else if(type==='back'){
+        const labels=['4','3½','3','2½','2','1½','1','½','0'];
+        const positions=[0,0.125,0.25,0.375,0.5,0.625,0.75,0.875,1];
+        positions.forEach((p,i)=>{
+            const x=x1+p*lineW;
+            const isMajor=i%2===0;
+            svg+='<line x1="'+x+'" y1="'+(y-(isMajor?12:8))+'" x2="'+x+'" y2="'+(y+(isMajor?12:8))+'" stroke="rgba(255,255,255,'+(isMajor?0.5:0.25)+')" stroke-width="'+(isMajor?2:1.5)+'"/>';
+            if(isMajor) svg+='<text x="'+x+'" y="'+(y+30)+'" text-anchor="middle" fill="var(--text)" font-size="13" font-weight="700" font-family="Inter">'+labels[i]+'</text>';
+            else svg+='<text x="'+x+'" y="'+(y-20)+'" text-anchor="middle" fill="#FCA5A5" font-size="11" font-weight="600" font-family="Inter">'+labels[i]+'</text>';
+            svg+='<circle cx="'+x+'" cy="'+y+'" r="'+(isMajor?5:4)+'" fill="#EF4444"/>';
+        });
+        svg+='<text x="'+(x1-15)+'" y="'+(y+5)+'" text-anchor="middle" fill="#FCA5A5" font-size="18" font-weight="800" font-family="Inter">⬅️</text>';
+        stem.innerHTML='Count <strong>backwards</strong> in halves: <span style="color:#FCA5A5;font-weight:700;">4, 3½, 3, 2½, 2, 1½, 1, ½, 0</span> — subtract ½ every jump.';
     } else if(type==='past'){
         const labels=['0','½','1','1½','2','2½','3','3½','4'];
         const positions=[0,1/8,2/8,3/8,4/8,5/8,6/8,7/8,1];
@@ -1781,6 +1844,249 @@ function checkWordProblem(week){
     const fb=document.getElementById('wp'+week+'Fb');
     if(val===p.answer){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! Answer: <strong>'+p.answer+'</strong>. ('+p.hint+')';playSound('correct')}
     else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The answer is <strong>'+p.answer+'</strong>. Working: '+p.hint;playSound('wrong')}
+}
+
+// ============ W1: SHADE YOUR OWN ============
+let shadeState={cells:0,target:0,shaded:new Set(),fracLabel:''};
+function newShade(){
+    const puzzles=[
+        {label:'½',cells:4,target:2,cols:4},
+        {label:'½',cells:6,target:3,cols:6},
+        {label:'¼',cells:4,target:1,cols:4},
+        {label:'⅓',cells:3,target:1,cols:3},
+        {label:'⅓',cells:6,target:2,cols:6},
+        {label:'¾',cells:4,target:3,cols:4},
+        {label:'²⁄₄',cells:4,target:2,cols:4},
+    ];
+    const p=puzzles[Math.floor(Math.random()*puzzles.length)];
+    shadeState={cells:p.cells,target:p.target,shaded:new Set(),fracLabel:p.label};
+    document.getElementById('shadeTarget').innerHTML='Shade <strong style="font-size:1.6rem;">'+p.label+'</strong> of this shape';
+    renderShade();
+    const fb=document.getElementById('shadeFb');fb.className='quiz-feedback';fb.textContent='';
+    playSound('click');
+}
+function renderShade(){
+    const area=document.getElementById('shadeArea');
+    const n=shadeState.cells;
+    const cellW=60,cellH=60,gap=0;
+    const totalW=n*cellW;
+    let svg='<svg viewBox="0 0 '+(totalW+4)+' '+(cellH+4)+'" style="width:100%;max-width:'+Math.min(totalW+20,480)+'px;">';
+    for(let i=0;i<n;i++){
+        const x=2+i*cellW;
+        const isShaded=shadeState.shaded.has(i);
+        svg+='<rect x="'+x+'" y="2" width="'+cellW+'" height="'+cellH+'" fill="'+(isShaded?'rgba(59,130,246,0.6)':'rgba(255,255,255,0.05)')+'" stroke="#3B82F6" stroke-width="2" style="cursor:pointer;" onclick="toggleShade('+i+')"/>';
+    }
+    svg+='</svg>';
+    area.innerHTML=svg;
+}
+function toggleShade(i){
+    if(shadeState.shaded.has(i)) shadeState.shaded.delete(i);
+    else shadeState.shaded.add(i);
+    renderShade();
+    playSound('click');
+}
+function checkShade(){
+    const fb=document.getElementById('shadeFb');
+    const got=shadeState.shaded.size;
+    if(got===shadeState.target){
+        fb.className='quiz-feedback show correct-fb';
+        fb.innerHTML='🎉 Perfect! '+shadeState.target+' out of '+shadeState.cells+' = <strong>'+shadeState.fracLabel+'</strong>';
+        playSound('correct');
+    } else {
+        fb.className='quiz-feedback show wrong-fb';
+        fb.innerHTML='❌ Not quite. You shaded <strong>'+got+'</strong>, but '+shadeState.fracLabel+' of '+shadeState.cells+' needs <strong>'+shadeState.target+'</strong> shaded.';
+        playSound('wrong');
+    }
+}
+
+// ============ W2: DIFFERENT-LOOKING QUARTERS ============
+function initDiffQuarters(){
+    const area=document.getElementById('diffQArea');
+    const quarters=[
+        {label:'Four vertical strips',why:'The square is cut into 4 equal vertical strips. One strip is ¼ of the whole.',
+         svg:'<svg viewBox="0 0 120 120" width="100%" style="max-width:120px;"><rect x="2" y="2" width="116" height="116" fill="rgba(16,185,129,0.12)" stroke="#10B981" stroke-width="2.5"/><rect x="2" y="2" width="29" height="116" fill="rgba(16,185,129,0.5)"/><line x1="31" y1="2" x2="31" y2="118" stroke="#10B981" stroke-width="1.5"/><line x1="60" y1="2" x2="60" y2="118" stroke="#10B981" stroke-width="1.5"/><line x1="89" y1="2" x2="89" y2="118" stroke="#10B981" stroke-width="1.5"/></svg>'},
+        {label:'Four horizontal strips',why:'Same square, cut horizontally. Each strip is still ¼ of the whole.',
+         svg:'<svg viewBox="0 0 120 120" width="100%" style="max-width:120px;"><rect x="2" y="2" width="116" height="116" fill="rgba(16,185,129,0.12)" stroke="#10B981" stroke-width="2.5"/><rect x="2" y="2" width="116" height="29" fill="rgba(16,185,129,0.5)"/><line x1="2" y1="31" x2="118" y2="31" stroke="#10B981" stroke-width="1.5"/><line x1="2" y1="60" x2="118" y2="60" stroke="#10B981" stroke-width="1.5"/><line x1="2" y1="89" x2="118" y2="89" stroke="#10B981" stroke-width="1.5"/></svg>'},
+        {label:'2 × 2 grid',why:'The square is split into 4 equal smaller squares. One small square is ¼.',
+         svg:'<svg viewBox="0 0 120 120" width="100%" style="max-width:120px;"><rect x="2" y="2" width="116" height="116" fill="rgba(16,185,129,0.12)" stroke="#10B981" stroke-width="2.5"/><rect x="2" y="2" width="58" height="58" fill="rgba(16,185,129,0.5)"/><line x1="60" y1="2" x2="60" y2="118" stroke="#10B981" stroke-width="1.5"/><line x1="2" y1="60" x2="118" y2="60" stroke="#10B981" stroke-width="1.5"/></svg>'},
+        {label:'Diagonal cross (X)',why:'Diagonals split the square into 4 equal triangles. Each triangle is ¼ — the shape is different but the size is the same.',
+         svg:'<svg viewBox="0 0 120 120" width="100%" style="max-width:120px;"><rect x="2" y="2" width="116" height="116" fill="rgba(16,185,129,0.12)" stroke="#10B981" stroke-width="2.5"/><polygon points="2,2 118,2 60,60" fill="rgba(16,185,129,0.5)"/><line x1="2" y1="2" x2="118" y2="118" stroke="#10B981" stroke-width="1.5"/><line x1="118" y1="2" x2="2" y2="118" stroke="#10B981" stroke-width="1.5"/></svg>'},
+    ];
+    let html='';
+    quarters.forEach((q,i)=>{
+        html+='<div class="click-shape" onclick="revealDiffQ('+i+')" style="background:rgba(16,185,129,0.08);border:2px solid rgba(16,185,129,0.25);border-radius:14px;padding:14px;text-align:center;cursor:pointer;">'+q.svg+'<div style="margin-top:8px;font-size:.85rem;font-weight:700;color:var(--quarter-color);">'+q.label+'</div><div id="diffQ-why-'+i+'" style="font-size:.8rem;color:var(--text-dim);margin-top:6px;opacity:0;transition:opacity .3s;line-height:1.4;">'+q.why+'</div></div>';
+    });
+    area.innerHTML=html;
+}
+function revealDiffQ(i){document.getElementById('diffQ-why-'+i).style.opacity='1';playSound('click')}
+
+// ============ W3: FRACTION WALL ============
+function initFractionWall(){
+    const container=document.getElementById('fractionWall');
+    const rows=[
+        {parts:1,label:'1',color:'rgba(139,92,246,0.45)',stroke:'#8B5CF6',name:'1 whole'},
+        {parts:2,label:'½',color:'rgba(59,130,246,0.45)',stroke:'#3B82F6',name:'halves'},
+        {parts:3,label:'⅓',color:'rgba(245,158,11,0.45)',stroke:'#F59E0B',name:'thirds'},
+        {parts:4,label:'¼',color:'rgba(16,185,129,0.45)',stroke:'#10B981',name:'quarters'},
+    ];
+    const W=540,rowH=52,gap=4;
+    const totalH=rows.length*(rowH+gap);
+    let svg='<svg viewBox="0 0 '+(W+4)+' '+totalH+'" style="width:100%;">';
+    rows.forEach((r,ri)=>{
+        const y=ri*(rowH+gap);
+        const segW=W/r.parts;
+        for(let i=0;i<r.parts;i++){
+            const x=2+i*segW;
+            svg+='<rect x="'+x+'" y="'+y+'" width="'+(segW-2)+'" height="'+rowH+'" fill="'+r.color+'" stroke="'+r.stroke+'" stroke-width="2" rx="6" style="cursor:pointer;" onclick="wallHighlight(\''+r.label+'\',\''+r.name+'\','+r.parts+')"/>';
+            svg+='<text x="'+(x+segW/2-1)+'" y="'+(y+rowH/2+7)+'" text-anchor="middle" fill="#fff" font-size="'+(r.parts>4?14:18)+'" font-weight="800" font-family="Inter" style="pointer-events:none;">'+r.label+'</text>';
+        }
+    });
+    svg+='</svg>';
+    container.innerHTML=svg;
+}
+function wallHighlight(label,name,parts){
+    const stem=document.getElementById('wallStem');
+    if(parts===1) stem.innerHTML='One <strong>whole</strong> — nothing has been split yet.';
+    else stem.innerHTML='<strong>'+label+'</strong> means 1 out of '+parts+' equal '+name+'. See how '+parts+' of them still equals 1 whole!';
+    playSound('click');
+}
+
+// ============ W3: WRITE THE FRACTION ============
+let writeFracState={num:0,den:0};
+function newWriteFraction(){
+    const shapes=[
+        {num:1,den:2,svg:'<rect x="2" y="2" width="156" height="76" rx="10" fill="rgba(59,130,246,0.1)" stroke="#3B82F6" stroke-width="2.5"/><rect x="2" y="2" width="78" height="76" rx="10" fill="rgba(59,130,246,0.5)"/><line x1="80" y1="2" x2="80" y2="78" stroke="#3B82F6" stroke-width="2"/>'},
+        {num:1,den:4,svg:'<rect x="2" y="2" width="156" height="76" rx="10" fill="rgba(16,185,129,0.1)" stroke="#10B981" stroke-width="2.5"/><rect x="2" y="2" width="39" height="76" rx="6" fill="rgba(16,185,129,0.5)"/><line x1="41" y1="2" x2="41" y2="78" stroke="#10B981" stroke-width="2"/><line x1="80" y1="2" x2="80" y2="78" stroke="#10B981" stroke-width="2"/><line x1="119" y1="2" x2="119" y2="78" stroke="#10B981" stroke-width="2"/>'},
+        {num:3,den:4,svg:'<rect x="2" y="2" width="156" height="76" rx="10" fill="rgba(16,185,129,0.1)" stroke="#10B981" stroke-width="2.5"/><rect x="2" y="2" width="117" height="76" rx="6" fill="rgba(16,185,129,0.5)"/><line x1="41" y1="2" x2="41" y2="78" stroke="#10B981" stroke-width="2"/><line x1="80" y1="2" x2="80" y2="78" stroke="#10B981" stroke-width="2"/><line x1="119" y1="2" x2="119" y2="78" stroke="#10B981" stroke-width="2"/>'},
+        {num:2,den:4,svg:'<rect x="2" y="2" width="156" height="76" rx="10" fill="rgba(139,92,246,0.1)" stroke="#8B5CF6" stroke-width="2.5"/><rect x="2" y="2" width="78" height="76" rx="6" fill="rgba(139,92,246,0.5)"/><line x1="41" y1="2" x2="41" y2="78" stroke="#8B5CF6" stroke-width="2"/><line x1="80" y1="2" x2="80" y2="78" stroke="#8B5CF6" stroke-width="2"/><line x1="119" y1="2" x2="119" y2="78" stroke="#8B5CF6" stroke-width="2"/>'},
+        {num:1,den:3,svg:'<rect x="2" y="2" width="156" height="76" rx="10" fill="rgba(245,158,11,0.1)" stroke="#F59E0B" stroke-width="2.5"/><rect x="2" y="2" width="52" height="76" rx="6" fill="rgba(245,158,11,0.5)"/><line x1="54" y1="2" x2="54" y2="78" stroke="#F59E0B" stroke-width="2"/><line x1="106" y1="2" x2="106" y2="78" stroke="#F59E0B" stroke-width="2"/>'},
+        {num:2,den:3,svg:'<rect x="2" y="2" width="156" height="76" rx="10" fill="rgba(245,158,11,0.1)" stroke="#F59E0B" stroke-width="2.5"/><rect x="2" y="2" width="104" height="76" rx="6" fill="rgba(245,158,11,0.5)"/><line x1="54" y1="2" x2="54" y2="78" stroke="#F59E0B" stroke-width="2"/><line x1="106" y1="2" x2="106" y2="78" stroke="#F59E0B" stroke-width="2"/>'},
+    ];
+    const s=shapes[Math.floor(Math.random()*shapes.length)];
+    writeFracState={num:s.num,den:s.den};
+    const area=document.getElementById('writeFracArea');
+    area.innerHTML='<div class="quiz-question"><div style="margin:12px auto 20px;text-align:center;"><svg width="240" height="110" viewBox="0 0 160 80">'+s.svg+'</svg></div>'+
+        '<div class="flex-center">'+
+        '<span style="font-size:1rem;color:var(--text-dim);">Top:</span>'+
+        '<input type="number" id="wfNum" style="width:70px;font-size:1.4rem;padding:8px;border-radius:10px;border:2px solid var(--card-border);background:rgba(255,255,255,0.06);color:var(--text);text-align:center;font-family:inherit;font-weight:800;" maxlength="2">'+
+        '<span style="font-size:1rem;color:var(--text-dim);margin-left:12px;">Bottom:</span>'+
+        '<input type="number" id="wfDen" style="width:70px;font-size:1.4rem;padding:8px;border-radius:10px;border:2px solid var(--card-border);background:rgba(255,255,255,0.06);color:var(--text);text-align:center;font-family:inherit;font-weight:800;" maxlength="2">'+
+        '<button class="action-btn check-btn" onclick="checkWriteFraction()">✓ Check</button>'+
+        '</div>'+
+        '<div class="quiz-feedback mt-16" id="wfFb"></div></div>';
+    playSound('click');
+}
+function checkWriteFraction(){
+    const n=parseInt(document.getElementById('wfNum').value);
+    const d=parseInt(document.getElementById('wfDen').value);
+    const fb=document.getElementById('wfFb');
+    if(n===writeFracState.num&&d===writeFracState.den){
+        fb.className='quiz-feedback show correct-fb';
+        fb.innerHTML='🎉 Correct! The fraction is <strong style="font-size:1.3rem;">'+writeFracState.num+'⁄'+writeFracState.den+'</strong>';
+        playSound('correct');
+    } else {
+        fb.className='quiz-feedback show wrong-fb';
+        fb.innerHTML='❌ Not quite. Top = shaded parts ('+writeFracState.num+'), Bottom = total parts ('+writeFracState.den+').';
+        playSound('wrong');
+    }
+}
+
+// ============ W3: COMPARE & ORDER ============
+let compareState={};
+function newCompare(){
+    const rounds=[
+        {a:{lbl:'½',val:1/2,col:'#3B82F6'},b:{lbl:'¼',val:1/4,col:'#10B981'},why:'½ is bigger than ¼. Fewer parts means each piece is bigger.'},
+        {a:{lbl:'½',val:1/2,col:'#3B82F6'},b:{lbl:'⅓',val:1/3,col:'#F59E0B'},why:'½ is bigger than ⅓. A pizza cut into 2 gives bigger slices than cut into 3.'},
+        {a:{lbl:'⅓',val:1/3,col:'#F59E0B'},b:{lbl:'¼',val:1/4,col:'#10B981'},why:'⅓ is bigger than ¼. 3 pieces are bigger than 4 pieces of the same whole.'},
+        {a:{lbl:'¾',val:3/4,col:'#10B981'},b:{lbl:'½',val:1/2,col:'#3B82F6'},why:'¾ is bigger than ½. Three quarters covers more than two quarters.'},
+        {a:{lbl:'²⁄₄',val:1/2,col:'#8B5CF6'},b:{lbl:'½',val:1/2,col:'#3B82F6'},why:'They are EQUAL! ²⁄₄ and ½ are equivalent fractions.',equal:true},
+        {a:{lbl:'¾',val:3/4,col:'#10B981'},b:{lbl:'⅓',val:1/3,col:'#F59E0B'},why:'¾ is bigger than ⅓ (¾ is more than half, ⅓ is less than half).'},
+    ];
+    const r=rounds[Math.floor(Math.random()*rounds.length)];
+    compareState=r;
+    const area=document.getElementById('compareArea');
+    area.innerHTML='<div class="quiz-question">'+
+        '<div style="display:flex;gap:20px;justify-content:center;align-items:center;flex-wrap:wrap;margin:10px 0 20px;">'+
+        compareBar(r.a)+'<span style="font-size:1.8rem;color:var(--text-dim);">vs</span>'+compareBar(r.b)+
+        '</div>'+
+        '<div class="q-text" style="text-align:center;">Which is bigger?</div>'+
+        '<div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="checkCompare(\'a\')">'+r.a.lbl+' is bigger</button>'+
+        '<button class="quiz-opt" onclick="checkCompare(\'eq\')">They are equal</button>'+
+        '<button class="quiz-opt" onclick="checkCompare(\'b\')">'+r.b.lbl+' is bigger</button>'+
+        '</div>'+
+        '<div class="quiz-feedback mt-16" id="compFb"></div></div>';
+    playSound('click');
+}
+function compareBar(f){
+    const w=180,h=46;
+    const fillW=Math.round(w*f.val);
+    return '<div style="text-align:center;"><svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'"><rect x="1" y="1" width="'+(w-2)+'" height="'+(h-2)+'" rx="6" fill="rgba(255,255,255,0.05)" stroke="'+f.col+'" stroke-width="2"/><rect x="1" y="1" width="'+fillW+'" height="'+(h-2)+'" rx="6" fill="'+f.col+'" opacity="0.6"/></svg><div style="font-size:1.6rem;font-weight:800;color:'+f.col+';margin-top:4px;">'+f.lbl+'</div></div>';
+}
+function checkCompare(pick){
+    const r=compareState;
+    const fb=document.getElementById('compFb');
+    let correct;
+    if(r.equal) correct='eq';
+    else correct=r.a.val>r.b.val?'a':'b';
+    const opts=document.querySelectorAll('#compareArea .quiz-opt');
+    opts.forEach(o=>o.classList.add('disabled'));
+    if(pick===correct){
+        fb.className='quiz-feedback show correct-fb';
+        fb.innerHTML='🎉 Correct! '+r.why;
+        playSound('correct');
+    } else {
+        fb.className='quiz-feedback show wrong-fb';
+        fb.innerHTML='❌ Not quite. '+r.why;
+        playSound('wrong');
+    }
+}
+
+// ============ W4: FRACTIONS OF DIFFERENT WHOLES ============
+let diffState={};
+function newDiffWholes(){
+    const rounds=[
+        {a:{lbl:'½ of 8',val:4,expl:'8 ÷ 2 = 4'},b:{lbl:'¼ of 20',val:5,expl:'20 ÷ 4 = 5'}},
+        {a:{lbl:'½ of 10',val:5,expl:'10 ÷ 2 = 5'},b:{lbl:'¼ of 16',val:4,expl:'16 ÷ 4 = 4'}},
+        {a:{lbl:'⅓ of 9',val:3,expl:'9 ÷ 3 = 3'},b:{lbl:'½ of 8',val:4,expl:'8 ÷ 2 = 4'}},
+        {a:{lbl:'¼ of 24',val:6,expl:'24 ÷ 4 = 6'},b:{lbl:'⅓ of 15',val:5,expl:'15 ÷ 3 = 5'}},
+        {a:{lbl:'¾ of 8',val:6,expl:'8 ÷ 4 = 2, × 3 = 6'},b:{lbl:'½ of 10',val:5,expl:'10 ÷ 2 = 5'}},
+        {a:{lbl:'⅓ of 12',val:4,expl:'12 ÷ 3 = 4'},b:{lbl:'¼ of 12',val:3,expl:'12 ÷ 4 = 3'}},
+    ];
+    const r=rounds[Math.floor(Math.random()*rounds.length)];
+    diffState=r;
+    const area=document.getElementById('diffWholesArea');
+    area.innerHTML='<div class="quiz-question">'+
+        '<div class="q-text" style="text-align:center;">Which is bigger?</div>'+
+        '<div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:20px 0;">'+
+        '<div style="background:rgba(59,130,246,0.1);border:2px solid rgba(59,130,246,0.4);border-radius:14px;padding:18px 22px;text-align:center;min-width:150px;"><div style="font-size:1.5rem;font-weight:800;color:var(--half-color);">'+r.a.lbl+'</div><div style="color:var(--text-dim);font-size:.85rem;margin-top:6px;">'+r.a.expl+'</div></div>'+
+        '<div style="background:rgba(16,185,129,0.1);border:2px solid rgba(16,185,129,0.4);border-radius:14px;padding:18px 22px;text-align:center;min-width:150px;"><div style="font-size:1.5rem;font-weight:800;color:var(--quarter-color);">'+r.b.lbl+'</div><div style="color:var(--text-dim);font-size:.85rem;margin-top:6px;">'+r.b.expl+'</div></div>'+
+        '</div>'+
+        '<div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="checkDiff(\'a\')">'+r.a.lbl+' is bigger ('+r.a.val+')</button>'+
+        '<button class="quiz-opt" onclick="checkDiff(\'eq\')">They are equal</button>'+
+        '<button class="quiz-opt" onclick="checkDiff(\'b\')">'+r.b.lbl+' is bigger ('+r.b.val+')</button>'+
+        '</div>'+
+        '<div class="quiz-feedback mt-16" id="diffFb"></div></div>';
+    playSound('click');
+}
+function checkDiff(pick){
+    const r=diffState;
+    const fb=document.getElementById('diffFb');
+    let correct;
+    if(r.a.val===r.b.val) correct='eq';
+    else correct=r.a.val>r.b.val?'a':'b';
+    const opts=document.querySelectorAll('#diffWholesArea .quiz-opt');
+    opts.forEach(o=>o.classList.add('disabled'));
+    if(pick===correct){
+        fb.className='quiz-feedback show correct-fb';
+        fb.innerHTML='🎉 Correct! '+r.a.lbl+' = '+r.a.val+', '+r.b.lbl+' = '+r.b.val+'. The <em>whole</em> matters just as much as the fraction!';
+        playSound('correct');
+    } else {
+        fb.className='quiz-feedback show wrong-fb';
+        fb.innerHTML='❌ Compare the actual amounts: '+r.a.lbl+' = '+r.a.val+', '+r.b.lbl+' = '+r.b.val+'.';
+        playSound('wrong');
+    }
 }
 
 // ============ INIT ============
