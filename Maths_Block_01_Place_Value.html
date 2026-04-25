@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Year 2 Maths: Block 1 — Place Value</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --tens-color: #3B82F6;
+    --tens-light: #93C5FD;
+    --tens-dark: #1D4ED8;
+    --ones-color: #F59E0B;
+    --ones-light: #FCD34D;
+    --ones-dark: #D97706;
+    --success: #10B981;
+    --error: #EF4444;
+    --bg-start: #0F172A;
+    --bg-end: #1E293B;
+    --card-bg: rgba(255,255,255,0.07);
+    --card-border: rgba(255,255,255,0.12);
+    --text: #F1F5F9;
+    --text-dim: #94A3B8;
+    --accent: #8B5CF6;
+    --accent-light: #A78BFA;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family:'Inter',sans-serif;
+    background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+    color: var(--text);
+    min-height:100vh;
+    overflow:hidden;
+    user-select:none;
+}
+/* --- SLIDE SYSTEM --- */
+.slide { display:none; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:30px; position:relative; animation: fadeSlideIn 0.5s ease; }
+.slide.active { display:flex; }
+@keyframes fadeSlideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+/* --- NAVIGATION --- */
+.nav-bar {
+    position:fixed; bottom:0; left:0; right:0; z-index:100;
+    background: rgba(15,23,42,0.9); backdrop-filter:blur(20px);
+    border-top:1px solid var(--card-border);
+    display:flex; align-items:center; justify-content:space-between; padding:12px 30px;
+}
+.nav-btn {
+    background: var(--accent); color:white; border:none; border-radius:12px;
+    padding:12px 28px; font-size:1rem; font-weight:600; cursor:pointer;
+    transition:all 0.2s; font-family:inherit;
+}
+.nav-btn:hover { background:var(--accent-light); transform:translateY(-2px); }
+.nav-btn:disabled { opacity:0.3; cursor:not-allowed; transform:none; }
+.nav-btn.back { background:rgba(255,255,255,0.1); }
+.slide-counter { color:var(--text-dim); font-size:0.9rem; font-weight:500; }
+.progress-bar-container { position:fixed; top:0; left:0; right:0; height:4px; background:rgba(255,255,255,0.05); z-index:101; }
+.progress-bar { height:100%; background:linear-gradient(90deg,var(--accent),var(--tens-color)); transition:width 0.4s ease; border-radius:0 2px 2px 0; }
+
+/* --- WEEK BADGE --- */
+.week-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,0.08); border:1px solid var(--card-border);
+    border-radius:100px; padding:6px 16px; font-size:0.8rem; color:var(--text-dim);
+    margin-bottom:16px; backdrop-filter:blur(10px);
+}
+.week-badge .dot { width:8px; height:8px; border-radius:50%; }
+.week-badge .dot.w1 { background:var(--tens-color); }
+.week-badge .dot.w2 { background:var(--success); }
+.week-badge .dot.w3 { background:var(--accent); }
+
+/* --- CARDS --- */
+.glass-card {
+    background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:20px; padding:32px; backdrop-filter:blur(20px);
+    max-width:900px; width:100%;
+}
+.slide-title {
+    font-size:2rem; font-weight:800; margin-bottom:8px;
+    background:linear-gradient(135deg,#fff,var(--text-dim));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.slide-subtitle { color:var(--text-dim); font-size:1.05rem; margin-bottom:24px; line-height:1.6; }
+
+/* --- BASE-10 BLOCKS --- */
+.blocks-area { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; padding:16px; min-height:120px; }
+.ten-rod {
+    width:28px; height:110px; border-radius:6px;
+    background:linear-gradient(180deg,var(--tens-color),var(--tens-dark));
+    border:2px solid var(--tens-light);
+    display:flex; flex-direction:column; gap:1px; padding:2px;
+    box-shadow:0 4px 12px rgba(59,130,246,0.3);
+    transition:all 0.3s; cursor:pointer; position:relative;
+}
+.ten-rod:hover { transform:scale(1.08); box-shadow:0 6px 20px rgba(59,130,246,0.5); }
+.ten-rod .unit { width:100%; flex:1; background:rgba(255,255,255,0.15); border-radius:2px; }
+.one-cube {
+    width:28px; height:28px; border-radius:5px;
+    background:linear-gradient(135deg,var(--ones-color),var(--ones-dark));
+    border:2px solid var(--ones-light);
+    box-shadow:0 3px 8px rgba(245,158,11,0.3);
+    transition:all 0.3s; cursor:pointer;
+}
+.one-cube:hover { transform:scale(1.15); box-shadow:0 5px 15px rgba(245,158,11,0.5); }
+
+/* --- SENTENCE STEM --- */
+.sentence-stem {
+    background:rgba(139,92,246,0.1); border:1px solid rgba(139,92,246,0.3);
+    border-radius:14px; padding:16px 24px; font-size:1.1rem; text-align:center;
+    margin-top:16px; line-height:1.7; color:var(--accent-light); font-weight:500;
+}
+.sentence-stem .highlight-tens { color:var(--tens-color); font-weight:700; }
+.sentence-stem .highlight-ones { color:var(--ones-color); font-weight:700; }
+
+/* --- INTERACTIVE BUTTONS --- */
+.action-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:12px 24px; border-radius:12px; border:2px solid transparent;
+    font-size:1rem; font-weight:600; cursor:pointer; transition:all 0.2s;
+    font-family:inherit; color:white;
+}
+.action-btn.tens-btn { background:var(--tens-color); }
+.action-btn.tens-btn:hover { background:var(--tens-dark); transform:scale(1.05); }
+.action-btn.ones-btn { background:var(--ones-color); }
+.action-btn.ones-btn:hover { background:var(--ones-dark); transform:scale(1.05); }
+.action-btn.remove-btn { background:rgba(239,68,68,0.2); border-color:rgba(239,68,68,0.4); color:#EF4444; }
+.action-btn.remove-btn:hover { background:rgba(239,68,68,0.3); }
+.action-btn.check-btn { background:var(--success); }
+.action-btn.check-btn:hover { background:#059669; transform:scale(1.05); }
+
+.btn-row { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:16px; }
+
+/* --- PLACE VALUE CHART --- */
+.pv-chart {
+    display:grid; grid-template-columns:1fr 1fr; border-radius:16px; overflow:hidden;
+    border:2px solid var(--card-border); max-width:400px; margin:0 auto;
+}
+.pv-header { padding:12px; text-align:center; font-weight:700; font-size:1.1rem; }
+.pv-header.tens { background:rgba(59,130,246,0.2); color:var(--tens-color); }
+.pv-header.ones { background:rgba(245,158,11,0.2); color:var(--ones-color); }
+.pv-cell { padding:20px; text-align:center; font-size:2.5rem; font-weight:800; border-top:1px solid var(--card-border); }
+.pv-cell.tens { color:var(--tens-color); background:rgba(59,130,246,0.05); }
+.pv-cell.ones { color:var(--ones-color); background:rgba(245,158,11,0.05); }
+
+/* --- PART-WHOLE MODEL --- */
+.pw-model { text-align:center; position:relative; }
+.pw-whole {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:100px; height:100px; border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),#7C3AED);
+    font-size:2.2rem; font-weight:800; color:white;
+    box-shadow:0 8px 25px rgba(139,92,246,0.4);
+}
+.pw-branches { display:flex; justify-content:center; gap:120px; margin-top:24px; position:relative; }
+.pw-part {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:80px; height:80px; border-radius:50%;
+    font-size:1.6rem; font-weight:700; color:white;
+    box-shadow:0 6px 18px rgba(0,0,0,0.2);
+}
+.pw-part.tens-part { background:linear-gradient(135deg,var(--tens-color),var(--tens-dark)); }
+.pw-part.ones-part { background:linear-gradient(135deg,var(--ones-color),var(--ones-dark)); }
+.pw-line { position:absolute; top:-20px; left:50%; width:2px; height:20px; background:var(--text-dim); }
+
+/* --- NUMBER LINE --- */
+.number-line-container { width:100%; max-width:700px; margin:20px auto; position:relative; }
+.number-line {
+    width:100%; height:6px; background:rgba(255,255,255,0.15); border-radius:3px;
+    position:relative; margin:40px 0 30px;
+}
+.nl-tick {
+    position:absolute; top:-8px; width:2px; height:22px;
+    background:rgba(255,255,255,0.4); border-radius:1px;
+}
+.nl-label {
+    position:absolute; top:20px; font-size:0.8rem; color:var(--text-dim);
+    transform:translateX(-50%); font-weight:500;
+}
+.nl-marker {
+    position:absolute; top:-18px; width:36px; height:36px; border-radius:50%;
+    background:var(--accent); border:3px solid white;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.8rem; font-weight:700; cursor:grab;
+    box-shadow:0 4px 12px rgba(139,92,246,0.5);
+    transform:translateX(-50%); transition:background 0.2s;
+    z-index:10;
+}
+.nl-marker:active { cursor:grabbing; background:var(--accent-light); }
+.nl-target-zone {
+    position:absolute; top:-4px; height:14px; border-radius:7px;
+    background:rgba(16,185,129,0.3); border:1px dashed var(--success);
+    transform:translateX(-50%);
+}
+
+/* --- QUIZ --- */
+.quiz-question {
+    background:rgba(255,255,255,0.04); border:1px solid var(--card-border);
+    border-radius:16px; padding:24px; margin-bottom:16px;
+}
+.quiz-question .q-text { font-size:1.1rem; font-weight:600; margin-bottom:16px; }
+.quiz-options { display:flex; flex-direction:column; gap:10px; }
+.quiz-opt {
+    padding:14px 20px; border-radius:12px; cursor:pointer;
+    background:rgba(255,255,255,0.06); border:2px solid rgba(255,255,255,0.1);
+    font-size:1rem; transition:all 0.2s; text-align:left;
+    font-family:inherit; color:var(--text); font-weight:500;
+}
+.quiz-opt:hover { border-color:var(--accent); background:rgba(139,92,246,0.1); }
+.quiz-opt.correct { border-color:var(--success); background:rgba(16,185,129,0.15); color:var(--success); }
+.quiz-opt.wrong { border-color:var(--error); background:rgba(239,68,68,0.1); color:var(--error); }
+.quiz-opt.disabled { pointer-events:none; }
+.quiz-feedback {
+    margin-top:12px; padding:12px 18px; border-radius:10px; font-size:0.95rem; font-weight:500;
+    display:none;
+}
+.quiz-feedback.show { display:block; }
+.quiz-feedback.correct-fb { background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); color:var(--success); }
+.quiz-feedback.wrong-fb { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); color:var(--error); }
+
+/* --- INPUT QUIZ --- */
+.quiz-input {
+    background:rgba(255,255,255,0.08); border:2px solid var(--card-border);
+    border-radius:12px; padding:12px 20px; font-size:1.3rem; font-weight:600;
+    color:var(--text); width:120px; text-align:center; font-family:inherit;
+    transition:border-color 0.2s;
+}
+.quiz-input:focus { outline:none; border-color:var(--accent); }
+.quiz-input.correct { border-color:var(--success); background:rgba(16,185,129,0.1); }
+.quiz-input.wrong { border-color:var(--error); background:rgba(239,68,68,0.1); }
+
+/* --- COMPARE BUTTONS --- */
+.compare-btn {
+    padding:14px 24px; border-radius:12px; font-size:1.8rem; font-weight:800;
+    cursor:pointer; transition:all 0.2s; border:2px solid var(--card-border);
+    background:rgba(255,255,255,0.06); color:var(--text); font-family:inherit;
+}
+.compare-btn:hover { border-color:var(--accent); background:rgba(139,92,246,0.1); }
+.compare-btn.selected { border-color:var(--accent); background:rgba(139,92,246,0.2); }
+.compare-btn.correct { border-color:var(--success); background:rgba(16,185,129,0.15); }
+.compare-btn.wrong { border-color:var(--error); background:rgba(239,68,68,0.1); }
+
+/* --- SKIP COUNT GRID --- */
+.skip-grid {
+    display:grid; grid-template-columns:repeat(5,1fr); gap:8px;
+    max-width:450px; margin:16px auto;
+}
+.skip-cell {
+    padding:14px; text-align:center; border-radius:10px; font-size:1.3rem; font-weight:700;
+    background:rgba(255,255,255,0.06); border:2px solid var(--card-border);
+}
+.skip-cell.given { color:var(--accent-light); }
+.skip-cell.blank input {
+    width:100%; background:transparent; border:none; color:var(--text);
+    font-size:1.3rem; font-weight:700; text-align:center; font-family:inherit;
+}
+.skip-cell.blank input:focus { outline:none; }
+.skip-cell.correct { border-color:var(--success); background:rgba(16,185,129,0.1); }
+.skip-cell.wrong { border-color:var(--error); background:rgba(239,68,68,0.1); }
+
+/* --- ARROW CARDS --- */
+.arrow-cards { display:flex; align-items:center; justify-content:center; gap:8px; margin:20px 0; }
+.arrow-card {
+    padding:16px 28px; border-radius:12px; font-size:2.5rem; font-weight:800;
+    position:relative; transition:all 0.5s; min-width:100px; text-align:center;
+}
+.arrow-card.tens-card { background:rgba(59,130,246,0.2); color:var(--tens-color); border:2px solid var(--tens-color); }
+.arrow-card.ones-card { background:rgba(245,158,11,0.2); color:var(--ones-color); border:2px solid var(--ones-color); }
+.arrow-card .plus { font-size:2rem; color:var(--text-dim); margin:0 8px; }
+
+/* --- WORD WRITING --- */
+.word-display {
+    font-size:1.8rem; font-weight:700; text-align:center;
+    padding:16px; color:var(--accent-light);
+    background:rgba(139,92,246,0.1); border-radius:14px;
+    border:1px solid rgba(139,92,246,0.3);
+}
+.word-input {
+    background:rgba(255,255,255,0.08); border:2px solid var(--card-border);
+    border-radius:12px; padding:14px 24px; font-size:1.3rem; font-weight:600;
+    color:var(--text); text-align:center; font-family:inherit; width:300px;
+    transition:border-color 0.2s;
+}
+.word-input:focus { outline:none; border-color:var(--accent); }
+
+/* --- EXCHANGE ANIMATION --- */
+.exchange-area { display:flex; align-items:center; gap:30px; justify-content:center; flex-wrap:wrap; }
+.exchange-box {
+    background:rgba(255,255,255,0.04); border:1px solid var(--card-border);
+    border-radius:16px; padding:20px; text-align:center; min-width:200px;
+}
+.exchange-box h4 { font-size:0.9rem; color:var(--text-dim); margin-bottom:12px; text-transform:uppercase; letter-spacing:1px; }
+.exchange-arrow { font-size:2rem; color:var(--accent); animation:pulseArrow 1.5s infinite; }
+@keyframes pulseArrow { 0%,100%{opacity:0.5;transform:scale(1);} 50%{opacity:1;transform:scale(1.2);} }
+
+/* --- ROADBLOCK --- */
+.roadblock-card {
+    background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(239,68,68,0.1));
+    border:2px solid rgba(245,158,11,0.3); border-radius:20px; padding:32px;
+    text-align:center; max-width:600px;
+}
+.roadblock-card h2 { color:var(--ones-color); font-size:1.8rem; margin-bottom:16px; }
+.roadblock-item {
+    display:flex; align-items:center; gap:12px; padding:12px 0;
+    border-bottom:1px solid rgba(255,255,255,0.05); font-size:1.05rem;
+}
+.roadblock-item:last-child { border-bottom:none; }
+.roadblock-check { font-size:1.3rem; }
+
+/* --- RESULTS --- */
+.results-card {
+    text-align:center; padding:40px;
+    background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:24px; backdrop-filter:blur(20px); max-width:500px;
+}
+.score-circle {
+    width:140px; height:140px; border-radius:50%; margin:0 auto 24px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:2.4rem; font-weight:900; color:white;
+}
+.score-circle.gold { background:linear-gradient(135deg,#F59E0B,#D97706); box-shadow:0 8px 30px rgba(245,158,11,0.4); }
+.score-circle.silver { background:linear-gradient(135deg,#94A3B8,#64748B); box-shadow:0 8px 30px rgba(148,163,184,0.3); }
+.score-circle.bronze { background:linear-gradient(135deg,#F97316,#C2410C); box-shadow:0 8px 30px rgba(249,115,22,0.3); }
+
+/* --- TITLE SLIDE --- */
+.title-slide h1 {
+    font-size:3.5rem; font-weight:900; text-align:center; line-height:1.2;
+    background:linear-gradient(135deg,var(--tens-color),var(--accent),var(--ones-color));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.title-meta { color:var(--text-dim); font-size:1.1rem; margin-top:12px; text-align:center; }
+.title-blocks { display:flex; gap:8px; justify-content:center; margin:30px 0; }
+.title-blocks .ten-rod { animation:float 3s ease-in-out infinite; }
+.title-blocks .one-cube { animation:float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+
+/* --- HOOK --- */
+.hook-comparison {
+    display:flex; gap:40px; align-items:center; justify-content:center; flex-wrap:wrap; margin:20px 0;
+}
+.hook-number {
+    font-size:5rem; font-weight:900; padding:20px 40px; border-radius:20px;
+    position:relative;
+}
+.hook-number.left { color:var(--tens-color); background:rgba(59,130,246,0.1); border:2px solid rgba(59,130,246,0.3); }
+.hook-number.right { color:var(--ones-color); background:rgba(245,158,11,0.1); border:2px solid rgba(245,158,11,0.3); }
+.hook-vs { font-size:2rem; font-weight:800; color:var(--text-dim); }
+.hook-caption { font-size:0.9rem; color:var(--text-dim); text-align:center; margin-top:6px; }
+
+/* --- HOMEWORK --- */
+.homework-card {
+    background:linear-gradient(135deg,rgba(59,130,246,0.05),rgba(139,92,246,0.08));
+    border:2px dashed rgba(139,92,246,0.3); border-radius:20px; padding:32px;
+    max-width:700px; width:100%;
+}
+.homework-card h3 { color:var(--accent-light); margin-bottom:16px; }
+.homework-item { padding:8px 0; font-size:1.05rem; color:var(--text); display:flex; gap:10px; line-height:1.6; }
+
+/* --- MISC --- */
+.big-number { font-size:4rem; font-weight:900; }
+.flex-center { display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; }
+.mt-16 { margin-top:16px; }
+.mt-24 { margin-top:24px; }
+.mb-16 { margin-bottom:16px; }
+.text-center { text-align:center; }
+.hidden { display:none !important; }
+
+/* --- SCROLLABLE CONTENT --- */
+.slide-content { max-height:calc(100vh - 100px); overflow-y:auto; width:100%; max-width:920px; padding-bottom:20px; }
+.slide-content::-webkit-scrollbar { width:6px; }
+.slide-content::-webkit-scrollbar-track { background:transparent; }
+.slide-content::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.15); border-radius:3px; }
+
+/* Responsive */
+@media (max-width:600px) {
+    .slide { padding:16px; }
+    .title-slide h1 { font-size:2.2rem; }
+    .hook-number { font-size:3rem; padding:14px 24px; }
+    .slide-title { font-size:1.5rem; }
+    .glass-card { padding:20px; }
+    .ten-rod { width:22px; height:88px; }
+    .one-cube { width:22px; height:22px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- ===================== SLIDE 1: TITLE ===================== -->
+<div class="slide active title-slide" id="slide-0">
+    <div class="slide-content flex-center" style="flex-direction:column;">
+        <div class="title-blocks">
+            <div class="ten-rod" style="animation-delay:0s;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+            <div class="ten-rod" style="animation-delay:0.3s;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+            <div class="one-cube" style="animation-delay:0.6s;"></div>
+            <div class="one-cube" style="animation-delay:0.8s;"></div>
+            <div class="one-cube" style="animation-delay:1s;"></div>
+        </div>
+        <h1>Place Value</h1>
+        <p class="title-meta">Year 2 Mathematics — Block 1 (Weeks 1–3)</p>
+        <p class="title-meta" style="margin-top:8px; font-size:0.95rem;">📐 Counting · Grouping · Partitioning · Comparing</p>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 2: WEEK 1 HOOK ===================== -->
+<div class="slide" id="slide-1">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+        <div class="glass-card text-center">
+            <div class="slide-title">🪄 Would You Rather…</div>
+            <div class="slide-subtitle">Count 34 sweets one by one… or in groups of ten?</div>
+            <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin:20px 0;">
+                <button class="action-btn" onclick="hookReveal()" style="background:#7C3AED; font-size:1.1rem; padding:16px 32px;">Show me the FAST way! 🚀</button>
+            </div>
+            <div id="hookReveal" class="hidden" style="margin-top:24px;">
+                <p style="font-size:1.1rem; margin-bottom:16px;">Look! We can group into <span style="color:var(--tens-color);font-weight:700;">tens</span> and count the leftover <span style="color:var(--ones-color);font-weight:700;">ones</span>:</p>
+                <div class="blocks-area" style="background:rgba(255,255,255,0.03); border-radius:16px; padding:20px;">
+                    <div class="ten-rod"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                    <div class="ten-rod"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                    <div class="ten-rod"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                    <div class="one-cube"></div><div class="one-cube"></div><div class="one-cube"></div><div class="one-cube"></div>
+                </div>
+                <div class="sentence-stem mt-16">
+                    <span class="highlight-tens">3 tens</span> and <span class="highlight-ones">4 ones</span> = <strong>34</strong> 🎉
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 3: NUMBERS TO 20 (TEENS) ===================== -->
+<div class="slide" id="slide-2">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+        <div class="glass-card">
+            <div class="slide-title">🧠 The Tricky Teens!</div>
+            <div class="slide-subtitle">Teen numbers are sneaky — "thirteen" sounds like it starts with 3, but it actually means <span style="color:var(--tens-color);font-weight:600;">1 ten</span> and <span style="color:var(--ones-color);font-weight:600;">3 ones</span>!</div>
+            <div id="teensArea" style="text-align:center;"></div>
+            <div class="btn-row mt-16">
+                <button class="action-btn" onclick="showTeenNumber(13)" style="background:var(--accent);">13</button>
+                <button class="action-btn" onclick="showTeenNumber(15)" style="background:var(--accent);">15</button>
+                <button class="action-btn" onclick="showTeenNumber(17)" style="background:var(--accent);">17</button>
+                <button class="action-btn" onclick="showTeenNumber(19)" style="background:var(--accent);">19</button>
+            </div>
+            <div class="sentence-stem mt-16" id="teenStem" style="opacity:0; transition:opacity 0.4s;">
+                Click a number above to see it broken down!
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 4: BASE-10 BUILDER ===================== -->
+<div class="slide" id="slide-3">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+        <div class="glass-card">
+            <div class="slide-title">🧱 Base-10 Block Builder</div>
+            <div class="slide-subtitle">Build the target number using Tens and Ones blocks!</div>
+            <div style="text-align:center; margin-bottom:16px;">
+                <span style="font-size:0.9rem; color:var(--text-dim);">TARGET:</span>
+                <span class="big-number" id="builderTarget" style="color:var(--accent);"></span>
+            </div>
+            <div class="blocks-area" id="builderBlocks" style="background:rgba(255,255,255,0.03); border-radius:16px; min-height:140px;"></div>
+            <div style="text-align:center; margin-top:12px;">
+                <span style="font-size:1.4rem; font-weight:700;" id="builderCount">0</span>
+                <span style="color:var(--text-dim);"> blocks total</span>
+            </div>
+            <div class="btn-row">
+                <button class="action-btn tens-btn" onclick="addBlock('ten')">+ Ten Rod</button>
+                <button class="action-btn ones-btn" onclick="addBlock('one')">+ One Cube</button>
+                <button class="action-btn remove-btn" onclick="removeBlock()">Remove Last</button>
+                <button class="action-btn check-btn" id="builderCheckBtn" onclick="checkBuilder()">✓ Check</button>
+            </div>
+            <div class="sentence-stem mt-16" id="builderStem">
+                <span class="highlight-tens" id="bsTens">0 tens</span> and <span class="highlight-ones" id="bsOnes">0 ones</span> = <strong id="bsTotal">0</strong>
+            </div>
+            <div id="builderFeedback" class="quiz-feedback mt-16"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 5: SKIP COUNTING ===================== -->
+<div class="slide" id="slide-4">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+        <div class="glass-card">
+            <div class="slide-title">🔢 Skip Counting</div>
+            <div class="slide-subtitle">Fill in the missing numbers! Count in the pattern shown.</div>
+            <div id="skipCountArea"></div>
+            <div class="btn-row mt-16">
+                <button class="action-btn check-btn" onclick="checkSkipCount()">✓ Check Answers</button>
+            </div>
+            <div id="skipFeedback" class="quiz-feedback mt-16"></div>
+            <div class="btn-row mt-16">
+                <button class="action-btn" style="background:var(--tens-color);" onclick="newSkipCount(2)">Count in 2s</button>
+                <button class="action-btn" style="background:var(--ones-color);" onclick="newSkipCount(5)">Count in 5s</button>
+                <button class="action-btn" style="background:var(--accent);" onclick="newSkipCount(10)">Count in 10s</button>
+                <button class="action-btn" style="background:var(--success);" onclick="newSkipCount(3)">Count in 3s</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 6: ROADBLOCK 1 ===================== -->
+<div class="slide" id="slide-5">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+        <div class="roadblock-card">
+            <h2>🚧 Roadblock 1</h2>
+            <p style="color:var(--text-dim); margin-bottom:20px;">You <strong>must master</strong> these before moving to Week 2:</p>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can group objects into tens and ones</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can state the tens and ones in any number to 100</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can build numbers using Base-10 blocks</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Knows that 10 ones = 1 ten</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can skip count in 2s, 5s, 10s, and 3s</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 7: MINI TEST 1 ===================== -->
+<div class="slide" id="slide-6">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+        <div class="glass-card">
+            <div class="slide-title">📝 Mini Test 1</div>
+            <div class="slide-subtitle">Answer all questions to check your mastery!</div>
+            <div id="miniTest1"></div>
+            <div id="mt1Result" class="hidden mt-24 text-center"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 8: HOMEWORK 1 ===================== -->
+<div class="slide" id="slide-7">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w1"></span> Week 1</div>
+        <div class="homework-card">
+            <h3>🏠 Homework 1: Draw & Group</h3>
+            <div class="homework-item"><span>📝</span> Draw dots for these numbers and group them into tens: <strong>18, 27, 36</strong></div>
+            <div class="homework-item"><span>✏️</span> Write: "___ tens and ___ ones" for each number.</div>
+            <div class="homework-item"><span>🔢</span> Skip count: Write the next 5 numbers counting in 5s from 15.</div>
+            <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Can you explain to someone at home why 10 ones is the same as 1 ten?</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 9: WEEK 2 HOOK ===================== -->
+<div class="slide" id="slide-8">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+        <div class="glass-card text-center">
+            <div class="slide-title">🪄 Is 25 the same as 52?</div>
+            <div class="slide-subtitle">They use the SAME digits… but are they the SAME number?</div>
+            <div class="hook-comparison">
+                <div>
+                    <div class="hook-number left">25</div>
+                    <div class="hook-caption"><span style="color:var(--tens-color);">2</span> tens, <span style="color:var(--ones-color);">5</span> ones</div>
+                </div>
+                <div class="hook-vs">vs</div>
+                <div>
+                    <div class="hook-number right">52</div>
+                    <div class="hook-caption"><span style="color:var(--tens-color);">5</span> tens, <span style="color:var(--ones-color);">2</span> ones</div>
+                </div>
+            </div>
+            <div class="sentence-stem"> The <strong>position</strong> of the digit changes its <strong>value</strong>! <br>The <span class="highlight-tens">2</span> in 25 means 20, but the <span class="highlight-ones">2</span> in 52 means just 2.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 10: PLACE VALUE CHART ===================== -->
+<div class="slide" id="slide-9">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+        <div class="glass-card text-center">
+            <div class="slide-title">📊 Place Value Chart</div>
+            <div class="slide-subtitle">Click "New Number" to see how any number breaks into tens and ones.</div>
+            <div style="display:flex; gap:30px; align-items:center; justify-content:center; flex-wrap:wrap;">
+                <div>
+                    <div class="big-number" id="pvNumber" style="color:var(--accent); margin-bottom:12px;">42</div>
+                    <div class="pv-chart">
+                        <div class="pv-header tens">Tens</div>
+                        <div class="pv-header ones">Ones</div>
+                        <div class="pv-cell tens" id="pvTens">4</div>
+                        <div class="pv-cell ones" id="pvOnes">2</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="blocks-area" id="pvBlocks" style="max-width:250px;"></div>
+                </div>
+            </div>
+            <div class="sentence-stem mt-16" id="pvStem">
+                This is the number <strong>42</strong>. The <span class="highlight-tens">4</span> shows we have <span class="highlight-tens">4 groups of ten</span>. The <span class="highlight-ones">2</span> shows we have <span class="highlight-ones">2 extra ones</span>.
+            </div>
+            <div class="btn-row mt-16">
+                <button class="action-btn" style="background:var(--accent);" onclick="newPVNumber()">🎲 New Number</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 11: PART-WHOLE MODEL ===================== -->
+<div class="slide" id="slide-10">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+        <div class="glass-card text-center">
+            <div class="slide-title">🔵 Part-Whole Model</div>
+            <div class="slide-subtitle">Every number can be split into its <span style="color:var(--tens-color);font-weight:600;">tens part</span> and <span style="color:var(--ones-color);font-weight:600;">ones part</span>.</div>
+            <div style="position:relative; padding:20px 0;">
+                <svg width="320" height="200" viewBox="0 0 320 200" style="display:block;margin:0 auto;">
+                    <line x1="160" y1="60" x2="80" y2="140" stroke="rgba(255,255,255,0.2)" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="160" y1="60" x2="240" y2="140" stroke="rgba(255,255,255,0.2)" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="160" cy="50" r="40" fill="url(#pwGrad1)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                    <text x="160" y="58" text-anchor="middle" fill="white" font-size="28" font-weight="800" font-family="Inter" id="pwWholeText">42</text>
+                    <circle cx="80" cy="155" r="34" fill="url(#pwGrad2)" stroke="rgba(59,130,246,0.4)" stroke-width="2"/>
+                    <text x="80" y="163" text-anchor="middle" fill="white" font-size="22" font-weight="700" font-family="Inter" id="pwTensText">40</text>
+                    <circle cx="240" cy="155" r="34" fill="url(#pwGrad3)" stroke="rgba(245,158,11,0.4)" stroke-width="2"/>
+                    <text x="240" y="163" text-anchor="middle" fill="white" font-size="22" font-weight="700" font-family="Inter" id="pwOnesText">2</text>
+                    <defs>
+                        <linearGradient id="pwGrad1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#7C3AED"/></linearGradient>
+                        <linearGradient id="pwGrad2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3B82F6"/><stop offset="100%" stop-color="#1D4ED8"/></linearGradient>
+                        <linearGradient id="pwGrad3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#F59E0B"/><stop offset="100%" stop-color="#D97706"/></linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="sentence-stem" id="pwStem">
+                <strong id="pwWhole2">42</strong> = <span class="highlight-tens" id="pwTens2">40</span> + <span class="highlight-ones" id="pwOnes2">2</span>
+            </div>
+            <div class="btn-row mt-16">
+                <button class="action-btn" style="background:var(--accent);" onclick="newPWNumber()">🎲 New Number</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 12: NON-STANDARD PARTITIONING ===================== -->
+<div class="slide" id="slide-11">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+        <div class="glass-card text-center">
+            <div class="slide-title">🔄 The Exchange Trick</div>
+            <div class="slide-subtitle" style="line-height:1.8;">This is <strong style="color:var(--ones-color);">vital</strong>! We can partition numbers in <em>different</em> ways by <strong>exchanging</strong> a ten for ten ones.<br>This helps us with subtraction later!</div>
+            <div id="exchangeDemo" style="margin:20px 0;"></div>
+            <div class="btn-row">
+                <button class="action-btn" style="background:var(--accent);" onclick="showExchange()">🔄 Exchange a Ten!</button>
+                <button class="action-btn" style="background:var(--tens-color);" onclick="resetExchange()">↩ Reset</button>
+            </div>
+            <div class="sentence-stem mt-16" id="exchangeStem"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 13: ARROW CARDS ===================== -->
+<div class="slide" id="slide-12">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+        <div class="glass-card text-center">
+            <div class="slide-title">🃏 Arrow Cards</div>
+            <div class="slide-subtitle">We can <strong>overlay</strong> a tens card and a ones card to make a number.</div>
+            <div id="arrowDemo" style="margin:20px 0;"></div>
+            <div class="btn-row mt-16">
+                <button class="action-btn" style="background:var(--accent);" onclick="newArrowCard()">🎲 New Number</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 14: WRITING IN WORDS ===================== -->
+<div class="slide" id="slide-13">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+        <div class="glass-card text-center">
+            <div class="slide-title">✏️ Writing Numbers in Words</div>
+            <div class="slide-subtitle">Type the number shown as a <strong>word</strong>. Watch out for tricky spellings!</div>
+            <div class="word-display" id="wordNum">42</div>
+            <div class="mt-16 flex-center">
+                <input type="text" class="word-input" id="wordInput" placeholder="Type the word…" autocomplete="off">
+                <button class="action-btn check-btn" onclick="checkWord()">✓ Check</button>
+            </div>
+            <div id="wordFeedback" class="quiz-feedback mt-16"></div>
+            <div id="wordHint" class="hidden mt-16" style="color:var(--text-dim); font-size:0.95rem;"></div>
+            <div class="btn-row mt-16">
+                <button class="action-btn" style="background:var(--accent);" onclick="newWordNumber()">🎲 Next Number</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 15: ROADBLOCK 2 ===================== -->
+<div class="slide" id="slide-14">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+        <div class="roadblock-card">
+            <h2>🚧 Roadblock 2</h2>
+            <p style="color:var(--text-dim); margin-bottom:20px;">You <strong>must master</strong> these before moving to Week 3:</p>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can partition any number ≤ 100 into tens + ones</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can use non-standard partitioning (e.g. 42 = 30 + 12)</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can move between blocks ↔ chart ↔ number</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Understands tens digit vs ones digit value</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can write numbers to 100 in words</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 16: MINI TEST 2 ===================== -->
+<div class="slide" id="slide-15">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+        <div class="glass-card">
+            <div class="slide-title">📝 Mini Test 2</div>
+            <div class="slide-subtitle">Answer all questions to check your mastery!</div>
+            <div id="miniTest2"></div>
+            <div id="mt2Result" class="hidden mt-24 text-center"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 17: HOMEWORK 2 ===================== -->
+<div class="slide" id="slide-16">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w2"></span> Week 2</div>
+        <div class="homework-card">
+            <h3>🏠 Homework 2: Partition & Write</h3>
+            <div class="homework-item"><span>📝</span> Partition these numbers into tens + ones: <strong>56, 71, 39, 84</strong></div>
+            <div class="homework-item"><span>🔄</span> Write 42 in <strong>two different ways</strong> (e.g. 40+2 and 30+12)</div>
+            <div class="homework-item"><span>🃏</span> Draw part-whole models for: <strong>63, 28, 95</strong></div>
+            <div class="homework-item"><span>✏️</span> Write these numbers in words: <strong>fourteen, forty, fifty, fifteen</strong></div>
+            <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Why is 25 NOT the same as 52? Explain to someone at home.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 18: WEEK 3 HOOK ===================== -->
+<div class="slide" id="slide-17">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+        <div class="glass-card text-center">
+            <div class="slide-title">🪄 Which is Bigger?</div>
+            <div class="slide-subtitle">48 or 51? Let's investigate with blocks!</div>
+            <div class="hook-comparison">
+                <div>
+                    <div class="hook-number left" style="font-size:4rem;">48</div>
+                    <div style="margin-top:12px;">
+                        <div class="blocks-area" style="max-width:200px;">
+                            <div class="ten-rod" style="height:70px;width:20px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                            <div class="ten-rod" style="height:70px;width:20px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                            <div class="ten-rod" style="height:70px;width:20px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                            <div class="ten-rod" style="height:70px;width:20px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                        </div>
+                        <div class="hook-caption" style="margin-top:8px;"><span style="color:var(--tens-color);font-weight:700;">4 tens</span> + <span style="color:var(--ones-color);font-weight:700;">8 ones</span></div>
+                    </div>
+                </div>
+                <div class="hook-vs">vs</div>
+                <div>
+                    <div class="hook-number right" style="font-size:4rem;">51</div>
+                    <div style="margin-top:12px;">
+                        <div class="blocks-area" style="max-width:200px;">
+                            <div class="ten-rod" style="height:70px;width:20px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                            <div class="ten-rod" style="height:70px;width:20px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                            <div class="ten-rod" style="height:70px;width:20px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                            <div class="ten-rod" style="height:70px;width:20px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                            <div class="ten-rod" style="height:70px;width:20px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>
+                        </div>
+                        <div class="hook-caption" style="margin-top:8px;"><span style="color:var(--tens-color);font-weight:700;">5 tens</span> + <span style="color:var(--ones-color);font-weight:700;">1 one</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="sentence-stem">
+                51 is bigger because <span class="highlight-tens">5 tens > 4 tens</span>. Always compare the <strong>tens first</strong>!
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 19: COMPARING NUMBERS ===================== -->
+<div class="slide" id="slide-18">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+        <div class="glass-card text-center">
+            <div class="slide-title">⚖️ Compare Numbers: &lt; &gt; =</div>
+            <div class="slide-subtitle">Choose the correct symbol to compare the two numbers.</div>
+            <div class="flex-center" style="gap:24px; margin:24px 0;">
+                <span class="big-number" style="color:var(--tens-color);" id="cmpLeft">34</span>
+                <div class="flex-center" style="gap:8px;">
+                    <button class="compare-btn" onclick="selectCompare('<')" id="cmpLt">&lt;</button>
+                    <button class="compare-btn" onclick="selectCompare('=')" id="cmpEq">=</button>
+                    <button class="compare-btn" onclick="selectCompare('>')" id="cmpGt">&gt;</button>
+                </div>
+                <span class="big-number" style="color:var(--ones-color);" id="cmpRight">43</span>
+            </div>
+            <div class="btn-row">
+                <button class="action-btn check-btn" onclick="checkCompare()">✓ Check</button>
+                <button class="action-btn" style="background:var(--accent);" onclick="newCompare()">🎲 Next</button>
+            </div>
+            <div id="cmpFeedback" class="quiz-feedback mt-16"></div>
+            <div class="sentence-stem mt-16" id="cmpStem" style="opacity:0; transition:opacity 0.4s;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 20: NUMBER LINE ===================== -->
+<div class="slide" id="slide-19">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+        <div class="glass-card">
+            <div class="slide-title">📏 Number Line</div>
+            <div class="slide-subtitle">Drag the marker to place the number on the number line. How close can you get?</div>
+            <div style="text-align:center; margin-bottom:8px;">
+                <span style="color:var(--text-dim);">Place this number:</span>
+                <span class="big-number" style="color:var(--accent); font-size:3rem;" id="nlTarget">60</span>
+            </div>
+            <div class="number-line-container" id="nlContainer">
+                <div class="number-line" id="numberLine">
+                    <div class="nl-marker" id="nlMarker">?</div>
+                </div>
+            </div>
+            <div class="btn-row">
+                <button class="action-btn check-btn" onclick="checkNumberLine()">✓ Check Position</button>
+                <button class="action-btn" style="background:var(--accent);" onclick="newNumberLine()">🎲 New Number</button>
+            </div>
+            <div id="nlFeedback" class="quiz-feedback mt-16"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 21: ROADBLOCK 3 ===================== -->
+<div class="slide" id="slide-20">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+        <div class="roadblock-card">
+            <h2>🚧 Roadblock 3</h2>
+            <p style="color:var(--text-dim); margin-bottom:20px;">You <strong>must master</strong> these before the Final Test:</p>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can compare any two 2-digit numbers</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can explain reasoning ("because 5 tens > 4 tens")</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can use &lt;, &gt;, and = correctly</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can order a set of numbers from smallest to largest</div>
+            <div class="roadblock-item"><span class="roadblock-check">✅</span> Can place numbers accurately on a number line</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 22: MINI TEST 3 ===================== -->
+<div class="slide" id="slide-21">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+        <div class="glass-card">
+            <div class="slide-title">📝 Mini Test 3</div>
+            <div class="slide-subtitle">Answer all questions to check your mastery!</div>
+            <div id="miniTest3"></div>
+            <div id="mt3Result" class="hidden mt-24 text-center"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 23: HOMEWORK 3 ===================== -->
+<div class="slide" id="slide-22">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="week-badge"><span class="dot w3"></span> Week 3</div>
+        <div class="homework-card">
+            <h3>🏠 Homework 3: Compare & Order</h3>
+            <div class="homework-item"><span>⚖️</span> Write &lt;, &gt; or = between these pairs: <strong>34 _ 43</strong>, <strong>78 _ 87</strong>, <strong>55 _ 55</strong>, <strong>61 _ 59</strong></div>
+            <div class="homework-item"><span>📏</span> Order these numbers smallest to largest: <strong>47, 12, 89, 35, 71</strong></div>
+            <div class="homework-item"><span>✏️</span> Draw a number line (0 to 100) and place: <strong>25, 50, 75</strong></div>
+            <div class="homework-item"><span>💡</span> <strong>Challenge:</strong> Where would 63 go? Is it closer to 60 or 70?</div>
+            <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Explain to someone at home why 82 is greater than 79.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 24: FINAL MASTERY ASSESSMENT ===================== -->
+<div class="slide" id="slide-23">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+        <div class="glass-card" style="border:2px solid var(--ones-color);">
+            <div class="slide-title" style="text-align:center;">🏆 Final Mastery Assessment</div>
+            <div class="slide-subtitle" style="text-align:center;">10 questions covering everything from Weeks 1–3. Good luck!</div>
+            <div id="finalTest"></div>
+            <div id="finalResult" class="hidden mt-24 text-center"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== SLIDE 25: CERTIFICATE ===================== -->
+<div class="slide" id="slide-24">
+    <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div class="results-card">
+            <div style="font-size:3rem; margin-bottom:12px;">🎓</div>
+            <h2 style="font-size:1.8rem; margin-bottom:8px;" id="certTitle">Place Value Master!</h2>
+            <p style="color:var(--text-dim); margin-bottom:24px;" id="certSubtitle">You've completed Block 1</p>
+            <div class="score-circle gold" id="certScore">—</div>
+            <p style="margin-top:20px; font-size:1.1rem;" id="certMessage">Complete the Final Assessment to see your score here.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== NAVIGATION BAR ===================== -->
+<div class="nav-bar">
+    <button class="nav-btn back" onclick="prevSlide()" id="backBtn">← Back</button>
+    <span class="slide-counter" id="slideCounter">1 / 25</span>
+    <button class="nav-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
+</div>
+
+<script>
+// ==================== SOUND ENGINE ====================
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function ensureAudio() { if (!audioCtx) audioCtx = new AudioCtx(); }
+function playSound(type) {
+    ensureAudio();
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    if (type === 'correct') { o.frequency.setValueAtTime(523,audioCtx.currentTime); o.frequency.setValueAtTime(659,audioCtx.currentTime+0.1); g.gain.setValueAtTime(0.15,audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.4); o.start(); o.stop(audioCtx.currentTime+0.4); }
+    else if (type === 'wrong') { o.type='sawtooth'; o.frequency.setValueAtTime(200,audioCtx.currentTime); g.gain.setValueAtTime(0.1,audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.3); o.start(); o.stop(audioCtx.currentTime+0.3); }
+    else if (type === 'success') { const t=audioCtx.currentTime; o.frequency.setValueAtTime(523,t); o.frequency.setValueAtTime(659,t+0.15); o.frequency.setValueAtTime(784,t+0.3); g.gain.setValueAtTime(0.15,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.6); o.start(); o.stop(t+0.6); }
+    else if (type === 'click') { o.frequency.setValueAtTime(800,audioCtx.currentTime); g.gain.setValueAtTime(0.08,audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.08); o.start(); o.stop(audioCtx.currentTime+0.08); }
+}
+
+// ==================== SLIDE MANAGEMENT ====================
+let currentSlide = 0;
+const totalSlides = 25;
+
+function showSlide(n) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.getElementById('slide-'+n).classList.add('active');
+    currentSlide = n;
+    document.getElementById('slideCounter').textContent = (n+1)+' / '+totalSlides;
+    document.getElementById('progressBar').style.width = ((n+1)/totalSlides*100)+'%';
+    document.getElementById('backBtn').disabled = n === 0;
+    // Initialize slide-specific content
+    if (n === 3 && !builderInitialized) initBuilder();
+    if (n === 4 && !skipInitialized) { newSkipCount(2); skipInitialized = true; }
+    if (n === 6 && !mt1Built) buildMiniTest1();
+    if (n === 9) initPVChart(42);
+    if (n === 10) initPWModel(42);
+    if (n === 11 && !exchangeInitialized) initExchange();
+    if (n === 12 && !arrowInitialized) { newArrowCard(); arrowInitialized = true; }
+    if (n === 13 && !wordInitialized) { newWordNumber(); wordInitialized = true; }
+    if (n === 15 && !mt2Built) buildMiniTest2();
+    if (n === 18 && !cmpInitialized) { newCompare(); cmpInitialized = true; }
+    if (n === 19 && !nlInitialized) initNumberLine();
+    if (n === 21 && !mt3Built) buildMiniTest3();
+    if (n === 23 && !ftBuilt) buildFinalTest();
+}
+function nextSlide() { if (currentSlide < totalSlides-1) { playSound('click'); showSlide(currentSlide+1); } }
+function prevSlide() { if (currentSlide > 0) { playSound('click'); showSlide(currentSlide-1); } }
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+});
+
+// ==================== SLIDE 2: HOOK ====================
+function hookReveal() { document.getElementById('hookReveal').classList.remove('hidden'); playSound('success'); }
+
+// ==================== SLIDE 3: TEENS ====================
+const teenWords = {13:'thirteen',14:'fourteen',15:'fifteen',16:'sixteen',17:'seventeen',18:'eighteen',19:'nineteen'};
+function showTeenNumber(n) {
+    playSound('click');
+    const area = document.getElementById('teensArea');
+    const ones = n - 10;
+    let html = '<div class="blocks-area" style="background:rgba(255,255,255,0.03);border-radius:16px;padding:20px;">';
+    html += '<div class="ten-rod"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>';
+    for (let i = 0; i < ones; i++) html += '<div class="one-cube"></div>';
+    html += '</div>';
+    area.innerHTML = html;
+    const stem = document.getElementById('teenStem');
+    stem.innerHTML = 'This is the number <strong>'+n+'</strong> ('+teenWords[n]+'). The <span class="highlight-tens">1</span> shows we have <span class="highlight-tens">1 group of ten</span>. The <span class="highlight-ones">'+ones+'</span> shows we have <span class="highlight-ones">'+ones+' extra ones</span>.';
+    stem.style.opacity = '1';
+}
+
+// ==================== SLIDE 4: BUILDER ====================
+let builderInitialized = false;
+let builderBlocks = []; // 'ten' or 'one'
+let builderTargetNum = 0;
+
+function initBuilder() {
+    builderBlocks = [];
+    builderTargetNum = 10 + Math.floor(Math.random()*80); // 10 to 89
+    document.getElementById('builderTarget').textContent = builderTargetNum;
+    renderBuilder();
+    builderInitialized = true;
+    document.getElementById('builderFeedback').className = 'quiz-feedback mt-16';
+    document.getElementById('builderFeedback').style.display = 'none';
+}
+function addBlock(type) {
+    playSound('click');
+    const tens = builderBlocks.filter(b=>b==='ten').length;
+    const ones = builderBlocks.filter(b=>b==='one').length;
+    if (type==='ten' && tens >= 9) return;
+    if (type==='one' && ones >= 9) return;
+    builderBlocks.push(type);
+    renderBuilder();
+}
+function removeBlock() {
+    if (builderBlocks.length > 0) { builderBlocks.pop(); playSound('click'); renderBuilder(); }
+}
+function renderBuilder() {
+    const area = document.getElementById('builderBlocks');
+    const tens = builderBlocks.filter(b=>b==='ten').length;
+    const ones = builderBlocks.filter(b=>b==='one').length;
+    const total = tens*10 + ones;
+    let html = '';
+    for (let i = 0; i < tens; i++) {
+        html += '<div class="ten-rod"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>';
+    }
+    for (let i = 0; i < ones; i++) html += '<div class="one-cube"></div>';
+    area.innerHTML = html;
+    document.getElementById('builderCount').textContent = total;
+    document.getElementById('bsTens').textContent = tens+' tens';
+    document.getElementById('bsOnes').textContent = ones+' ones';
+    document.getElementById('bsTotal').textContent = total;
+}
+function checkBuilder() {
+    const tens = builderBlocks.filter(b=>b==='ten').length;
+    const ones = builderBlocks.filter(b=>b==='one').length;
+    const total = tens*10 + ones;
+    const fb = document.getElementById('builderFeedback');
+    if (total === builderTargetNum) {
+        fb.className = 'quiz-feedback mt-16 show correct-fb';
+        fb.textContent = '🎉 Correct! '+builderTargetNum+' = '+tens+' tens and '+ones+' ones!';
+        playSound('correct');
+        setTimeout(() => {
+            builderBlocks = [];
+            builderTargetNum = 10 + Math.floor(Math.random()*80);
+            document.getElementById('builderTarget').textContent = builderTargetNum;
+            renderBuilder();
+            fb.style.display = 'none';
+        }, 2500);
+    } else {
+        fb.className = 'quiz-feedback mt-16 show wrong-fb';
+        fb.textContent = '❌ Not quite! You made '+total+' but the target is '+builderTargetNum+'. Try again!';
+        playSound('wrong');
+    }
+}
+
+// ==================== SLIDE 5: SKIP COUNTING ====================
+let skipInitialized = false;
+let currentSkipData = { step: 2, start: 0, sequence: [], blanks: [] };
+
+function newSkipCount(step) {
+    playSound('click');
+    const start = step === 10 ? 0 : (step === 3 ? 0 : 0);
+    const seq = [];
+    for (let i = 0; i < 10; i++) seq.push(start + step * i);
+    // Make 4 blanks at random positions (not first)
+    const positions = [];
+    while (positions.length < 4) {
+        const p = 1 + Math.floor(Math.random()*9);
+        if (!positions.includes(p)) positions.push(p);
+    }
+    positions.sort((a,b)=>a-b);
+    currentSkipData = { step, start, sequence: seq, blanks: positions };
+    renderSkipCount();
+    document.getElementById('skipFeedback').className = 'quiz-feedback mt-16';
+    document.getElementById('skipFeedback').style.display = 'none';
+}
+function renderSkipCount() {
+    const { sequence, blanks, step } = currentSkipData;
+    let html = '<div style="text-align:center;margin-bottom:12px;font-size:1.1rem;color:var(--accent-light);font-weight:600;">Count in '+step+'s</div>';
+    html += '<div class="skip-grid">';
+    sequence.forEach((val, i) => {
+        if (blanks.includes(i)) {
+            html += '<div class="skip-cell blank" id="sc-'+i+'"><input type="text" data-answer="'+val+'" maxlength="3"></div>';
+        } else {
+            html += '<div class="skip-cell given">'+val+'</div>';
+        }
+    });
+    html += '</div>';
+    document.getElementById('skipCountArea').innerHTML = html;
+}
+function checkSkipCount() {
+    let allCorrect = true;
+    currentSkipData.blanks.forEach(i => {
+        const cell = document.getElementById('sc-'+i);
+        const input = cell.querySelector('input');
+        const answer = parseInt(input.dataset.answer);
+        const userVal = parseInt(input.value);
+        if (userVal === answer) {
+            cell.classList.add('correct');
+            cell.classList.remove('wrong');
+        } else {
+            cell.classList.add('wrong');
+            cell.classList.remove('correct');
+            allCorrect = false;
+        }
+        input.disabled = true;
+    });
+    const fb = document.getElementById('skipFeedback');
+    if (allCorrect) {
+        fb.className = 'quiz-feedback mt-16 show correct-fb';
+        fb.textContent = '🎉 Perfect! You can count in '+currentSkipData.step+'s!';
+        playSound('correct');
+    } else {
+        fb.className = 'quiz-feedback mt-16 show wrong-fb';
+        fb.textContent = '❌ Some answers are wrong. The correct sequence is: '+currentSkipData.sequence.join(', ');
+        playSound('wrong');
+    }
+}
+
+// ==================== MINI TEST 1 ====================
+let mt1Built = false;
+function buildMiniTest1() {
+    const questions = [
+        { q:'How many tens and ones are in the number 23?', opts:['2 tens and 3 ones','3 tens and 2 ones','23 ones','2 ones and 3 tens'], correct:0 },
+        { q:'What number is made from 4 tens and 5 ones?', opts:['54','45','9','405'], correct:1 },
+        { q:'True or False: 10 ones is the same as 1 ten.', opts:['True','False'], correct:0 },
+        { q:'What is the next number when counting in 5s: 10, 15, 20, ___?', opts:['22','30','25','21'], correct:2 },
+        { q:'How many tens are in the number 70?', opts:['7','70','0','17'], correct:0 },
+        { q:'Which shows 36 correctly?', opts:['3 tens and 6 ones','6 tens and 3 ones','30 tens and 6 ones','36 ones only'], correct:0 },
+    ];
+    buildQuiz('miniTest1', questions, 'mt1Result', 'Mini Test 1');
+    mt1Built = true;
+}
+
+// ==================== SLIDE 10: PV CHART ====================
+function initPVChart(num) {
+    const t = Math.floor(num/10), o = num % 10;
+    document.getElementById('pvNumber').textContent = num;
+    document.getElementById('pvTens').textContent = t;
+    document.getElementById('pvOnes').textContent = o;
+    // Build blocks
+    let html = '';
+    for (let i=0;i<t;i++) html += '<div class="ten-rod" style="height:70px;width:20px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>';
+    for (let i=0;i<o;i++) html += '<div class="one-cube"></div>';
+    document.getElementById('pvBlocks').innerHTML = html;
+    document.getElementById('pvStem').innerHTML = 'This is the number <strong>'+num+'</strong>. The <span class="highlight-tens">'+t+'</span> shows we have <span class="highlight-tens">'+t+' groups of ten</span>. The <span class="highlight-ones">'+o+'</span> shows we have <span class="highlight-ones">'+o+' extra ones</span>.';
+}
+function newPVNumber() {
+    playSound('click');
+    initPVChart(11 + Math.floor(Math.random()*79));
+}
+
+// ==================== SLIDE 11: PART-WHOLE ====================
+function initPWModel(num) {
+    const t = Math.floor(num/10)*10, o = num%10;
+    document.getElementById('pwWholeText').textContent = num;
+    document.getElementById('pwTensText').textContent = t;
+    document.getElementById('pwOnesText').textContent = o;
+    document.getElementById('pwWhole2').textContent = num;
+    document.getElementById('pwTens2').textContent = t;
+    document.getElementById('pwOnes2').textContent = o;
+}
+function newPWNumber() {
+    playSound('click');
+    const num = 11 + Math.floor(Math.random()*79);
+    initPWModel(num);
+}
+
+// ==================== SLIDE 12: EXCHANGE ====================
+let exchangeInitialized = false;
+let exchangeNum = 42;
+let exchangeState = 'standard'; // 'standard' or 'exchanged'
+
+function initExchange() {
+    exchangeNum = 42;
+    exchangeState = 'standard';
+    renderExchange();
+    exchangeInitialized = true;
+}
+function renderExchange() {
+    const t = Math.floor(exchangeNum/10), o = exchangeNum%10;
+    const area = document.getElementById('exchangeDemo');
+    const stem = document.getElementById('exchangeStem');
+    if (exchangeState === 'standard') {
+        let blocksHtml = '';
+        for (let i=0;i<t;i++) blocksHtml += '<div class="ten-rod" style="height:80px;width:22px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>';
+        for (let i=0;i<o;i++) blocksHtml += '<div class="one-cube"></div>';
+        area.innerHTML = '<div class="exchange-area"><div class="exchange-box"><h4>Standard</h4><div class="blocks-area">'+blocksHtml+'</div><div style="margin-top:8px;font-size:1.2rem;font-weight:700;"><span style="color:var(--tens-color);">'+t+' tens</span> and <span style="color:var(--ones-color);">'+o+' ones</span></div></div></div>';
+        stem.innerHTML = '<strong>'+exchangeNum+'</strong> = <span class="highlight-tens">'+(t*10)+'</span> + <span class="highlight-ones">'+o+'</span>';
+    } else {
+        const newTens = t - 1;
+        const newOnes = o + 10;
+        let leftBlocks = '';
+        for (let i=0;i<newTens;i++) leftBlocks += '<div class="ten-rod" style="height:80px;width:22px;"><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div><div class="unit"></div></div>';
+        let rightBlocks = '';
+        for (let i=0;i<newOnes;i++) rightBlocks += '<div class="one-cube"></div>';
+        area.innerHTML = '<div class="exchange-area"><div class="exchange-box"><h4>Tens</h4><div class="blocks-area">'+leftBlocks+'</div><div style="margin-top:8px;font-size:1.2rem;font-weight:700;color:var(--tens-color);">'+newTens+' tens</div></div><div class="exchange-arrow">→</div><div class="exchange-box"><h4>Ones</h4><div class="blocks-area" style="max-width:200px;">'+rightBlocks+'</div><div style="margin-top:8px;font-size:1.2rem;font-weight:700;color:var(--ones-color);">'+newOnes+' ones</div></div></div>';
+        stem.innerHTML = '<strong>'+exchangeNum+'</strong> = <span class="highlight-tens">'+(newTens*10)+'</span> + <span class="highlight-ones">'+newOnes+'</span> — Still '+exchangeNum+'! 🎉';
+    }
+}
+function showExchange() {
+    if (exchangeState === 'standard') {
+        exchangeState = 'exchanged';
+        playSound('success');
+    } else {
+        // New number
+        exchangeNum = 21 + Math.floor(Math.random()*69);
+        exchangeState = 'standard';
+        playSound('click');
+    }
+    renderExchange();
+}
+function resetExchange() {
+    exchangeState = 'standard';
+    playSound('click');
+    renderExchange();
+}
+
+// ==================== SLIDE 13: ARROW CARDS ====================
+let arrowInitialized = false;
+function newArrowCard() {
+    playSound('click');
+    const num = 11 + Math.floor(Math.random()*79);
+    const t = Math.floor(num/10)*10, o = num%10;
+    const area = document.getElementById('arrowDemo');
+    // Phase 1: separated
+    area.innerHTML = '<div style="text-align:center;"><div class="arrow-cards" id="arrowCards"><div class="arrow-card tens-card" id="ac-tens">'+t+'</div><span style="font-size:2rem;color:var(--text-dim);animation:pulseArrow 1.5s infinite;">+</span><div class="arrow-card ones-card" id="ac-ones">'+o+'</div></div><div class="btn-row mt-16"><button class="action-btn" style="background:var(--success);" onclick="combineArrow('+num+','+t+','+o+')">🃏 Combine!</button></div><div class="sentence-stem mt-16" id="arrowStem"><span class="highlight-tens">'+t+'</span> + <span class="highlight-ones">'+o+'</span> = ?</div></div>';
+}
+function combineArrow(num, t, o) {
+    playSound('success');
+    const area = document.getElementById('arrowDemo');
+    area.innerHTML = '<div style="text-align:center;"><div class="arrow-cards"><div class="arrow-card" style="background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(245,158,11,0.2));border:2px solid var(--accent);color:var(--accent-light);font-size:3rem;">'+num+'</div></div><div class="sentence-stem mt-16"><span class="highlight-tens">'+t+'</span> + <span class="highlight-ones">'+o+'</span> = <strong>'+num+'</strong> 🎉</div></div>';
+}
+
+// ==================== SLIDE 14: WORDS ====================
+let wordInitialized = false;
+let currentWordNum = 0;
+const numberWords = {
+    0:'zero',1:'one',2:'two',3:'three',4:'four',5:'five',6:'six',7:'seven',8:'eight',9:'nine',
+    10:'ten',11:'eleven',12:'twelve',13:'thirteen',14:'fourteen',15:'fifteen',16:'sixteen',17:'seventeen',18:'eighteen',19:'nineteen',
+    20:'twenty',30:'thirty',40:'forty',50:'fifty',60:'sixty',70:'seventy',80:'eighty',90:'ninety',100:'one hundred'
+};
+function numToWord(n) {
+    if (numberWords[n]) return numberWords[n];
+    const t = Math.floor(n/10)*10, o = n%10;
+    return numberWords[t]+'-'+numberWords[o];
+}
+function newWordNumber() {
+    currentWordNum = 1 + Math.floor(Math.random()*99);
+    document.getElementById('wordNum').textContent = currentWordNum;
+    document.getElementById('wordInput').value = '';
+    document.getElementById('wordInput').className = 'word-input';
+    document.getElementById('wordFeedback').className = 'quiz-feedback mt-16';
+    document.getElementById('wordFeedback').style.display = 'none';
+    document.getElementById('wordHint').classList.add('hidden');
+    playSound('click');
+}
+function checkWord() {
+    const input = document.getElementById('wordInput').value.trim().toLowerCase().replace(/\s+/g,'-');
+    const correct = numToWord(currentWordNum).toLowerCase();
+    const fb = document.getElementById('wordFeedback');
+    if (input === correct || input === correct.replace(/-/g,' ') || input === correct.replace(/-/g,'')) {
+        fb.className = 'quiz-feedback mt-16 show correct-fb';
+        fb.textContent = '🎉 Correct! '+currentWordNum+' = "'+numToWord(currentWordNum)+'"';
+        document.getElementById('wordInput').className = 'word-input correct';
+        playSound('correct');
+    } else {
+        fb.className = 'quiz-feedback mt-16 show wrong-fb';
+        fb.textContent = '❌ Not quite. The correct spelling is: "'+numToWord(currentWordNum)+'"';
+        document.getElementById('wordInput').className = 'word-input wrong';
+        playSound('wrong');
+        // Common mistake hints
+        const hint = document.getElementById('wordHint');
+        if (currentWordNum >= 40 && currentWordNum < 50 && input.includes('four')) {
+            hint.textContent = '💡 Tip: It\'s "forty" not "fourty" — the U is dropped!';
+            hint.classList.remove('hidden');
+        } else if (currentWordNum === 15 && input.includes('five')) {
+            hint.textContent = '💡 Tip: It\'s "fifteen" not "fiveteen"!';
+            hint.classList.remove('hidden');
+        }
+    }
+}
+document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.activeElement && document.activeElement.id === 'wordInput') checkWord();
+});
+
+// ==================== MINI TEST 2 ====================
+let mt2Built = false;
+function buildMiniTest2() {
+    const questions = [
+        { q:'Partition 67 into tens and ones:', opts:['60 + 7','6 + 7','67 + 0','70 + 6'], correct:0 },
+        { q:'Which number does 50 + 3 make?', opts:['35','503','53','8'], correct:2 },
+        { q:'What is 42 written in a different way (non-standard)?', opts:['40 + 2','30 + 12','42 + 0','4 + 2'], correct:1 },
+        { q:'Write eighty-four as a number:', opts:['48','804','84','8004'], correct:2 },
+        { q:'In the number 52, the digit 5 represents:', opts:['5 ones','5','50 (5 tens)','52'], correct:2 },
+        { q:'Which word is spelled correctly?', opts:['Fourty','Fourty-two','Forty','Foty'], correct:2 },
+    ];
+    buildQuiz('miniTest2', questions, 'mt2Result', 'Mini Test 2');
+    mt2Built = true;
+}
+
+// ==================== SLIDE 19: COMPARE ====================
+let cmpInitialized = false;
+let cmpLeft = 0, cmpRight = 0, cmpSelected = '';
+function newCompare() {
+    cmpLeft = 10 + Math.floor(Math.random()*80);
+    cmpRight = 10 + Math.floor(Math.random()*80);
+    if (Math.random() < 0.15) cmpRight = cmpLeft; // occasionally equal
+    document.getElementById('cmpLeft').textContent = cmpLeft;
+    document.getElementById('cmpRight').textContent = cmpRight;
+    cmpSelected = '';
+    ['cmpLt','cmpEq','cmpGt'].forEach(id => { document.getElementById(id).className = 'compare-btn'; });
+    document.getElementById('cmpFeedback').className = 'quiz-feedback mt-16';
+    document.getElementById('cmpFeedback').style.display = 'none';
+    document.getElementById('cmpStem').style.opacity = '0';
+    cmpInitialized = true;
+}
+function selectCompare(sym) {
+    playSound('click');
+    cmpSelected = sym;
+    ['cmpLt','cmpEq','cmpGt'].forEach(id => { document.getElementById(id).classList.remove('selected'); });
+    if (sym==='<') document.getElementById('cmpLt').classList.add('selected');
+    if (sym==='=') document.getElementById('cmpEq').classList.add('selected');
+    if (sym==='>') document.getElementById('cmpGt').classList.add('selected');
+}
+function checkCompare() {
+    if (!cmpSelected) return;
+    const correct = cmpLeft < cmpRight ? '<' : (cmpLeft > cmpRight ? '>' : '=');
+    const fb = document.getElementById('cmpFeedback');
+    const stem = document.getElementById('cmpStem');
+    const tl = Math.floor(cmpLeft/10), tr = Math.floor(cmpRight/10);
+    if (cmpSelected === correct) {
+        fb.className = 'quiz-feedback mt-16 show correct-fb';
+        fb.textContent = '🎉 Correct! '+cmpLeft+' '+correct+' '+cmpRight;
+        playSound('correct');
+        if (correct === '<') stem.innerHTML = cmpLeft+' is <strong>less than</strong> '+cmpRight+' because <span class="highlight-tens">'+tl+' tens < '+tr+' tens</span>.';
+        else if (correct === '>') stem.innerHTML = cmpLeft+' is <strong>greater than</strong> '+cmpRight+' because <span class="highlight-tens">'+tl+' tens > '+tr+' tens</span>.';
+        else stem.innerHTML = 'They are <strong>equal</strong>! Same tens and same ones.';
+        stem.style.opacity = '1';
+    } else {
+        fb.className = 'quiz-feedback mt-16 show wrong-fb';
+        fb.textContent = '❌ Not quite. The correct answer is: '+cmpLeft+' '+correct+' '+cmpRight;
+        playSound('wrong');
+    }
+}
+
+// ==================== SLIDE 20: NUMBER LINE ====================
+let nlInitialized = false;
+let nlTarget = 60;
+let nlPos = 50; // percentage position of marker
+
+function initNumberLine() {
+    nlTarget = Math.round((10 + Math.floor(Math.random()*80)) / 5) * 5; // multiples of 5
+    document.getElementById('nlTarget').textContent = nlTarget;
+    document.getElementById('nlFeedback').className = 'quiz-feedback mt-16';
+    document.getElementById('nlFeedback').style.display = 'none';
+    nlPos = 50;
+    renderNumberLine();
+    setupNLDrag();
+    nlInitialized = true;
+}
+function renderNumberLine() {
+    const line = document.getElementById('numberLine');
+    let html = '';
+    // Ticks at every 10
+    for (let i = 0; i <= 100; i += 10) {
+        const pct = i;
+        html += '<div class="nl-tick" style="left:'+pct+'%;"></div>';
+        html += '<div class="nl-label" style="left:'+pct+'%;">'+i+'</div>';
+    }
+    html += '<div class="nl-marker" id="nlMarker" style="left:'+nlPos+'%;">?</div>';
+    line.innerHTML = html;
+}
+function setupNLDrag() {
+    const container = document.getElementById('numberLine');
+    let dragging = false;
+    function updatePos(clientX) {
+        const rect = container.getBoundingClientRect();
+        let pct = ((clientX - rect.left) / rect.width) * 100;
+        pct = Math.max(0, Math.min(100, pct));
+        nlPos = Math.round(pct);
+        const marker = document.getElementById('nlMarker');
+        marker.style.left = nlPos + '%';
+        marker.textContent = nlPos;
+    }
+    container.addEventListener('mousedown', e => { dragging = true; updatePos(e.clientX); });
+    document.addEventListener('mousemove', e => { if (dragging) updatePos(e.clientX); });
+    document.addEventListener('mouseup', () => { dragging = false; });
+    container.addEventListener('touchstart', e => { dragging = true; updatePos(e.touches[0].clientX); }, {passive:true});
+    document.addEventListener('touchmove', e => { if (dragging) updatePos(e.touches[0].clientX); }, {passive:true});
+    document.addEventListener('touchend', () => { dragging = false; });
+}
+function checkNumberLine() {
+    const diff = Math.abs(nlPos - nlTarget);
+    const fb = document.getElementById('nlFeedback');
+    if (diff <= 3) {
+        fb.className = 'quiz-feedback mt-16 show correct-fb';
+        fb.textContent = '🎉 Perfect! You placed it right at '+nlPos+'. The target was '+nlTarget+'.';
+        playSound('correct');
+    } else if (diff <= 8) {
+        fb.className = 'quiz-feedback mt-16 show correct-fb';
+        fb.textContent = '👍 Close! You placed it at '+nlPos+'. The target was '+nlTarget+'. Only '+diff+' away!';
+        playSound('correct');
+    } else {
+        fb.className = 'quiz-feedback mt-16 show wrong-fb';
+        fb.textContent = '❌ You placed it at '+nlPos+', but the target was '+nlTarget+'. Think about which tens it\'s between!';
+        playSound('wrong');
+    }
+}
+function newNumberLine() {
+    nlTarget = Math.round((10 + Math.floor(Math.random()*80)) / 5) * 5;
+    document.getElementById('nlTarget').textContent = nlTarget;
+    nlPos = 50;
+    renderNumberLine();
+    setupNLDrag();
+    document.getElementById('nlFeedback').className = 'quiz-feedback mt-16';
+    document.getElementById('nlFeedback').style.display = 'none';
+    playSound('click');
+}
+
+// ==================== MINI TEST 3 ====================
+let mt3Built = false;
+function buildMiniTest3() {
+    const questions = [
+        { q:'Which symbol goes between 45 and 54?', opts:['45 < 54','45 > 54','45 = 54'], correct:0 },
+        { q:'Order from smallest to largest: 23, 67, 12', opts:['12, 23, 67','23, 12, 67','67, 23, 12'], correct:0 },
+        { q:'Where is 70 on a number line from 0 to 100?', opts:['Right in the middle','Closer to 100 than 0','Closer to 0 than 100','At the very end'], correct:1 },
+        { q:'Why is 82 greater than 79?', opts:['Because 2 > 9','Because 8 tens > 7 tens','Because 82 has more digits','Because 79 comes after 82'], correct:1 },
+        { q:'Which number is closest to 50?', opts:['38','61','48','55'], correct:2 },
+        { q:'34 ___ 43. What goes in the gap?', opts:['>','<','='], correct:1 },
+    ];
+    buildQuiz('miniTest3', questions, 'mt3Result', 'Mini Test 3');
+    mt3Built = true;
+}
+
+// ==================== FINAL TEST ====================
+let ftBuilt = false;
+function buildFinalTest() {
+    const questions = [
+        { q:'1. How many tens and ones make 56?', opts:['5 tens and 6 ones','6 tens and 5 ones','56 ones','50 tens and 6 ones'], correct:0 },
+        { q:'2. What number is 7 tens and 3 ones?', opts:['37','73','703','10'], correct:1 },
+        { q:'3. What is the next number counting in 3s: 9, 12, 15, ___?', opts:['16','17','18','20'], correct:2 },
+        { q:'4. Partition 84 into tens and ones:', opts:['8 + 4','80 + 4','84 + 0','40 + 8'], correct:1 },
+        { q:'5. Write 42 using non-standard partitioning:', opts:['40 + 2','42 + 0','30 + 12','4 + 2'], correct:2 },
+        { q:'6. What is "sixty-seven" as a number?', opts:['76','607','67','6007'], correct:2 },
+        { q:'7. In the number 91, what does the 9 represent?', opts:['9 ones','9','90 (9 tens)','91'], correct:2 },
+        { q:'8. Which is correct: 38 ___ 83?', opts:['38 > 83','38 = 83','38 < 83'], correct:2 },
+        { q:'9. Order smallest to largest: 55, 19, 72, 38', opts:['19, 38, 55, 72','55, 38, 72, 19','72, 55, 38, 19','19, 55, 38, 72'], correct:0 },
+        { q:'10. Where would 25 go on a number line 0–100?', opts:['Three-quarters along','Halfway','A quarter of the way','Right at the start'], correct:2 },
+    ];
+    buildQuiz('finalTest', questions, 'finalResult', 'Final Mastery Assessment', true);
+    ftBuilt = true;
+}
+
+// ==================== GENERIC QUIZ BUILDER ====================
+function buildQuiz(containerId, questions, resultId, testName, isFinal) {
+    const container = document.getElementById(containerId);
+    let score = 0;
+    let answered = 0;
+    let html = '';
+    questions.forEach((q, qi) => {
+        html += '<div class="quiz-question" id="'+containerId+'-q'+qi+'">';
+        html += '<div class="q-text">'+q.q+'</div>';
+        html += '<div class="quiz-options">';
+        q.opts.forEach((opt, oi) => {
+            html += '<button class="quiz-opt" data-qi="'+qi+'" data-oi="'+oi+'" data-correct="'+q.correct+'" onclick="handleQuizAnswer(this,\''+containerId+'\',\''+resultId+'\','+questions.length+','+!!isFinal+')">'+opt+'</button>';
+        });
+        html += '</div>';
+        html += '<div class="quiz-feedback" id="'+containerId+'-fb'+qi+'"></div>';
+        html += '</div>';
+    });
+    container.innerHTML = html;
+    container.dataset.score = '0';
+    container.dataset.answered = '0';
+    container.dataset.total = questions.length;
+    container.dataset.testName = testName;
+}
+
+function handleQuizAnswer(btn, containerId, resultId, total, isFinal) {
+    const qi = parseInt(btn.dataset.qi);
+    const oi = parseInt(btn.dataset.oi);
+    const correct = parseInt(btn.dataset.correct);
+    const container = document.getElementById(containerId);
+    const fb = document.getElementById(containerId+'-fb'+qi);
+
+    // Disable all options for this question
+    const qDiv = document.getElementById(containerId+'-q'+qi);
+    qDiv.querySelectorAll('.quiz-opt').forEach(o => { o.classList.add('disabled'); });
+
+    if (oi === correct) {
+        btn.classList.add('correct');
+        fb.className = 'quiz-feedback show correct-fb';
+        fb.textContent = '✅ Correct!';
+        container.dataset.score = parseInt(container.dataset.score) + 1;
+        playSound('correct');
+    } else {
+        btn.classList.add('wrong');
+        qDiv.querySelectorAll('.quiz-opt')[correct].classList.add('correct');
+        fb.className = 'quiz-feedback show wrong-fb';
+        fb.textContent = '❌ The correct answer is: ' + qDiv.querySelectorAll('.quiz-opt')[correct].textContent;
+        playSound('wrong');
+    }
+
+    container.dataset.answered = parseInt(container.dataset.answered) + 1;
+    const answered = parseInt(container.dataset.answered);
+    const score = parseInt(container.dataset.score);
+
+    if (answered === total) {
+        setTimeout(() => {
+            const resultDiv = document.getElementById(resultId);
+            resultDiv.classList.remove('hidden');
+            const pct = Math.round(score/total*100);
+            let emoji = pct >= 90 ? '🌟' : pct >= 70 ? '👍' : '💪';
+            resultDiv.innerHTML = '<div style="font-size:2rem;">'+emoji+'</div><div style="font-size:1.5rem;font-weight:800;margin:8px 0;">'+score+' / '+total+'</div><div style="color:var(--text-dim);">'+container.dataset.testName+' Complete!</div>';
+            if (isFinal) updateCertificate(score, total);
+            playSound('success');
+        }, 1000);
+    }
+}
+
+function updateCertificate(score, total) {
+    const pct = Math.round(score/total*100);
+    document.getElementById('certScore').textContent = score+'/'+total;
+    if (pct >= 90) {
+        document.getElementById('certTitle').textContent = '🌟 Place Value Master!';
+        document.getElementById('certScore').className = 'score-circle gold';
+        document.getElementById('certMessage').textContent = 'Outstanding! You have mastered Place Value. You are ready for Block 2.';
+    } else if (pct >= 70) {
+        document.getElementById('certTitle').textContent = '👍 Great Work!';
+        document.getElementById('certScore').className = 'score-circle silver';
+        document.getElementById('certMessage').textContent = 'Good progress! Review the areas you found tricky, then try again.';
+    } else {
+        document.getElementById('certTitle').textContent = '💪 Keep Practising!';
+        document.getElementById('certScore').className = 'score-circle bronze';
+        document.getElementById('certMessage').textContent = 'You need more practice on Place Value. Go back through the lessons and try the tests again.';
+    }
+}
+
+// ==================== INIT ====================
+showSlide(0);
+</script>
+</body>
+</html>

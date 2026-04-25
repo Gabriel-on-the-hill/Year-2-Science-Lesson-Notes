@@ -21,9 +21,29 @@
     --text-dim: #94A3B8;
     --accent: #8B5CF6;
     --accent-light: #A78BFA;
+    --nav-bg: rgba(15,23,42,.92);
+    --track: rgba(255,255,255,.05);
 }
+body.light{
+    --bg-start:#F8FAFC;
+    --bg-end:#E2E8F0;
+    --card-bg:rgba(255,255,255,0.75);
+    --card-border:rgba(15,23,42,0.12);
+    --text:#0F172A;
+    --text-dim:#475569;
+    --accent:#7C3AED;
+    --accent-light:#6D28D9;
+    --nav-bg:rgba(248,250,252,.92);
+    --track:rgba(15,23,42,.06);
+}
+body.light .slide-title{background:linear-gradient(135deg,#0F172A,#475569);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body.light .quiz-opt{background:rgba(15,23,42,.04);border-color:rgba(15,23,42,.1)}
+body.light .nl-line{background:rgba(15,23,42,.18)}
+body.light .nl-tick{background:rgba(15,23,42,.45)}
+body.light .nav-btn.back{background:rgba(15,23,42,.08);color:var(--text)}
+body.light .progress-bar-container{background:rgba(15,23,42,.08)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-start),var(--bg-end));color:var(--text);min-height:100vh;overflow:hidden;user-select:none}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-start),var(--bg-end));color:var(--text);min-height:100vh;overflow:hidden;user-select:none;transition:background .4s ease,color .4s ease}
 
 /* SLIDE SYSTEM */
 .slide{display:none;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:30px 30px 90px;position:relative;animation:fadeIn .5s ease}
@@ -31,13 +51,51 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 @keyframes fadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
 /* NAV */
-.nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(15,23,42,.92);backdrop-filter:blur(20px);border-top:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between;padding:12px 30px}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-top:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between;padding:12px 30px;gap:12px}
 .nav-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
 .nav-btn:hover{background:var(--accent-light);transform:translateY(-2px)}
 .nav-btn:disabled{opacity:.3;cursor:not-allowed;transform:none}
 .nav-btn.back{background:rgba(255,255,255,.1)}
+.theme-toggle,.reset-btn{background:transparent;color:var(--text-dim);border:1px solid var(--card-border);border-radius:10px;padding:8px 14px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.theme-toggle:hover,.reset-btn:hover{color:var(--text);border-color:var(--accent)}
+.nav-center{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* RESUME TOAST */
+.resume-toast{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-120%);z-index:200;background:var(--card-bg);backdrop-filter:blur(20px);border:1px solid var(--card-border);border-left:4px solid var(--accent);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 12px 40px rgba(0,0,0,.4);font-size:.95rem;color:var(--text);transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;max-width:92vw}
+.resume-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.resume-toast .resume-icon{font-size:1.4rem}
+.resume-toast .resume-msg strong{color:var(--accent-light)}
+.resume-toast button{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit}
+.resume-toast button.ghost{background:transparent;color:var(--text-dim);padding:6px 10px}
+.resume-toast button.ghost:hover{color:var(--text)}
+
+/* HINT */
+.kbd-hint{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);font-size:.78rem;color:var(--text-dim);background:var(--card-bg);border:1px solid var(--card-border);border-radius:100px;padding:6px 14px;backdrop-filter:blur(10px);pointer-events:none;animation:hintFade 6s ease-in-out forwards;opacity:0}
+@keyframes hintFade{0%{opacity:0}10%{opacity:1}80%{opacity:1}100%{opacity:0}}
+.kbd-hint kbd{background:rgba(255,255,255,.1);border:1px solid var(--card-border);border-radius:4px;padding:1px 6px;font-family:'Inter',sans-serif;font-size:.75rem;margin:0 2px}
+
+/* PRINT */
+@media print{
+    body{background:#fff!important;color:#000!important;overflow:visible!important}
+    .nav-bar,.progress-bar-container,.resume-toast,.kbd-hint,.theme-toggle,.reset-btn,.week-badge{display:none!important}
+    .slide{display:none!important;page-break-after:always}
+    .slide.active{display:block!important;min-height:auto!important;padding:0!important;background:#fff!important}
+    .slide-content{max-height:none!important;overflow:visible!important;padding:0!important}
+    .glass-card,.homework-card,.roadblock-card,.results-card{background:#fff!important;border:1px solid #cbd5e1!important;backdrop-filter:none!important;box-shadow:none!important;color:#000!important;page-break-inside:avoid}
+    .homework-card{border:2px solid #7C3AED!important}
+    h3,.slide-title{color:#0F172A!important;-webkit-text-fill-color:#0F172A!important;background:none!important}
+    .slide-subtitle,.homework-item,.ak-item{color:#1e293b!important}
+    .answer-key{display:block!important;page-break-before:auto}
+    .answer-key[open],.answer-key{margin-top:14px}
+    .answer-key summary{background:#fef3c7!important;color:#92400e!important;border:1px solid #f59e0b!important}
+    .answer-key:not([open]) > *:not(summary){display:block!important}
+    .tier-mild{background:#dcfce7!important;color:#166534!important;border-color:#86efac!important}
+    .tier-medium{background:#fef3c7!important;color:#92400e!important;border-color:#fcd34d!important}
+    .tier-spicy{background:#fee2e2!important;color:#991b1b!important;border-color:#fca5a5!important}
+    strong{color:#0F172A!important}
+}
 .slide-counter{color:var(--text-dim);font-size:.9rem;font-weight:500}
-.progress-bar-container{position:fixed;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,.05);z-index:101}
+.progress-bar-container{position:fixed;top:0;left:0;right:0;height:4px;background:var(--track);z-index:101}
 .progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--half-color));transition:width .4s ease;border-radius:0 2px 2px 0}
 
 /* BADGES */
@@ -47,7 +105,7 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 
 /* CARDS */
 .glass-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:32px;backdrop-filter:blur(20px);max-width:920px;width:100%}
-.slide-title{font-size:2rem;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,#fff,var(--text-dim));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.slide-title{font-size:2rem;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,#fff,var(--text-dim));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .slide-subtitle{color:var(--text-dim);font-size:1.05rem;margin-bottom:24px;line-height:1.7}
 
 /* FRACTION SHAPES */
@@ -110,6 +168,10 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 .homework-card{background:linear-gradient(135deg,rgba(59,130,246,.05),rgba(139,92,246,.08));border:2px dashed rgba(139,92,246,.3);border-radius:20px;padding:32px;max-width:700px;width:100%}
 .homework-card h3{color:var(--accent-light);margin-bottom:16px}
 .homework-item{padding:8px 0;font-size:1.05rem;color:var(--text);display:flex;gap:10px;line-height:1.6}
+.tier-header{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:6px 12px;border-radius:100px;margin:14px 0 4px}
+.tier-mild{background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.3)}
+.tier-medium{background:rgba(245,158,11,.12);color:#F59E0B;border:1px solid rgba(245,158,11,.3)}
+.tier-spicy{background:rgba(239,68,68,.12);color:#EF4444;border:1px solid rgba(239,68,68,.3)}
 .answer-key{margin-top:20px;border-top:1px dashed rgba(255,255,255,.12);padding-top:16px}
 .answer-key summary{cursor:pointer;color:var(--third-color);font-weight:700;padding:10px 14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;list-style:none;font-size:.95rem}
 .answer-key summary::-webkit-details-marker{display:none}
@@ -159,7 +221,7 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 .click-shape:hover{filter:brightness(1.3)}
 
 /* TITLE */
-.title-slide h1{font-size:3.5rem;font-weight:900;text-align:center;line-height:1.2;background:linear-gradient(135deg,var(--half-color),var(--accent),var(--third-color));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.title-slide h1{font-size:3.5rem;font-weight:900;text-align:center;line-height:1.2;background:linear-gradient(135deg,var(--half-color),var(--accent),var(--third-color));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .title-meta{color:var(--text-dim);font-size:1.1rem;margin-top:12px;text-align:center}
 
 @media(max-width:600px){
@@ -416,12 +478,16 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
     <div class="week-badge"><span class="dot w1"></span> Week 1</div>
     <div class="homework-card">
         <h3>🏠 Homework 1: Halves Hunt</h3>
+        <div class="slide-subtitle" style="margin-bottom:8px;font-size:.95rem;">Try every tier — Mild builds confidence, Medium stretches, Spicy challenges.</div>
+        <div class="tier-header tier-mild">🌱 Mild — warm-up</div>
         <div class="homework-item"><span>✏️</span> Draw 3 shapes (circle, rectangle, triangle) and shade <strong>exactly half</strong> of each.</div>
-        <div class="homework-item"><span>🍪</span> Find half of: <strong>8, 14, 20, 6</strong>. Show your working by drawing counters split into 2 groups.</div>
         <div class="homework-item"><span>🔍</span> Scavenger Hunt: Find 3 things at home that are split into halves (e.g. a sandwich cut in half).</div>
+        <div class="tier-header tier-medium">🔥 Medium — main practice</div>
+        <div class="homework-item"><span>🍪</span> Find half of: <strong>8, 14, 20, 6</strong>. Show your working by drawing counters split into 2 groups.</div>
+        <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> Ben has 10 grapes. He eats half of them. How many does he eat? How many are left?</div>
+        <div class="tier-header tier-spicy">🌶️ Spicy — stretch & explain</div>
         <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> If you cut a pizza into 2 pieces but one piece is bigger, is it halves? Why not?</div>
         <div class="homework-item"><span>🕵️</span> <strong>Spot the mistake:</strong> Toby cuts his pancake into 2 pieces and gives the <em>smaller</em> piece to his sister. He says "I've given her half." Is he right? Explain.</div>
-        <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> Ben has 10 grapes. He eats half of them. How many does he eat? How many are left?</div>
         <details class="answer-key">
             <summary>Answer key (for parents / teachers)</summary>
             <div class="ak-item"><strong>Shapes:</strong> any drawing with 2 equal parts, 1 shaded. Accept diagonal / horizontal / vertical cuts.</div>
@@ -710,13 +776,17 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
     <div class="week-badge"><span class="dot w2"></span> Week 2</div>
     <div class="homework-card">
         <h3>🏠 Homework 2: Quarters & Thirds</h3>
+        <div class="slide-subtitle" style="margin-bottom:8px;font-size:.95rem;">Try every tier — Mild builds confidence, Medium stretches, Spicy challenges.</div>
+        <div class="tier-header tier-mild">🌱 Mild — warm-up</div>
         <div class="homework-item"><span>🍕</span> Draw a pizza and divide it into <strong>4 equal slices</strong>. Shade 1 slice. What fraction is shaded?</div>
+        <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Which is bigger — ½ of a pizza or ¼ of a pizza? Why?</div>
+        <div class="tier-header tier-medium">🔥 Medium — main practice</div>
         <div class="homework-item"><span>🍪</span> Find ¼ of: <strong>8, 16, 20, 24</strong>. Draw counters in 4 groups.</div>
         <div class="homework-item"><span>🎂</span> Find ⅓ of: <strong>6, 12, 15, 18</strong>. Draw counters in 3 groups.</div>
-        <div class="homework-item"><span>🔄</span> <strong>Challenge:</strong> If ¼ of a number is 5, what is the whole number?</div>
-        <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Which is bigger — ½ of a pizza or ¼ of a pizza? Why?</div>
-        <div class="homework-item"><span>🕵️</span> <strong>Spot the mistake:</strong> Alice says "¼ of 12 is 6, because 12 ÷ 2 = 6." What did she do wrong? Write the correct answer.</div>
         <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> There are 16 children in a class. ¼ of them wear glasses. How many wear glasses? How many do NOT?</div>
+        <div class="tier-header tier-spicy">🌶️ Spicy — stretch & explain</div>
+        <div class="homework-item"><span>🔄</span> <strong>Challenge:</strong> If ¼ of a number is 5, what is the whole number?</div>
+        <div class="homework-item"><span>🕵️</span> <strong>Spot the mistake:</strong> Alice says "¼ of 12 is 6, because 12 ÷ 2 = 6." What did she do wrong? Write the correct answer.</div>
         <details class="answer-key">
             <summary>Answer key (for parents / teachers)</summary>
             <div class="ak-item"><strong>Pizza:</strong> any drawing with 4 equal slices, 1 shaded. Fraction shaded = <strong>¼</strong>.</div>
@@ -857,6 +927,28 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 </div>
 </div>
 
+<!-- ===== NEW: W3 ¾-OF-QUANTITY PRACTICE ===== -->
+<div class="slide" id="slide-w3-tq-practice">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w3"></span> Week 3 · Practice</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🎯 Your Turn: Find ¾</div>
+        <div class="slide-subtitle">Use the bar model to help. <strong>Step 1:</strong> divide by 4. <strong>Step 2:</strong> multiply by 3.</div>
+        <div style="font-size:1.4rem;margin:8px 0 4px;">Find <span class="hl-quarter">¾</span> of <span class="big-number" style="color:var(--quarter-color);font-size:3rem;" id="tqpNum">12</span></div>
+        <div id="tqpBarArea" style="margin:14px 0;"></div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:8px;">
+            <input type="number" id="tqpInput" placeholder="?" min="0" onkeydown="if(event.key==='Enter')checkTQPractice()" style="width:120px;padding:14px 18px;font-size:1.4rem;font-weight:800;text-align:center;border-radius:12px;border:2px solid var(--card-border);background:rgba(255,255,255,0.06);color:var(--text);font-family:inherit;" />
+            <button class="action-btn check-btn" onclick="checkTQPractice()">✅ Check</button>
+            <button class="action-btn" style="background:var(--accent);" onclick="newTQPractice()">🎲 New</button>
+        </div>
+        <div id="tqpFb" class="quiz-feedback mt-16"></div>
+        <div class="sentence-stem mt-16">
+            <strong>Score:</strong> <span id="tqpScore" style="color:var(--quarter-color);font-weight:800;">0</span> correct in a row 🔥
+        </div>
+    </div>
+</div>
+</div>
+
 <!-- ===== NEW: W3 COMPARE & ORDER ===== -->
 <div class="slide" id="slide-w3-compare">
 <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
@@ -939,12 +1031,16 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
     <div class="week-badge"><span class="dot w3"></span> Week 3</div>
     <div class="homework-card">
         <h3>🏠 Homework 3: Equivalence & Three Quarters</h3>
+        <div class="slide-subtitle" style="margin-bottom:8px;font-size:.95rem;">Try every tier — Mild builds confidence, Medium stretches, Spicy challenges.</div>
+        <div class="tier-header tier-mild">🌱 Mild — warm-up</div>
         <div class="homework-item"><span>✏️</span> Draw two identical bars. Shade ½ of one and ²⁄₄ of the other. Are they equal?</div>
-        <div class="homework-item"><span>🍪</span> Find ¾ of: <strong>8, 12, 16, 20</strong>. Show Step 1 (÷4) and Step 2 (×3).</div>
         <div class="homework-item"><span>🔢</span> Sort these into unit and non-unit fractions: <strong>½, ²⁄₃, ¼, ³⁄₄, ⅓, ²⁄₄</strong></div>
+        <div class="tier-header tier-medium">🔥 Medium — main practice</div>
+        <div class="homework-item"><span>🍪</span> Find ¾ of: <strong>8, 12, 16, 20</strong>. Show Step 1 (÷4) and Step 2 (×3).</div>
+        <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> A cake is cut into 12 equal slices. ¾ of the slices are eaten. How many slices are eaten? How many are left?</div>
+        <div class="tier-header tier-spicy">🌶️ Spicy — stretch & explain</div>
         <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Why does ½ = ²⁄₄? Can you explain it to someone using a picture?</div>
         <div class="homework-item"><span>👩‍🏫</span> <strong>Teach-back:</strong> Explain to someone at home why ²⁄₄ is the same as ½, using a drawing. Record any question they ask you.</div>
-        <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> A cake is cut into 12 equal slices. ¾ of the slices are eaten. How many slices are eaten? How many are left?</div>
         <details class="answer-key">
             <summary>Answer key (for parents / teachers)</summary>
             <div class="ak-item"><strong>Equivalence bars:</strong> Yes — the shaded region should be the same length on both bars. ½ = ²⁄₄.</div>
@@ -1078,12 +1174,16 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
     <div class="week-badge"><span class="dot w4"></span> Week 4</div>
     <div class="homework-card">
         <h3>🏠 Homework 4: Fractions Master Practice</h3>
+        <div class="slide-subtitle" style="margin-bottom:8px;font-size:.95rem;">Try every tier — Mild builds confidence, Medium stretches, Spicy challenges.</div>
+        <div class="tier-header tier-mild">🌱 Mild — warm-up</div>
         <div class="homework-item"><span>📏</span> Draw a number line from 0 to 2. Mark on it: <strong>½, 1, 1½, 2</strong></div>
-        <div class="homework-item"><span>📊</span> Use bar models to find: ½ of 18, ¼ of 20, ⅓ of 15, ¾ of 16</div>
         <div class="homework-item"><span>🍰</span> Draw a cake split into 4 parts. Shade ¾. How much is left unshaded? Write the fraction.</div>
+        <div class="tier-header tier-medium">🔥 Medium — main practice</div>
+        <div class="homework-item"><span>📊</span> Use bar models to find: ½ of 18, ¼ of 20, ⅓ of 15, ¾ of 16</div>
+        <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> Sam has 20 stickers. He gives ½ to his friend and ¼ to his brother. How many stickers does he give away altogether? How many does he keep?</div>
+        <div class="tier-header tier-spicy">🌶️ Spicy — stretch & explain</div>
         <div class="homework-item"><span>💬</span> <strong>Discussion:</strong> Is ½ of 10 the same as ¼ of 20? Prove it!</div>
         <div class="homework-item"><span>🔄</span> <strong>Open-middle:</strong> Find three different fractions of 12 that give a whole-number answer. Which gives the biggest answer? Which the smallest?</div>
-        <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> Sam has 20 stickers. He gives ½ to his friend and ¼ to his brother. How many stickers does he give away altogether? How many does he keep?</div>
         <details class="answer-key">
             <summary>Answer key (for parents / teachers)</summary>
             <div class="ak-item"><strong>Number line:</strong> 0 — ½ (halfway between 0 and 1) — 1 — 1½ (halfway between 1 and 2) — 2, in equal jumps.</div>
@@ -1178,8 +1278,21 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 <!-- NAV BAR -->
 <div class="nav-bar">
     <button class="nav-btn back" onclick="prevSlide()" id="backBtn">← Back</button>
-    <span class="slide-counter" id="slideCounter">1 / 46</span>
+    <div class="nav-center">
+        <span class="slide-counter" id="slideCounter">1 / 46</span>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" title="Toggle light/dark mode">🌙 Dark</button>
+        <button class="reset-btn" onclick="resetProgress()" title="Restart from slide 1">🔄 Restart</button>
+        <button class="reset-btn" onclick="window.print()" title="Print this slide (great for homework)">🖨️ Print</button>
+    </div>
     <button class="nav-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
+</div>
+
+<!-- RESUME TOAST -->
+<div class="resume-toast" id="resumeToast">
+    <span class="resume-icon">👋</span>
+    <span class="resume-msg" id="resumeMsg">Welcome back — picking up where you left off.</span>
+    <button onclick="dismissResume()">Got it</button>
+    <button class="ghost" onclick="resetProgress()">Restart</button>
 </div>
 
 <script>
@@ -1191,6 +1304,48 @@ if(t==='correct'){o.frequency.setValueAtTime(523,now);o.frequency.setValueAtTime
 else if(t==='wrong'){o.type='sawtooth';o.frequency.setValueAtTime(200,now);g.gain.setValueAtTime(.1,now);g.gain.exponentialRampToValueAtTime(.001,now+.3);o.start();o.stop(now+.3)}
 else if(t==='success'){o.frequency.setValueAtTime(523,now);o.frequency.setValueAtTime(659,now+.15);o.frequency.setValueAtTime(784,now+.3);g.gain.setValueAtTime(.15,now);g.gain.exponentialRampToValueAtTime(.001,now+.6);o.start();o.stop(now+.6)}
 else if(t==='click'){o.frequency.setValueAtTime(800,now);g.gain.setValueAtTime(.08,now);g.gain.exponentialRampToValueAtTime(.001,now+.08);o.start();o.stop(now+.08)}}
+
+// ============ THEME ============
+const STORAGE_KEY='y2_fractions_state';
+function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}}catch(e){return{}}}
+function saveState(patch){try{const s=loadState();localStorage.setItem(STORAGE_KEY,JSON.stringify({...s,...patch}))}catch(e){}}
+function applyTheme(mode){
+    document.body.classList.toggle('light',mode==='light');
+    const btn=document.getElementById('themeToggle');
+    if(btn)btn.textContent=mode==='light'?'☀️ Light':'🌙 Dark';
+}
+function toggleTheme(){
+    const next=document.body.classList.contains('light')?'dark':'light';
+    applyTheme(next);
+    saveState({theme:next});
+    playSound('click');
+}
+function resetProgress(){
+    try{const s=loadState();localStorage.setItem(STORAGE_KEY,JSON.stringify({theme:s.theme||'dark'}))}catch(e){}
+    dismissResume();
+    showSlide(0);
+    playSound('click');
+}
+function dismissResume(){
+    const t=document.getElementById('resumeToast');
+    if(t)t.classList.remove('show');
+}
+function showResumeToast(slideNum,total){
+    const t=document.getElementById('resumeToast');
+    const msg=document.getElementById('resumeMsg');
+    if(!t||!msg)return;
+    msg.innerHTML='Welcome back — picking up at <strong>slide '+(slideNum+1)+' of '+total+'</strong>.';
+    setTimeout(()=>t.classList.add('show'),400);
+    setTimeout(()=>t.classList.remove('show'),7000);
+}
+function showKbdHint(){
+    if(document.getElementById('kbdHint'))return;
+    const h=document.createElement('div');
+    h.id='kbdHint';h.className='kbd-hint';
+    h.innerHTML='Tip: use <kbd>←</kbd> <kbd>→</kbd> arrow keys to move between slides';
+    document.body.appendChild(h);
+    setTimeout(()=>{const el=document.getElementById('kbdHint');if(el)el.remove()},6500);
+}
 
 // ============ SLIDES ============
 let cur=0;let total=46;
@@ -1205,6 +1360,8 @@ function showSlide(n){
     document.getElementById('backBtn').disabled=n===0;
     const id=slides[n].id;
     if(slideInit[id]&&!initFlags[id]){slideInit[id]();initFlags[id]=true}
+    saveState({slide:n});
+    window.scrollTo(0,0);
 }
 const initFlags={};
 const slideInit={
@@ -1225,6 +1382,7 @@ const slideInit={
     'slide-w3-wall':()=>initFractionWall(),
     'slide-w3-write':()=>newWriteFraction(),
     'slide-17':()=>newThreeQuarter(),
+    'slide-w3-tq-practice':()=>newTQPractice(),
     'slide-w3-mistake':()=>initMistakes(),
     'slide-w3-compare':()=>newCompare(),
     'slide-w3-wp':()=>newWordProblem(3),
@@ -1416,6 +1574,57 @@ function showThreeQuarters(){
     stem.style.opacity='1';
     document.getElementById('tqBtn').disabled=true;
     playSound('success');
+}
+
+// ============ ¾-OF-QUANTITY PRACTICE ============
+let tqpStreak=0;let tqpCurrent=0;
+function newTQPractice(){
+    const nums=[8,12,16,20,24,28,32,40];
+    tqpCurrent=nums[Math.floor(Math.random()*nums.length)];
+    document.getElementById('tqpNum').textContent=tqpCurrent;
+    document.getElementById('tqpInput').value='';
+    document.getElementById('tqpInput').disabled=false;
+    document.getElementById('tqpFb').className='quiz-feedback';
+    const q=tqpCurrent/4;
+    let parts='';
+    for(let i=0;i<4;i++){
+        parts+='<div class="part" style="background:rgba(16,185,129,0.15);color:var(--text-dim);">'+q+'</div>';
+    }
+    document.getElementById('tqpBarArea').innerHTML='<div class="bar-model" style="max-width:480px;"><div class="whole-bar">'+tqpCurrent+'</div><div class="parts-bar">'+parts+'</div></div><div style="color:var(--text-dim);font-size:.9rem;margin-top:8px;">Each ¼ is <strong style="color:var(--quarter-color);">'+q+'</strong> — now take <strong>3</strong> of those.</div>';
+    document.getElementById('tqpInput').focus();
+    playSound('click');
+}
+function checkTQPractice(){
+    const input=document.getElementById('tqpInput');
+    const fb=document.getElementById('tqpFb');
+    const val=parseInt(input.value,10);
+    const correct=(tqpCurrent/4)*3;
+    if(isNaN(val)){fb.className='quiz-feedback show wrong-fb';fb.textContent='Type a number first.';return}
+    input.disabled=true;
+    if(val===correct){
+        tqpStreak++;
+        document.getElementById('tqpScore').textContent=tqpStreak;
+        fb.className='quiz-feedback show correct-fb';
+        fb.innerHTML='🎉 Correct! ¼ of '+tqpCurrent+' = '+(tqpCurrent/4)+', so ¾ of '+tqpCurrent+' = '+(tqpCurrent/4)+' × 3 = <strong>'+correct+'</strong>.';
+        // Show shaded bar
+        const q=tqpCurrent/4;
+        let parts='';
+        for(let i=0;i<4;i++){
+            const shaded=i<3;
+            parts+='<div class="part" style="background:'+(shaded?'rgba(16,185,129,0.45)':'rgba(255,255,255,0.04)')+';color:'+(shaded?'#fff':'var(--text-dim)')+';font-weight:'+(shaded?'800':'500')+';">'+q+'</div>';
+        }
+        document.getElementById('tqpBarArea').innerHTML='<div class="bar-model" style="max-width:480px;"><div class="whole-bar">'+tqpCurrent+'</div><div class="parts-bar">'+parts+'</div></div>';
+        playSound('correct');
+        setTimeout(newTQPractice,1800);
+    } else {
+        tqpStreak=0;
+        document.getElementById('tqpScore').textContent=tqpStreak;
+        fb.className='quiz-feedback show wrong-fb';
+        const q=tqpCurrent/4;
+        fb.innerHTML='❌ Not quite. <strong>Step 1:</strong> '+tqpCurrent+' ÷ 4 = '+q+'. <strong>Step 2:</strong> '+q+' × 3 = <strong>'+correct+'</strong>. Try a new one!';
+        playSound('wrong');
+        input.disabled=false;
+    }
 }
 
 // ============ FRACTION NUMBER LINE ============
@@ -2090,7 +2299,16 @@ function checkDiff(pick){
 }
 
 // ============ INIT ============
-showSlide(0);
+(function(){
+    const s=loadState();
+    applyTheme(s.theme==='light'?'light':'dark');
+    const slidesEl=document.querySelectorAll('.slide');
+    let start=0;
+    if(typeof s.slide==='number'&&s.slide>=0&&s.slide<slidesEl.length)start=s.slide;
+    showSlide(start);
+    if(start>0)showResumeToast(start,slidesEl.length);
+    else setTimeout(showKbdHint,800);
+})();
 </script>
 </body>
 </html>
