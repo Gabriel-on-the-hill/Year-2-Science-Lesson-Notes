@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Debugger | Score Engine 2.0</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Orbitron:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #020617;
+            --panel-bg: #0f172a;
+            --text-main: #f8fafc;
+            --code-text: #818cf8;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+            --accent-blue: #3b82f6;
+            --neon-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.1;
+            position: fixed;
+            bottom: 100%;
+            pointer-events: none;
+            animation: scanline 6s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100px; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            z-index: 5;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-red);
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+            margin-bottom: 10px;
+        }
+
+        .instruction-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #334155;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #94a3b8;
+            border-left: 4px solid var(--accent-yellow);
+        }
+
+        .terminal {
+            background-color: var(--panel-bg);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 850px;
+            padding: 2rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .block-container {
+            margin-bottom: 1.2rem;
+            padding: 1.5rem;
+            background: #020617;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .block-container:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+            transform: scale(1.01);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .code-line {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            color: var(--code-text);
+        }
+
+        .output-val {
+            color: var(--accent-yellow);
+            background: rgba(245, 158, 11, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        button {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-bug {
+            background: transparent;
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+
+        .btn-bug:hover, .btn-bug.active {
+            background: var(--accent-red);
+            color: white;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-clear {
+            background: transparent;
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+
+        .btn-clear:hover, .btn-clear.active {
+            background: var(--accent-green);
+            color: white;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .fix-input {
+            display: none;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #1e293b;
+            align-items: center;
+            gap: 15px;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fix-input input {
+            background: #1e293b;
+            border: 1px solid var(--accent-blue);
+            color: white;
+            font-family: 'Fira Code', monospace;
+            padding: 0.6rem;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            width: 100px;
+            text-align: center;
+            outline: none;
+        }
+
+        .fix-input input:focus {
+            box-shadow: 0 0 10px var(--accent-blue);
+        }
+
+        .status-badge {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .status-badge.show { opacity: 1; }
+
+        .deploy-container {
+            margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-deploy {
+            background: var(--accent-blue);
+            color: white;
+            font-size: 1.2rem;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+            100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+        }
+
+        /* Success Screen */
+        .overlay-success {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.98);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            color: var(--accent-green);
+            margin-bottom: 2rem;
+            animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .overlay-success h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Particles container */
+        #particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 101;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--accent-green);
+            border-radius: 50%;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    <div id="particles"></div>
+
+    <div class="overlay-success" id="successScreen">
+        <div class="success-icon">✓</div>
+        <h2>SYSTEM RESTORED</h2>
+        <p style="font-size: 1.2rem; color: #94a3b8; margin-bottom: 3rem;">All score blocks compiled successfully. Excellent work, Dev Emmanuel!</p>
+        <button class="btn-deploy" onclick="location.reload()">REBOOT SYSTEM</button>
+    </div>
+
+    <div class="header">
+        <h1>SCORE ENGINE DEBUGGER</h1>
+        <div class="instruction-box">
+            <strong>DEVELOPER LOG:</strong> The Penalty Shootout game is calculating scores incorrectly. 
+            Analyze each code block. If you find a bug, report it and provide the correct calculation. 
+            If it looks right, mark it as clear.
+        </div>
+    </div>
+
+    <div class="terminal" id="terminalApp">
+        <!-- JS will populate this -->
+    </div>
+
+    <div class="deploy-container">
+        <button class="btn-deploy" id="deployBtn" onclick="deployFixes()">🚀 DEPLOY SYSTEM FIXES</button>
+        <p style="color: #475569; font-size: 0.8rem; font-family: 'Fira Code';">READY FOR DEPLOYMENT</p>
+    </div>
+
+    <script>
+        // --- AUDIO ENGINE ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(type) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'success') {
+                const now = audioCtx.currentTime;
+                [440, 554.37, 659.25, 880].forEach((f, i) => {
+                    const o = audioCtx.createOscillator();
+                    const g = audioCtx.createGain();
+                    o.type = 'sine';
+                    o.frequency.setValueAtTime(f, now + (i * 0.1));
+                    g.gain.setValueAtTime(0.05, now + (i * 0.1));
+                    g.gain.exponentialRampToValueAtTime(0.01, now + (i * 0.1) + 0.3);
+                    o.connect(g);
+                    g.connect(audioCtx.destination);
+                    o.start(now + (i * 0.1));
+                    o.stop(now + (i * 0.1) + 0.3);
+                });
+            }
+        }
+
+        // --- GAME LOGIC ---
+        const bugs = [
+            { id: 1, eq: "2 * 7", currentOutput: 15, actual: 14, hasBug: true },
+            { id: 2, eq: "5 * 6", currentOutput: 35, actual: 30, hasBug: true },
+            { id: 3, eq: "10 * 4", currentOutput: 40, actual: 40, hasBug: false },
+            { id: 4, eq: "3 * 5", currentOutput: 18, actual: 15, hasBug: true },
+            { id: 5, eq: "2 * 0", currentOutput: 2, actual: 0, hasBug: true }
+        ];
+
+        const state = {};
+
+        function init() {
+            const terminal = document.getElementById('terminalApp');
+            terminal.innerHTML = '';
+            
+            bugs.forEach((b, index) => {
+                state[b.id] = { selected: null, fixVal: null };
+                
+                const block = document.createElement('div');
+                block.className = 'block-container';
+                block.innerHTML = `
+                    <div class="code-header">
+                        <div class="code-line">
+                            <span style="color:#94a3b8">${index+1}.</span> 
+                            <span style="color:#f472b6">calc</span> score = ${b.eq}; 
+                            <span style="color:#475569">// returns </span>
+                            <span class="output-val">${b.currentOutput}</span>
+                        </div>
+                        <div class="status-badge" id="badge-${b.id}"></div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-bug" onclick="selectOption(${b.id}, 'bug')" id="btn-bug-${b.id}">🐞 BUG DETECTED</button>
+                        <button class="btn-clear" onclick="selectOption(${b.id}, 'clear')" id="btn-clear-${b.id}">✅ CODE CLEAR</button>
+                    </div>
+                    <div class="fix-input" id="fix-${b.id}">
+                        <label style="color:#94a3b8; font-family:'Fira Code'; font-size:0.9rem">PATCH VALUE:</label>
+                        <input type="number" id="input-${b.id}" oninput="updateFix(${b.id}, this.value)" placeholder="??">
+                    </div>
+                `;
+                terminal.appendChild(block);
+            });
+        }
+
+        function selectOption(id, choice) {
+            playSound('click');
+            state[id].selected = choice;
+            
+            const btnBug = document.getElementById(`btn-bug-${id}`);
+            const btnClear = document.getElementById(`btn-clear-${id}`);
+            const fixContainer = document.getElementById(`fix-${id}`);
+            
+            if (choice === 'bug') {
+                btnBug.classList.add('active');
+                btnClear.classList.remove('active');
+                fixContainer.style.display = 'flex';
+                document.getElementById(`input-${id}`).focus();
+            } else {
+                btnClear.classList.add('active');
+                btnBug.classList.remove('active');
+                fixContainer.style.display = 'none';
+                state[id].fixVal = null;
+            }
+        }
+
+        function updateFix(id, val) {
+            state[id].fixVal = parseInt(val);
+        }
+
+        function deployFixes() {
+            let allCorrect = true;
+
+            bugs.forEach(b => {
+                const badge = document.getElementById(`badge-${b.id}`);
+                const s = state[b.id];
+                let isCorrect = false;
+
+                if (b.hasBug) {
+                    if (s.selected === 'bug' && s.fixVal === b.actual) isCorrect = true;
+                } else {
+                    if (s.selected === 'clear') isCorrect = true;
+                }
+
+                badge.className = 'status-badge show';
+                if (isCorrect) {
+                    badge.textContent = "VERIFIED";
+                    badge.style.background = "rgba(16, 185, 129, 0.2)";
+                    badge.style.color = "var(--accent-green)";
+                } else {
+                    badge.textContent = "FAILED";
+                    badge.style.background = "rgba(239, 68, 68, 0.2)";
+                    badge.style.color = "var(--accent-red)";
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                playSound('success');
+                createParticles();
+                setTimeout(() => {
+                    document.getElementById('successScreen').style.display = 'flex';
+                }, 800);
+            } else {
+                playSound('error');
+                document.body.style.animation = "shake 0.4s";
+                setTimeout(() => document.body.style.animation = "", 400);
+            }
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 8 + 4;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.top = Math.random() * 100 + 'vh';
+                container.appendChild(p);
+                
+                p.animate([
+                    { transform: 'translateY(0) scale(1)', opacity: 1 },
+                    { transform: `translateY(-100px) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 1000 + Math.random() * 1000,
+                    easing: 'ease-out'
+                }).onfinish = () => p.remove();
+            }
+        }
+
+        init();
+    </script>
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+    </style>
+</body>
+</html>
