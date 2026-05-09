@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Year 2 Maths: Summer Block 2 — Time</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --oclock: #3B82F6;
+    --halfpast: #10B981;
+    --qpast: #F59E0B;
+    --qto: #8B5CF6;
+    --success: #10B981;
+    --error: #EF4444;
+    --bg-start: #0F172A;
+    --bg-end: #1E293B;
+    --card-bg: rgba(255,255,255,0.07);
+    --card-border: rgba(255,255,255,0.12);
+    --text: #F1F5F9;
+    --text-dim: #94A3B8;
+    --accent: #8B5CF6;
+    --accent-light: #A78BFA;
+    --nav-bg: rgba(15,23,42,.92);
+    --track: rgba(255,255,255,.05);
+    --face: rgba(255,255,255,0.04);
+    --face-stroke: rgba(255,255,255,0.25);
+}
+body.light{
+    --bg-start:#F8FAFC;
+    --bg-end:#E2E8F0;
+    --card-bg:rgba(255,255,255,0.75);
+    --card-border:rgba(15,23,42,0.12);
+    --text:#0F172A;
+    --text-dim:#475569;
+    --accent:#7C3AED;
+    --accent-light:#6D28D9;
+    --nav-bg:rgba(248,250,252,.92);
+    --track:rgba(15,23,42,.06);
+    --face:rgba(255,255,255,0.95);
+    --face-stroke:rgba(15,23,42,0.45);
+}
+body.light .slide-title{background:linear-gradient(135deg,#0F172A,#475569);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body.light .quiz-opt{background:rgba(15,23,42,.04);border-color:rgba(15,23,42,.1)}
+body.light .nav-btn.back{background:rgba(15,23,42,.08);color:var(--text)}
+body.light .progress-bar-container{background:rgba(15,23,42,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-start),var(--bg-end));color:var(--text);min-height:100vh;overflow:hidden;user-select:none;transition:background .4s ease,color .4s ease}
+
+/* SLIDES */
+.slide{display:none;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:30px 30px 90px;position:relative;animation:fadeIn .5s ease}
+.slide.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+.nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-top:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between;padding:12px 30px;gap:12px}
+.nav-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.nav-btn:hover{background:var(--accent-light);transform:translateY(-2px)}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.nav-btn.back{background:rgba(255,255,255,.1)}
+.theme-toggle,.reset-btn{background:transparent;color:var(--text-dim);border:1px solid var(--card-border);border-radius:10px;padding:8px 14px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.theme-toggle:hover,.reset-btn:hover{color:var(--text);border-color:var(--accent)}
+.nav-center{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* RESUME TOAST */
+.resume-toast{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-120%);z-index:200;background:var(--card-bg);backdrop-filter:blur(20px);border:1px solid var(--card-border);border-left:4px solid var(--accent);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 12px 40px rgba(0,0,0,.4);font-size:.95rem;color:var(--text);transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;max-width:92vw}
+.resume-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.resume-toast .resume-icon{font-size:1.4rem}
+.resume-toast .resume-msg strong{color:var(--accent-light)}
+.resume-toast button{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit}
+.resume-toast button.ghost{background:transparent;color:var(--text-dim);padding:6px 10px}
+.resume-toast button.ghost:hover{color:var(--text)}
+
+/* HINT */
+.kbd-hint{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);font-size:.78rem;color:var(--text-dim);background:var(--card-bg);border:1px solid var(--card-border);border-radius:100px;padding:6px 14px;backdrop-filter:blur(10px);pointer-events:none;animation:hintFade 6s ease-in-out forwards;opacity:0}
+@keyframes hintFade{0%{opacity:0}10%{opacity:1}80%{opacity:1}100%{opacity:0}}
+.kbd-hint kbd{background:rgba(255,255,255,.1);border:1px solid var(--card-border);border-radius:4px;padding:1px 6px;font-family:'Inter',sans-serif;font-size:.75rem;margin:0 2px}
+
+/* PRINT */
+@media print{
+    body{background:#fff!important;color:#000!important;overflow:visible!important}
+    .nav-bar,.progress-bar-container,.resume-toast,.kbd-hint,.theme-toggle,.reset-btn,.week-badge{display:none!important}
+    .slide{display:none!important;page-break-after:always}
+    .slide.active{display:block!important;min-height:auto!important;padding:0!important;background:#fff!important}
+    .slide-content{max-height:none!important;overflow:visible!important;padding:0!important}
+    .glass-card,.homework-card,.roadblock-card,.results-card{background:#fff!important;border:1px solid #cbd5e1!important;backdrop-filter:none!important;box-shadow:none!important;color:#000!important;page-break-inside:avoid}
+    .homework-card{border:2px solid #7C3AED!important}
+    h3,.slide-title{color:#0F172A!important;-webkit-text-fill-color:#0F172A!important;background:none!important}
+    .slide-subtitle,.homework-item,.ak-item{color:#1e293b!important}
+    .answer-key{display:block!important;page-break-before:auto}
+    .answer-key[open],.answer-key{margin-top:14px}
+    .answer-key summary{background:#fef3c7!important;color:#92400e!important;border:1px solid #f59e0b!important}
+    .answer-key:not([open]) > *:not(summary){display:block!important}
+    .tier-mild{background:#dcfce7!important;color:#166534!important;border-color:#86efac!important}
+    .tier-medium{background:#fef3c7!important;color:#92400e!important;border-color:#fcd34d!important}
+    .tier-spicy{background:#fee2e2!important;color:#991b1b!important;border-color:#fca5a5!important}
+    strong{color:#0F172A!important}
+}
+.slide-counter{color:var(--text-dim);font-size:.9rem;font-weight:500}
+.progress-bar-container{position:fixed;top:0;left:0;right:0;height:4px;background:var(--track);z-index:101}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--oclock));transition:width .4s ease;border-radius:0 2px 2px 0}
+
+/* BADGES */
+.week-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid var(--card-border);border-radius:100px;padding:6px 16px;font-size:.8rem;color:var(--text-dim);margin-bottom:16px;backdrop-filter:blur(10px)}
+.week-badge .dot{width:8px;height:8px;border-radius:50%}
+.dot.w5{background:var(--oclock)}.dot.w6{background:var(--qpast)}
+
+/* CARDS */
+.glass-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:32px;backdrop-filter:blur(20px);max-width:920px;width:100%}
+.slide-title{font-size:2rem;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,#fff,var(--text-dim));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.slide-subtitle{color:var(--text-dim);font-size:1.05rem;margin-bottom:24px;line-height:1.7}
+
+/* CLOCK */
+.clock-row{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin:20px 0}
+.clock-box{text-align:center}
+.clock-box .label{margin-top:8px;font-size:.95rem;color:var(--text-dim);font-weight:600}
+.clock-box .label strong{color:var(--text)}
+.click-clock{cursor:pointer;transition:transform .2s}
+.click-clock:hover{transform:scale(1.04)}
+
+/* SENTENCE STEM */
+.sentence-stem{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:14px;padding:16px 24px;font-size:1.1rem;text-align:center;margin-top:16px;line-height:1.7;color:var(--accent-light);font-weight:500}
+.hl-oclock{color:var(--oclock);font-weight:700}
+.hl-half{color:var(--halfpast);font-weight:700}
+.hl-qpast{color:var(--qpast);font-weight:700}
+.hl-qto{color:var(--qto);font-weight:700}
+
+/* BUTTONS */
+.action-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;border:2px solid transparent;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;color:#fff}
+.action-btn:hover{transform:scale(1.05)}
+.action-btn.check-btn{background:var(--success)}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+
+/* QUIZ */
+.quiz-question{background:rgba(255,255,255,.04);border:1px solid var(--card-border);border-radius:16px;padding:24px;margin-bottom:16px}
+.quiz-question .q-text{font-size:1.1rem;font-weight:600;margin-bottom:16px;line-height:1.6}
+.quiz-options{display:flex;flex-direction:column;gap:10px}
+.quiz-opt{padding:14px 20px;border-radius:12px;cursor:pointer;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.1);font-size:1rem;transition:all .2s;text-align:left;font-family:inherit;color:var(--text);font-weight:500}
+.quiz-opt:hover{border-color:var(--accent);background:rgba(139,92,246,.1)}
+.quiz-opt.correct{border-color:var(--success);background:rgba(16,185,129,.15);color:var(--success)}
+.quiz-opt.wrong{border-color:var(--error);background:rgba(239,68,68,.1);color:var(--error)}
+.quiz-opt.disabled{pointer-events:none}
+.quiz-feedback{margin-top:12px;padding:12px 18px;border-radius:10px;font-size:.95rem;font-weight:500;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct-fb{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--success)}
+.quiz-feedback.wrong-fb{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--error)}
+.quiz-input{padding:10px;border-radius:10px;border:2px solid var(--card-border);background:rgba(255,255,255,0.06);color:var(--text);text-align:center;font-family:inherit;font-weight:700;font-size:1.2rem}
+
+/* ROADBLOCK */
+.roadblock-card{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(239,68,68,.1));border:2px solid rgba(245,158,11,.3);border-radius:20px;padding:32px;text-align:center;max-width:600px}
+.roadblock-card h2{color:var(--qpast);font-size:1.8rem;margin-bottom:16px}
+.roadblock-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:1.05rem;text-align:left}
+.roadblock-item:last-child{border-bottom:none}
+
+/* HOMEWORK */
+.homework-card{background:linear-gradient(135deg,rgba(59,130,246,.05),rgba(139,92,246,.08));border:2px dashed rgba(139,92,246,.3);border-radius:20px;padding:32px;max-width:700px;width:100%}
+.homework-card h3{color:var(--accent-light);margin-bottom:16px}
+.homework-item{padding:8px 0;font-size:1.05rem;color:var(--text);display:flex;gap:10px;line-height:1.6}
+.tier-header{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:6px 12px;border-radius:100px;margin:14px 0 4px}
+.tier-mild{background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.3)}
+.tier-medium{background:rgba(245,158,11,.12);color:#F59E0B;border:1px solid rgba(245,158,11,.3)}
+.tier-spicy{background:rgba(239,68,68,.12);color:#EF4444;border:1px solid rgba(239,68,68,.3)}
+.answer-key{margin-top:20px;border-top:1px dashed rgba(255,255,255,.12);padding-top:16px}
+.answer-key summary{cursor:pointer;color:var(--qpast);font-weight:700;padding:10px 14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;list-style:none;font-size:.95rem}
+.answer-key summary::-webkit-details-marker{display:none}
+.answer-key summary::before{content:'🔑 ';margin-right:4px}
+.answer-key[open] summary{margin-bottom:12px}
+.answer-key .ak-item{padding:6px 0;font-size:.95rem;color:var(--text-dim);line-height:1.6}
+.answer-key .ak-item strong{color:var(--text)}
+
+/* DURATION NUMBER LINE */
+.dur-line{width:100%;max-width:560px;margin:20px auto;position:relative}
+
+/* RESULTS */
+.results-card{text-align:center;padding:40px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:24px;backdrop-filter:blur(20px);max-width:520px}
+.score-circle{width:140px;height:140px;border-radius:50%;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;font-weight:900;color:#fff}
+.score-circle.gold{background:linear-gradient(135deg,#F59E0B,#D97706);box-shadow:0 8px 30px rgba(245,158,11,.4)}
+.score-circle.silver{background:linear-gradient(135deg,#94A3B8,#64748B);box-shadow:0 8px 30px rgba(148,163,184,.3)}
+.score-circle.bronze{background:linear-gradient(135deg,#F97316,#C2410C);box-shadow:0 8px 30px rgba(249,115,22,.3)}
+
+/* DIGITAL */
+.digital-time{font-family:'Inter',monospace;font-size:3rem;font-weight:900;letter-spacing:.04em;background:rgba(0,0,0,.4);color:#FBBF24;padding:14px 26px;border-radius:14px;display:inline-block;border:2px solid rgba(245,158,11,.25);box-shadow:inset 0 0 24px rgba(245,158,11,.15);font-feature-settings:'tnum'}
+
+/* STEPPER */
+.stepper{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid var(--card-border);border-radius:14px;padding:8px;margin:6px}
+.step-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;width:36px;height:36px;font-size:1.2rem;font-weight:800;cursor:pointer;transition:all .2s;font-family:inherit}
+.step-btn:hover{background:var(--accent-light);transform:scale(1.1)}
+.step-btn:disabled{opacity:.4;cursor:not-allowed}
+.step-label{padding:0 12px;font-weight:700;color:var(--text);font-size:1rem;min-width:70px;text-align:center}
+
+/* MISC */
+.flex-center{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+.mt-16{margin-top:16px}.mt-24{margin-top:24px}.mb-16{margin-bottom:16px}
+.text-center{text-align:center}
+.hidden{display:none!important}
+.big-number{font-size:4rem;font-weight:900}
+.slide-content{max-height:calc(100vh - 100px);overflow-y:auto;width:100%;max-width:920px;padding-bottom:20px}
+.slide-content::-webkit-scrollbar{width:6px}
+.slide-content::-webkit-scrollbar-track{background:transparent}
+.slide-content::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px}
+
+/* TITLE */
+.title-slide h1{font-size:3.5rem;font-weight:900;text-align:center;line-height:1.2;background:linear-gradient(135deg,var(--oclock),var(--accent),var(--qpast));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.title-meta{color:var(--text-dim);font-size:1.1rem;margin-top:12px;text-align:center}
+
+/* FACT CARD */
+.fact-card{background:rgba(255,255,255,.04);border:2px solid var(--card-border);border-radius:14px;padding:18px;text-align:center;cursor:pointer;transition:all .2s}
+.fact-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.fact-card .fc-num{font-size:2.5rem;font-weight:900;color:var(--accent-light)}
+.fact-card .fc-lbl{font-size:.95rem;color:var(--text-dim);font-weight:600;margin-top:4px}
+.fact-card .fc-flip{display:none;font-size:.85rem;color:var(--text);margin-top:8px;line-height:1.5}
+.fact-card.flipped .fc-num{display:none}
+.fact-card.flipped .fc-lbl{display:none}
+.fact-card.flipped .fc-flip{display:block}
+
+/* MATCH PAIRS */
+.pairs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:18px 0}
+.pair-card{background:rgba(255,255,255,.04);border:2px solid var(--card-border);border-radius:14px;padding:14px;cursor:pointer;transition:all .2s;text-align:center;font-weight:700;color:var(--text);min-height:80px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.pair-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.pair-card.selected{border-color:var(--qpast);background:rgba(245,158,11,0.15);box-shadow:0 0 0 4px rgba(245,158,11,0.2)}
+.pair-card.matched{border-color:var(--success);background:rgba(16,185,129,0.18);pointer-events:none;opacity:.7}
+.pair-card.flash-wrong{border-color:var(--error);background:rgba(239,68,68,0.15);animation:flash .4s}
+@keyframes flash{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+/* CALENDAR GRID */
+.cal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:18px 0;width:100%}
+.cal-card{background:rgba(255,255,255,.04);border:2px solid var(--card-border);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s;font-weight:700;color:var(--text)}
+.cal-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.cal-card .cc-num{font-size:1.6rem;font-weight:900;color:var(--accent-light)}
+.cal-card .cc-lbl{font-size:.85rem;color:var(--text-dim);font-weight:600;margin-top:4px}
+.cal-card.season-spring{border-color:#22C55E;background:rgba(34,197,94,.1)}
+.cal-card.season-summer{border-color:#F59E0B;background:rgba(245,158,11,.1)}
+.cal-card.season-autumn{border-color:#EA580C;background:rgba(234,88,12,.1)}
+.cal-card.season-winter{border-color:#0EA5E9;background:rgba(14,165,233,.1)}
+
+/* DRAG-ORDER PILE */
+.order-pile{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:18px 0;padding:14px;background:rgba(255,255,255,.03);border:1px dashed var(--card-border);border-radius:14px;min-height:70px}
+.order-chip{padding:10px 16px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .2s}
+.order-chip:hover{background:var(--accent-light);transform:translateY(-2px)}
+.order-chip:disabled{opacity:.4;cursor:not-allowed}
+.order-slot{display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:14px 0;padding:14px;background:rgba(16,185,129,.05);border:2px solid rgba(16,185,129,.25);border-radius:14px;min-height:60px;width:100%}
+.order-placed{padding:10px 14px;background:rgba(16,185,129,.18);color:var(--success);border:2px solid var(--success);border-radius:10px;font-weight:700;font-size:.9rem}
+
+/* BAR MODEL DURATION */
+.bm-dur{max-width:560px;margin:18px auto;border-radius:14px;overflow:hidden;border:2px solid var(--card-border)}
+.bm-dur .bm-whole{height:48px;display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,.15);font-weight:700;color:var(--accent-light);border-bottom:2px solid var(--card-border);font-size:1.05rem}
+.bm-dur .bm-parts{display:flex;height:48px}
+.bm-dur .bm-part{flex:1;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;color:#fff}
+.bm-dur .bm-part:not(:last-child){border-right:2px solid var(--card-border)}
+
+/* DAY CYCLE */
+.cycle-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.cycle-card{flex:1;min-width:140px;max-width:180px;background:rgba(255,255,255,.04);border:2px solid var(--card-border);border-radius:14px;padding:14px;text-align:center;transition:all .2s}
+.cycle-card .cy-emoji{font-size:2rem}
+.cycle-card .cy-name{font-weight:800;margin:6px 0 4px;font-size:1rem}
+.cycle-card .cy-time{font-size:.85rem;color:var(--text-dim);font-weight:500}
+
+/* CHEAT SHEET */
+.cheat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:14px 0}
+.cheat-cell{background:rgba(255,255,255,.04);border:1px solid var(--card-border);border-radius:12px;padding:14px}
+.cheat-cell h4{color:var(--accent-light);font-size:1rem;margin-bottom:8px;font-weight:800}
+.cheat-cell p{font-size:.9rem;color:var(--text);line-height:1.6}
+.cheat-cell strong{color:var(--qpast)}
+
+/* GLOSSARY */
+.gloss-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);text-align:left}
+.gloss-item:last-child{border-bottom:none}
+.gloss-term{font-weight:800;color:var(--accent-light);min-width:140px;flex-shrink:0}
+.gloss-def{color:var(--text);font-size:.95rem;line-height:1.6}
+
+@media(max-width:600px){
+    .slide{padding:16px 16px 90px}.title-slide h1{font-size:2.2rem}.slide-title{font-size:1.5rem}.glass-card{padding:20px}.digital-time{font-size:2rem;padding:10px 18px}
+    .gloss-item{flex-direction:column;gap:4px}.gloss-term{min-width:0}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- ===== SLIDE 0: TITLE ===== -->
+<div class="slide active title-slide" id="slide-0">
+<div class="slide-content flex-center" style="flex-direction:column;min-height:80vh;">
+    <div style="margin-bottom:20px;" id="titleClock"></div>
+    <h1>Time</h1>
+    <p class="title-meta">Year 2 Mathematics — Summer Term, Block 2 (Weeks 5–6)</p>
+    <p class="title-meta" style="margin-top:8px;font-size:.95rem;">🕒 O'clock · Half past · Quarter past · Quarter to · 5 minutes · Durations</p>
+</div>
+</div>
+
+<!-- ===== SLIDE 1: WEEK 1 HOOK ===== -->
+<div class="slide" id="slide-hook1">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🪄 Which clock shows <span class="hl-oclock">3 o'clock</span>?</div>
+        <div class="slide-subtitle">Tap the clock you think is right.<br>Look at where the <strong>short hand</strong> (hour) and <strong>long hand</strong> (minute) are pointing.</div>
+        <div class="clock-row" id="hookClocks"></div>
+        <div id="hookFb" class="quiz-feedback mt-16"></div>
+        <div class="sentence-stem mt-16" id="hookStem" style="opacity:0;transition:opacity .4s;">
+            At <strong>o'clock</strong> times, the <span class="hl-oclock">long minute hand always points to 12</span>. The short hour hand points <em>exactly</em> to the hour.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 2: PARTS OF A CLOCK ===== -->
+<div class="slide" id="slide-parts">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🔍 Parts of a Clock</div>
+        <div class="slide-subtitle">Click each part of the clock to discover what it does.</div>
+        <div id="partsArea"></div>
+        <div class="sentence-stem mt-16">
+            <strong>Remember:</strong> the <span class="hl-oclock">short, fat hand</span> shows the <strong>hour</strong>. The <span class="hl-qpast">long, thin hand</span> shows the <strong>minutes</strong>.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 3: HOUR HAND SECRET ===== -->
+<div class="slide" id="slide-hourhand">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Gold Dust</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🤫 The Hour-Hand Secret</div>
+        <div class="slide-subtitle">This is what trips up most Year 2 children. Watch what happens to the <strong>short hand</strong> as the minutes go by from <strong>3 o'clock</strong>...</div>
+        <div id="hourHandDemo" class="text-center" style="margin:20px 0;"></div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:var(--oclock);" onclick="hourHandStep(0)">🕒 3:00</button>
+            <button class="action-btn" style="background:var(--qpast);" onclick="hourHandStep(15)">🕒 3:15</button>
+            <button class="action-btn" style="background:var(--halfpast);" onclick="hourHandStep(30)">🕒 3:30</button>
+            <button class="action-btn" style="background:var(--qto);" onclick="hourHandStep(45)">🕒 3:45</button>
+            <button class="action-btn" style="background:var(--accent);" onclick="hourHandPlay()">▶️ Play</button>
+        </div>
+        <div class="sentence-stem mt-16" id="hourHandStem">
+            Click a button — see how the short hand <strong>creeps</strong> from 3 towards 4. By 3:30, it sits <em>halfway</em> between them. By 3:45 it is closer to 4 than to 3!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 4: O'CLOCK ===== -->
+<div class="slide" id="slide-oclock">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🕒 <span class="hl-oclock">O'clock</span></div>
+        <div class="slide-subtitle">An <strong>o'clock</strong> time means <strong>0 minutes past</strong> the hour.<br>The minute hand <span class="hl-oclock">always points straight up to 12</span>.</div>
+        <div class="clock-row" id="oclockArea"></div>
+        <div class="sentence-stem">
+            <strong>Sentence stem:</strong> "The long hand is on <span class="hl-oclock">12</span>, and the short hand is on <strong>3</strong>. The time is <strong>3 o'clock</strong>."
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 5: HALF PAST ===== -->
+<div class="slide" id="slide-half">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🕢 <span class="hl-half">Half past</span></div>
+        <div class="slide-subtitle">Half past = <strong>30 minutes past</strong> the hour. The minute hand has travelled <strong>halfway around</strong> the clock — so it points <span class="hl-half">straight down to 6</span>.<br>⚠️ The hour hand is now <em>halfway between</em> two numbers!</div>
+        <div class="clock-row" id="halfArea"></div>
+        <div class="sentence-stem">
+            <strong>Common mistake:</strong> at half past 4, the short hand is <em>not</em> pointing at 4 — it has crept halfway to 5. If your hand still points exactly at 4, your clock is wrong!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 6: QUARTER PAST ===== -->
+<div class="slide" id="slide-qpast">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🕒 <span class="hl-qpast">Quarter past</span></div>
+        <div class="slide-subtitle">Quarter past = <strong>15 minutes past</strong> the hour. The minute hand has gone <span class="hl-qpast">¼ of the way around</span> — it points to <strong>3</strong>.</div>
+        <div class="clock-row" id="qpastArea"></div>
+        <div class="sentence-stem">
+            🔗 <strong>Link to fractions:</strong> a clock face has 4 quarters, just like a pizza! Quarter past = the first quarter (12 → 3) is finished.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 7: QUARTER TO ===== -->
+<div class="slide" id="slide-qto">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Trickiest</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🕘 <span class="hl-qto">Quarter to</span></div>
+        <div class="slide-subtitle">Quarter <strong>to</strong> = there are <strong>15 minutes left</strong> until the next hour. The minute hand points to <strong>9</strong>.<br>⚠️ The hour hand is <span class="hl-qto">nearly at the next number</span> — almost there!</div>
+        <div class="clock-row" id="qtoArea"></div>
+        <div class="sentence-stem">
+            <strong>Trap:</strong> at quarter to <strong>5</strong>, the short hand is <em>almost</em> at the 5 — but the time is "quarter to 5" because the minute hand still has to travel up to 12. We name the hour we are <em>going to</em>, not the one we are leaving!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 8: BUILD A CLOCK ===== -->
+<div class="slide" id="slide-build">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Construct</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🛠️ Build the Time</div>
+        <div class="slide-subtitle">Use the buttons to move the hands. Make the clock match the target time.<br>Watch the short hand <em>drift</em> as you change the minutes!</div>
+        <div id="buildTarget" style="font-size:1.4rem;font-weight:800;color:var(--accent-light);margin:8px 0;"></div>
+        <div id="buildClock" style="margin:10px auto;"></div>
+        <div class="flex-center mt-16">
+            <div class="stepper"><button class="step-btn" onclick="bumpHour(-1)">−</button><div class="step-label" id="bHrLbl">Hour: 3</div><button class="step-btn" onclick="bumpHour(1)">+</button></div>
+            <div class="stepper"><button class="step-btn" onclick="bumpMin(-15)">−15</button><div class="step-label" id="bMinLbl">Min: 0</div><button class="step-btn" onclick="bumpMin(15)">+15</button></div>
+        </div>
+        <div class="btn-row">
+            <button class="action-btn check-btn" onclick="checkBuild()">✓ Check</button>
+            <button class="action-btn" style="background:var(--accent);" onclick="newBuildTask()">🎲 New Time</button>
+        </div>
+        <div class="quiz-feedback mt-16" id="buildFb"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 9: READ THE CLOCK PRACTICE ===== -->
+<div class="slide" id="slide-read1">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Practice</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">👀 Read the Clock</div>
+        <div class="slide-subtitle">Look at the clock and pick the correct time. The hour hand always tells the truth — pay attention to it!</div>
+        <div id="read1Area"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newReadClock(1)">🎲 New Clock</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Tip:</strong> read the <strong>minute hand first</strong> ("o'clock / quarter past / half past / quarter to") then check the <em>hour</em> the short hand is heading towards.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 10: WORD PROBLEMS W1 ===== -->
+<div class="slide" id="slide-wp1">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Stories</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📖 Time Stories</div>
+        <div class="slide-subtitle">Read each story and pick the correct time. Type the time as you would say it.</div>
+        <div id="wp1Area"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newWordProblem(1)">🎲 New Story</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Tip:</strong> circle the time-words first ("at half past", "by 4 o'clock"). They tell you exactly which time you need.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W1 NEW: SEQUENCE CHALLENGE ===== -->
+<div class="slide" id="slide-w1-seq">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Sequences</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🔢 Find the Missing Time</div>
+        <div class="slide-subtitle">Each sequence counts in <strong>quarter hours</strong> (15 minutes). What time is missing?<br>Click <strong>New Sequence</strong> for another puzzle.</div>
+        <div id="seqArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newSequence()">🎲 New Sequence</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Pattern rule:</strong> count <em>forwards</em> in jumps of 15 minutes. After "quarter to" comes "o'clock"; after "o'clock" comes "quarter past".
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W1 NEW: MATCH PAIRS (analog ↔ words) ===== -->
+<div class="slide" id="slide-w1-pairs">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Pairs Game</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🧩 Match the Pairs</div>
+        <div class="slide-subtitle">Click a clock, then click the matching <strong>time-in-words</strong>. Match all <strong>4 pairs</strong> to win.</div>
+        <div id="pairsArea1"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newPairs(1)">🎲 New Round</button></div>
+        <div class="quiz-feedback mt-16" id="pairs1Fb"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W1 NEW: SET THE HANDS ===== -->
+<div class="slide" id="slide-w1-set">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Construct</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">✍️ Set the Hands</div>
+        <div class="slide-subtitle">A digital clock tells you the time. Click the <strong>hour</strong> and the <strong>minute mark</strong> to draw the hands on the analog clock.</div>
+        <div id="setTarget" style="margin:8px 0;"></div>
+        <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;align-items:flex-start;margin:14px 0;">
+            <div id="setClock"></div>
+            <div style="display:flex;flex-direction:column;gap:14px;max-width:240px;">
+                <div><div style="font-size:.9rem;color:var(--text-dim);margin-bottom:6px;font-weight:600;">Pick the HOUR (short hand):</div><div id="setHourPicker" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;"></div></div>
+                <div><div style="font-size:.9rem;color:var(--text-dim);margin-bottom:6px;font-weight:600;">Pick the MINUTE mark (long hand):</div><div id="setMinPicker" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;"></div></div>
+            </div>
+        </div>
+        <div class="btn-row">
+            <button class="action-btn check-btn" onclick="checkSetHands()">✓ Check</button>
+            <button class="action-btn" style="background:var(--accent);" onclick="newSetHands()">🎲 New Time</button>
+        </div>
+        <div class="quiz-feedback mt-16" id="setFb"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W1 NEW: SPOT THE MISTAKE ===== -->
+<div class="slide" id="slide-w1-mistake">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Detective</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🕵️ Spot the Mistake</div>
+        <div class="slide-subtitle">Each child below has read or drawn the time wrong. Click <strong>"Show the mistake"</strong> to find out why.</div>
+        <div id="mistakeArea"></div>
+        <div class="sentence-stem mt-16">
+            <strong>Big takeaway:</strong> the most common mistake is forgetting that the <em>hour hand drifts</em>. The second-biggest is naming the wrong hour at "quarter to".
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W1 NEW: TRUE OR FALSE ===== -->
+<div class="slide" id="slide-w1-tf">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · True or False</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">✅❌ True or False?</div>
+        <div class="slide-subtitle">Read each statement carefully. Decide if it's <strong>True</strong> or <strong>False</strong>. Don't be tricked!</div>
+        <div id="tfArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="initTF()">🔄 Reset</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Tip:</strong> if you say "true" automatically, slow down. Re-read the sentence and picture the clock.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W1 NEW: TIME AGO / TIME IN ===== -->
+<div class="slide" id="slide-w1-shift">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Forwards &amp; Backwards</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">⏪⏩ What Time Was / Will It Be?</div>
+        <div class="slide-subtitle">Use the buttons to <strong>jump forwards</strong> or <strong>jump backwards</strong>. Watch the clock change!</div>
+        <div id="shiftCurrent" style="font-size:1.1rem;color:var(--accent-light);font-weight:700;margin:6px 0;"></div>
+        <div id="shiftClock" style="margin:10px auto;"></div>
+        <div class="btn-row" style="margin-top:8px;">
+            <button class="action-btn" style="background:var(--qto);" onclick="shiftBy(-60)">−1 hour</button>
+            <button class="action-btn" style="background:var(--qto);" onclick="shiftBy(-30)">−30 min</button>
+            <button class="action-btn" style="background:var(--qto);" onclick="shiftBy(-15)">−15 min</button>
+            <button class="action-btn" style="background:var(--qpast);" onclick="shiftBy(15)">+15 min</button>
+            <button class="action-btn" style="background:var(--qpast);" onclick="shiftBy(30)">+30 min</button>
+            <button class="action-btn" style="background:var(--qpast);" onclick="shiftBy(60)">+1 hour</button>
+        </div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newShift()">🎲 New Start Time</button></div>
+        <div id="shiftQuestion" style="margin:14px 0;"></div>
+        <div class="quiz-feedback mt-16" id="shiftFb"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W1 NEW: PARTS OF THE DAY ===== -->
+<div class="slide" id="slide-w1-parts">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Daily Cycle</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🌅🌞🌆🌙 Parts of the Day</div>
+        <div class="slide-subtitle">A whole day is split into four big parts. Each part has a feeling — and a typical time range.</div>
+        <div class="cycle-row">
+            <div class="cycle-card" style="border-color:#FBBF24;background:rgba(251,191,36,.08);"><div class="cy-emoji">🌅</div><div class="cy-name">Morning</div><div class="cy-time">After waking until 12:00 (noon)</div></div>
+            <div class="cycle-card" style="border-color:#F59E0B;background:rgba(245,158,11,.08);"><div class="cy-emoji">🌞</div><div class="cy-name">Afternoon</div><div class="cy-time">12:00 (noon) until ~6:00 pm</div></div>
+            <div class="cycle-card" style="border-color:#F97316;background:rgba(249,115,22,.08);"><div class="cy-emoji">🌆</div><div class="cy-name">Evening</div><div class="cy-time">~6:00 pm until ~9:00 pm</div></div>
+            <div class="cycle-card" style="border-color:#6366F1;background:rgba(99,102,241,.08);"><div class="cy-emoji">🌙</div><div class="cy-name">Night</div><div class="cy-time">~9:00 pm until waking up</div></div>
+        </div>
+        <div id="partsDayQuiz"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newPartsDay()">🎲 New Question</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Sentence stem:</strong> "I eat breakfast in the <span class="hl-qpast">morning</span>. I eat lunch in the <span class="hl-qpast">afternoon</span>. I sleep at <span class="hl-qto">night</span>."
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W1 NEW: AM AND PM ===== -->
+<div class="slide" id="slide-w1-ampm">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · 12-Hour Clock</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🌅 a.m. &nbsp;&amp;&nbsp; p.m. 🌙</div>
+        <div class="slide-subtitle">A clock face only has 12 numbers, but a day has <strong>24 hours</strong>. The hour hand goes round <strong>twice</strong> each day. So we use <strong>a.m.</strong> and <strong>p.m.</strong> to know which trip we're on.</div>
+        <div style="display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:14px 0;">
+            <div style="background:rgba(251,191,36,.08);border:2px solid rgba(251,191,36,.4);border-radius:14px;padding:18px;max-width:280px;"><div style="font-size:1.6rem;font-weight:900;color:#FBBF24;">a.m.</div><div style="color:var(--text-dim);font-size:.85rem;margin:4px 0 8px;">"ante meridiem" = before midday</div><div style="font-size:.95rem;line-height:1.6;color:var(--text);">From <strong>12:00 midnight</strong> until <strong>12:00 noon</strong>.<br>Morning times: 7:00 a.m. is breakfast.</div></div>
+            <div style="background:rgba(99,102,241,.08);border:2px solid rgba(99,102,241,.4);border-radius:14px;padding:18px;max-width:280px;"><div style="font-size:1.6rem;font-weight:900;color:#A78BFA;">p.m.</div><div style="color:var(--text-dim);font-size:.85rem;margin:4px 0 8px;">"post meridiem" = after midday</div><div style="font-size:.95rem;line-height:1.6;color:var(--text);">From <strong>12:00 noon</strong> until <strong>12:00 midnight</strong>.<br>Afternoon &amp; evening: 7:00 p.m. is dinner.</div></div>
+        </div>
+        <div id="ampmQuiz"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newAmPm()">🎲 New Question</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Memory hook:</strong> a.m. = "<em>at morning</em>". p.m. = "<em>past midday</em>". 12:00 noon and 12:00 midnight are special — neither a.m. nor p.m.!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W1 NEW: ROMAN NUMERAL CLOCKS ===== -->
+<div class="slide" id="slide-w1-roman">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · Bonus</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🏛️ Roman-Numeral Clocks</div>
+        <div class="slide-subtitle">Some old clocks (church towers, grandfather clocks) use <strong>Roman numerals</strong> instead of normal numbers. Same clock — different writing!</div>
+        <div id="romanClock" style="margin:14px auto;display:flex;justify-content:center;"></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;max-width:520px;margin:16px auto;font-size:.95rem;">
+            <div class="cheat-cell"><strong>I</strong> = 1</div><div class="cheat-cell"><strong>II</strong> = 2</div><div class="cheat-cell"><strong>III</strong> = 3</div><div class="cheat-cell"><strong>IIII</strong> = 4*</div>
+            <div class="cheat-cell"><strong>V</strong> = 5</div><div class="cheat-cell"><strong>VI</strong> = 6</div><div class="cheat-cell"><strong>VII</strong> = 7</div><div class="cheat-cell"><strong>VIII</strong> = 8</div>
+            <div class="cheat-cell"><strong>IX</strong> = 9</div><div class="cheat-cell"><strong>X</strong> = 10</div><div class="cheat-cell"><strong>XI</strong> = 11</div><div class="cheat-cell"><strong>XII</strong> = 12</div>
+        </div>
+        <div class="sentence-stem mt-16">
+            *Most clocks use <strong>IIII</strong> for 4 (not <strong>IV</strong>) — a clockmaker's tradition that keeps the face balanced. The hands and times work exactly the same way!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 11: ROADBLOCK 1 ===== -->
+<div class="slide" id="slide-rb1">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1</div>
+    <div class="roadblock-card">
+        <h2>🚧 Roadblock 1</h2>
+        <p style="color:var(--text-dim);margin-bottom:20px;">You <strong>must master</strong> these before moving to Week 2:</p>
+        <div class="roadblock-item"><span>✅</span> Knows the <strong>short hand</strong> shows the hour, the <strong>long hand</strong> shows minutes</div>
+        <div class="roadblock-item"><span>✅</span> Reads <strong>o'clock</strong> times correctly</div>
+        <div class="roadblock-item"><span>✅</span> Reads <strong>half past</strong> (knows minute hand on 6)</div>
+        <div class="roadblock-item"><span>✅</span> Reads <strong>quarter past</strong> (minute hand on 3)</div>
+        <div class="roadblock-item"><span>✅</span> Reads <strong>quarter to</strong> (minute hand on 9, hour hand near next number)</div>
+        <div class="roadblock-item"><span>✅</span> Knows the hour hand <strong>drifts</strong> between numbers</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 12: MINI TEST 1 ===== -->
+<div class="slide" id="slide-mt1">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1</div>
+    <div class="glass-card">
+        <div class="slide-title">📝 Mini Test 1</div>
+        <div class="slide-subtitle">Answer all questions to check your mastery!</div>
+        <div id="miniTest1"></div>
+        <div id="mt1Result" class="hidden mt-24 text-center"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 13: HOMEWORK 1 ===== -->
+<div class="slide" id="slide-hw1">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w5"></span> Week 1</div>
+    <div class="homework-card">
+        <h3>🏠 Homework 1: Clock Detective</h3>
+        <div class="slide-subtitle" style="margin-bottom:8px;font-size:.95rem;">Try every tier — Mild builds confidence, Medium stretches, Spicy challenges.</div>
+        <div class="tier-header tier-mild">🌱 Mild — warm-up</div>
+        <div class="homework-item"><span>✏️</span> Draw 4 clock faces. Show: <strong>2 o'clock</strong>, <strong>half past 4</strong>, <strong>quarter past 6</strong>, <strong>quarter to 9</strong>.</div>
+        <div class="homework-item"><span>🔍</span> Scavenger hunt: find 3 clocks at home (kitchen, bedroom, oven, microwave). Read the time on each.</div>
+        <div class="tier-header tier-medium">🔥 Medium — main practice</div>
+        <div class="homework-item"><span>🕒</span> Write the time shown when the minute hand is on <strong>6</strong> and the hour hand is between <strong>7 and 8</strong>.</div>
+        <div class="homework-item"><span>🍎</span> <strong>Word problem:</strong> Lily eats breakfast at half past 7. Then she leaves for school 30 minutes later. What time does she leave?</div>
+        <div class="tier-header tier-spicy">🌶️ Spicy — stretch & explain</div>
+        <div class="homework-item"><span>💬</span> <strong>Spot the mistake:</strong> Tom drew <em>quarter to 5</em> with the short hand pointing exactly at 4 and the long hand on 9. Why is his clock wrong?</div>
+        <div class="homework-item"><span>🕵️</span> <strong>Discussion:</strong> Why is "quarter to 5" called "quarter to 5" and not "quarter to 4"? Explain in your own words.</div>
+        <details class="answer-key">
+            <summary>Answer key (for parents / teachers)</summary>
+            <div class="ak-item"><strong>Drawings:</strong> 2 o'clock — minute on 12, hour on 2. Half past 4 — minute on 6, hour halfway between 4 and 5. Quarter past 6 — minute on 3, hour just past 6. Quarter to 9 — minute on 9, hour <em>almost</em> at 9.</div>
+            <div class="ak-item"><strong>Mystery clock:</strong> minute on 6 = "half past"; hour between 7 and 8 = "half past 7". Time is <strong>half past 7</strong>.</div>
+            <div class="ak-item"><strong>Lily:</strong> Half past 7 + 30 minutes = <strong>8 o'clock</strong>.</div>
+            <div class="ak-item"><strong>Tom's mistake:</strong> at quarter to 5, the hour hand should be <em>almost</em> at 5, not still at 4. The short hand drifts as the minutes pass — by 4:45 it has travelled three-quarters of the way from 4 to 5.</div>
+            <div class="ak-item"><strong>Discussion:</strong> we name the time after the hour we are <em>arriving at</em>, not leaving. "Quarter to 5" means there is a quarter of an hour <em>left until</em> 5 o'clock.</div>
+        </details>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 14: WEEK 2 HOOK ===== -->
+<div class="slide" id="slide-hook2">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🪄 Beyond the Big Four</div>
+        <div class="slide-subtitle">Now we can read <strong>o'clock</strong>, <strong>half past</strong>, and <strong>quarters</strong>.<br>But what about times <em>between</em> them? Like… <span class="hl-qpast">5 minutes past</span>, or <span class="hl-qto">10 minutes to</span>?</div>
+        <div id="hook2Clock" class="text-center" style="margin:20px 0;"></div>
+        <div class="sentence-stem">
+            🕒 <strong>Big idea:</strong> the clock face has 60 minutes. Each <strong>number</strong> on the clock is a jump of <strong>5 minutes</strong>. So we can count: <span class="hl-qpast">5, 10, 15, 20, 25, 30…</span>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 15: 5-MINUTE INTERVALS ===== -->
+<div class="slide" id="slide-five">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🪜 Counting in 5s Around the Clock</div>
+        <div class="slide-subtitle">Each number on the clock = <strong>5 minutes</strong>. Click a number to see how many minutes <em>past</em> the hour it shows.</div>
+        <div id="fiveClock" class="text-center" style="margin:20px 0;"></div>
+        <div class="sentence-stem mt-16" id="fiveStem">
+            🔢 Click any number on the clock. Counting in 5s is the same skip-counting Emmanuel learned in Autumn Term!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 16: TELLING TIME TO 5 MINUTES ===== -->
+<div class="slide" id="slide-totime">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">⏱️ Telling Time to the Nearest 5 Minutes</div>
+        <div class="slide-subtitle">After 30 minutes past, we switch from <span class="hl-qpast">"past"</span> to <span class="hl-qto">"to"</span>!<br>Click each clock to see how to read it.</div>
+        <div class="clock-row" id="toTimeArea"></div>
+        <div class="sentence-stem">
+            <strong>Rule of thumb:</strong> if the minute hand is on the <span class="hl-qpast">right side</span> of the clock (1–6), say "past". If it is on the <span class="hl-qto">left side</span> (7–11), say "to".
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 17: WRITING TIME (DIGITAL) ===== -->
+<div class="slide" id="slide-digital">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">⌚ Writing Time (Digital)</div>
+        <div class="slide-subtitle">A <strong>digital clock</strong> writes time using numbers. The format is <span class="hl-qpast">hours : minutes</span>. Click a card to see how each spoken time looks digital.</div>
+        <div id="digitalArea" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:20px 0;"></div>
+        <div class="sentence-stem mt-16">
+            <strong>Watch out!</strong> "Quarter past 3" is <span class="hl-qpast">3:15</span> — but "quarter to 4" is <span class="hl-qto">3:45</span> on a digital clock. The hour shown is the one we are <em>still in</em>.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 18: HOURS, DAYS, WEEKS ===== -->
+<div class="slide" id="slide-units">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📅 Hours, Days &amp; Weeks</div>
+        <div class="slide-subtitle">How long is an hour? How many hours in a day? Click each card to flip it and reveal the fact.</div>
+        <div id="unitsArea" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:20px 0;"></div>
+        <div class="sentence-stem mt-16">
+            🧠 <strong>Memory trick:</strong> a clock has 12 numbers, but a day has <strong>2 trips</strong> around the clock = 24 hours!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 19: DURATIONS ===== -->
+<div class="slide" id="slide-dur">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">⏳ Finding Durations</div>
+        <div class="slide-subtitle">A <strong>duration</strong> is how long something lasts. We find it by counting from the start time to the end time.<br>Pick a scenario to see it on a number line:</div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:var(--oclock);" onclick="showDur('a')">🎬 Film</button>
+            <button class="action-btn" style="background:var(--halfpast);" onclick="showDur('b')">🎂 Party</button>
+            <button class="action-btn" style="background:var(--qpast);" onclick="showDur('c')">🚗 Drive</button>
+            <button class="action-btn" style="background:var(--qto);" onclick="showDur('d')">📚 Reading</button>
+        </div>
+        <div id="durArea" style="margin:20px 0;"></div>
+        <div class="sentence-stem mt-16" id="durStem">
+            <strong>Tip:</strong> jump up in <em>easy</em> chunks — go to the next o'clock first, then keep counting.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 20: COMPARE DURATIONS ===== -->
+<div class="slide" id="slide-cmp">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">⚖️ Comparing Durations</div>
+        <div class="slide-subtitle">Which is longer? Which is shorter? Compare two activities.</div>
+        <div id="cmpArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newCompare()">🎲 New Pair</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Watch out:</strong> "1 hour" sounds bigger than "45 minutes", but always check the units. <em>1 hour = 60 minutes</em>. A trip of 90 minutes is longer than a trip of 1 hour!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 21: WORD PROBLEMS W2 ===== -->
+<div class="slide" id="slide-wp2">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Stories</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📖 Time Stories — Level Up</div>
+        <div class="slide-subtitle">Now we mix everything: telling time, writing it digitally, and finding durations.</div>
+        <div id="wp2Area"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newWordProblem(2)">🎲 New Story</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Strategy:</strong> draw a number line, mark the START, then count up in friendly chunks (10 mins, 30 mins, 1 hour) until you reach the END.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: 5-MIN INCREMENTS TABLE ===== -->
+<div class="slide" id="slide-w2-allmin">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Reference</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📊 Every 5-Minute Mark</div>
+        <div class="slide-subtitle">Click any minute mark to see the analog clock and how we say it. This is your <strong>complete</strong> reference for telling 5-minute time.</div>
+        <div id="allMinTable" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(85px,1fr));gap:8px;margin:18px 0;width:100%;"></div>
+        <div id="allMinDisplay" style="margin-top:10px;"></div>
+        <div class="sentence-stem mt-16">
+            <strong>The 30-min switch:</strong> minutes <span class="hl-qpast">5–30</span> are "past". Minutes <span class="hl-qto">35–55</span> are "to" the next hour. At exactly :30 we say "half past".
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: PAIRS GAME (analog ↔ digital) ===== -->
+<div class="slide" id="slide-w2-pairs">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Pairs Game</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🧩 Analog &amp; Digital Pairs</div>
+        <div class="slide-subtitle">Match each <strong>analog clock</strong> to its <strong>digital reading</strong>.</div>
+        <div id="pairsArea2"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newPairs(2)">🎲 New Round</button></div>
+        <div class="quiz-feedback mt-16" id="pairs2Fb"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: SEQUENCE COMPLETION (DIGITAL) ===== -->
+<div class="slide" id="slide-w2-seq">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Sequences</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🔢 Continue the Pattern</div>
+        <div class="slide-subtitle">Each row counts in a fixed jump (5, 10, or 15 minutes). Type the <strong>next time</strong> in the pattern.</div>
+        <div id="seqDigArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newSeqDigital()">🎲 New Pattern</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Step 1:</strong> work out the jump size by subtracting two terms. <strong>Step 2:</strong> add that jump to the last number. Watch the hour roll over at :60!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: DAYS OF THE WEEK ===== -->
+<div class="slide" id="slide-w2-days">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Calendar</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📅 Days of the Week</div>
+        <div class="slide-subtitle">There are <strong>7 days</strong> in a week. Click them in order from <strong>Monday → Sunday</strong>.</div>
+        <div id="daysOrderSlot" class="order-slot"></div>
+        <div id="daysOrderPile" class="order-pile"></div>
+        <div class="btn-row">
+            <button class="action-btn check-btn" onclick="checkDayOrder()">✓ Check</button>
+            <button class="action-btn" style="background:var(--accent);" onclick="initDaysOrder()">🔄 Reset</button>
+        </div>
+        <div class="quiz-feedback mt-16" id="daysOrderFb"></div>
+        <div id="daysQuestion" style="margin-top:18px;"></div>
+        <div class="sentence-stem mt-16">
+            <strong>Sing it:</strong> "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday." After <em>Sunday</em>, the cycle starts again at <em>Monday</em>.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: MONTHS OF THE YEAR ===== -->
+<div class="slide" id="slide-w2-months">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Calendar</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🗓️ The 12 Months</div>
+        <div class="slide-subtitle">There are <strong>12 months</strong> in a year. Click each card to see how many days that month has.</div>
+        <div class="cal-grid" id="monthsGrid"></div>
+        <div class="sentence-stem mt-16">
+            <strong>Knuckle trick:</strong> make a fist. Each <em>knuckle</em> = 31 days; each <em>dip</em> between knuckles = 30 days (except <strong>February</strong>, which has 28 — or 29 in a <em>leap year</em>).<br><br>
+            <strong>Rhyme:</strong> "Thirty days hath September, April, June, and November. All the rest have thirty-one — except February alone."
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: TODAY / YESTERDAY / TOMORROW ===== -->
+<div class="slide" id="slide-w2-tytm">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Day Logic</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">⏮️ Yesterday · 📍 Today · ⏭️ Tomorrow</div>
+        <div class="slide-subtitle">If <strong>today</strong> is a certain day, what was <strong>yesterday</strong>? What will <strong>tomorrow</strong> be?</div>
+        <div id="tytmArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newTytm()">🎲 New Question</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Trick at the edges:</strong> if today is <em>Monday</em>, yesterday was <em>Sunday</em> (jumping <strong>back</strong> through the week). If today is <em>Sunday</em>, tomorrow is <em>Monday</em> (the cycle restarts).
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: SEASONS ===== -->
+<div class="slide" id="slide-w2-seasons">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Year Cycle</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🍂 The Four Seasons</div>
+        <div class="slide-subtitle">A year has <strong>4 seasons</strong>. Each lasts about 3 months. Click each card.</div>
+        <div class="cal-grid" id="seasonsGrid"></div>
+        <div id="seasonsQuiz" style="margin-top:14px;"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newSeasonQ()">🎲 New Question</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>UK seasons (rough months):</strong> Spring = Mar–May · Summer = Jun–Aug · Autumn = Sep–Nov · Winter = Dec–Feb. After Winter, Spring starts again — like a giant clock!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: BAR MODEL DURATION ===== -->
+<div class="slide" id="slide-w2-barmodel">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Bar Model</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📊 Duration as a Bar Model</div>
+        <div class="slide-subtitle">A <strong>bar model</strong> is another way to show duration. The whole bar is the total time, split into smaller blocks for each chunk.</div>
+        <div id="bmDurArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newBarModelDur()">🎲 New Bar Model</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Bar models vs number lines:</strong> the number line shows the <em>journey</em> (jumps from start to end). The bar model shows the <em>total</em> chopped into parts. Both give the same answer!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: CONVERT MINS ↔ HOURS ===== -->
+<div class="slide" id="slide-w2-convert">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Conversions</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🔁 Minutes ↔ Hours</div>
+        <div class="slide-subtitle">60 minutes = 1 hour. Type the answer to convert between minutes and hours/minutes.</div>
+        <div id="convertArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newConvert()">🎲 New Conversion</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Trick:</strong> to go from minutes → hours, count how many <strong>60s</strong> fit. 90 mins = 60 + 30 = <strong>1 hour 30 mins</strong>. To go the other way, multiply hours by 60 then add minutes.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: ORDER DURATIONS ===== -->
+<div class="slide" id="slide-w2-order">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Ordering</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📏 Order from Shortest → Longest</div>
+        <div class="slide-subtitle">Convert each duration to <strong>minutes</strong> in your head, then click them in order from <strong>shortest first</strong>.</div>
+        <div id="orderSlot" class="order-slot"></div>
+        <div id="orderPile" class="order-pile"></div>
+        <div class="btn-row">
+            <button class="action-btn check-btn" onclick="checkOrder()">✓ Check</button>
+            <button class="action-btn" style="background:var(--accent);" onclick="newOrder()">🎲 New Set</button>
+        </div>
+        <div class="quiz-feedback mt-16" id="orderFb"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: MULTI-STEP WORD PROBLEMS ===== -->
+<div class="slide" id="slide-w2-multi">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · Multi-Step</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🪜 Multi-Step Word Problems</div>
+        <div class="slide-subtitle">Each story has <strong>two or three steps</strong>. Read carefully, do one step at a time, and don't lose track!</div>
+        <div id="multiArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newMulti()">🎲 New Story</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Strategy:</strong> 1️⃣ Find the START. 2️⃣ Add each duration in chunks. 3️⃣ Cross-check by counting back. Draw a number line if you get stuck!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== W2 NEW: SATS-STYLE MIXED PRACTICE ===== -->
+<div class="slide" id="slide-w2-sats">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · KS1 SATs Style</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🎯 SATs-Style Mixed Practice</div>
+        <div class="slide-subtitle">These are the kinds of questions that appear in <strong>KS1 SATs</strong>. Mix of clock reading, durations, calendar, conversions.</div>
+        <div id="satsArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newSats()">🎲 New Question</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>SATs technique:</strong> read the question <em>twice</em> before looking at the answers. Underline numbers and time-words. Don't pick the first plausible answer — work it out first.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 22: ROADBLOCK 2 ===== -->
+<div class="slide" id="slide-rb2">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2</div>
+    <div class="roadblock-card">
+        <h2>🚧 Roadblock 2</h2>
+        <p style="color:var(--text-dim);margin-bottom:20px;">You <strong>must master</strong> these before finishing the block:</p>
+        <div class="roadblock-item"><span>✅</span> Counts in 5s around the clock face</div>
+        <div class="roadblock-item"><span>✅</span> Reads time to the nearest 5 minutes</div>
+        <div class="roadblock-item"><span>✅</span> Switches between "past" and "to" correctly at 30 minutes</div>
+        <div class="roadblock-item"><span>✅</span> Writes time in digital form (e.g. 3:15, 5:45)</div>
+        <div class="roadblock-item"><span>✅</span> Knows: 60 mins = 1 hour, 24 hours = 1 day, 7 days = 1 week</div>
+        <div class="roadblock-item"><span>✅</span> Finds and compares durations using a number line</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 23: MINI TEST 2 ===== -->
+<div class="slide" id="slide-mt2">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2</div>
+    <div class="glass-card">
+        <div class="slide-title">📝 Mini Test 2</div>
+        <div class="slide-subtitle">Answer all questions to check your mastery!</div>
+        <div id="miniTest2"></div>
+        <div id="mt2Result" class="hidden mt-24 text-center"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 24: HOMEWORK 2 ===== -->
+<div class="slide" id="slide-hw2">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge"><span class="dot w6"></span> Week 2</div>
+    <div class="homework-card">
+        <h3>🏠 Homework 2: Time Tracker</h3>
+        <div class="slide-subtitle" style="margin-bottom:8px;font-size:.95rem;">Try every tier — Mild builds confidence, Medium stretches, Spicy challenges.</div>
+        <div class="tier-header tier-mild">🌱 Mild — warm-up</div>
+        <div class="homework-item"><span>✏️</span> Write the digital time for: <strong>quarter past 2</strong>, <strong>half past 6</strong>, <strong>quarter to 8</strong>, <strong>10 past 4</strong>.</div>
+        <div class="homework-item"><span>🔍</span> Watch the kitchen clock. Write the time when you start AND finish your favourite snack. How many minutes did it take?</div>
+        <div class="tier-header tier-medium">🔥 Medium — main practice</div>
+        <div class="homework-item"><span>📺</span> Your show starts at <strong>5:00</strong> and ends at <strong>5:30</strong>. How long is it? Now: starts at <strong>5:15</strong>, ends at <strong>6:00</strong> — how long?</div>
+        <div class="homework-item"><span>📅</span> How many hours from <strong>9 in the morning</strong> until <strong>3 in the afternoon</strong>? <em>(Tip: count on past 12.)</em></div>
+        <div class="homework-item"><span>⏰</span> Convert: 1 hour 15 minutes = <strong>?</strong> minutes. 90 minutes = <strong>?</strong> hour and <strong>?</strong> minutes.</div>
+        <div class="tier-header tier-spicy">🌶️ Spicy — stretch & explain</div>
+        <div class="homework-item"><span>💬</span> <strong>Compare:</strong> a film is 1 hour 30 minutes. A car ride is 80 minutes. Which is longer? Show your working.</div>
+        <div class="homework-item"><span>🕵️</span> <strong>Time diary:</strong> for ONE day, write down the time (digital + words) at: waking up, breakfast, lunch, bedtime. Work out the duration between breakfast and lunch.</div>
+        <details class="answer-key">
+            <summary>Answer key (for parents / teachers)</summary>
+            <div class="ak-item"><strong>Digital times:</strong> quarter past 2 = <strong>2:15</strong>; half past 6 = <strong>6:30</strong>; quarter to 8 = <strong>7:45</strong>; 10 past 4 = <strong>4:10</strong>.</div>
+            <div class="ak-item"><strong>Show durations:</strong> 5:00 → 5:30 = <strong>30 minutes</strong>. 5:15 → 6:00 = <strong>45 minutes</strong> (15 mins to 5:30, then another 30 to 6:00).</div>
+            <div class="ak-item"><strong>9am → 3pm:</strong> 9 → 12 = 3 hours, 12 → 3 = 3 hours, total = <strong>6 hours</strong>.</div>
+            <div class="ak-item"><strong>Conversions:</strong> 1 hr 15 min = 60 + 15 = <strong>75 minutes</strong>. 90 minutes = <strong>1 hour 30 minutes</strong>.</div>
+            <div class="ak-item"><strong>Compare:</strong> 1 hr 30 min = 90 min. So 80 min &lt; 90 min — the <strong>film is longer</strong> by 10 minutes.</div>
+            <div class="ak-item"><strong>Diary:</strong> any reasonable times. Common: breakfast 7:30, lunch 12:30 → <strong>5 hours</strong>.</div>
+        </details>
+    </div>
+</div>
+</div>
+
+<!-- ===== CHEAT SHEET ===== -->
+<div class="slide" id="slide-cheat">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge" style="background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.3);"><span class="dot" style="background:var(--qpast);"></span> Reference Card</div>
+    <div class="glass-card">
+        <div class="slide-title text-center">📋 Cheat Sheet — Everything You Need</div>
+        <div class="slide-subtitle text-center">One page. Print it. Stick it on the fridge.</div>
+        <div class="cheat-row">
+            <div class="cheat-cell">
+                <h4>🕒 The Hands</h4>
+                <p><strong>Short, fat hand</strong> = hour. <strong>Long, thin hand</strong> = minutes. The hour hand <strong>drifts</strong> between numbers as the minutes pass.</p>
+            </div>
+            <div class="cheat-cell">
+                <h4>🟦 The Big Four</h4>
+                <p><strong>O'clock:</strong> minute hand on 12.<br><strong>Quarter past:</strong> on 3.<br><strong>Half past:</strong> on 6.<br><strong>Quarter to:</strong> on 9.</p>
+            </div>
+            <div class="cheat-cell">
+                <h4>🔢 Counting in 5s</h4>
+                <p>Each <strong>number</strong> on the clock = 5 minutes. So 3 → 15 mins, 6 → 30 mins, 9 → 45 mins, 12 → 0 (or 60).</p>
+            </div>
+            <div class="cheat-cell">
+                <h4>↔️ Past or To?</h4>
+                <p><strong>:01 to :30</strong> → say "past" the current hour.<br><strong>:31 to :59</strong> → say "to" the next hour. (Subtract from 60.)</p>
+            </div>
+            <div class="cheat-cell">
+                <h4>⌚ Digital Format</h4>
+                <p><strong>HH : MM</strong> — hour, then minutes.<br><em>Quarter to 5</em> = 4:45 (still hour 4!).<br><em>Quarter past 5</em> = 5:15.</p>
+            </div>
+            <div class="cheat-cell">
+                <h4>📐 Time Units</h4>
+                <p>60 secs = 1 min · 60 mins = 1 hour · 24 hrs = 1 day · 7 days = 1 week · 12 months = 1 year · 365 days = 1 year (366 leap).</p>
+            </div>
+            <div class="cheat-cell">
+                <h4>📅 Days &amp; Months</h4>
+                <p>Mon, Tue, Wed, Thu, Fri, Sat, Sun.<br>Jan, Feb (28/29), Mar, Apr (30), May, Jun (30), Jul, Aug, Sep (30), Oct, Nov (30), Dec.</p>
+            </div>
+            <div class="cheat-cell">
+                <h4>🌅 a.m. / p.m.</h4>
+                <p><strong>a.m.</strong> = 12 midnight → 12 noon (morning).<br><strong>p.m.</strong> = 12 noon → 12 midnight (afternoon, evening, night).</p>
+            </div>
+            <div class="cheat-cell">
+                <h4>⏳ Find Duration</h4>
+                <p>Jump from start → next o'clock → end. Count the chunks. Or use a number line / bar model.</p>
+            </div>
+            <div class="cheat-cell">
+                <h4>🍂 Seasons</h4>
+                <p>Spring (Mar–May) · Summer (Jun–Aug) · Autumn (Sep–Nov) · Winter (Dec–Feb).</p>
+            </div>
+            <div class="cheat-cell">
+                <h4>🔁 Conversions</h4>
+                <p>1 hr = 60 min · ½ hr = 30 min · ¼ hr = 15 min · 90 min = 1 hr 30 min · 75 min = 1 hr 15 min.</p>
+            </div>
+            <div class="cheat-cell">
+                <h4>⚠️ Top Mistakes</h4>
+                <p>1. Hour hand stuck on a number at half past.<br>2. "Quarter to 5" → digital is <em>4:45</em> not <em>5:45</em>.<br>3. Forgetting to cross the hour at :00.</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== GLOSSARY ===== -->
+<div class="slide" id="slide-glossary">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge" style="background:rgba(139,92,246,.15);border-color:rgba(139,92,246,.3);"><span class="dot" style="background:var(--accent);"></span> Vocabulary</div>
+    <div class="glass-card">
+        <div class="slide-title text-center">📖 Glossary — Time Vocabulary</div>
+        <div class="slide-subtitle text-center">Every word you'll meet in this block.</div>
+        <div class="gloss-item"><div class="gloss-term">Analog clock</div><div class="gloss-def">A clock with a round face and two hands that move around. Sometimes called a "round clock".</div></div>
+        <div class="gloss-item"><div class="gloss-term">Digital clock</div><div class="gloss-def">A clock that shows the time as numbers, like <strong>3:15</strong>. Found on phones, ovens, microwaves.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Hour hand</div><div class="gloss-def">The <strong>short, fat</strong> hand on an analog clock. Points to the current hour. Drifts slowly between numbers.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Minute hand</div><div class="gloss-def">The <strong>long, thin</strong> hand on an analog clock. Goes once around the clock every hour.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Second hand</div><div class="gloss-def">A very thin, fast-moving hand on some clocks. Goes once around every minute (60 seconds).</div></div>
+        <div class="gloss-item"><div class="gloss-term">O'clock</div><div class="gloss-def">An exact hour, with no extra minutes. The minute hand points straight up to 12.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Half past</div><div class="gloss-def">30 minutes past the hour. The minute hand points to 6, the hour hand sits halfway between two numbers.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Quarter past</div><div class="gloss-def">15 minutes past the hour. The minute hand points to 3.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Quarter to</div><div class="gloss-def">15 minutes <em>before</em> the next hour. The minute hand points to 9. The hour hand is almost at the next number.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Duration</div><div class="gloss-def">How long something lasts. Found by counting from the start time to the end time.</div></div>
+        <div class="gloss-item"><div class="gloss-term">a.m.</div><div class="gloss-def">"Ante meridiem" — before midday. Times from midnight (12:00) to noon (12:00).</div></div>
+        <div class="gloss-item"><div class="gloss-term">p.m.</div><div class="gloss-def">"Post meridiem" — after midday. Times from noon (12:00) to midnight (12:00).</div></div>
+        <div class="gloss-item"><div class="gloss-term">Noon / midday</div><div class="gloss-def">12:00 in the middle of the day. The end of "morning" and start of "afternoon".</div></div>
+        <div class="gloss-item"><div class="gloss-term">Midnight</div><div class="gloss-def">12:00 at the very middle of the night. The end of one day and start of the next.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Second</div><div class="gloss-def">The smallest unit of time we use. 60 seconds = 1 minute.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Minute</div><div class="gloss-def">60 seconds. The minute hand moves one tick every minute. 60 minutes = 1 hour.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Hour</div><div class="gloss-def">60 minutes. The hour hand moves from one number to the next every hour.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Day</div><div class="gloss-def">24 hours. The hour hand goes round the clock <em>twice</em> in a day.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Week</div><div class="gloss-def">7 days. Monday through Sunday.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Month</div><div class="gloss-def">A part of the year. Most months have 30 or 31 days; February has 28 (or 29 in a leap year).</div></div>
+        <div class="gloss-item"><div class="gloss-term">Year</div><div class="gloss-def">12 months, or 365 days (366 in a leap year).</div></div>
+        <div class="gloss-item"><div class="gloss-term">Leap year</div><div class="gloss-def">A special year with an extra day (29 February). Happens every 4 years.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Season</div><div class="gloss-def">One of the four parts of the year — Spring, Summer, Autumn, Winter.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Calendar</div><div class="gloss-def">A chart showing the days, weeks and months of a year.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Roman numeral</div><div class="gloss-def">An old way to write numbers using letters: I, II, III, IIII (or IV), V, VI, VII, VIII, IX, X, XI, XII.</div></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 25: FINAL TEST ===== -->
+<div class="slide" id="slide-final">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="week-badge" style="background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(139,92,246,.15));"><span class="dot" style="background:linear-gradient(135deg,#F59E0B,#8B5CF6);"></span> Final Mastery Assessment</div>
+    <div class="glass-card">
+        <div class="slide-title">🏆 Final Mastery Assessment</div>
+        <div class="slide-subtitle">Combine everything from Weeks 1 &amp; 2. Aim for <strong>9+ out of 11</strong> to earn the Time Master badge.</div>
+        <div id="finalTest"></div>
+        <div id="finalResult" class="hidden mt-24 text-center"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== SLIDE 26: CERTIFICATE ===== -->
+<div class="slide" id="slide-cert">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="results-card">
+        <div class="score-circle silver" id="certScore">— / —</div>
+        <h2 id="certTitle" style="margin-bottom:14px;">Complete the Final Test First</h2>
+        <p id="certMessage" style="color:var(--text-dim);line-height:1.7;">Once you finish the Final Mastery Assessment, your badge appears here.</p>
+        <div class="sentence-stem" style="margin-top:20px;">
+            🏁 <strong>Up next:</strong> Summer Block 3 — <em>Statistics</em> (tally charts, pictograms, block diagrams).
+        </div>
+        <div class="btn-row mt-24"><button class="action-btn" style="background:var(--accent);" onclick="window.print()">🖨️ Print this lesson</button></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== RESUME TOAST ===== -->
+<div class="resume-toast" id="resumeToast" role="status">
+    <span class="resume-icon">⏱️</span>
+    <span class="resume-msg" id="resumeMsg"></span>
+    <button onclick="dismissResume()">Continue</button>
+    <button class="ghost" onclick="resetProgress()">Start over</button>
+</div>
+
+<!-- ===== NAV BAR ===== -->
+<div class="nav-bar">
+    <button class="nav-btn back" id="backBtn" onclick="prevSlide()">← Back</button>
+    <div class="nav-center">
+        <span class="slide-counter" id="slideCounter">1 / 27</span>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Dark</button>
+        <button class="reset-btn" onclick="resetProgress()">↺ Reset</button>
+    </div>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+// ============ SOUND ============
+const AudioCtx=window.AudioContext||window.webkitAudioContext;let audioCtx;
+function ensureAudio(){if(!audioCtx)audioCtx=new AudioCtx()}
+function playSound(t){try{ensureAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);const now=audioCtx.currentTime;
+if(t==='correct'){o.frequency.setValueAtTime(523,now);o.frequency.setValueAtTime(659,now+.1);g.gain.setValueAtTime(.15,now);g.gain.exponentialRampToValueAtTime(.001,now+.4);o.start();o.stop(now+.4)}
+else if(t==='wrong'){o.type='sawtooth';o.frequency.setValueAtTime(200,now);g.gain.setValueAtTime(.1,now);g.gain.exponentialRampToValueAtTime(.001,now+.3);o.start();o.stop(now+.3)}
+else if(t==='success'){o.frequency.setValueAtTime(523,now);o.frequency.setValueAtTime(659,now+.15);o.frequency.setValueAtTime(784,now+.3);g.gain.setValueAtTime(.15,now);g.gain.exponentialRampToValueAtTime(.001,now+.6);o.start();o.stop(now+.6)}
+else if(t==='click'){o.frequency.setValueAtTime(800,now);g.gain.setValueAtTime(.08,now);g.gain.exponentialRampToValueAtTime(.001,now+.08);o.start();o.stop(now+.08)}
+else if(t==='tick'){o.frequency.setValueAtTime(1200,now);g.gain.setValueAtTime(.04,now);g.gain.exponentialRampToValueAtTime(.001,now+.05);o.start();o.stop(now+.05)}}catch(e){}}
+
+// ============ THEME / STATE ============
+const STORAGE_KEY='y2_time_state';
+function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}}catch(e){return{}}}
+function saveState(patch){try{const s=loadState();localStorage.setItem(STORAGE_KEY,JSON.stringify({...s,...patch}))}catch(e){}}
+function applyTheme(mode){document.body.classList.toggle('light',mode==='light');const btn=document.getElementById('themeToggle');if(btn)btn.textContent=mode==='light'?'☀️ Light':'🌙 Dark'}
+function toggleTheme(){const next=document.body.classList.contains('light')?'dark':'light';applyTheme(next);saveState({theme:next});playSound('click');refreshAllClocks()}
+function resetProgress(){try{const s=loadState();localStorage.setItem(STORAGE_KEY,JSON.stringify({theme:s.theme||'dark'}))}catch(e){}dismissResume();showSlide(0);playSound('click')}
+function dismissResume(){const t=document.getElementById('resumeToast');if(t)t.classList.remove('show')}
+function showResumeToast(slideNum,total){const t=document.getElementById('resumeToast');const msg=document.getElementById('resumeMsg');if(!t||!msg)return;msg.innerHTML='Welcome back — picking up at <strong>slide '+(slideNum+1)+' of '+total+'</strong>.';setTimeout(()=>t.classList.add('show'),400);setTimeout(()=>t.classList.remove('show'),7000)}
+function showKbdHint(){if(document.getElementById('kbdHint'))return;const h=document.createElement('div');h.id='kbdHint';h.className='kbd-hint';h.innerHTML='Tip: use <kbd>←</kbd> <kbd>→</kbd> arrow keys to move between slides';document.body.appendChild(h);setTimeout(()=>{const el=document.getElementById('kbdHint');if(el)el.remove()},6500)}
+
+// ============ SLIDES ============
+let cur=0;let total=27;
+function showSlide(n){
+    const slides=document.querySelectorAll('.slide');
+    total=slides.length;
+    slides.forEach(s=>s.classList.remove('active'));
+    slides[n].classList.add('active');
+    cur=n;
+    document.getElementById('slideCounter').textContent=(n+1)+' / '+total;
+    document.getElementById('progressBar').style.width=((n+1)/total*100)+'%';
+    document.getElementById('backBtn').disabled=n===0;
+    const id=slides[n].id;
+    if(slideInit[id]&&!initFlags[id]){slideInit[id]();initFlags[id]=true}
+    saveState({slide:n});
+    window.scrollTo(0,0);
+}
+const initFlags={};
+const slideInit={
+    'slide-0':()=>renderTitleClock(),
+    'slide-hook1':()=>initHookClocks(),
+    'slide-parts':()=>initParts(),
+    'slide-hourhand':()=>hourHandStep(0),
+    'slide-oclock':()=>initOclock(),
+    'slide-half':()=>initHalf(),
+    'slide-qpast':()=>initQpast(),
+    'slide-qto':()=>initQto(),
+    'slide-build':()=>newBuildTask(),
+    'slide-read1':()=>newReadClock(1),
+    'slide-wp1':()=>newWordProblem(1),
+    'slide-mt1':()=>buildMT1(),
+    'slide-hook2':()=>renderInto('hook2Clock',clockSvg(7,20,{size:160})),
+    'slide-five':()=>initFiveClock(),
+    'slide-totime':()=>initToTime(),
+    'slide-digital':()=>initDigital(),
+    'slide-units':()=>initUnits(),
+    'slide-dur':()=>showDur('a'),
+    'slide-cmp':()=>newCompare(),
+    'slide-wp2':()=>newWordProblem(2),
+    'slide-mt2':()=>buildMT2(),
+    'slide-final':()=>buildFinalTest(),
+    'slide-w1-seq':()=>newSequence(),
+    'slide-w1-pairs':()=>newPairs(1),
+    'slide-w1-set':()=>newSetHands(),
+    'slide-w1-mistake':()=>initMistakes(),
+    'slide-w1-tf':()=>initTF(),
+    'slide-w1-shift':()=>newShift(),
+    'slide-w1-parts':()=>newPartsDay(),
+    'slide-w1-ampm':()=>newAmPm(),
+    'slide-w1-roman':()=>renderInto('romanClock',clockSvg(7,15,{size:200,accent:'var(--qpast)',roman:true})),
+    'slide-w2-allmin':()=>initAllMin(),
+    'slide-w2-pairs':()=>newPairs(2),
+    'slide-w2-seq':()=>newSeqDigital(),
+    'slide-w2-days':()=>{initDaysOrder();newDayQuestion();},
+    'slide-w2-months':()=>initMonths(),
+    'slide-w2-tytm':()=>newTytm(),
+    'slide-w2-seasons':()=>{initSeasons();newSeasonQ();},
+    'slide-w2-barmodel':()=>newBarModelDur(),
+    'slide-w2-convert':()=>newConvert(),
+    'slide-w2-order':()=>newOrder(),
+    'slide-w2-multi':()=>newMulti(),
+    'slide-w2-sats':()=>newSats(),
+};
+function refreshAllClocks(){/* theme switch redraws happen on slide enter — gentle no-op */}
+function nextSlide(){if(cur<total-1){playSound('click');showSlide(cur+1)}}
+function prevSlide(){if(cur>0){playSound('click');showSlide(cur-1)}}
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide()});
+function renderInto(id,html){const el=document.getElementById(id);if(el)el.innerHTML=html}
+
+// ============ CLOCK SVG GENERATOR ============
+// hours: 0-23, minutes: 0-59
+// opts: {size, label, highlight: 'half'|'qpast'|'qto'|null, faceColor, accent}
+function clockSvg(hours,minutes,opts){
+    opts=opts||{};
+    const size=opts.size||170;
+    const cx=100,cy=100,r=82;
+    const hr=((hours%12)+minutes/60);
+    const hAng=hr*30-90;            // hour hand angle in degrees, 0deg = right (SVG)
+    const mAng=minutes*6-90;
+    const hRad=hAng*Math.PI/180,mRad=mAng*Math.PI/180;
+    const hLen=42,mLen=64;
+    const hx=cx+hLen*Math.cos(hRad),hy=cy+hLen*Math.sin(hRad);
+    const mx=cx+mLen*Math.cos(mRad),my=cy+mLen*Math.sin(mRad);
+    const accent=opts.accent||'var(--accent)';
+    let s='<svg viewBox="0 0 200 200" width="'+size+'" height="'+size+'" class="'+(opts.cls||'')+'" '+(opts.onclick?'onclick="'+opts.onclick+'"':'')+'>';
+    // Highlight wedge (under everything)
+    if(opts.highlight==='half'){
+        // 0..30 minutes wedge (right half)
+        s+='<path d="M100 100 L100 18 A82 82 0 0 1 100 182 Z" fill="rgba(16,185,129,0.22)"/>';
+    } else if(opts.highlight==='qpast'){
+        s+='<path d="M100 100 L100 18 A82 82 0 0 1 182 100 Z" fill="rgba(245,158,11,0.25)"/>';
+    } else if(opts.highlight==='qto'){
+        s+='<path d="M100 100 L18 100 A82 82 0 0 1 100 18 Z" fill="rgba(139,92,246,0.25)"/>';
+    } else if(opts.highlight==='past'){
+        // generic past-wedge from 12 to current minute
+        const ang=mAng;const lx=100+82*Math.cos(mRad),ly=100+82*Math.sin(mRad);
+        const large=minutes>30?1:0;
+        s+='<path d="M100 100 L100 18 A82 82 0 '+large+' 1 '+lx+' '+ly+' Z" fill="rgba(59,130,246,0.18)"/>';
+    }
+    // Face
+    s+='<circle cx="100" cy="100" r="92" fill="var(--card-bg)" stroke="var(--card-border)" stroke-width="1"/>';
+    s+='<circle cx="100" cy="100" r="82" fill="var(--face)" stroke="var(--face-stroke)" stroke-width="2.5"/>';
+    // Minute ticks
+    for(let i=0;i<60;i++){
+        const a=i*6-90,rad=a*Math.PI/180;
+        const isHour=i%5===0;
+        const r1=isHour?70:74,r2=80;
+        const x1=cx+r1*Math.cos(rad),y1=cy+r1*Math.sin(rad);
+        const x2=cx+r2*Math.cos(rad),y2=cy+r2*Math.sin(rad);
+        s+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="var(--face-stroke)" stroke-width="'+(isHour?2.2:1)+'" stroke-linecap="round"/>';
+    }
+    // Numbers
+    const romans=['','I','II','III','IIII','V','VI','VII','VIII','IX','X','XI','XII'];
+    for(let i=1;i<=12;i++){
+        const a=i*30-90,rad=a*Math.PI/180;
+        const tx=cx+58*Math.cos(rad),ty=cy+58*Math.sin(rad)+5;
+        const isHi=opts.highlightNum===i;
+        const label=opts.roman?romans[i]:i;
+        const fontSize=opts.roman?(i===4||i===8||i===12||i===7?12:14):(isHi?20:16);
+        s+='<text x="'+tx+'" y="'+ty+'" text-anchor="middle" font-size="'+fontSize+'" font-weight="'+(isHi?900:800)+'" fill="'+(isHi?accent:'var(--text)')+'" font-family="Inter">'+label+'</text>';
+    }
+    // Hour hand (short, fat)
+    s+='<line x1="100" y1="100" x2="'+hx+'" y2="'+hy+'" stroke="var(--text)" stroke-width="6" stroke-linecap="round"/>';
+    // Minute hand (long, thin)
+    s+='<line x1="100" y1="100" x2="'+mx+'" y2="'+my+'" stroke="'+accent+'" stroke-width="3.5" stroke-linecap="round"/>';
+    // Centre pin
+    s+='<circle cx="100" cy="100" r="5" fill="'+accent+'"/>';
+    s+='<circle cx="100" cy="100" r="2" fill="var(--bg-end)"/>';
+    s+='</svg>';
+    return s;
+}
+
+// ============ TITLE ============
+function renderTitleClock(){
+    const cont=document.getElementById('titleClock');
+    if(!cont)return;
+    cont.innerHTML='<div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">'+
+        clockSvg(3,0,{size:90,accent:'#3B82F6'})+
+        clockSvg(2,15,{size:90,accent:'#F59E0B'})+
+        clockSvg(7,30,{size:90,accent:'#10B981'})+
+        clockSvg(8,45,{size:90,accent:'#8B5CF6'})+
+    '</div>';
+}
+
+// ============ HOOK 1 ============
+function initHookClocks(){
+    const area=document.getElementById('hookClocks');
+    const choices=[
+        {h:9,m:0,correct:false,why:'That clock shows 9 o\'clock — the short hand is on 9, not 3!'},
+        {h:3,m:0,correct:true,why:'The minute hand is on 12, the hour hand is on 3. That\'s 3 o\'clock!'},
+        {h:3,m:30,correct:false,why:'Close — but the minute hand is on 6 (half past 3), not on 12.'},
+    ];
+    let html='';
+    choices.forEach((c,i)=>{
+        html+='<div class="clock-box">'+clockSvg(c.h,c.m,{size:140,cls:'click-clock',onclick:'hookPick('+i+')'})+'<div class="label">Clock '+String.fromCharCode(65+i)+'</div></div>';
+    });
+    area.innerHTML=html;
+    area.dataset.data=JSON.stringify(choices);
+}
+function hookPick(i){
+    const data=JSON.parse(document.getElementById('hookClocks').dataset.data);
+    const c=data[i];
+    const fb=document.getElementById('hookFb');
+    if(c.correct){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 '+c.why;playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ '+c.why;playSound('wrong')}
+    document.getElementById('hookStem').style.opacity='1';
+}
+
+// ============ PARTS OF A CLOCK ============
+function initParts(){
+    const area=document.getElementById('partsArea');
+    const labels=[
+        {key:'hour',title:'Hour hand',body:'The <strong>short, fat</strong> hand. It moves slowly. It tells us the <em>hour</em>.'},
+        {key:'minute',title:'Minute hand',body:'The <strong>long, thin</strong> hand. It moves faster — once around every <em>hour</em>. It tells us the <em>minutes</em>.'},
+        {key:'numbers',title:'The 12 numbers',body:'A clock has 12 numbers around the edge. Each big number is a jump of <strong>5 minutes</strong> for the long hand.'},
+        {key:'twelve',title:'The 12 (top)',body:'The number <strong>12</strong> is at the top. When the minute hand is on 12, the time is exactly <em>o\'clock</em>!'},
+    ];
+    let html='<div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;align-items:center;">';
+    html+='<div>'+clockSvg(2,20,{size:200,accent:'var(--qpast)'})+'</div>';
+    html+='<div style="display:flex;flex-direction:column;gap:10px;max-width:340px;text-align:left;">';
+    labels.forEach((l,i)=>{
+        html+='<div class="quiz-opt" style="cursor:pointer;" onclick="revealPart('+i+')"><strong style="color:var(--accent-light);">'+l.title+'</strong><div id="part-body-'+i+'" style="font-size:.9rem;color:var(--text-dim);margin-top:4px;opacity:0;max-height:0;overflow:hidden;transition:all .4s;line-height:1.5;">'+l.body+'</div></div>';
+    });
+    html+='</div></div>';
+    area.innerHTML=html;
+}
+function revealPart(i){
+    const el=document.getElementById('part-body-'+i);
+    el.style.opacity='1';el.style.maxHeight='200px';
+    playSound('click');
+}
+
+// ============ HOUR HAND DEMO ============
+let hhPlayInterval=null;
+function hourHandStep(min){
+    if(hhPlayInterval){clearInterval(hhPlayInterval);hhPlayInterval=null}
+    const cont=document.getElementById('hourHandDemo');
+    cont.innerHTML=clockSvg(3,min,{size:200,accent:'var(--qpast)',highlightNum:3});
+    const stem=document.getElementById('hourHandStem');
+    if(min===0)stem.innerHTML='At <span class="hl-oclock">3:00</span>, the short hand points <strong>exactly at 3</strong>.';
+    else if(min===15)stem.innerHTML='At <span class="hl-qpast">3:15</span> (quarter past), the short hand has crept <strong>just past 3</strong> — about ¼ of the way to 4.';
+    else if(min===30)stem.innerHTML='At <span class="hl-half">3:30</span> (half past), the short hand sits <strong>halfway between 3 and 4</strong>. This is the moment many children get wrong!';
+    else if(min===45)stem.innerHTML='At <span class="hl-qto">3:45</span> (quarter to 4), the short hand is <strong>nearly at 4</strong>. Only a quarter of an hour to go!';
+    playSound('tick');
+}
+function hourHandPlay(){
+    if(hhPlayInterval){clearInterval(hhPlayInterval);hhPlayInterval=null;return}
+    let m=0;
+    hourHandStep(m);
+    hhPlayInterval=setInterval(()=>{
+        m+=5;
+        if(m>=60){m=0}
+        const cont=document.getElementById('hourHandDemo');
+        cont.innerHTML=clockSvg(3,m,{size:200,accent:'var(--qpast)',highlightNum:3});
+        const stem=document.getElementById('hourHandStem');
+        stem.innerHTML='Watch how the short hand <strong>creeps</strong> forward as the minutes go from 3:'+(m<10?'0':'')+m+'…';
+        playSound('tick');
+        if(m===0){clearInterval(hhPlayInterval);hhPlayInterval=null;hourHandStep(0)}
+    },650);
+}
+
+// ============ O'CLOCK ============
+function initOclock(){
+    const area=document.getElementById('oclockArea');
+    const times=[{h:1,m:0,lbl:'1 o\'clock'},{h:5,m:0,lbl:'5 o\'clock'},{h:9,m:0,lbl:'9 o\'clock'},{h:12,m:0,lbl:'12 o\'clock'}];
+    let html='';
+    times.forEach(t=>{html+='<div class="clock-box">'+clockSvg(t.h,t.m,{size:130,accent:'var(--oclock)'})+'<div class="label"><strong>'+t.lbl+'</strong></div></div>'});
+    area.innerHTML=html;
+}
+
+// ============ HALF PAST ============
+function initHalf(){
+    const area=document.getElementById('halfArea');
+    const times=[{h:2,m:30,lbl:'Half past 2'},{h:4,m:30,lbl:'Half past 4'},{h:7,m:30,lbl:'Half past 7'}];
+    let html='';
+    times.forEach(t=>{html+='<div class="clock-box">'+clockSvg(t.h,t.m,{size:140,accent:'var(--halfpast)',highlight:'half'})+'<div class="label"><strong>'+t.lbl+'</strong> · digital '+t.h+':'+t.m+'</div></div>'});
+    area.innerHTML=html;
+}
+
+// ============ QUARTER PAST ============
+function initQpast(){
+    const area=document.getElementById('qpastArea');
+    const times=[{h:1,m:15,lbl:'Quarter past 1'},{h:6,m:15,lbl:'Quarter past 6'},{h:10,m:15,lbl:'Quarter past 10'}];
+    let html='';
+    times.forEach(t=>{html+='<div class="clock-box">'+clockSvg(t.h,t.m,{size:140,accent:'var(--qpast)',highlight:'qpast'})+'<div class="label"><strong>'+t.lbl+'</strong> · digital '+t.h+':15</div></div>'});
+    area.innerHTML=html;
+}
+
+// ============ QUARTER TO ============
+function initQto(){
+    const area=document.getElementById('qtoArea');
+    const times=[{h:2,m:45,lbl:'Quarter to 3',d:'2:45'},{h:5,m:45,lbl:'Quarter to 6',d:'5:45'},{h:8,m:45,lbl:'Quarter to 9',d:'8:45'}];
+    let html='';
+    times.forEach(t=>{html+='<div class="clock-box">'+clockSvg(t.h,t.m,{size:140,accent:'var(--qto)',highlight:'qto'})+'<div class="label"><strong>'+t.lbl+'</strong> · digital '+t.d+'</div></div>'});
+    area.innerHTML=html;
+}
+
+// ============ BUILD A CLOCK ============
+let buildState={hr:3,min:0,target:{hr:3,min:30,lbl:'half past 3'}};
+const buildTargets=[
+    {hr:2,min:0,lbl:'2 o\'clock'},
+    {hr:5,min:30,lbl:'half past 5'},
+    {hr:7,min:15,lbl:'quarter past 7'},
+    {hr:8,min:45,lbl:'quarter to 9'},
+    {hr:11,min:30,lbl:'half past 11'},
+    {hr:6,min:15,lbl:'quarter past 6'},
+    {hr:3,min:45,lbl:'quarter to 4'},
+    {hr:9,min:0,lbl:'9 o\'clock'},
+    {hr:1,min:30,lbl:'half past 1'},
+    {hr:4,min:15,lbl:'quarter past 4'},
+];
+function newBuildTask(){
+    buildState.target=buildTargets[Math.floor(Math.random()*buildTargets.length)];
+    buildState.hr=12;buildState.min=0;
+    document.getElementById('buildTarget').innerHTML='🎯 Make the clock show: <strong>'+buildState.target.lbl+'</strong>';
+    document.getElementById('buildFb').className='quiz-feedback';
+    document.getElementById('buildFb').textContent='';
+    renderBuild();
+    playSound('click');
+}
+function renderBuild(){
+    document.getElementById('buildClock').innerHTML=clockSvg(buildState.hr,buildState.min,{size:200,accent:'var(--accent-light)'});
+    document.getElementById('bHrLbl').textContent='Hour: '+buildState.hr;
+    document.getElementById('bMinLbl').textContent='Min: '+buildState.min;
+}
+function bumpHour(d){
+    buildState.hr=((buildState.hr-1+d+12)%12)+1;
+    renderBuild();playSound('tick');
+}
+function bumpMin(d){
+    let m=buildState.min+d;
+    while(m<0){m+=60;buildState.hr=((buildState.hr-1-1+12)%12)+1}
+    while(m>=60){m-=60;buildState.hr=((buildState.hr-1+1)%12)+1}
+    buildState.min=m;
+    renderBuild();playSound('tick');
+}
+function checkBuild(){
+    const fb=document.getElementById('buildFb');
+    const t=buildState.target;
+    if(buildState.hr===t.hr&&buildState.min===t.min){
+        fb.className='quiz-feedback show correct-fb';
+        fb.innerHTML='🎉 Perfect! You built <strong>'+t.lbl+'</strong>. Notice how the short hand has drifted to the right place!';
+        playSound('success');
+    } else {
+        fb.className='quiz-feedback show wrong-fb';
+        fb.innerHTML='❌ Not quite. You showed <strong>'+buildState.hr+':'+(buildState.min<10?'0':'')+buildState.min+'</strong>, but the target was <strong>'+t.lbl+'</strong> ('+t.hr+':'+(t.min<10?'0':'')+t.min+').';
+        playSound('wrong');
+    }
+}
+
+// ============ READ THE CLOCK ============
+let readState={};
+function newReadClock(week){
+    const banks={
+        1:[
+            {h:2,m:0,lbl:'2 o\'clock'},{h:8,m:0,lbl:'8 o\'clock'},
+            {h:3,m:30,lbl:'Half past 3'},{h:6,m:30,lbl:'Half past 6'},
+            {h:1,m:15,lbl:'Quarter past 1'},{h:9,m:15,lbl:'Quarter past 9'},
+            {h:4,m:45,lbl:'Quarter to 5'},{h:11,m:45,lbl:'Quarter to 12'},
+        ],
+        2:[
+            {h:3,m:5,lbl:'5 past 3'},{h:7,m:10,lbl:'10 past 7'},
+            {h:2,m:20,lbl:'20 past 2'},{h:5,m:25,lbl:'25 past 5'},
+            {h:8,m:35,lbl:'25 to 9'},{h:6,m:40,lbl:'20 to 7'},
+            {h:10,m:50,lbl:'10 to 11'},{h:4,m:55,lbl:'5 to 5'},
+        ],
+    };
+    const bank=banks[week];
+    const correct=bank[Math.floor(Math.random()*bank.length)];
+    // Build 4 distractors
+    const used=new Set([correct.lbl]);
+    const opts=[correct.lbl];
+    while(opts.length<4){
+        const d=bank[Math.floor(Math.random()*bank.length)];
+        if(!used.has(d.lbl)){used.add(d.lbl);opts.push(d.lbl)}
+    }
+    // Shuffle
+    for(let i=opts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[opts[i],opts[j]]=[opts[j],opts[i]]}
+    readState={correct:correct.lbl,week};
+    const area=document.getElementById('read'+week+'Area');
+    let html='<div class="quiz-question"><div style="display:flex;justify-content:center;margin-bottom:18px;">'+clockSvg(correct.h,correct.m,{size:180,accent:'var(--accent-light)'})+'</div>';
+    html+='<div class="q-text" style="text-align:center;">What time is shown?</div><div class="quiz-options">';
+    opts.forEach(o=>{html+='<button class="quiz-opt" onclick="checkRead(\''+o.replace(/'/g,'&#39;')+'\','+week+')">'+o+'</button>'});
+    html+='</div><div class="quiz-feedback" id="read'+week+'Fb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkRead(pick,week){
+    const fb=document.getElementById('read'+week+'Fb');
+    const opts=document.querySelectorAll('#read'+week+'Area .quiz-opt');
+    opts.forEach(o=>{o.classList.add('disabled');if(o.textContent===readState.correct)o.classList.add('correct')});
+    if(pick===readState.correct){
+        fb.className='quiz-feedback show correct-fb';
+        fb.innerHTML='🎉 Correct! That clock shows <strong>'+readState.correct+'</strong>.';
+        playSound('correct');
+    } else {
+        // Find clicked button and mark wrong
+        opts.forEach(o=>{if(o.textContent===pick&&pick!==readState.correct)o.classList.add('wrong')});
+        fb.className='quiz-feedback show wrong-fb';
+        fb.innerHTML='❌ Not quite. The clock shows <strong>'+readState.correct+'</strong>. Look at the minute hand first, then the hour hand.';
+        playSound('wrong');
+    }
+}
+
+// ============ WORD PROBLEMS ============
+const wpBanks={
+    1:[
+        {story:'Lily wakes up at <strong>7 o\'clock</strong>. Which digital time matches?',opts:['7:00','7:30','7:15','7:45'],correct:0,why:'O\'clock = :00.'},
+        {story:'School starts at <strong>half past 8</strong>. Which is correct?',opts:['8:15','8:30','8:45','8:00'],correct:1,why:'Half past = :30.'},
+        {story:'The cake is in the oven at <strong>quarter past 3</strong>. Which clock matches?',opts:['3:00','3:15','3:30','3:45'],correct:1,why:'Quarter past = :15.'},
+        {story:'Bedtime is <strong>quarter to 8</strong>. Which digital time?',opts:['8:00','8:15','7:45','8:45'],correct:2,why:'Quarter to 8 = 15 minutes BEFORE 8 = 7:45.'},
+        {story:'The match started at <strong>2 o\'clock</strong> and lasted half an hour. What time did it end?',opts:['2:15','2:30','3:00','2:45'],correct:1,why:'2:00 + 30 minutes = 2:30 (half past 2).'},
+    ],
+    2:[
+        {story:'Tom finishes lunch at <strong>1:25</strong>. Which is the same?',opts:['25 past 1','25 to 1','25 past 2','5 past 1'],correct:0,why:'Past 30 mins? No (25 ≤ 30). So we say "25 past 1".'},
+        {story:'The film starts at <strong>5:50</strong>. Which is the same?',opts:['10 past 5','50 past 5','10 to 6','5 to 6'],correct:2,why:'After 30 we switch to "to". 60 − 50 = 10 → 10 to 6.'},
+        {story:'Football starts at 4:00 and ends at 4:45. <strong>How long</strong> did it last?',opts:['15 mins','30 mins','45 mins','1 hour'],correct:2,why:'4:00 → 4:45 = 45 minutes.'},
+        {story:'Reading starts at 2:30 and lasts <strong>30 minutes</strong>. What time does it end?',opts:['2:00','2:45','3:00','3:30'],correct:2,why:'2:30 + 30 mins = 3:00.'},
+        {story:'Bath starts at 6:15, ends at 6:35. <strong>Duration</strong>?',opts:['10 mins','15 mins','20 mins','25 mins'],correct:2,why:'6:15 → 6:35 = 20 minutes.'},
+        {story:'Mum drives for 1 hour and 15 minutes = <strong>?</strong> minutes',opts:['65','70','75','80'],correct:2,why:'1 hour = 60 mins, plus 15 = 75.'},
+    ],
+};
+let wpCurrent={};
+function newWordProblem(week){
+    const bank=wpBanks[week];
+    const p=bank[Math.floor(Math.random()*bank.length)];
+    wpCurrent[week]=p;
+    const area=document.getElementById('wp'+week+'Area');
+    let html='<div class="quiz-question"><div class="q-text">'+p.story+'</div><div class="quiz-options">';
+    p.opts.forEach((o,i)=>{html+='<button class="quiz-opt" onclick="checkWP('+week+','+i+')">'+o+'</button>'});
+    html+='</div><div class="quiz-feedback" id="wp'+week+'Fb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkWP(week,i){
+    const p=wpCurrent[week];
+    const fb=document.getElementById('wp'+week+'Fb');
+    const opts=document.querySelectorAll('#wp'+week+'Area .quiz-opt');
+    opts.forEach(o=>o.classList.add('disabled'));
+    if(i===p.correct){
+        opts[i].classList.add('correct');
+        fb.className='quiz-feedback show correct-fb';
+        fb.innerHTML='🎉 Correct! '+p.why;
+        playSound('correct');
+    } else {
+        opts[i].classList.add('wrong');opts[p.correct].classList.add('correct');
+        fb.className='quiz-feedback show wrong-fb';
+        fb.innerHTML='❌ Not quite. The answer is <strong>'+p.opts[p.correct]+'</strong>. '+p.why;
+        playSound('wrong');
+    }
+}
+
+// ============ FIVE-MINUTE INTERVALS ============
+function initFiveClock(){
+    const cont=document.getElementById('fiveClock');
+    const cx=140,cy=140,R=110;
+    let s='<svg viewBox="0 0 280 280" width="260" height="260">';
+    s+='<circle cx="140" cy="140" r="118" fill="var(--card-bg)" stroke="var(--card-border)"/>';
+    s+='<circle cx="140" cy="140" r="108" fill="var(--face)" stroke="var(--face-stroke)" stroke-width="2.5"/>';
+    // Inner numbers (hour) and outer "minutes past" labels
+    for(let i=1;i<=12;i++){
+        const a=i*30-90,rad=a*Math.PI/180;
+        const tx=cx+78*Math.cos(rad),ty=cy+78*Math.sin(rad)+5;
+        s+='<text x="'+tx+'" y="'+ty+'" text-anchor="middle" font-size="18" font-weight="800" fill="var(--text)" font-family="Inter">'+i+'</text>';
+        // Outer minute label (5*i)
+        const ox=cx+R*Math.cos(rad),oy=cy+R*Math.sin(rad)+4;
+        s+='<g style="cursor:pointer;" onclick="fiveTap('+i+')"><circle cx="'+ox+'" cy="'+oy+'" r="14" fill="rgba(245,158,11,0.18)" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/><text x="'+ox+'" y="'+oy+'" text-anchor="middle" font-size="10" font-weight="800" fill="var(--qpast)" font-family="Inter">'+(i*5)+'</text></g>';
+    }
+    s+='<line x1="140" y1="140" x2="140" y2="50" stroke="var(--accent-light)" stroke-width="3.5" stroke-linecap="round" id="fiveMinHand"/>';
+    s+='<line x1="140" y1="140" x2="140" y2="78" stroke="var(--text)" stroke-width="6" stroke-linecap="round"/>';
+    s+='<circle cx="140" cy="140" r="5" fill="var(--accent-light)"/>';
+    s+='</svg>';
+    cont.innerHTML=s;
+}
+function fiveTap(i){
+    const min=i*5;
+    const ang=min*6-90;
+    const rad=ang*Math.PI/180;
+    const x=140+78*Math.cos(rad),y=140+78*Math.sin(rad);
+    const hand=document.getElementById('fiveMinHand');
+    if(hand){hand.setAttribute('x2',x);hand.setAttribute('y2',y)}
+    const stem=document.getElementById('fiveStem');
+    let phrase;
+    if(min===0||min===60)phrase='<strong>o\'clock</strong>';
+    else if(min===15)phrase='<strong>quarter past</strong> (15 minutes past)';
+    else if(min===30)phrase='<strong>half past</strong> (30 minutes past)';
+    else if(min===45)phrase='<strong>quarter to</strong> the next hour (45 past = 15 to)';
+    else if(min<=30)phrase='<strong>'+min+' minutes past</strong> the hour';
+    else phrase='<strong>'+(60-min)+' minutes to</strong> the next hour';
+    stem.innerHTML='You jumped to <span class="hl-qpast">'+min+' minutes</span>. That is '+phrase+'.';
+    playSound('tick');
+}
+
+// ============ TELLING TIME TO 5 MINUTES ============
+function initToTime(){
+    const area=document.getElementById('toTimeArea');
+    const items=[
+        {h:2,m:5,top:'5 past 2',d:'2:05',hl:'past'},
+        {h:4,m:20,top:'20 past 4',d:'4:20',hl:'past'},
+        {h:7,m:40,top:'20 to 8',d:'7:40',hl:'qto'},
+        {h:9,m:55,top:'5 to 10',d:'9:55',hl:'qto'},
+    ];
+    let html='';
+    items.forEach((it,i)=>{
+        html+='<div class="clock-box"><div onclick="revealToTime('+i+')" style="cursor:pointer;">'+clockSvg(it.h,it.m,{size:140,accent:it.hl==='qto'?'var(--qto)':'var(--qpast)',highlight:it.hl==='qto'?null:'past'})+'</div>'+
+            '<div class="label" id="tt-label-'+i+'" style="opacity:0;transition:opacity .3s;"><strong>'+it.top+'</strong><br>digital '+it.d+'</div></div>';
+    });
+    area.innerHTML=html;
+}
+function revealToTime(i){
+    document.getElementById('tt-label-'+i).style.opacity='1';
+    playSound('click');
+}
+
+// ============ DIGITAL TIME CARDS ============
+function initDigital(){
+    const area=document.getElementById('digitalArea');
+    const items=[
+        {spoken:'2 o\'clock',d:'2:00',h:2,m:0},
+        {spoken:'Half past 5',d:'5:30',h:5,m:30},
+        {spoken:'Quarter past 9',d:'9:15',h:9,m:15},
+        {spoken:'Quarter to 4',d:'3:45',h:3,m:45},
+        {spoken:'10 past 6',d:'6:10',h:6,m:10},
+        {spoken:'25 to 8',d:'7:35',h:7,m:35},
+    ];
+    let html='';
+    items.forEach((it,i)=>{
+        html+='<div class="quiz-opt" style="cursor:pointer;text-align:center;" onclick="flipDigital('+i+')">'+
+            '<div id="dig-front-'+i+'" style="font-size:1.05rem;font-weight:700;color:var(--accent-light);">'+it.spoken+'</div>'+
+            '<div id="dig-back-'+i+'" style="display:none;">'+
+                '<div style="margin:6px 0;">'+clockSvg(it.h,it.m,{size:90,accent:'var(--qpast)'})+'</div>'+
+                '<div class="digital-time" style="font-size:1.5rem;padding:6px 14px;">'+it.d+'</div>'+
+            '</div></div>';
+    });
+    area.innerHTML=html;
+}
+function flipDigital(i){
+    const f=document.getElementById('dig-front-'+i),b=document.getElementById('dig-back-'+i);
+    if(!f||!b)return;
+    f.style.display=f.style.display==='none'?'block':'none';
+    b.style.display=b.style.display==='none'?'block':'none';
+    playSound('click');
+}
+
+// ============ HOURS / DAYS / WEEKS ============
+function initUnits(){
+    const area=document.getElementById('unitsArea');
+    const facts=[
+        {top:'60',sub:'seconds in 1 minute',full:'<strong>60 seconds = 1 minute</strong>. Each tick of the second hand is one second!'},
+        {top:'60',sub:'minutes in 1 hour',full:'<strong>60 minutes = 1 hour</strong>. The minute hand goes all the way around in one hour.'},
+        {top:'24',sub:'hours in 1 day',full:'<strong>24 hours = 1 day.</strong> A day is two trips of the hour hand around the clock!'},
+        {top:'7',sub:'days in 1 week',full:'<strong>7 days = 1 week.</strong> Mon, Tue, Wed, Thu, Fri, Sat, Sun.'},
+        {top:'12',sub:'months in 1 year',full:'<strong>12 months = 1 year.</strong> Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec.'},
+        {top:'365',sub:'days in 1 year',full:'<strong>365 days ≈ 1 year</strong> (366 in a leap year — every 4 years).'},
+    ];
+    let html='';
+    facts.forEach((f,i)=>{
+        html+='<div class="fact-card" onclick="flipFact('+i+')"><div class="fc-num">'+f.top+'</div><div class="fc-lbl">'+f.sub+'</div><div class="fc-flip">'+f.full+'</div></div>';
+    });
+    area.innerHTML=html;
+}
+function flipFact(i){
+    const cards=document.querySelectorAll('.fact-card');
+    cards[i].classList.toggle('flipped');
+    playSound('click');
+}
+
+// ============ DURATIONS (number line) ============
+function showDur(key){
+    const data={
+        a:{title:'Film',start:'2:00',end:'3:00',startMin:0,endMin:60,jumps:[{from:0,to:60,label:'1 hour',color:'#3B82F6'}],sentence:'2:00 → 3:00 = <strong>1 hour</strong> = 60 minutes.'},
+        b:{title:'Party',start:'4:00',end:'5:30',startMin:0,endMin:90,jumps:[{from:0,to:60,label:'1 hour',color:'#10B981'},{from:60,to:90,label:'30 min',color:'#10B981'}],sentence:'4:00 → 5:00 is 1 hour, then 5:00 → 5:30 is half an hour. Total = <strong>1 hour 30 minutes</strong>.'},
+        c:{title:'Drive',start:'9:30',end:'10:15',startMin:0,endMin:45,jumps:[{from:0,to:30,label:'30 min',color:'#F59E0B'},{from:30,to:45,label:'15 min',color:'#F59E0B'}],sentence:'9:30 → 10:00 is 30 minutes (jump up to the o\'clock first!), then 10:00 → 10:15 is 15 minutes. Total = <strong>45 minutes</strong>.'},
+        d:{title:'Reading',start:'7:15',end:'7:35',startMin:0,endMin:20,jumps:[{from:0,to:15,label:'15 min',color:'#8B5CF6'},{from:15,to:20,label:'5 min',color:'#8B5CF6'}],sentence:'7:15 → 7:30 = 15 minutes, then 7:30 → 7:35 = 5 minutes. Total = <strong>20 minutes</strong>.'},
+    };
+    const d=data[key];
+    const W=560,H=120;
+    const x1=50,x2=W-30;const lineW=x2-x1;
+    let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:560px;">';
+    s+='<line x1="'+x1+'" y1="70" x2="'+x2+'" y2="70" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-linecap="round"/>';
+    // arrows / markers
+    const startX=x1,endX=x2;
+    s+='<line x1="'+startX+'" y1="55" x2="'+startX+'" y2="85" stroke="var(--text)" stroke-width="2.5"/>';
+    s+='<line x1="'+endX+'" y1="55" x2="'+endX+'" y2="85" stroke="var(--text)" stroke-width="2.5"/>';
+    s+='<text x="'+startX+'" y="105" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="700" font-family="Inter">'+d.start+'</text>';
+    s+='<text x="'+endX+'" y="105" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="700" font-family="Inter">'+d.end+'</text>';
+    // jumps
+    d.jumps.forEach(j=>{
+        const a=x1+j.from/d.endMin*lineW;const b=x1+j.to/d.endMin*lineW;
+        const mid=(a+b)/2;
+        s+='<path d="M '+a+' 70 Q '+mid+' 30 '+b+' 70" stroke="'+j.color+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
+        s+='<polygon points="'+(b-5)+',64 '+b+',74 '+(b-9)+',74" fill="'+j.color+'"/>';
+        s+='<text x="'+mid+'" y="20" text-anchor="middle" fill="'+j.color+'" font-size="13" font-weight="800" font-family="Inter">'+j.label+'</text>';
+    });
+    s+='</svg>';
+    document.getElementById('durArea').innerHTML='<div style="font-weight:800;color:var(--accent-light);margin-bottom:10px;font-size:1.1rem;">'+d.title+': '+d.start+' → '+d.end+'</div>'+s;
+    document.getElementById('durStem').innerHTML=d.sentence;
+    playSound('click');
+}
+
+// ============ COMPARE DURATIONS ============
+let cmpState={};
+function newCompare(){
+    const rounds=[
+        {a:{lbl:'Film',mins:90,from:'1 hr 30 min'},b:{lbl:'Drive',mins:80,from:'80 min'},why:'1 hr 30 min = 90 mins. 90 &gt; 80, so the film is longer by 10 minutes.'},
+        {a:{lbl:'Game',mins:45,from:'45 min'},b:{lbl:'Walk',mins:60,from:'1 hour'},why:'1 hour = 60 mins. 60 &gt; 45, so the walk is longer by 15 minutes.'},
+        {a:{lbl:'Bath',mins:20,from:'20 min'},b:{lbl:'Meal',mins:30,from:'half hour'},why:'Half an hour = 30 minutes. The meal is 10 minutes longer than the bath.'},
+        {a:{lbl:'Class',mins:75,from:'1 hr 15 min'},b:{lbl:'Lunch',mins:45,from:'45 min'},why:'1 hr 15 min = 75 mins. The class is 30 minutes longer than lunch.'},
+        {a:{lbl:'Trip',mins:120,from:'2 hours'},b:{lbl:'Show',mins:90,from:'1½ hours'},why:'2 hours = 120 mins; 1½ hours = 90 mins. The trip is 30 minutes longer.'},
+    ];
+    const r=rounds[Math.floor(Math.random()*rounds.length)];
+    cmpState=r;
+    const area=document.getElementById('cmpArea');
+    let html='<div class="quiz-question">'+
+        '<div class="q-text" style="text-align:center;">Which is longer?</div>'+
+        '<div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:20px 0;">'+
+        '<div style="background:rgba(59,130,246,0.1);border:2px solid rgba(59,130,246,0.4);border-radius:14px;padding:18px;text-align:center;min-width:160px;"><div style="font-size:1.2rem;font-weight:800;color:var(--oclock);">'+r.a.lbl+'</div><div style="color:var(--text-dim);font-size:.9rem;margin-top:6px;">'+r.a.from+'</div></div>'+
+        '<div style="background:rgba(245,158,11,0.1);border:2px solid rgba(245,158,11,0.4);border-radius:14px;padding:18px;text-align:center;min-width:160px;"><div style="font-size:1.2rem;font-weight:800;color:var(--qpast);">'+r.b.lbl+'</div><div style="color:var(--text-dim);font-size:.9rem;margin-top:6px;">'+r.b.from+'</div></div>'+
+        '</div>'+
+        '<div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="checkCompare(\'a\')">'+r.a.lbl+' is longer</button>'+
+        '<button class="quiz-opt" onclick="checkCompare(\'eq\')">They are equal</button>'+
+        '<button class="quiz-opt" onclick="checkCompare(\'b\')">'+r.b.lbl+' is longer</button>'+
+        '</div>'+
+        '<div class="quiz-feedback mt-16" id="cmpFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkCompare(pick){
+    const r=cmpState;
+    const fb=document.getElementById('cmpFb');
+    const opts=document.querySelectorAll('#cmpArea .quiz-opt');
+    opts.forEach(o=>o.classList.add('disabled'));
+    let correct;
+    if(r.a.mins===r.b.mins)correct='eq';
+    else correct=r.a.mins>r.b.mins?'a':'b';
+    if(pick===correct){
+        fb.className='quiz-feedback show correct-fb';
+        fb.innerHTML='🎉 Correct! '+r.why;
+        playSound('correct');
+    } else {
+        fb.className='quiz-feedback show wrong-fb';
+        fb.innerHTML='❌ Not quite. '+r.why;
+        playSound('wrong');
+    }
+}
+
+// ============ QUIZ BUILDER (shared) ============
+function buildQuiz(cId,qs,rId,name,isFinal){
+    const c=document.getElementById(cId);let html='';
+    qs.forEach((q,qi)=>{
+        html+='<div class="quiz-question" id="'+cId+'-q'+qi+'">';
+        if(q.type==='explain'){
+            html+='<div class="q-text">✍️ '+q.q+'</div>'+
+                '<textarea id="'+cId+'-ex'+qi+'" rows="3" placeholder="Type your explanation here..." style="width:100%;padding:12px;border-radius:10px;border:2px solid var(--card-border);background:rgba(255,255,255,0.06);color:var(--text);font-family:inherit;font-size:.95rem;resize:vertical;box-sizing:border-box;"></textarea>'+
+                '<div class="btn-row" style="justify-content:flex-start;margin-top:10px;"><button class="action-btn" style="background:var(--accent);" onclick="revealExplain(this,\''+cId+'\',\''+rId+'\','+qs.length+','+!!isFinal+','+qi+')">🔍 Show model answer</button></div>'+
+                '<div class="quiz-feedback" id="'+cId+'-fb'+qi+'" data-model="'+q.model.replace(/"/g,'&quot;').replace(/'/g,'&#39;')+'"></div>';
+        } else if(q.type==='clock'){
+            html+='<div class="q-text">'+q.q+'</div><div style="display:flex;justify-content:center;margin:12px 0;">'+clockSvg(q.h,q.m,{size:150,accent:'var(--accent-light)'})+'</div><div class="quiz-options">';
+            q.opts.forEach((opt,oi)=>{html+='<button class="quiz-opt" data-qi="'+qi+'" data-oi="'+oi+'" data-correct="'+q.correct+'" onclick="handleAns(this,\''+cId+'\',\''+rId+'\','+qs.length+','+!!isFinal+')">'+opt+'</button>'});
+            html+='</div><div class="quiz-feedback" id="'+cId+'-fb'+qi+'"></div>';
+        } else {
+            html+='<div class="q-text">'+q.q+'</div><div class="quiz-options">';
+            q.opts.forEach((opt,oi)=>{html+='<button class="quiz-opt" data-qi="'+qi+'" data-oi="'+oi+'" data-correct="'+q.correct+'" onclick="handleAns(this,\''+cId+'\',\''+rId+'\','+qs.length+','+!!isFinal+')">'+opt+'</button>'});
+            html+='</div><div class="quiz-feedback" id="'+cId+'-fb'+qi+'"></div>';
+        }
+        html+='</div>';
+    });
+    c.innerHTML=html;c.dataset.score='0';c.dataset.answered='0';c.dataset.total=qs.length;c.dataset.testName=name;
+}
+function finishTest(cId,rId,total,isFinal){
+    const c=document.getElementById(cId);
+    const r=document.getElementById(rId);r.classList.remove('hidden');
+    const sc=+c.dataset.score;const pct=Math.round(sc/total*100);
+    let emoji=pct>=90?'🌟':pct>=70?'👍':'💪';
+    r.innerHTML='<div style="font-size:2rem;">'+emoji+'</div><div style="font-size:1.5rem;font-weight:800;margin:8px 0;">'+sc+' / '+total+'</div><div style="color:var(--text-dim);">'+c.dataset.testName+' Complete!</div>';
+    if(isFinal)updateCert(sc,total);
+    playSound('success');
+}
+function handleAns(btn,cId,rId,total,isFinal){
+    const qi=+btn.dataset.qi,oi=+btn.dataset.oi,correct=+btn.dataset.correct;
+    const c=document.getElementById(cId),fb=document.getElementById(cId+'-fb'+qi);
+    const qDiv=document.getElementById(cId+'-q'+qi);
+    qDiv.querySelectorAll('.quiz-opt').forEach(o=>o.classList.add('disabled'));
+    if(oi===correct){btn.classList.add('correct');fb.className='quiz-feedback show correct-fb';fb.textContent='✅ Correct!';c.dataset.score=+c.dataset.score+1;playSound('correct')}
+    else{btn.classList.add('wrong');qDiv.querySelectorAll('.quiz-opt')[correct].classList.add('correct');fb.className='quiz-feedback show wrong-fb';fb.textContent='❌ The correct answer is: '+qDiv.querySelectorAll('.quiz-opt')[correct].textContent;playSound('wrong')}
+    c.dataset.answered=+c.dataset.answered+1;
+    if(+c.dataset.answered===total){setTimeout(()=>finishTest(cId,rId,total,isFinal),1e3)}
+}
+function revealExplain(btn,cId,rId,total,isFinal,qi){
+    const c=document.getElementById(cId);
+    const fb=document.getElementById(cId+'-fb'+qi);
+    const ta=document.getElementById(cId+'-ex'+qi);
+    const hasAttempt=ta.value.trim().length>=5;
+    btn.disabled=true;btn.style.opacity='0.5';
+    ta.disabled=true;
+    fb.className='quiz-feedback show '+(hasAttempt?'correct-fb':'wrong-fb');
+    fb.innerHTML=(hasAttempt?'✅ <strong>Good effort!</strong> Here\'s a model answer:<br><br>':'💡 <strong>Try writing at least one sentence next time.</strong> Here\'s a model answer:<br><br>')+'<em>'+fb.dataset.model+'</em>';
+    if(hasAttempt)c.dataset.score=+c.dataset.score+1;
+    c.dataset.answered=+c.dataset.answered+1;
+    playSound(hasAttempt?'correct':'click');
+    if(+c.dataset.answered===total){setTimeout(()=>finishTest(cId,rId,total,isFinal),1e3)}
+}
+function updateCert(sc,total){
+    const pct=Math.round(sc/total*100);
+    document.getElementById('certScore').textContent=sc+'/'+total;
+    if(pct>=90){document.getElementById('certTitle').textContent='🌟 Time Master!';document.getElementById('certScore').className='score-circle gold';document.getElementById('certMessage').textContent='Outstanding! You have mastered Time. Ready for Block 3: Statistics!'}
+    else if(pct>=70){document.getElementById('certTitle').textContent='👍 Great Work!';document.getElementById('certScore').className='score-circle silver';document.getElementById('certMessage').textContent='Good progress! Review the tricky areas (especially quarter to and durations), then try again.'}
+    else{document.getElementById('certTitle').textContent='💪 Keep Practising!';document.getElementById('certScore').className='score-circle bronze';document.getElementById('certMessage').textContent='You need more practice with the clock face. Go back through Week 1 and try the tests again.'}
+}
+
+// ============ MINI TESTS ============
+function buildMT1(){buildQuiz('miniTest1',[
+    {type:'clock',h:7,m:0,q:'What time is shown?',opts:['7 o\'clock','12 o\'clock','Half past 7','7:30'],correct:0},
+    {type:'clock',h:4,m:30,q:'What time is shown?',opts:['Half past 4','Half past 5','Quarter past 4','4 o\'clock'],correct:0},
+    {type:'clock',h:2,m:15,q:'What time is shown?',opts:['Quarter to 2','Half past 2','Quarter past 2','2 o\'clock'],correct:2},
+    {type:'clock',h:8,m:45,q:'What time is shown?',opts:['Quarter past 8','Quarter to 9','Quarter past 9','Half past 8'],correct:1},
+    {q:'On a clock at half past 6, where does the long minute hand point?',opts:['12','3','6','9'],correct:2},
+    {q:'On a clock at quarter to 5, where does the SHORT hour hand point?',opts:['Exactly at 4','Exactly at 5','Halfway between 4 and 5','Almost at 5'],correct:3},
+    {q:'Quarter past 3 in digital is:',opts:['3:00','3:15','3:30','3:45'],correct:1},
+    {type:'explain',q:'Sam draws "half past 4" with the short hand pointing exactly at 4. Why is this wrong?',model:'At half past 4, the minutes have gone halfway around — so the hour hand has also moved halfway. It should sit halfway between 4 and 5, not exactly on 4. Because the minute hand keeps moving, the hour hand keeps drifting!'},
+],'mt1Result','Mini Test 1')}
+
+function buildMT2(){buildQuiz('miniTest2',[
+    {type:'clock',h:3,m:20,q:'What time is shown?',opts:['20 to 3','20 past 3','3:20','Both B and C'],correct:3},
+    {type:'clock',h:6,m:50,q:'What time is shown?',opts:['10 past 6','10 to 7','50 past 7','6:30'],correct:1},
+    {q:'Quarter to 5 in digital is:',opts:['4:15','4:45','5:15','5:45'],correct:1},
+    {q:'How many minutes in 1 hour?',opts:['30','45','60','90'],correct:2},
+    {q:'How many hours in 1 day?',opts:['12','24','48','7'],correct:1},
+    {q:'A film starts at 5:00 and ends at 5:45. How long is it?',opts:['15 mins','30 mins','45 mins','1 hour'],correct:2},
+    {q:'How long from 9:30 to 10:00?',opts:['10 mins','20 mins','30 mins','1 hour'],correct:2},
+    {q:'Which is LONGER: 1 hour, or 75 minutes?',opts:['1 hour is longer','75 minutes is longer','They are equal'],correct:1},
+    {type:'explain',q:'Explain why "quarter to 8" is written as 7:45 on a digital clock, NOT 8:45.',model:'A digital clock shows the hour we are currently in, not the next one. At quarter to 8, the hour is still 7 — only 45 minutes have passed. We won\'t reach 8 until 15 more minutes go by. So the digital reads 7:45.'},
+],'mt2Result','Mini Test 2')}
+
+function buildFinalTest(){buildQuiz('finalTest',[
+    {type:'clock',h:5,m:0,q:'1. What time is shown?',opts:['5 o\'clock','12 o\'clock','5:30','Quarter past 5'],correct:0},
+    {type:'clock',h:9,m:30,q:'2. What time is shown?',opts:['Half past 9','Half past 10','Quarter past 9','9 o\'clock'],correct:0},
+    {type:'clock',h:11,m:15,q:'3. What time is shown?',opts:['Quarter to 11','Quarter past 11','Quarter past 12','11:30'],correct:1},
+    {type:'clock',h:1,m:45,q:'4. What time is shown?',opts:['Quarter past 1','Quarter to 1','Quarter to 2','Half past 1'],correct:2},
+    {type:'clock',h:6,m:25,q:'5. What time is shown?',opts:['25 past 6','25 to 6','25 past 7','5 past 6'],correct:0},
+    {q:'6. Half past 7 in digital is:',opts:['7:15','7:30','7:45','8:30'],correct:1},
+    {q:'7. Quarter to 11 in digital is:',opts:['10:15','10:45','11:15','11:45'],correct:1},
+    {q:'8. The lesson started at 2:00 and ended at 2:45. How long was it?',opts:['15 minutes','30 minutes','45 minutes','1 hour'],correct:2},
+    {q:'9. How long from 8:30 in the morning to 12:00 noon?',opts:['2 hours','2 hours 30 minutes','3 hours','3 hours 30 minutes'],correct:3},
+    {q:'10. Which is the LONGEST?',opts:['45 minutes','Half an hour','1 hour','25 minutes'],correct:2},
+    {type:'explain',q:'11. Explain why the hour hand on a clock does NOT stay still on a number — give an example.',model:'The hour hand moves slowly all through the hour, drifting from one number towards the next. For example, at half past 3, the hour hand has moved halfway between 3 and 4 — because half of the hour has gone by. By 3:45 it is almost at 4. Only at exactly 3 o\'clock does it point straight at the 3.'},
+],'finalResult','Final Mastery Assessment',true)}
+
+// ============ HELPERS ============
+function timeLabel(h,m){
+    if(m===0){const hh=h===0?12:h;return hh+" o'clock"}
+    if(m===15)return "Quarter past "+h;
+    if(m===30)return "Half past "+h;
+    if(m===45){const next=h===12?1:h+1;return "Quarter to "+next}
+    if(m<30)return m+" past "+h;
+    const next=h===12?1:h+1;return (60-m)+" to "+next;
+}
+function digitalLabel(h,m){return h+":"+(m<10?'0':'')+m}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+// ============ W1: SEQUENCE CHALLENGE ============
+let seqState={};
+function newSequence(){
+    const seqs=[
+        {seq:[{h:3,m:0},{h:3,m:15},null,{h:3,m:45}],missing:2,answer:'Half past 3',mins:30,h:3},
+        {seq:[{h:5,m:30},null,{h:6,m:0},{h:6,m:15}],missing:1,answer:'Quarter to 6',mins:45,h:5},
+        {seq:[null,{h:7,m:15},{h:7,m:30},{h:7,m:45}],missing:0,answer:"7 o'clock",mins:0,h:7},
+        {seq:[{h:9,m:45},{h:10,m:0},null,{h:10,m:30}],missing:2,answer:'Quarter past 10',mins:15,h:10},
+        {seq:[{h:2,m:15},{h:2,m:30},{h:2,m:45},null],missing:3,answer:"3 o'clock",mins:0,h:3},
+    ];
+    const s=seqs[Math.floor(Math.random()*seqs.length)];
+    seqState=s;
+    const area=document.getElementById('seqArea');
+    let html='<div class="quiz-question"><div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center;margin:14px 0;">';
+    s.seq.forEach((t,i)=>{
+        if(t===null){
+            html+='<div style="background:rgba(245,158,11,0.12);border:3px dashed rgba(245,158,11,0.6);border-radius:14px;width:130px;height:130px;display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--qpast);font-weight:900;">?</div>';
+        } else {
+            html+='<div class="clock-box">'+clockSvg(t.h,t.m,{size:120,accent:'var(--accent-light)'})+'<div class="label">'+timeLabel(t.h,t.m)+'</div></div>';
+        }
+        if(i<s.seq.length-1)html+='<span style="font-size:1.6rem;color:var(--text-dim);">→</span>';
+    });
+    html+='</div>';
+    // Build distractors
+    const distract=['Quarter past 4','Half past 8',"5 o'clock",'Quarter to 7','Quarter past 2'];
+    const opts=[s.answer];const used=new Set([s.answer]);
+    while(opts.length<4){const d=distract[Math.floor(Math.random()*distract.length)];if(!used.has(d)){used.add(d);opts.push(d)}}
+    shuffle(opts);
+    html+='<div class="q-text" style="text-align:center;">What time is missing?</div><div class="quiz-options">';
+    opts.forEach(o=>{html+='<button class="quiz-opt" onclick="checkSeq(\''+o.replace(/'/g,'&#39;')+'\')">'+o+'</button>'});
+    html+='</div><div class="quiz-feedback" id="seqFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkSeq(pick){
+    const fb=document.getElementById('seqFb');
+    const opts=document.querySelectorAll('#seqArea .quiz-opt');
+    opts.forEach(o=>{o.classList.add('disabled');if(o.textContent===seqState.answer)o.classList.add('correct')});
+    if(pick===seqState.answer){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! Each jump is 15 minutes — that\'s a quarter of an hour.';playSound('correct')}
+    else{opts.forEach(o=>{if(o.textContent===pick&&pick!==seqState.answer)o.classList.add('wrong')});fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The missing time is <strong>'+seqState.answer+'</strong>. Each step jumps 15 minutes.';playSound('wrong')}
+}
+
+// ============ MATCH PAIRS ============
+let pairsState={};
+function newPairs(round){
+    const banks={
+        1:[
+            {h:2,m:0,word:"2 o'clock"},{h:5,m:30,word:'Half past 5'},{h:9,m:15,word:'Quarter past 9'},{h:7,m:45,word:'Quarter to 8'},
+            {h:4,m:0,word:"4 o'clock"},{h:11,m:30,word:'Half past 11'},{h:6,m:15,word:'Quarter past 6'},{h:1,m:45,word:'Quarter to 2'},
+        ],
+        2:[
+            {h:3,m:5,d:'3:05'},{h:7,m:20,d:'7:20'},{h:8,m:35,d:'8:35'},{h:10,m:50,d:'10:50'},
+            {h:2,m:10,d:'2:10'},{h:5,m:25,d:'5:25'},{h:6,m:40,d:'6:40'},{h:9,m:55,d:'9:55'},
+        ],
+    };
+    const bank=banks[round];const picked=[];
+    while(picked.length<4){const p=bank[Math.floor(Math.random()*bank.length)];if(!picked.includes(p))picked.push(p)}
+    const labelKey=round===1?'word':'d';
+    const left=picked.map((p,i)=>({id:'A'+i,...p}));
+    const right=shuffle(picked.slice()).map((p,i)=>({id:'B'+i,...p}));
+    pairsState={round,picked,selected:null,matched:0,labelKey};
+    const area=document.getElementById('pairsArea'+round);
+    let html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">';
+    html+='<div><div style="font-size:.85rem;color:var(--text-dim);margin-bottom:8px;font-weight:600;">Clocks</div><div class="pairs-grid" style="grid-template-columns:1fr 1fr;">';
+    left.forEach(p=>{html+='<div class="pair-card" data-side="L" data-h="'+p.h+'" data-m="'+p.m+'" data-id="'+p.id+'" onclick="pickPair(this,'+round+')">'+clockSvg(p.h,p.m,{size:100,accent:'var(--accent-light)'})+'</div>'});
+    html+='</div></div>';
+    html+='<div><div style="font-size:.85rem;color:var(--text-dim);margin-bottom:8px;font-weight:600;">'+(round===1?'Times in words':'Digital times')+'</div><div class="pairs-grid" style="grid-template-columns:1fr;">';
+    right.forEach(p=>{html+='<div class="pair-card" data-side="R" data-h="'+p.h+'" data-m="'+p.m+'" data-id="'+p.id+'" onclick="pickPair(this,'+round+')">'+(round===1?p.word:p.d)+'</div>'});
+    html+='</div></div></div>';
+    area.innerHTML=html;
+    document.getElementById('pairs'+round+'Fb').className='quiz-feedback';
+    document.getElementById('pairs'+round+'Fb').textContent='';
+    playSound('click');
+}
+function pickPair(el,round){
+    if(el.classList.contains('matched'))return;
+    const sel=pairsState.selected;
+    if(!sel){el.classList.add('selected');pairsState.selected=el;playSound('tick');return}
+    if(sel===el){el.classList.remove('selected');pairsState.selected=null;return}
+    if(sel.dataset.side===el.dataset.side){sel.classList.remove('selected');el.classList.add('selected');pairsState.selected=el;return}
+    // Compare h+m
+    if(sel.dataset.h===el.dataset.h&&sel.dataset.m===el.dataset.m){
+        sel.classList.add('matched');el.classList.add('matched');
+        sel.classList.remove('selected');pairsState.selected=null;
+        pairsState.matched++;
+        playSound('correct');
+        if(pairsState.matched===4){
+            const fb=document.getElementById('pairs'+round+'Fb');
+            fb.className='quiz-feedback show correct-fb';
+            fb.innerHTML='🎉 All 4 pairs matched! Click "New Round" for another set.';
+            playSound('success');
+        }
+    } else {
+        sel.classList.add('flash-wrong');el.classList.add('flash-wrong');
+        playSound('wrong');
+        setTimeout(()=>{sel.classList.remove('flash-wrong','selected');el.classList.remove('flash-wrong')},400);
+        pairsState.selected=null;
+    }
+}
+
+// ============ SET THE HANDS ============
+let setHandsState={hr:0,min:0,target:{}};
+function newSetHands(){
+    const targets=[
+        {hr:2,min:0,d:'2:00',w:"2 o'clock"},
+        {hr:5,min:30,d:'5:30',w:'Half past 5'},
+        {hr:7,min:15,d:'7:15',w:'Quarter past 7'},
+        {hr:8,min:45,d:'8:45',w:'Quarter to 9'},
+        {hr:11,min:0,d:'11:00',w:"11 o'clock"},
+        {hr:3,min:30,d:'3:30',w:'Half past 3'},
+        {hr:9,min:15,d:'9:15',w:'Quarter past 9'},
+        {hr:4,min:45,d:'4:45',w:'Quarter to 5'},
+        {hr:6,min:30,d:'6:30',w:'Half past 6'},
+        {hr:10,min:15,d:'10:15',w:'Quarter past 10'},
+    ];
+    const t=targets[Math.floor(Math.random()*targets.length)];
+    setHandsState={hr:0,min:0,target:t};
+    document.getElementById('setTarget').innerHTML='🎯 Make the clock show: <strong style="color:var(--accent-light);font-size:1.2rem;">'+t.w+'</strong> &nbsp;<span class="digital-time" style="font-size:1.2rem;padding:6px 12px;">'+t.d+'</span>';
+    // Build hour picker (1-12)
+    let hp='';
+    for(let i=1;i<=12;i++)hp+='<button class="step-btn" onclick="pickSetHour('+i+')" id="sh-'+i+'" style="width:auto;height:auto;padding:8px 6px;font-size:.9rem;">'+i+'</button>';
+    document.getElementById('setHourPicker').innerHTML=hp;
+    // Build minute picker (00, 05, 10, ..., 55)
+    let mp='';
+    for(let i=0;i<60;i+=5){const lbl=(i<10?'0':'')+i;mp+='<button class="step-btn" onclick="pickSetMin('+i+')" id="sm-'+i+'" style="width:auto;height:auto;padding:8px 6px;font-size:.85rem;">:'+lbl+'</button>'}
+    document.getElementById('setMinPicker').innerHTML=mp;
+    document.getElementById('setFb').className='quiz-feedback';
+    document.getElementById('setFb').textContent='';
+    renderSetClock();
+    playSound('click');
+}
+function renderSetClock(){
+    document.getElementById('setClock').innerHTML=clockSvg(setHandsState.hr||12,setHandsState.min,{size:200,accent:'var(--accent-light)'});
+}
+function pickSetHour(h){
+    setHandsState.hr=h;
+    document.querySelectorAll('#setHourPicker .step-btn').forEach(b=>b.style.background='var(--accent)');
+    const el=document.getElementById('sh-'+h);if(el)el.style.background='var(--success)';
+    renderSetClock();playSound('tick');
+}
+function pickSetMin(m){
+    setHandsState.min=m;
+    document.querySelectorAll('#setMinPicker .step-btn').forEach(b=>b.style.background='var(--accent)');
+    const el=document.getElementById('sm-'+m);if(el)el.style.background='var(--success)';
+    renderSetClock();playSound('tick');
+}
+function checkSetHands(){
+    const fb=document.getElementById('setFb');
+    const t=setHandsState.target;
+    if(setHandsState.hr===t.hr&&setHandsState.min===t.min){
+        fb.className='quiz-feedback show correct-fb';
+        fb.innerHTML='🎉 Perfect! You drew <strong>'+t.w+'</strong> ('+t.d+'). Notice how the short hand has drifted to the right place!';
+        playSound('success');
+    } else {
+        fb.className='quiz-feedback show wrong-fb';
+        fb.innerHTML='❌ Not quite. You picked hour <strong>'+(setHandsState.hr||'?')+'</strong> and minute <strong>:'+((setHandsState.min<10?'0':'')+setHandsState.min)+'</strong>, but the target was <strong>'+t.w+'</strong> ('+t.d+').';
+        playSound('wrong');
+    }
+}
+
+// ============ SPOT THE MISTAKE ============
+function initMistakes(){
+    const area=document.getElementById('mistakeArea');
+    const cases=[
+        {kid:'Sarah',claim:'It\'s half past 7',shownH:7,shownM:0,why:'Sarah forgot the minute hand! At <strong>half past</strong>, the long hand is on <strong>6</strong>, not 12. The clock she showed is <strong>7 o\'clock</strong>.'},
+        {kid:'Tom',claim:'It\'s quarter to 5',shownH:4,shownM:15,why:'Tom mixed up "to" and "past". <strong>Quarter past 4</strong> has the minute hand on 3 (which is what he drew). <strong>Quarter to 5</strong> has the minute hand on 9.'},
+        {kid:'Mia',claim:'It\'s half past 4',shownH:4,shownM:30,hrFix:true,why:'Mia drew the hour hand pointing <em>exactly</em> at 4. At half past 4, the hour hand should sit <strong>halfway between 4 and 5</strong> — because half the hour has gone by!'},
+        {kid:'Jay',claim:'In digital it\'s 5:45',shownH:4,shownM:45,why:'Jay got the hour wrong. The clock shows quarter to 5 — only 45 minutes past <strong>4</strong>. Digital time uses the hour we are <em>still in</em>: <strong>4:45</strong>.'},
+    ];
+    let html='';
+    cases.forEach((c,i)=>{
+        html+='<div class="quiz-question"><div class="q-text"><strong>'+c.kid+' says:</strong> "'+c.claim+'"</div>';
+        html+='<div style="display:flex;justify-content:center;margin:12px 0;">'+clockSvg(c.shownH,c.shownM,{size:140,accent:'var(--error)'})+'</div>';
+        html+='<div class="btn-row" style="justify-content:flex-start;"><button class="action-btn" style="background:var(--error);" onclick="revealMistake('+i+')">🚨 Show the mistake</button></div>';
+        html+='<div class="quiz-feedback" id="mistake-fb-'+i+'" style="margin-top:12px;">'+c.why+'</div></div>';
+    });
+    area.innerHTML=html;
+}
+function revealMistake(i){const fb=document.getElementById('mistake-fb-'+i);fb.classList.add('show','correct-fb');playSound('correct')}
+
+// ============ TRUE / FALSE ============
+function initTF(){
+    const area=document.getElementById('tfArea');
+    const items=[
+        {q:'The hour hand is the LONG, thin one.',a:false,why:'False. The hour hand is the <strong>short, fat</strong> one. The minute hand is the long, thin one.'},
+        {q:'At "o\'clock", the minute hand always points to 12.',a:true,why:'True! O\'clock means 0 minutes past, so the minute hand is at the very top — on the 12.'},
+        {q:'At half past 3, the hour hand points exactly at 3.',a:false,why:'False. At half past 3, the hour hand has drifted <strong>halfway between 3 and 4</strong>.'},
+        {q:'There are 60 minutes in 1 hour.',a:true,why:'True! That\'s why the minute hand goes once around the clock every hour.'},
+        {q:'"Quarter to 5" in digital is 5:45.',a:false,why:'False. "Quarter to 5" means we have 45 minutes past <strong>4</strong> — so it\'s <strong>4:45</strong> on a digital clock.'},
+        {q:'Each big number on a clock face = 5 minutes for the minute hand.',a:true,why:'True! 12 numbers × 5 minutes each = 60 minutes per full trip.'},
+        {q:'A day has 12 hours.',a:false,why:'False! A day has <strong>24 hours</strong>. The hour hand goes round the clock <em>twice</em> in one day.'},
+        {q:'1 hour 30 minutes is the same as 90 minutes.',a:true,why:'True! 60 + 30 = 90 minutes.'},
+    ];
+    let html='';
+    items.forEach((it,i)=>{
+        html+='<div class="quiz-question"><div class="q-text">'+(i+1)+'. '+it.q+'</div><div class="quiz-options" style="flex-direction:row;justify-content:center;gap:14px;">';
+        html+='<button class="quiz-opt" data-i="'+i+'" data-a="true" onclick="checkTF(this,'+it.a+')" style="flex:0 1 120px;background:rgba(16,185,129,.1);">✅ True</button>';
+        html+='<button class="quiz-opt" data-i="'+i+'" data-a="false" onclick="checkTF(this,'+it.a+')" style="flex:0 1 120px;background:rgba(239,68,68,.1);">❌ False</button>';
+        html+='</div><div class="quiz-feedback" id="tf-fb-'+i+'">'+it.why+'</div></div>';
+    });
+    area.innerHTML=html;
+}
+function checkTF(btn,correctIsTrue){
+    const i=+btn.dataset.i;const picked=btn.dataset.a==='true';
+    const fb=document.getElementById('tf-fb-'+i);
+    const allBtns=btn.parentElement.querySelectorAll('.quiz-opt');
+    allBtns.forEach(b=>b.classList.add('disabled'));
+    if(picked===correctIsTrue){btn.classList.add('correct');fb.classList.add('show','correct-fb');playSound('correct')}
+    else{btn.classList.add('wrong');allBtns.forEach(b=>{if(b.dataset.a===String(correctIsTrue))b.classList.add('correct')});fb.classList.add('show','wrong-fb');playSound('wrong')}
+}
+
+// ============ TIME AGO / TIME IN ============
+let shiftState={cur:0,start:0,question:null};
+function newShift(){
+    const starts=[60,90,120,150,180,210,240,300,360,420,480,540,600];// minutes since 12:00
+    shiftState.start=starts[Math.floor(Math.random()*starts.length)];
+    shiftState.cur=shiftState.start;
+    const dirs=[
+        {label:'+30 min',delta:30},{label:'+1 hour',delta:60},{label:'-30 min',delta:-30},{label:'-1 hour',delta:-60},
+        {label:'+15 min',delta:15},{label:'-15 min',delta:-15},
+    ];
+    const d=dirs[Math.floor(Math.random()*dirs.length)];
+    shiftState.question=d;
+    renderShift();
+    const sh=Math.floor(shiftState.start/60),sm=shiftState.start%60;
+    document.getElementById('shiftQuestion').innerHTML='<div class="quiz-question" style="margin:0;"><div class="q-text">🎯 What time is <strong>'+d.label+'</strong> from <strong>'+digitalLabel(sh,sm)+'</strong>?</div><div class="flex-center"><input type="text" class="quiz-input" id="shiftInput" placeholder="e.g. 3:30" style="width:120px;"><button class="action-btn check-btn" onclick="checkShift()">✓ Check</button></div></div>';
+    document.getElementById('shiftFb').className='quiz-feedback';
+    document.getElementById('shiftFb').textContent='';
+    playSound('click');
+}
+function shiftBy(d){
+    shiftState.cur=Math.max(0,Math.min(720,shiftState.cur+d));
+    renderShift();playSound('tick');
+}
+function renderShift(){
+    const h=Math.floor(shiftState.cur/60)%12||12,m=shiftState.cur%60;
+    document.getElementById('shiftClock').innerHTML=clockSvg(h,m,{size:200,accent:'var(--accent-light)'});
+    document.getElementById('shiftCurrent').innerHTML='Current clock: <strong>'+digitalLabel(h,m)+'</strong> ('+timeLabel(h,m)+')';
+}
+function checkShift(){
+    const fb=document.getElementById('shiftFb');
+    const val=(document.getElementById('shiftInput').value||'').trim();
+    const target=shiftState.start+shiftState.question.delta;
+    const th=Math.floor(target/60)%12||12,tm=((target%60)+60)%60;
+    const correctDigital=digitalLabel(th,tm);
+    if(val===correctDigital||val===correctDigital.replace(':0',':')){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+shiftState.question.label+' from your start time = <strong>'+correctDigital+'</strong>.';playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The answer is <strong>'+correctDigital+'</strong>. Use the +/- buttons to check, then try again.';playSound('wrong')}
+}
+
+// ============ PARTS OF THE DAY ============
+let partsDayState={};
+function newPartsDay(){
+    const items=[
+        {event:'Eat breakfast',answer:'Morning'},{event:'Watch the sunset',answer:'Evening'},
+        {event:'Go to bed',answer:'Night'},{event:'Eat lunch at school',answer:'Afternoon'},
+        {event:'Wake up',answer:'Morning'},{event:'Brush teeth before bed',answer:'Night'},
+        {event:'Have an after-school snack',answer:'Afternoon'},{event:'Have dinner with family',answer:'Evening'},
+    ];
+    const it=items[Math.floor(Math.random()*items.length)];
+    partsDayState=it;
+    const opts=['Morning','Afternoon','Evening','Night'];
+    const area=document.getElementById('partsDayQuiz');
+    let html='<div class="quiz-question"><div class="q-text">When would you usually: <strong>'+it.event+'</strong>?</div><div class="quiz-options">';
+    opts.forEach(o=>{html+='<button class="quiz-opt" onclick="checkPartsDay(\''+o+'\')">'+o+'</button>'});
+    html+='</div><div class="quiz-feedback" id="partsDayFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkPartsDay(pick){
+    const fb=document.getElementById('partsDayFb');
+    const opts=document.querySelectorAll('#partsDayQuiz .quiz-opt');
+    opts.forEach(o=>{o.classList.add('disabled');if(o.textContent===partsDayState.answer)o.classList.add('correct')});
+    if(pick===partsDayState.answer){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! Most people do that in the <strong>'+partsDayState.answer.toLowerCase()+'</strong>.';playSound('correct')}
+    else{opts.forEach(o=>{if(o.textContent===pick)o.classList.add('wrong')});fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The usual answer is <strong>'+partsDayState.answer+'</strong>.';playSound('wrong')}
+}
+
+// ============ AM / PM ============
+let ampmState={};
+function newAmPm(){
+    const items=[
+        {q:'7:00 in the morning, just after breakfast',answer:'a.m.'},{q:'2:00 in the afternoon, at school',answer:'p.m.'},
+        {q:'9:00 at night, almost bedtime',answer:'p.m.'},{q:'6:00 when the sun is rising',answer:'a.m.'},
+        {q:'12:00 — when most people eat lunch',answer:'p.m.'},{q:'10:00 in the morning, snack time',answer:'a.m.'},
+        {q:'5:00 when you have dinner',answer:'p.m.'},{q:'11:00 at night, fast asleep',answer:'p.m.'},
+    ];
+    const it=items[Math.floor(Math.random()*items.length)];
+    ampmState=it;
+    const area=document.getElementById('ampmQuiz');
+    let html='<div class="quiz-question"><div class="q-text">'+it.q+' — is this <strong>a.m.</strong> or <strong>p.m.</strong>?</div><div class="quiz-options" style="flex-direction:row;justify-content:center;">';
+    html+='<button class="quiz-opt" style="flex:0 1 140px;" onclick="checkAmPm(\'a.m.\')">🌅 a.m.</button>';
+    html+='<button class="quiz-opt" style="flex:0 1 140px;" onclick="checkAmPm(\'p.m.\')">🌙 p.m.</button>';
+    html+='</div><div class="quiz-feedback" id="ampmFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkAmPm(pick){
+    const fb=document.getElementById('ampmFb');
+    const opts=document.querySelectorAll('#ampmQuiz .quiz-opt');
+    opts.forEach(o=>{o.classList.add('disabled');if(o.textContent.includes(ampmState.answer))o.classList.add('correct')});
+    if(pick===ampmState.answer){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! That\'s definitely <strong>'+ampmState.answer+'</strong>.';playSound('correct')}
+    else{opts.forEach(o=>{if(o.textContent.includes(pick)&&pick!==ampmState.answer)o.classList.add('wrong')});fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. That time is <strong>'+ampmState.answer+'</strong>.';playSound('wrong')}
+}
+
+// ============ ALL 5-MIN INCREMENTS TABLE ============
+function initAllMin(){
+    const area=document.getElementById('allMinTable');
+    let html='';
+    for(let m=0;m<60;m+=5){
+        html+='<button class="quiz-opt" style="padding:10px 6px;text-align:center;font-size:.95rem;" onclick="showAllMin('+m+')">:<strong>'+(m<10?'0':'')+m+'</strong></button>';
+    }
+    area.innerHTML=html;
+    showAllMin(15);
+}
+function showAllMin(m){
+    const display=document.getElementById('allMinDisplay');
+    const h=4;// fixed sample hour for display
+    const word=timeLabel(h,m);
+    const dig=digitalLabel(h,m);
+    display.innerHTML='<div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;align-items:center;">'+
+        clockSvg(h,m,{size:170,accent:'var(--accent-light)',highlight:m<=30&&m>0?'past':null})+
+        '<div style="text-align:left;"><div style="font-size:1.5rem;font-weight:800;color:var(--accent-light);margin-bottom:6px;">'+word+'</div>'+
+        '<div class="digital-time" style="font-size:1.6rem;padding:8px 16px;">'+dig+'</div>'+
+        '<div style="margin-top:10px;color:var(--text-dim);font-size:.9rem;">Minute hand on <strong>'+(m===0?12:m/5)+'</strong>. Hour hand '+(m===0?'exactly on 4':'between 4 and 5'+(m>=30?', closer to 5':''))+'.</div></div></div>';
+    playSound('tick');
+}
+
+// ============ SEQUENCE COMPLETION (DIGITAL) ============
+let seqDigState={};
+function newSeqDigital(){
+    const seqs=[
+        {start:[2,0],step:5,answer:'2:20',display:['2:00','2:05','2:10','2:15','?']},
+        {start:[3,30],step:10,answer:'4:10',display:['3:30','3:40','3:50','4:00','?']},
+        {start:[7,15],step:15,answer:'8:00',display:['7:15','7:30','7:45','?','8:15']},
+        {start:[10,5],step:5,answer:'10:25',display:['10:05','10:10','10:15','10:20','?']},
+        {start:[6,45],step:15,answer:'7:45',display:['6:45','7:00','7:15','7:30','?']},
+        {start:[4,50],step:10,answer:'5:30',display:['4:50','5:00','5:10','5:20','?']},
+    ];
+    const s=seqs[Math.floor(Math.random()*seqs.length)];
+    seqDigState=s;
+    const area=document.getElementById('seqDigArea');
+    let html='<div class="quiz-question"><div class="q-text">Pattern (jumps of '+s.step+' minutes):</div>';
+    html+='<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0;align-items:center;">';
+    s.display.forEach((d,i)=>{
+        if(d==='?')html+='<div class="digital-time" style="font-size:1.4rem;padding:10px 16px;color:var(--qpast);background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.6);">?</div>';
+        else html+='<div class="digital-time" style="font-size:1.4rem;padding:10px 16px;">'+d+'</div>';
+        if(i<s.display.length-1)html+='<span style="color:var(--text-dim);font-size:1.3rem;">→</span>';
+    });
+    html+='</div>';
+    html+='<div class="flex-center"><input type="text" class="quiz-input" id="seqDigInput" placeholder="e.g. 2:20" style="width:130px;"><button class="action-btn check-btn" onclick="checkSeqDig()">✓ Check</button></div>';
+    html+='<div class="quiz-feedback" id="seqDigFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkSeqDig(){
+    const val=(document.getElementById('seqDigInput').value||'').trim();
+    const fb=document.getElementById('seqDigFb');
+    const want=seqDigState.answer;
+    if(val===want){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! The pattern adds '+seqDigState.step+' minutes each time. Next: <strong>'+want+'</strong>.';playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The answer is <strong>'+want+'</strong>. Each jump is +'+seqDigState.step+' minutes — watch the hour roll over at :60!';playSound('wrong')}
+}
+
+// ============ DAYS OF THE WEEK ============
+const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+let daysOrderState={pile:[],placed:[]};
+function initDaysOrder(){
+    daysOrderState={pile:shuffle(DAYS.slice()),placed:[]};
+    renderDaysOrder();
+    document.getElementById('daysOrderFb').className='quiz-feedback';
+    document.getElementById('daysOrderFb').textContent='';
+}
+function renderDaysOrder(){
+    const pile=document.getElementById('daysOrderPile');
+    const slot=document.getElementById('daysOrderSlot');
+    pile.innerHTML=daysOrderState.pile.map((d,i)=>'<button class="order-chip" onclick="placeDay('+i+')">'+d+'</button>').join('')||'<div style="color:var(--text-dim);font-size:.9rem;">All placed! Click Check.</div>';
+    slot.innerHTML=daysOrderState.placed.length?daysOrderState.placed.map(d=>'<div class="order-placed">'+d+'</div>').join(''):'<div style="color:var(--text-dim);font-size:.9rem;">Click days from the pile in correct order →</div>';
+}
+function placeDay(i){
+    const d=daysOrderState.pile.splice(i,1)[0];
+    daysOrderState.placed.push(d);
+    renderDaysOrder();
+    playSound('tick');
+}
+function checkDayOrder(){
+    const fb=document.getElementById('daysOrderFb');
+    if(daysOrderState.placed.length<7){fb.className='quiz-feedback show wrong-fb';fb.textContent='Place all 7 days first.';return}
+    const correct=daysOrderState.placed.every((d,i)=>d===DAYS[i]);
+    if(correct){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Perfect order! Mon → Tue → Wed → Thu → Fri → Sat → Sun.';playSound('success')}
+    else{const wrong=daysOrderState.placed.findIndex((d,i)=>d!==DAYS[i]);fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The first wrong place is position '+(wrong+1)+': you put <strong>'+daysOrderState.placed[wrong]+'</strong> but it should be <strong>'+DAYS[wrong]+'</strong>.';playSound('wrong')}
+}
+function newDayQuestion(){
+    const qs=[
+        {q:'What day comes AFTER Wednesday?',a:'Thursday'},
+        {q:'What day comes BEFORE Saturday?',a:'Friday'},
+        {q:'What is the FIRST day of the week (school week)?',a:'Monday'},
+        {q:'What is the day BETWEEN Monday and Wednesday?',a:'Tuesday'},
+        {q:'What day comes AFTER Sunday?',a:'Monday'},
+    ];
+    const item=qs[Math.floor(Math.random()*qs.length)];
+    const opts=shuffle([item.a,...shuffle(DAYS.filter(d=>d!==item.a)).slice(0,3)]);
+    const area=document.getElementById('daysQuestion');
+    let html='<div class="quiz-question"><div class="q-text">'+item.q+'</div><div class="quiz-options">';
+    opts.forEach(o=>{html+='<button class="quiz-opt" onclick="checkDayQ(\''+o+'\',\''+item.a+'\')">'+o+'</button>'});
+    html+='</div><div class="quiz-feedback" id="dayQFb"></div></div>';
+    area.innerHTML=html;
+}
+function checkDayQ(pick,answer){
+    const fb=document.getElementById('dayQFb');
+    const opts=document.querySelectorAll('#daysQuestion .quiz-opt');
+    opts.forEach(o=>{o.classList.add('disabled');if(o.textContent===answer)o.classList.add('correct')});
+    if(pick===answer){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+answer+'.';playSound('correct')}
+    else{opts.forEach(o=>{if(o.textContent===pick)o.classList.add('wrong')});fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The answer is <strong>'+answer+'</strong>.';playSound('wrong')}
+}
+
+// ============ MONTHS OF THE YEAR ============
+const MONTHS=[
+    {n:'January',d:31},{n:'February',d:28,note:' (29 leap)'},{n:'March',d:31},{n:'April',d:30},
+    {n:'May',d:31},{n:'June',d:30},{n:'July',d:31},{n:'August',d:31},
+    {n:'September',d:30},{n:'October',d:31},{n:'November',d:30},{n:'December',d:31},
+];
+function initMonths(){
+    const grid=document.getElementById('monthsGrid');
+    let html='';
+    MONTHS.forEach((m,i)=>{
+        html+='<div class="cal-card" onclick="flipMonth('+i+')" id="mc-'+i+'"><div class="cc-num">'+(i+1)+'</div><div class="cc-lbl">'+m.n+'</div><div id="mc-back-'+i+'" style="display:none;"><div style="font-size:1.5rem;font-weight:900;color:var(--qpast);">'+m.d+'</div><div style="font-size:.8rem;color:var(--text-dim);margin-top:2px;">days'+(m.note||'')+'</div></div></div>';
+    });
+    grid.innerHTML=html;
+}
+function flipMonth(i){
+    const card=document.getElementById('mc-'+i);
+    const back=document.getElementById('mc-back-'+i);
+    const num=card.querySelector('.cc-num'),lbl=card.querySelector('.cc-lbl');
+    if(back.style.display==='none'){back.style.display='block';num.style.display='none';lbl.style.display='none'}
+    else{back.style.display='none';num.style.display='block';lbl.style.display='block'}
+    playSound('click');
+}
+
+// ============ TODAY / YESTERDAY / TOMORROW ============
+let tytmState={};
+function newTytm(){
+    const today=DAYS[Math.floor(Math.random()*DAYS.length)];
+    const idx=DAYS.indexOf(today);
+    const yesterday=DAYS[(idx-1+7)%7];
+    const tomorrow=DAYS[(idx+1)%7];
+    const which=Math.random()<0.5?'yesterday':'tomorrow';
+    const answer=which==='yesterday'?yesterday:tomorrow;
+    tytmState={today,answer,which};
+    const opts=shuffle([answer,...shuffle(DAYS.filter(d=>d!==answer)).slice(0,3)]);
+    const area=document.getElementById('tytmArea');
+    let html='<div class="quiz-question"><div class="q-text">If <strong>today</strong> is <strong style="color:var(--accent-light);">'+today+'</strong>, what was <strong>'+which+'</strong>?</div><div class="quiz-options">';
+    opts.forEach(o=>{html+='<button class="quiz-opt" onclick="checkTytm(\''+o+'\')">'+o+'</button>'});
+    html+='</div><div class="quiz-feedback" id="tytmFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkTytm(pick){
+    const fb=document.getElementById('tytmFb');
+    const opts=document.querySelectorAll('#tytmArea .quiz-opt');
+    opts.forEach(o=>{o.classList.add('disabled');if(o.textContent===tytmState.answer)o.classList.add('correct')});
+    if(pick===tytmState.answer){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+tytmState.which.charAt(0).toUpperCase()+tytmState.which.slice(1)+' is <strong>'+tytmState.answer+'</strong>.';playSound('correct')}
+    else{opts.forEach(o=>{if(o.textContent===pick)o.classList.add('wrong')});fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. '+tytmState.which+' is <strong>'+tytmState.answer+'</strong>. Step '+(tytmState.which==='yesterday'?'BACK':'FORWARD')+' one day.';playSound('wrong')}
+}
+
+// ============ SEASONS ============
+const SEASONS=[
+    {n:'Spring',cls:'season-spring',emoji:'🌸',months:'March – May',note:'Flowers bloom, days get longer.'},
+    {n:'Summer',cls:'season-summer',emoji:'☀️',months:'June – August',note:'Hottest, longest days.'},
+    {n:'Autumn',cls:'season-autumn',emoji:'🍂',months:'September – November',note:'Leaves fall, days get cooler.'},
+    {n:'Winter',cls:'season-winter',emoji:'❄️',months:'December – February',note:'Coldest, shortest days.'},
+];
+function initSeasons(){
+    const grid=document.getElementById('seasonsGrid');
+    grid.innerHTML=SEASONS.map(s=>'<div class="cal-card '+s.cls+'"><div style="font-size:2rem;">'+s.emoji+'</div><div style="font-weight:800;font-size:1.1rem;margin-top:4px;">'+s.n+'</div><div style="font-size:.85rem;color:var(--text-dim);margin-top:4px;">'+s.months+'</div><div style="font-size:.8rem;color:var(--text-dim);margin-top:6px;line-height:1.4;">'+s.note+'</div></div>').join('');
+}
+let seasonState={};
+function newSeasonQ(){
+    const qs=[
+        {q:'In which season does it usually SNOW in the UK?',a:'Winter'},
+        {q:'In which season do leaves FALL from trees?',a:'Autumn'},
+        {q:'In which season do FLOWERS first bloom?',a:'Spring'},
+        {q:'In which season are the days LONGEST and warmest?',a:'Summer'},
+        {q:'Which season comes AFTER Spring?',a:'Summer'},
+        {q:'Which season comes BEFORE Spring?',a:'Winter'},
+    ];
+    const it=qs[Math.floor(Math.random()*qs.length)];
+    seasonState=it;
+    const opts=shuffle(SEASONS.map(s=>s.n));
+    const area=document.getElementById('seasonsQuiz');
+    let html='<div class="quiz-question"><div class="q-text">'+it.q+'</div><div class="quiz-options">';
+    opts.forEach(o=>{html+='<button class="quiz-opt" onclick="checkSeasonQ(\''+o+'\')">'+o+'</button>'});
+    html+='</div><div class="quiz-feedback" id="seasonFb"></div></div>';
+    area.innerHTML=html;
+}
+function checkSeasonQ(pick){
+    const fb=document.getElementById('seasonFb');
+    const opts=document.querySelectorAll('#seasonsQuiz .quiz-opt');
+    opts.forEach(o=>{o.classList.add('disabled');if(o.textContent===seasonState.a)o.classList.add('correct')});
+    if(pick===seasonState.a){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+seasonState.a+'.';playSound('correct')}
+    else{opts.forEach(o=>{if(o.textContent===pick)o.classList.add('wrong')});fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The answer is <strong>'+seasonState.a+'</strong>.';playSound('wrong')}
+}
+
+// ============ BAR MODEL DURATION ============
+let bmDurState={};
+function newBarModelDur(){
+    const scenarios=[
+        {title:'Lesson',start:'10:00',end:'10:45',totalMin:45,blocks:[{lbl:'30 min',min:30,col:'rgba(59,130,246,0.5)'},{lbl:'15 min',min:15,col:'rgba(59,130,246,0.35)'}],ans:45,why:'10:00 → 10:30 is 30 mins; 10:30 → 10:45 is 15 mins. Total = 45 min.'},
+        {title:'Bake',start:'2:15',end:'3:00',totalMin:45,blocks:[{lbl:'15 min',min:15,col:'rgba(245,158,11,0.5)'},{lbl:'30 min',min:30,col:'rgba(245,158,11,0.35)'}],ans:45,why:'2:15 → 2:30 is 15 mins; 2:30 → 3:00 is 30 mins. Total = 45 min.'},
+        {title:'Drive',start:'9:30',end:'11:00',totalMin:90,blocks:[{lbl:'30 min',min:30,col:'rgba(16,185,129,0.5)'},{lbl:'1 hour',min:60,col:'rgba(16,185,129,0.35)'}],ans:90,why:'9:30 → 10:00 is 30 mins; 10:00 → 11:00 is 1 hour. Total = 1 hr 30 min = 90 min.'},
+        {title:'Match',start:'4:45',end:'6:00',totalMin:75,blocks:[{lbl:'15 min',min:15,col:'rgba(139,92,246,0.5)'},{lbl:'1 hour',min:60,col:'rgba(139,92,246,0.35)'}],ans:75,why:'4:45 → 5:00 is 15 mins; 5:00 → 6:00 is 1 hour. Total = 1 hr 15 min = 75 min.'},
+    ];
+    const s=scenarios[Math.floor(Math.random()*scenarios.length)];
+    bmDurState=s;
+    const area=document.getElementById('bmDurArea');
+    let html='<div class="quiz-question">';
+    html+='<div style="font-weight:800;color:var(--accent-light);margin-bottom:10px;font-size:1.1rem;">'+s.title+': '+s.start+' → '+s.end+'</div>';
+    html+='<div class="bm-dur"><div class="bm-whole">Total = ?</div><div class="bm-parts">';
+    s.blocks.forEach(b=>{html+='<div class="bm-part" style="flex:'+b.min+';background:'+b.col+';">'+b.lbl+'</div>'});
+    html+='</div></div>';
+    html+='<div class="flex-center mt-16"><span style="font-size:1.05rem;">Total duration =</span><input type="number" class="quiz-input" id="bmInput" style="width:100px;" placeholder="?"><span style="color:var(--text-dim);">minutes</span><button class="action-btn check-btn" onclick="checkBarModel()">✓</button></div>';
+    html+='<div class="quiz-feedback" id="bmFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkBarModel(){
+    const val=parseInt(document.getElementById('bmInput').value);
+    const fb=document.getElementById('bmFb');
+    if(val===bmDurState.ans){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+bmDurState.why;playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The answer is <strong>'+bmDurState.ans+' minutes</strong>. '+bmDurState.why;playSound('wrong')}
+}
+
+// ============ CONVERT MINS ↔ HOURS ============
+let convertState={};
+function newConvert(){
+    const items=[
+        {q:'How many minutes in 1 hour?',a:60},{q:'How many minutes in 2 hours?',a:120},
+        {q:'How many minutes in 1 hour 30 minutes?',a:90},{q:'How many minutes in ½ hour?',a:30},
+        {q:'How many minutes in ¼ hour?',a:15},{q:'90 minutes is how many hours and minutes? (Type only the minutes part of "1 hour ?? minutes")',a:30,hint:'90 = 60 + 30'},
+        {q:'75 minutes is "1 hour ?? minutes"',a:15,hint:'75 = 60 + 15'},
+        {q:'How many minutes in 1 hour 45 minutes?',a:105},
+        {q:'120 minutes = how many hours? (type just the number)',a:2,hint:'120 ÷ 60 = 2'},
+    ];
+    const it=items[Math.floor(Math.random()*items.length)];
+    convertState=it;
+    const area=document.getElementById('convertArea');
+    let html='<div class="quiz-question"><div class="q-text">'+it.q+'</div>';
+    html+='<div class="flex-center mt-16"><input type="number" class="quiz-input" id="convertInput" style="width:120px;" placeholder="?"><button class="action-btn check-btn" onclick="checkConvert()">✓</button></div>';
+    html+='<div class="quiz-feedback" id="convertFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkConvert(){
+    const val=parseInt(document.getElementById('convertInput').value);
+    const fb=document.getElementById('convertFb');
+    if(val===convertState.a){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+(convertState.hint||'')+' Answer = <strong>'+convertState.a+'</strong>.';playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The answer is <strong>'+convertState.a+'</strong>. '+(convertState.hint||'');playSound('wrong')}
+}
+
+// ============ ORDER DURATIONS ============
+let orderState={items:[],placed:[]};
+function newOrder(){
+    const sets=[
+        [{lbl:'30 minutes',min:30},{lbl:'1 hour',min:60},{lbl:'15 minutes',min:15},{lbl:'1 hour 30 mins',min:90}],
+        [{lbl:'45 minutes',min:45},{lbl:'2 hours',min:120},{lbl:'½ hour',min:30},{lbl:'75 minutes',min:75}],
+        [{lbl:'1 hour 15 mins',min:75},{lbl:'90 minutes',min:90},{lbl:'1 hour',min:60},{lbl:'25 minutes',min:25}],
+    ];
+    const s=sets[Math.floor(Math.random()*sets.length)];
+    orderState={items:shuffle(s.slice()),placed:[],correct:s.slice().sort((a,b)=>a.min-b.min)};
+    renderOrder();
+    document.getElementById('orderFb').className='quiz-feedback';
+    document.getElementById('orderFb').textContent='';
+    playSound('click');
+}
+function renderOrder(){
+    const pile=document.getElementById('orderPile');
+    const slot=document.getElementById('orderSlot');
+    pile.innerHTML=orderState.items.map((it,i)=>'<button class="order-chip" onclick="placeOrder('+i+')">'+it.lbl+'</button>').join('')||'<div style="color:var(--text-dim);font-size:.9rem;">All placed! Click Check.</div>';
+    slot.innerHTML=orderState.placed.length?orderState.placed.map(it=>'<div class="order-placed">'+it.lbl+'</div>').join(''):'<div style="color:var(--text-dim);font-size:.9rem;">Click chips in order — shortest first →</div>';
+}
+function placeOrder(i){
+    const it=orderState.items.splice(i,1)[0];
+    orderState.placed.push(it);
+    renderOrder();
+    playSound('tick');
+}
+function checkOrder(){
+    const fb=document.getElementById('orderFb');
+    if(orderState.placed.length<4){fb.className='quiz-feedback show wrong-fb';fb.textContent='Place all 4 first.';return}
+    const correct=orderState.placed.every((it,i)=>it.min===orderState.correct[i].min);
+    if(correct){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct order! '+orderState.correct.map(c=>c.lbl).join(' → ')+'.';playSound('success')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. Correct order: <strong>'+orderState.correct.map(c=>c.lbl).join(' → ')+'</strong>. Convert each to minutes first!';playSound('wrong')}
+}
+
+// ============ MULTI-STEP WORD PROBLEMS ============
+let multiState={};
+function newMulti(){
+    const stories=[
+        {story:'Lily starts homework at <strong>4:00 pm</strong>. She works for 30 minutes, then takes a 15-minute break, then works another 20 minutes. What time does she finish?',answer:'5:05',hint:'4:00 + 30 = 4:30. + 15 = 4:45. + 20 = 5:05.'},
+        {story:'Tom\'s bus leaves at <strong>8:30 am</strong>. The bus ride is 45 minutes, then he walks for 10 minutes. What time does he arrive?',answer:'9:25',hint:'8:30 + 45 = 9:15. + 10 = 9:25.'},
+        {story:'A film starts at <strong>2:15 pm</strong> and lasts 1 hour 30 minutes. What time does it end?',answer:'3:45',hint:'2:15 + 1 hour = 3:15. + 30 min = 3:45.'},
+        {story:'Mum starts cooking at <strong>5:30 pm</strong>. The recipe takes 45 minutes plus 15 minutes resting. What time can they eat?',answer:'6:30',hint:'5:30 + 45 = 6:15. + 15 = 6:30.'},
+        {story:'Sam wakes up at <strong>7:00 am</strong>. He gets ready for 25 minutes, eats breakfast for 15 minutes, then walks 20 minutes to school. What time does he arrive?',answer:'8:00',hint:'7:00 + 25 = 7:25. + 15 = 7:40. + 20 = 8:00.'},
+        {story:'A train leaves at <strong>9:45 am</strong>. The trip is 1 hour 20 minutes. What time does the train arrive?',answer:'11:05',hint:'9:45 + 1 hour = 10:45. + 20 min = 11:05.'},
+    ];
+    const s=stories[Math.floor(Math.random()*stories.length)];
+    multiState=s;
+    const area=document.getElementById('multiArea');
+    let html='<div class="quiz-question"><div class="q-text">'+s.story+'</div>';
+    html+='<div class="flex-center mt-16"><input type="text" class="quiz-input" id="multiInput" style="width:130px;" placeholder="e.g. 5:05"><button class="action-btn check-btn" onclick="checkMulti()">✓</button></div>';
+    html+='<div class="quiz-feedback" id="multiFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkMulti(){
+    const val=(document.getElementById('multiInput').value||'').trim();
+    const fb=document.getElementById('multiFb');
+    if(val===multiState.answer){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! Working: '+multiState.hint;playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. Answer: <strong>'+multiState.answer+'</strong>. Working: '+multiState.hint;playSound('wrong')}
+}
+
+// ============ SATS-STYLE MIXED PRACTICE ============
+let satsState={};
+function newSats(){
+    const qs=[
+        {q:'A clock shows the minute hand on 6 and the hour hand between 8 and 9. What is the time?',opts:['8 o\'clock','Half past 8','Quarter past 8','Half past 9'],correct:1,why:'Minute on 6 = "half past". Hour between 8 and 9 = "half past 8".'},
+        {q:'Sara\'s lesson lasts ½ hour. It starts at 9:15. What time does it end?',opts:['9:30','9:45','10:00','10:15'],correct:1,why:'½ hour = 30 min. 9:15 + 30 = 9:45.'},
+        {q:'How many days are there in 2 weeks?',opts:['7','12','14','21'],correct:2,why:'1 week = 7 days, so 2 weeks = 14 days.'},
+        {q:'A film starts at 4:30 and ends at 6:00. How long is the film?',opts:['1 hour','1 hour 30 mins','30 mins','2 hours'],correct:1,why:'4:30 → 5:00 is 30 mins, 5:00 → 6:00 is 1 hour. Total = 1 hr 30 mins.'},
+        {q:'Which is the same as quarter to 7?',opts:['7:15','6:45','7:45','6:15'],correct:1,why:'Quarter to 7 = 15 mins before 7 = 6:45.'},
+        {q:'Tom\'s birthday is in May. How many months until next May?',opts:['10','11','12','1'],correct:2,why:'A full year passes — 12 months until the same month next year.'},
+        {q:'How many minutes between 3:25 and 3:50?',opts:['15','20','25','30'],correct:2,why:'50 − 25 = 25 minutes.'},
+        {q:'Which is longer: 1 hour, or 70 minutes?',opts:['1 hour','70 minutes','They are equal'],correct:1,why:'1 hour = 60 mins. 70 > 60, so 70 mins is longer.'},
+        {q:'It is Tuesday. What day will it be in 3 days?',opts:['Wednesday','Thursday','Friday','Saturday'],correct:2,why:'Tue → Wed (1) → Thu (2) → Fri (3).'},
+        {q:'Which month has 28 days (or 29 in a leap year)?',opts:['January','February','April','November'],correct:1,why:'February — the only month with 28 (or 29) days.'},
+    ];
+    const q=qs[Math.floor(Math.random()*qs.length)];
+    satsState=q;
+    const area=document.getElementById('satsArea');
+    let html='<div class="quiz-question"><div class="q-text">'+q.q+'</div><div class="quiz-options">';
+    q.opts.forEach((o,i)=>{html+='<button class="quiz-opt" onclick="checkSats('+i+')">'+o+'</button>'});
+    html+='</div><div class="quiz-feedback" id="satsFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkSats(i){
+    const fb=document.getElementById('satsFb');
+    const opts=document.querySelectorAll('#satsArea .quiz-opt');
+    opts.forEach(o=>o.classList.add('disabled'));
+    opts[satsState.correct].classList.add('correct');
+    if(i===satsState.correct){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+satsState.why;playSound('correct')}
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The answer is <strong>'+satsState.opts[satsState.correct]+'</strong>. '+satsState.why;playSound('wrong')}
+}
+
+// ============ INIT ============
+(function(){
+    const s=loadState();
+    applyTheme(s.theme==='light'?'light':'dark');
+    const slidesEl=document.querySelectorAll('.slide');
+    let start=0;
+    if(typeof s.slide==='number'&&s.slide>=0&&s.slide<slidesEl.length)start=s.slide;
+    showSlide(start);
+    if(start>0)showResumeToast(start,slidesEl.length);
+    else setTimeout(showKbdHint,800);
+})();
+</script>
+</body>
+</html>
