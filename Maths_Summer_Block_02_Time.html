@@ -262,6 +262,39 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 .cheat-cell p{font-size:.9rem;color:var(--text);line-height:1.6}
 .cheat-cell strong{color:var(--qpast)}
 
+/* GENIUS TRACK */
+.genius-badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(139,92,246,.18));border:1px solid rgba(245,158,11,.4);border-radius:100px;padding:8px 18px;font-size:.85rem;color:#FCD34D;margin-bottom:16px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.genius-gate{background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(139,92,246,.12));border:2px solid rgba(245,158,11,.35);border-radius:24px;padding:40px;text-align:center;max-width:700px;width:100%;box-shadow:0 0 60px rgba(245,158,11,.15)}
+.genius-gate h1{font-size:2.8rem;font-weight:900;background:linear-gradient(135deg,#FBBF24,#A78BFA);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;margin-bottom:14px}
+.genius-tease{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:20px 0}
+.tease-cell{background:rgba(255,255,255,.04);border:1px solid var(--card-border);border-radius:10px;padding:12px;text-align:left;font-size:.9rem;line-height:1.5}
+.tease-cell strong{color:#FCD34D;display:block;margin-bottom:4px}
+
+/* SPEED CHALLENGE */
+.speed-display{background:rgba(0,0,0,.4);border:2px solid rgba(245,158,11,.4);border-radius:14px;padding:18px;display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:14px;margin:14px 0}
+.speed-stat{text-align:center}
+.speed-stat .ss-num{font-family:'Inter',monospace;font-size:2rem;font-weight:900;color:#FBBF24;font-feature-settings:'tnum';line-height:1}
+.speed-stat .ss-lbl{font-size:.75rem;color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+.speed-stat.timer .ss-num{color:#10B981}
+.speed-stat.timer.warn .ss-num{color:#EF4444;animation:pulse .6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+
+/* INVESTIGATION */
+.investigate-card{background:rgba(139,92,246,.08);border:2px dashed rgba(139,92,246,.4);border-radius:18px;padding:24px;text-align:left;margin:14px 0}
+.investigate-card h4{color:var(--accent-light);font-size:1.15rem;margin-bottom:10px;font-weight:800}
+.investigate-card .inv-prompt{color:var(--text);line-height:1.7;margin-bottom:12px}
+.investigate-card textarea{width:100%;padding:12px;border-radius:10px;border:2px solid var(--card-border);background:rgba(255,255,255,.04);color:var(--text);font-family:inherit;font-size:.95rem;resize:vertical;box-sizing:border-box;min-height:80px}
+.investigate-card details{margin-top:12px;border-top:1px dashed rgba(139,92,246,.3);padding-top:12px}
+.investigate-card summary{cursor:pointer;color:var(--accent-light);font-weight:700;font-size:.9rem;list-style:none}
+.investigate-card summary::-webkit-details-marker{display:none}
+.investigate-card summary::before{content:'💡 ';margin-right:4px}
+.investigate-card .model{color:var(--text-dim);font-size:.9rem;line-height:1.7;margin-top:8px;font-style:italic}
+
+/* ANGLE VISUAL */
+.angle-row{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.angle-card{background:rgba(255,255,255,.04);border:2px solid var(--card-border);border-radius:14px;padding:14px;text-align:center;min-width:140px}
+.angle-card .ac-deg{font-size:1.6rem;font-weight:900;color:var(--qpast)}
+
 /* GLOSSARY */
 .gloss-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);text-align:left}
 .gloss-item:last-child{border-bottom:none}
@@ -1196,6 +1229,247 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 </div>
 </div>
 
+<!-- ============================================================ -->
+<!-- ===== 🦁 GENIUS TRACK — Year 3+ Stretch Content ============ -->
+<!-- ============================================================ -->
+
+<!-- ===== GENIUS GATE ===== -->
+<div class="slide" id="slide-genius-gate">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;">
+    <div class="genius-gate">
+        <div style="font-size:5rem;margin-bottom:6px;">🦁</div>
+        <div class="genius-badge">Optional · Year 3 Reach-Ahead</div>
+        <h1>The Genius Track</h1>
+        <p style="color:var(--text-dim);font-size:1.1rem;line-height:1.7;margin:14px 0;">You've finished Block 2 Time. Most Year 2s stop here — and that is a great place to stop.<br>But if you want a <strong style="color:#FCD34D;">real challenge</strong>, the next <strong>10 slides</strong> push past the Year 2 curriculum.</p>
+        <div class="genius-tease">
+            <div class="tease-cell"><strong>⏱️ Minute Precision</strong>Read time exactly to the minute, not just to 5.</div>
+            <div class="tease-cell"><strong>🕓 24-Hour Clock</strong>Convert 4:30 pm ↔ 16:30 like a pro.</div>
+            <div class="tease-cell"><strong>🌙 Across Midnight</strong>Find durations that cross from one day to the next.</div>
+            <div class="tease-cell"><strong>📐 Clock Angles</strong>How many degrees between the hands?</div>
+            <div class="tease-cell"><strong>🤝 Hand Logic</strong>When do the hands overlap or form a right angle?</div>
+            <div class="tease-cell"><strong>🕵️ Multi-Clock Puzzles</strong>Three clocks, one truth — solve it.</div>
+            <div class="tease-cell"><strong>🔬 Open Investigations</strong>No "right answer" — just thinking.</div>
+            <div class="tease-cell"><strong>⚡ Speed Challenge</strong>How many clocks can you read in 60 seconds?</div>
+        </div>
+        <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:14px;margin:16px 0;font-size:.9rem;color:var(--text);">
+            ⚠️ <strong>Warning:</strong> some questions here are Year 3 or older. It's normal for these to feel hard. Take your time, draw clocks on paper, and don't worry about getting them all right.
+        </div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:linear-gradient(135deg,#F59E0B,#8B5CF6);font-size:1.1rem;padding:14px 32px;" onclick="nextSlide()">🦁 Begin the Genius Track →</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== GENIUS 1: MINUTE PRECISION ===== -->
+<div class="slide" id="slide-genius-minute">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="genius-badge">🦁 Genius · Minute Precision</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">⏱️ Read to the Exact Minute</div>
+        <div class="slide-subtitle">Year 2 reads to the nearest 5 minutes. Year 3+ reads <strong>every minute</strong>.<br>Each <em>tiny</em> tick = 1 minute. Type the digital time exactly.</div>
+        <div id="genMinArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newGenMin()">🎲 New Clock</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Strategy:</strong> find the nearest big number, then count individual ticks past it (or back from it). E.g., minute hand just past the 4 = 20+a few; just past the 5 = 25+a few.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== GENIUS 2: 24-HOUR CLOCK ===== -->
+<div class="slide" id="slide-genius-24h">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="genius-badge">🦁 Genius · 24-Hour Clock</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🕓 The 24-Hour Clock</div>
+        <div class="slide-subtitle">Trains, planes and the army don't use a.m./p.m. — they use the <strong>24-hour clock</strong>. After 12:00 noon they keep counting: 13, 14, 15… up to 23:59. Then it rolls over to 00:00 (midnight).</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;max-width:560px;margin:14px auto;font-size:.85rem;">
+            <div class="cheat-cell" style="text-align:center;"><strong>00:00</strong><br>midnight</div>
+            <div class="cheat-cell" style="text-align:center;"><strong>06:00</strong><br>6 a.m.</div>
+            <div class="cheat-cell" style="text-align:center;"><strong>12:00</strong><br>noon</div>
+            <div class="cheat-cell" style="text-align:center;"><strong>13:00</strong><br>1 p.m.</div>
+            <div class="cheat-cell" style="text-align:center;"><strong>17:30</strong><br>5:30 p.m.</div>
+            <div class="cheat-cell" style="text-align:center;"><strong>20:15</strong><br>8:15 p.m.</div>
+            <div class="cheat-cell" style="text-align:center;"><strong>23:00</strong><br>11 p.m.</div>
+            <div class="cheat-cell" style="text-align:center;"><strong>23:59</strong><br>1 min to midnight</div>
+        </div>
+        <div id="gen24Area"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newGen24()">🎲 New Conversion</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>The trick for p.m.:</strong> add 12 to the hour. 3 p.m. → 3 + 12 = <strong>15:00</strong>. 8 p.m. → 8 + 12 = <strong>20:00</strong>. <strong>Going back to 12-hour:</strong> if the hour is &gt; 12, subtract 12 and add "p.m.".
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== GENIUS 3: ACROSS MIDNIGHT ===== -->
+<div class="slide" id="slide-genius-midnight">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="genius-badge">🦁 Genius · Across Midnight</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🌙 Durations Across Midnight</div>
+        <div class="slide-subtitle">When a duration crosses <strong>midnight</strong>, the end time is on a different day. Split the journey at midnight and add the two halves.</div>
+        <div id="genMidArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newGenMidnight()">🎲 New Story</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Strategy:</strong> jump 1 — start time → <em>12:00 midnight</em>. Jump 2 — midnight → end time. Add the two. <em>Example:</em> 11:00 pm → 6:00 am = <strong>1 hr</strong> + <strong>6 hrs</strong> = <strong>7 hours</strong>.
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== GENIUS 4: CLOCK ANGLES ===== -->
+<div class="slide" id="slide-genius-angles">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="genius-badge">🦁 Genius · Clock Angles</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📐 Angles Between the Hands</div>
+        <div class="slide-subtitle">A full circle = <strong>360°</strong>. The clock has 12 numbers, so each "hour gap" is <strong>360 ÷ 12 = 30°</strong>. The minute hand moves <strong>6°</strong> per minute; the hour hand a <em>tiny</em> <strong>0.5°</strong> per minute.</div>
+        <div id="genAngleExamples" class="angle-row"></div>
+        <div id="genAngleVisual" style="margin:14px 0;"></div>
+        <div id="genAngleArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newGenAngle()">🎲 New Angle</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Quick formula (Y3+):</strong> angle = | (30 × hour) − (5.5 × minute) |. At <strong>3:00</strong> the answer is 30×3 − 0 = <strong>90°</strong> (a right angle!).
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== GENIUS 5: HAND OVERLAPS ===== -->
+<div class="slide" id="slide-genius-overlap">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="genius-badge">🦁 Genius · Hand Logic</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🤝 When Do the Hands Overlap?</div>
+        <div class="slide-subtitle">Both hands point the same way at <strong>12:00</strong>. The minute hand laps the hour hand again about every <strong>1 hour 5 minutes</strong> — so over 12 hours, they overlap exactly <strong>11 times</strong> (not 12 — the lapping is what makes it 11).</div>
+        <div id="genOverlapDemo" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:14px 0;"></div>
+        <div id="genOverlapArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newGenOverlap()">🎲 New Question</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Why 11, not 12?</strong> In 12 hours the hour hand goes round once and the minute hand goes round 12 times — so the minute hand "catches up" 12 − 1 = 11 times. Beautiful, isn't it?
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== GENIUS 6: RIGHT ANGLES ===== -->
+<div class="slide" id="slide-genius-rightangle">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="genius-badge">🦁 Genius · Right Angles</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">📐 When Are the Hands at 90°?</div>
+        <div class="slide-subtitle">A <strong>right angle</strong> = 90°. The clearest example is <strong>3:00</strong> and <strong>9:00</strong> — the hands form a perfect L.</div>
+        <div id="genRightExamples" style="display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:14px 0;"></div>
+        <div id="genRightArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newGenRight()">🎲 New Question</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Mind-bender:</strong> in 12 hours, the hands form a right angle <strong>22 times</strong> (about every 32 minutes). Not 24 — they "miss" two of the would-be right angles because of the hour hand's drift!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== GENIUS 7: MULTI-CLOCK LOGIC ===== -->
+<div class="slide" id="slide-genius-multiclock">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="genius-badge">🦁 Genius · Multi-Clock Logic</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">🕵️ Multi-Clock Puzzles</div>
+        <div class="slide-subtitle">Each puzzle gives you clocks that are <strong>fast</strong> or <strong>slow</strong>. Work out the actual time.</div>
+        <div id="genMultiClockArea"></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newGenMultiClock()">🎲 New Puzzle</button></div>
+        <div class="sentence-stem mt-16">
+            <strong>Logic key:</strong> if a clock is <strong>fast</strong> by X minutes, the actual time is its reading <em>minus</em> X. If <strong>slow</strong>, the actual time is <em>plus</em> X. Apply to each clock — they should all agree!
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== GENIUS 8: SPEED CHALLENGE ===== -->
+<div class="slide" id="slide-genius-speed">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="genius-badge">🦁 Genius · Speed Challenge</div>
+    <div class="glass-card text-center">
+        <div class="slide-title">⚡ Beat the Clock</div>
+        <div class="slide-subtitle">You have <strong>60 seconds</strong>. Read each clock and pick the matching digital time. How many can you get? <strong>10+ = Genius. 15+ = Legend.</strong></div>
+        <div class="speed-display">
+            <div class="speed-stat timer" id="speedTimer"><div class="ss-num" id="speedTime">60</div><div class="ss-lbl">Seconds</div></div>
+            <div class="speed-stat"><div class="ss-num" id="speedScore">0</div><div class="ss-lbl">Correct</div></div>
+            <div class="speed-stat"><div class="ss-num" id="speedTotal">0</div><div class="ss-lbl">Attempted</div></div>
+        </div>
+        <div id="speedArea"></div>
+        <div class="btn-row">
+            <button class="action-btn" style="background:linear-gradient(135deg,#F59E0B,#EF4444);font-size:1.05rem;" onclick="startSpeed()" id="speedStartBtn">⚡ Start 60-second challenge</button>
+        </div>
+        <div class="quiz-feedback mt-16" id="speedFb"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== GENIUS 9: OPEN INVESTIGATION ===== -->
+<div class="slide" id="slide-genius-investigate">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="genius-badge">🦁 Genius · Open Investigation</div>
+    <div class="glass-card">
+        <div class="slide-title text-center">🔬 Open Investigations</div>
+        <div class="slide-subtitle text-center">No multiple choice. No "right answer". Just thinking. Type your idea, then peek at a model answer.</div>
+        <div class="investigate-card">
+            <h4>1. Why 60 minutes — not 100?</h4>
+            <div class="inv-prompt">Most things in maths are based on 10s (we have 10 fingers, money goes 1p, 10p, £1, £10…). But an hour has <strong>60 minutes</strong>, not 100. Why? Make a guess.</div>
+            <textarea id="inv1" placeholder="Type your idea..."></textarea>
+            <details><summary>Show one possible answer</summary><div class="model">The Babylonians (3,000+ years ago) loved the number 60 because it splits cleanly so many ways: 60 ÷ 2 = 30, ÷ 3 = 20, ÷ 4 = 15, ÷ 5 = 12, ÷ 6 = 10. That meant they could split an hour into halves, thirds, quarters, fifths and sixths — all whole numbers. 100 only splits cleanly into 2, 4, 5, 10. We kept the 60 because it's just so much more useful for cutting time into equal parts.</div></details>
+        </div>
+        <div class="investigate-card">
+            <h4>2. Design a 10-hour clock.</h4>
+            <div class="inv-prompt">Imagine a planet where the day has only <strong>10 hours</strong> instead of 24. How long would each "hour" be on Earth? How many minutes in one of these new hours? Sketch what the clock face might look like in your head.</div>
+            <textarea id="inv2" placeholder="Type your idea..."></textarea>
+            <details><summary>Show one possible answer</summary><div class="model">A real Earth day = 24 hours = 1,440 minutes. Splitting that into 10 new hours gives <strong>144 minutes</strong> per new hour — more than twice as long as ours! The clock face would have only 10 numbers around it (instead of 12), spaced 36° apart instead of 30°. France actually tried "decimal time" during the Revolution in 1793 — they had 10 hours per day, 100 minutes per hour, 100 seconds per minute. It lasted about a year before everyone gave up and went back to the 24-hour day.</div></details>
+        </div>
+        <div class="investigate-card">
+            <h4>3. Could you tell the time on a clock with no numbers?</h4>
+            <div class="inv-prompt">Some clocks are pure decoration — just hands, no numbers. Could you still read them? What features of the clock face would you need?</div>
+            <textarea id="inv3" placeholder="Type your idea..."></textarea>
+            <details><summary>Show one possible answer</summary><div class="model">Yes, as long as the clock has <strong>12 evenly-spaced markers</strong> (ticks, dots, anything) and you know which one is "12". Our brains learn to use the <em>position</em> of the hands more than the numbers themselves. Many luxury watches have only 4 marks (12, 3, 6, 9), and people read them just fine. The numbers are a helpful guide for beginners — but the geometry of the circle is what really tells the time.</div></details>
+        </div>
+        <div class="investigate-card">
+            <h4>4. Why does the hour hand move at all when no hour has passed?</h4>
+            <div class="inv-prompt">When it's 3:30, the hour hand has drifted halfway between 3 and 4 — even though it's still "3 something". Why don't clockmakers just leave the hour hand stuck on 3 until exactly 4:00? Would that be better or worse? Argue for either side.</div>
+            <textarea id="inv4" placeholder="Type your idea..."></textarea>
+            <details><summary>Show one possible answer</summary><div class="model">A "jumping" hour hand would be easier to read for beginners — but it would lose precision. The smooth drift is actually a feature: at a glance you can tell whether it's <em>early</em> in the hour (hand near 3) or <em>late</em> (hand near 4) without even looking at the minute hand. It's a built-in "fraction-of-the-hour" indicator. Mechanically, smooth drift is also what gears naturally produce — to make it jump you'd need extra ratchets, which would cost more and be less reliable.</div></details>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- ===== GENIUS FINAL ===== -->
+<div class="slide" id="slide-genius-final">
+<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;">
+    <div class="genius-gate">
+        <div style="font-size:5rem;">🏆🦁</div>
+        <h1 style="font-size:2.4rem;">Genius Master</h1>
+        <p style="color:var(--text-dim);font-size:1.05rem;line-height:1.7;margin:14px 0;">You've gone past Year 2. You've explored angles, 24-hour time, the maths of overlapping hands, and questioned <em>why</em> a clock works the way it does — not just how to read it.</p>
+        <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:12px;padding:18px;margin:16px 0;text-align:left;">
+            <strong style="color:#FCD34D;display:block;margin-bottom:8px;">🎯 What you can now do (Year 3+):</strong>
+            <ul style="color:var(--text);line-height:1.8;padding-left:22px;font-size:.95rem;">
+                <li>Read time to the exact minute</li>
+                <li>Convert between 12-hour and 24-hour formats</li>
+                <li>Calculate durations across midnight</li>
+                <li>Reason about angles between clock hands</li>
+                <li>Solve multi-clock logic puzzles</li>
+                <li>Argue mathematically about <em>why</em> clocks are designed as they are</li>
+            </ul>
+        </div>
+        <p style="color:var(--accent-light);font-weight:700;margin-top:14px;">Up next when you're ready: Year 3 Time — minute precision, Roman numerals on real clocks, and elapsed-time SATs questions.</p>
+        <div class="btn-row mt-24">
+            <button class="action-btn" style="background:var(--accent);" onclick="window.print()">🖨️ Print my Genius certificate</button>
+            <button class="action-btn back" onclick="showSlide(0)">↺ Back to Start</button>
+        </div>
+    </div>
+</div>
+</div>
+
 <!-- ===== RESUME TOAST ===== -->
 <div class="resume-toast" id="resumeToast" role="status">
     <span class="resume-icon">⏱️</span>
@@ -1298,6 +1572,14 @@ const slideInit={
     'slide-w2-order':()=>newOrder(),
     'slide-w2-multi':()=>newMulti(),
     'slide-w2-sats':()=>newSats(),
+    'slide-genius-minute':()=>newGenMin(),
+    'slide-genius-24h':()=>newGen24(),
+    'slide-genius-midnight':()=>newGenMidnight(),
+    'slide-genius-angles':()=>{initGenAngleExamples();newGenAngle();},
+    'slide-genius-overlap':()=>{initGenOverlapDemo();newGenOverlap();},
+    'slide-genius-rightangle':()=>{initGenRightExamples();newGenRight();},
+    'slide-genius-multiclock':()=>newGenMultiClock(),
+    'slide-genius-speed':()=>resetSpeed(),
 };
 function refreshAllClocks(){/* theme switch redraws happen on slide enter — gentle no-op */}
 function nextSlide(){if(cur<total-1){playSound('click');showSlide(cur+1)}}
@@ -2606,6 +2888,297 @@ function checkSats(i){
     opts[satsState.correct].classList.add('correct');
     if(i===satsState.correct){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+satsState.why;playSound('correct')}
     else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. The answer is <strong>'+satsState.opts[satsState.correct]+'</strong>. '+satsState.why;playSound('wrong')}
+}
+
+// ============================================================
+// ============ 🦁 GENIUS TRACK HANDLERS ======================
+// ============================================================
+
+// ============ G1: MINUTE PRECISION ============
+let genMinState={};
+function newGenMin(){
+    const odd=[1,2,3,4,6,7,8,9,11,12,13,14,16,17,18,19,21,22,23,24,26,27,28,29,31,32,33,34,36,37,38,39,41,42,43,44,46,47,48,49,51,52,53,54,56,57,58,59];
+    const m=odd[Math.floor(Math.random()*odd.length)];
+    const h=Math.floor(Math.random()*12)+1;
+    genMinState={h,m,answer:digitalLabel(h,m)};
+    const area=document.getElementById('genMinArea');
+    let html='<div class="quiz-question"><div style="display:flex;justify-content:center;margin:14px 0;">'+clockSvg(h,m,{size:200,accent:'var(--accent-light)'})+'</div>';
+    html+='<div class="q-text" style="text-align:center;">Read this clock to the <strong>exact minute</strong>. Type as digital (e.g. 3:23):</div>';
+    html+='<div class="flex-center"><input type="text" class="quiz-input" id="genMinInput" placeholder="H:MM" style="width:130px;"><button class="action-btn check-btn" onclick="checkGenMin()">✓ Check</button></div>';
+    html+='<div class="quiz-feedback" id="genMinFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkGenMin(){
+    const val=(document.getElementById('genMinInput').value||'').trim();
+    const fb=document.getElementById('genMinFb');
+    const want=genMinState.answer;
+    const altWant=genMinState.m<10?genMinState.h+':'+genMinState.m:want;
+    if(val===want||val===altWant){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Spot on! Hour '+genMinState.h+', minute '+genMinState.m+' = <strong>'+want+'</strong>.';playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. Exact answer: <strong>'+want+'</strong>. The minute hand was on tick '+genMinState.m+' (count from the 12, in 1-minute steps).';playSound('wrong')}
+}
+
+// ============ G2: 24-HOUR CLOCK ============
+let gen24State={};
+function newGen24(){
+    const items=[
+        {q:'Convert <strong>3 p.m.</strong> to 24-hour:',a:'15:00',hint:'3 + 12 = 15.'},
+        {q:'Convert <strong>9 a.m.</strong> to 24-hour:',a:'09:00',hint:'a.m. hours stay the same; pad with a leading 0.'},
+        {q:'Convert <strong>17:30</strong> to 12-hour with a.m./p.m.:',a:'5:30 p.m.',hint:'17 − 12 = 5; afternoon → p.m.'},
+        {q:'Convert <strong>23:00</strong> to 12-hour with a.m./p.m.:',a:'11:00 p.m.',hint:'23 − 12 = 11; night → p.m.'},
+        {q:'Convert <strong>noon</strong> to 24-hour:',a:'12:00',hint:'Noon stays as 12:00. (Midnight = 00:00.)'},
+        {q:'Convert <strong>midnight</strong> to 24-hour:',a:'00:00',hint:'Midnight is the start of a new day = 00:00.'},
+        {q:'Convert <strong>20:15</strong> to 12-hour with a.m./p.m.:',a:'8:15 p.m.',hint:'20 − 12 = 8 p.m.'},
+        {q:'Convert <strong>6:45 p.m.</strong> to 24-hour:',a:'18:45',hint:'6 + 12 = 18.'},
+    ];
+    const it=items[Math.floor(Math.random()*items.length)];
+    gen24State=it;
+    const area=document.getElementById('gen24Area');
+    let html='<div class="quiz-question"><div class="q-text">'+it.q+'</div>';
+    html+='<div class="flex-center"><input type="text" class="quiz-input" id="gen24Input" style="width:160px;" placeholder="answer"><button class="action-btn check-btn" onclick="checkGen24()">✓ Check</button></div>';
+    html+='<div class="quiz-feedback" id="gen24Fb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkGen24(){
+    const val=(document.getElementById('gen24Input').value||'').trim().toLowerCase().replace(/\s+/g,' ');
+    const want=gen24State.a.toLowerCase();
+    const fb=document.getElementById('gen24Fb');
+    // Accept variants: "15:00" or "1500"; "5:30 p.m." or "5:30pm"
+    const normalize=s=>s.replace(/\s+/g,'').replace(/\./g,'').replace(/^0+/,'');
+    if(normalize(val)===normalize(want)){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+gen24State.hint;playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. Answer: <strong>'+gen24State.a+'</strong>. '+gen24State.hint;playSound('wrong')}
+}
+
+// ============ G3: ACROSS MIDNIGHT ============
+let genMidState={};
+function newGenMidnight(){
+    const items=[
+        {story:'A night flight leaves at <strong>11:00 p.m.</strong> and lands at <strong>6:00 a.m.</strong> the next day. How many hours?',a:7,hint:'11 p.m. → midnight = 1 hr. Midnight → 6 a.m. = 6 hrs. 1 + 6 = 7 hrs.'},
+        {story:'A baker starts at <strong>10:00 p.m.</strong> and finishes at <strong>4:30 a.m.</strong> How long does she work?',a:'6:30',isHrMin:true,hint:'10 p.m. → midnight = 2 hrs. Midnight → 4:30 a.m. = 4 hrs 30 mins. Total = 6 hrs 30 mins.'},
+        {story:'A train departs at <strong>9:30 p.m.</strong> and arrives at <strong>2:15 a.m.</strong> How long is the journey?',a:'4:45',isHrMin:true,hint:'9:30 p.m. → midnight = 2 hrs 30 mins. Midnight → 2:15 a.m. = 2 hrs 15 mins. Total = 4 hrs 45 mins.'},
+        {story:'You start a film at <strong>11:30 p.m.</strong> and it ends at <strong>1:00 a.m.</strong> How long is the film?',a:'1:30',isHrMin:true,hint:'11:30 p.m. → midnight = 30 mins. Midnight → 1:00 a.m. = 1 hr. Total = 1 hr 30 mins.'},
+        {story:'A nightshift worker clocks in at <strong>8:45 p.m.</strong> and out at <strong>5:00 a.m.</strong> How long?',a:'8:15',isHrMin:true,hint:'8:45 p.m. → midnight = 3 hrs 15 mins. Midnight → 5 a.m. = 5 hrs. Total = 8 hrs 15 mins.'},
+    ];
+    const it=items[Math.floor(Math.random()*items.length)];
+    genMidState=it;
+    const area=document.getElementById('genMidArea');
+    let html='<div class="quiz-question"><div class="q-text">'+it.story+'</div>';
+    if(it.isHrMin)html+='<div class="flex-center"><input type="text" class="quiz-input" id="genMidInput" placeholder="hr:min e.g. 6:30" style="width:140px;"><button class="action-btn check-btn" onclick="checkGenMid(true)">✓ Check</button></div>';
+    else html+='<div class="flex-center"><input type="number" class="quiz-input" id="genMidInput" style="width:120px;" placeholder="?"><span style="color:var(--text-dim);">hours</span><button class="action-btn check-btn" onclick="checkGenMid(false)">✓ Check</button></div>';
+    html+='<div class="quiz-feedback" id="genMidFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkGenMid(isHrMin){
+    const val=(document.getElementById('genMidInput').value||'').trim();
+    const fb=document.getElementById('genMidFb');
+    const want=String(genMidState.a);
+    if(val===want){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+genMidState.hint;playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. Answer: <strong>'+want+(isHrMin?'':' hours')+'</strong>. '+genMidState.hint;playSound('wrong')}
+}
+
+// ============ G4: CLOCK ANGLES ============
+function initGenAngleExamples(){
+    const area=document.getElementById('genAngleExamples');
+    const ex=[
+        {h:3,m:0,deg:90,note:'Right angle'},
+        {h:6,m:0,deg:180,note:'Straight line'},
+        {h:12,m:0,deg:0,note:'Hands overlap'},
+        {h:9,m:0,deg:90,note:'Right angle'},
+    ];
+    let html='';
+    ex.forEach(e=>{html+='<div class="angle-card">'+clockSvg(e.h,e.m,{size:90,accent:'var(--qpast)'})+'<div class="ac-deg">'+e.deg+'°</div><div style="font-size:.85rem;color:var(--text-dim);">'+e.note+' at '+digitalLabel(e.h,e.m)+'</div></div>'});
+    area.innerHTML=html;
+}
+let genAngleState={};
+function newGenAngle(){
+    const items=[
+        {h:2,m:0,deg:60},{h:4,m:0,deg:120},{h:5,m:0,deg:150},{h:7,m:0,deg:150},
+        {h:8,m:0,deg:120},{h:10,m:0,deg:60},{h:1,m:0,deg:30},{h:11,m:0,deg:30},
+    ];
+    const it=items[Math.floor(Math.random()*items.length)];
+    genAngleState=it;
+    document.getElementById('genAngleVisual').innerHTML='<div style="display:flex;justify-content:center;">'+clockSvg(it.h,it.m,{size:170,accent:'var(--qpast)'})+'</div>';
+    const opts=[it.deg,30,60,90,120,150,180].filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b);
+    const area=document.getElementById('genAngleArea');
+    let html='<div class="quiz-question"><div class="q-text" style="text-align:center;">At '+digitalLabel(it.h,it.m)+', how many degrees between the hands?</div><div class="quiz-options" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));">';
+    opts.forEach(d=>{html+='<button class="quiz-opt" style="text-align:center;font-size:1.05rem;font-weight:800;" onclick="checkGenAngle('+d+')">'+d+'°</button>'});
+    html+='</div><div class="quiz-feedback" id="genAngleFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkGenAngle(d){
+    const fb=document.getElementById('genAngleFb');
+    const opts=document.querySelectorAll('#genAngleArea .quiz-opt');
+    opts.forEach(o=>{o.classList.add('disabled');if(parseInt(o.textContent)===genAngleState.deg)o.classList.add('correct')});
+    if(d===genAngleState.deg){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! At '+digitalLabel(genAngleState.h,genAngleState.m)+', the gap is '+(genAngleState.deg/30)+' "hour-gaps" × 30° = <strong>'+genAngleState.deg+'°</strong>.';playSound('correct')}
+    else{opts.forEach(o=>{if(parseInt(o.textContent)===d&&d!==genAngleState.deg)o.classList.add('wrong')});fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. Answer: <strong>'+genAngleState.deg+'°</strong>. Count the hour-gaps between the hands and multiply by 30°.';playSound('wrong')}
+}
+
+// ============ G5: HAND OVERLAPS ============
+function initGenOverlapDemo(){
+    const area=document.getElementById('genOverlapDemo');
+    area.innerHTML='<div class="clock-box">'+clockSvg(12,0,{size:140,accent:'var(--qpast)'})+'<div class="label">12:00 — exact overlap</div></div>'+
+        '<div class="clock-box">'+clockSvg(1,5,{size:140,accent:'var(--qpast)'})+'<div class="label">~1:05 — next overlap (Y3+)</div></div>';
+}
+let genOverlapState={};
+function newGenOverlap(){
+    const items=[
+        {q:'How many times in 12 hours do the hour and minute hands <strong>overlap</strong>?',opts:['10','11','12','24'],correct:1,why:'Eleven. The minute hand laps the hour hand 11 times per 12 hours.'},
+        {q:'After 12:00, when do the hands next overlap (approximately)?',opts:['Just after 12:30','Just after 1:00','Just after 1:30','At 2:00'],correct:1,why:'Just after 1:00 (around 1:05). The minute hand hits 12 at 1:00, but the hour hand has already drifted past — so they meet a few minutes later.'},
+        {q:'In a full 24-hour day, the hands overlap how many times?',opts:['11','12','22','24'],correct:2,why:'22 — eleven times per 12-hour cycle, doubled.'},
+        {q:'Which two times have the hands forming a <strong>straight line</strong> (180°)?',opts:['12:00 and 6:00','3:00 and 9:00','6:00 only','12:30 and 6:30'],correct:2,why:'Only 6:00 — at 12:00 they overlap (0°). At 3:00 / 9:00 they form a right angle (90°). The straight line happens at 6:00.'},
+    ];
+    const it=items[Math.floor(Math.random()*items.length)];
+    genOverlapState=it;
+    const area=document.getElementById('genOverlapArea');
+    let html='<div class="quiz-question"><div class="q-text">'+it.q+'</div><div class="quiz-options">';
+    it.opts.forEach((o,i)=>{html+='<button class="quiz-opt" onclick="checkGenOverlap('+i+')">'+o+'</button>'});
+    html+='</div><div class="quiz-feedback" id="genOverlapFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkGenOverlap(i){
+    const fb=document.getElementById('genOverlapFb');
+    const opts=document.querySelectorAll('#genOverlapArea .quiz-opt');
+    opts.forEach(o=>o.classList.add('disabled'));
+    opts[genOverlapState.correct].classList.add('correct');
+    if(i===genOverlapState.correct){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+genOverlapState.why;playSound('correct')}
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. '+genOverlapState.why;playSound('wrong')}
+}
+
+// ============ G6: RIGHT ANGLES ============
+function initGenRightExamples(){
+    const area=document.getElementById('genRightExamples');
+    area.innerHTML='<div class="clock-box">'+clockSvg(3,0,{size:130,accent:'var(--qpast)'})+'<div class="label">3:00 — right angle (90°)</div></div>'+
+        '<div class="clock-box">'+clockSvg(9,0,{size:130,accent:'var(--qpast)'})+'<div class="label">9:00 — right angle (90°)</div></div>';
+}
+let genRightState={};
+function newGenRight(){
+    const items=[
+        {q:'In 12 hours, how many times do the hands form a right angle (90°)?',opts:['12','22','24','11'],correct:1,why:'22 — about every 32 minutes, but with two "missed" right angles because of how the hour hand drifts.'},
+        {q:'At which of these times are the hands at exactly 90°?',opts:['3:00','3:30','6:00','12:30'],correct:0,why:'3:00 — the minute hand is on 12, the hour hand on 3. Three "hour-gaps" × 30° = 90°.'},
+        {q:'What is the angle between the hands at 6:00?',opts:['90°','120°','150°','180°'],correct:3,why:'180° — the hands point in exactly opposite directions, forming a straight line.'},
+        {q:'At <strong>9:00</strong>, the angle between the hands is:',opts:['30°','60°','90°','120°'],correct:2,why:'90°. The hour hand is on 9, the minute hand on 12. Three hour-gaps × 30° = 90°.'},
+    ];
+    const it=items[Math.floor(Math.random()*items.length)];
+    genRightState=it;
+    const area=document.getElementById('genRightArea');
+    let html='<div class="quiz-question"><div class="q-text">'+it.q+'</div><div class="quiz-options">';
+    it.opts.forEach((o,i)=>{html+='<button class="quiz-opt" onclick="checkGenRight('+i+')">'+o+'</button>'});
+    html+='</div><div class="quiz-feedback" id="genRightFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkGenRight(i){
+    const fb=document.getElementById('genRightFb');
+    const opts=document.querySelectorAll('#genRightArea .quiz-opt');
+    opts.forEach(o=>o.classList.add('disabled'));
+    opts[genRightState.correct].classList.add('correct');
+    if(i===genRightState.correct){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+genRightState.why;playSound('correct')}
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. '+genRightState.why;playSound('wrong')}
+}
+
+// ============ G7: MULTI-CLOCK LOGIC ============
+let genMultiState={};
+function newGenMultiClock(){
+    const puzzles=[
+        {clocks:[{h:4,m:15,off:15,lbl:'15 mins fast'},{h:3,m:50,off:-10,lbl:'10 mins slow'}],actual:'4:00',why:'Fast clock reads 4:15 → real time = 4:15 − 15 = 4:00. Slow clock reads 3:50 → real = 3:50 + 10 = 4:00. Both agree: 4:00.'},
+        {clocks:[{h:7,m:30,off:30,lbl:'30 mins fast'},{h:6,m:45,off:-15,lbl:'15 mins slow'}],actual:'7:00',why:'7:30 − 30 = 7:00. 6:45 + 15 = 7:00. Real time = 7:00.'},
+        {clocks:[{h:2,m:50,off:20,lbl:'20 mins fast'},{h:2,m:25,off:-5,lbl:'5 mins slow'}],actual:'2:30',why:'2:50 − 20 = 2:30. 2:25 + 5 = 2:30. Real time = 2:30.'},
+        {clocks:[{h:9,m:0,off:60,lbl:'1 hour fast'},{h:7,m:30,off:-30,lbl:'30 mins slow'}],actual:'8:00',why:'9:00 − 60 = 8:00. 7:30 + 30 = 8:00. Real time = 8:00.'},
+    ];
+    const p=puzzles[Math.floor(Math.random()*puzzles.length)];
+    genMultiState=p;
+    const area=document.getElementById('genMultiClockArea');
+    let html='<div class="quiz-question"><div class="q-text">Two clocks are wrong. Each label tells you by how much. <strong>What is the real time?</strong></div>';
+    html+='<div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin:18px 0;">';
+    p.clocks.forEach(c=>{html+='<div class="clock-box">'+clockSvg(c.h,c.m,{size:140,accent:c.off>0?'var(--error)':'var(--oclock)'})+'<div class="label">'+digitalLabel(c.h,c.m)+'<br><span style="color:'+(c.off>0?'var(--error)':'var(--oclock)')+';font-weight:700;">('+c.lbl+')</span></div></div>'});
+    html+='</div>';
+    html+='<div class="flex-center"><input type="text" class="quiz-input" id="genMultiInput" style="width:130px;" placeholder="e.g. 4:00"><button class="action-btn check-btn" onclick="checkGenMulti()">✓ Check</button></div>';
+    html+='<div class="quiz-feedback" id="genMultiFb"></div></div>';
+    area.innerHTML=html;
+    playSound('click');
+}
+function checkGenMulti(){
+    const val=(document.getElementById('genMultiInput').value||'').trim();
+    const fb=document.getElementById('genMultiFb');
+    if(val===genMultiState.actual){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+genMultiState.why;playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. Real time: <strong>'+genMultiState.actual+'</strong>. '+genMultiState.why;playSound('wrong')}
+}
+
+// ============ G8: SPEED CHALLENGE ============
+let speedState={running:false,score:0,total:0,timeLeft:60,timerId:null,current:null};
+function resetSpeed(){
+    if(speedState.timerId){clearInterval(speedState.timerId);speedState.timerId=null}
+    speedState={running:false,score:0,total:0,timeLeft:60,timerId:null,current:null};
+    document.getElementById('speedTime').textContent='60';
+    document.getElementById('speedScore').textContent='0';
+    document.getElementById('speedTotal').textContent='0';
+    document.getElementById('speedTimer').classList.remove('warn');
+    document.getElementById('speedArea').innerHTML='<div style="color:var(--text-dim);padding:30px;font-style:italic;">Press Start to begin. New clocks will appear every time you answer.</div>';
+    document.getElementById('speedFb').className='quiz-feedback';
+    document.getElementById('speedFb').textContent='';
+    document.getElementById('speedStartBtn').disabled=false;
+}
+function startSpeed(){
+    if(speedState.running)return;
+    speedState.running=true;
+    speedState.score=0;speedState.total=0;speedState.timeLeft=60;
+    document.getElementById('speedStartBtn').disabled=true;
+    document.getElementById('speedFb').className='quiz-feedback';
+    nextSpeedQ();
+    speedState.timerId=setInterval(()=>{
+        speedState.timeLeft--;
+        document.getElementById('speedTime').textContent=speedState.timeLeft;
+        if(speedState.timeLeft<=10)document.getElementById('speedTimer').classList.add('warn');
+        if(speedState.timeLeft<=0)endSpeed();
+    },1000);
+    playSound('click');
+}
+function nextSpeedQ(){
+    if(!speedState.running)return;
+    const h=Math.floor(Math.random()*12)+1;
+    const m=Math.floor(Math.random()*12)*5;
+    const correct=digitalLabel(h,m);
+    const distractors=new Set([correct]);
+    while(distractors.size<4){
+        const dh=Math.floor(Math.random()*12)+1;
+        const dm=Math.floor(Math.random()*12)*5;
+        distractors.add(digitalLabel(dh,dm));
+    }
+    const opts=shuffle(Array.from(distractors));
+    speedState.current={correct};
+    let html='<div style="display:flex;justify-content:center;margin:10px 0;">'+clockSvg(h,m,{size:160,accent:'var(--accent-light)'})+'</div>';
+    html+='<div class="quiz-options" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">';
+    opts.forEach(o=>{html+='<button class="quiz-opt" style="padding:14px;font-size:1.1rem;font-weight:800;" onclick="speedAns(\''+o+'\')">'+o+'</button>'});
+    html+='</div>';
+    document.getElementById('speedArea').innerHTML=html;
+}
+function speedAns(pick){
+    if(!speedState.running)return;
+    speedState.total++;
+    document.getElementById('speedTotal').textContent=speedState.total;
+    if(pick===speedState.current.correct){speedState.score++;document.getElementById('speedScore').textContent=speedState.score;playSound('correct')}
+    else playSound('wrong');
+    nextSpeedQ();
+}
+function endSpeed(){
+    speedState.running=false;
+    if(speedState.timerId){clearInterval(speedState.timerId);speedState.timerId=null}
+    document.getElementById('speedArea').innerHTML='';
+    document.getElementById('speedTimer').classList.remove('warn');
+    const fb=document.getElementById('speedFb');
+    let badge='💪 Keep practising';
+    if(speedState.score>=15)badge='👑 LEGEND';
+    else if(speedState.score>=10)badge='🦁 GENIUS';
+    else if(speedState.score>=6)badge='⭐ Solid';
+    fb.className='quiz-feedback show correct-fb';
+    fb.innerHTML='⏱️ Time! You got <strong>'+speedState.score+' / '+speedState.total+'</strong> correct. <br><span style="font-size:1.4rem;font-weight:800;">'+badge+'</span>';
+    document.getElementById('speedStartBtn').disabled=false;
+    document.getElementById('speedStartBtn').textContent='⚡ Try again';
+    playSound('success');
 }
 
 // ============ INIT ============
