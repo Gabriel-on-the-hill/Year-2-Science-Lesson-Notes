@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scratch: Build the Parrot Fly Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-event: #FFBF00;
+    --c-motion: #4C97FF;
+    --c-looks: #9966FF;
+    --c-sound: #CF63CF;
+    --c-control: #FFAB19;
+    --c-sensing: #5CB1D6;
+    --c-ops: #59C059;
+    --c-vars: #FF8C1A;
+    --c-myblock: #FF6680;
+    --c-text: #1C2833;
+    --c-muted: #6b7785;
+    --c-bg: #F0F8FF;
+    --shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: var(--c-bg);
+    background-image: radial-gradient(rgba(76,151,255,0.18) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--c-text);
+  }
+
+  .app { width: 100vw; height: 100vh; display: flex; flex-direction: column; }
+
+  /* Top bar */
+  header.bar {
+    background: #4C97FF;
+    color: white;
+    padding: 12px 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    z-index: 10;
+  }
+  header.bar h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+  }
+  header.bar .home-btn {
+    background: white;
+    color: #4C97FF;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.85rem;
+  }
+  header.bar .home-btn:hover { background: #fff4d6; }
+
+  /* Slide viewport */
+  #viewport {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    padding: 18px;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 18px;
+    background: white;
+    border-radius: 22px;
+    padding: 24px 32px;
+    box-shadow: var(--shadow);
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+    border: 3px solid #4C97FF;
+    animation: pop 0.35s ease;
+  }
+  .slide.active { display: flex; }
+  .slide.solo { border-color: #f1c40f; border-style: dashed; background: linear-gradient(135deg, #fffbe6, #fff4d6); }
+  .slide.stretch { border-color: #e67e22; background: linear-gradient(135deg, #fff4eb, #ffe8d6); }
+  .slide.blueprint { border-color: #59C059; background: linear-gradient(135deg, #f4fff0, #e8f8e0); }
+  .slide.closing { border-color: #9966FF; background: linear-gradient(135deg, #f8f5ff, #efe6ff); }
+
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.97) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .slide h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.9rem;
+    color: #2c3e50;
+    margin-bottom: 6px;
+  }
+  .slide .kicker {
+    color: var(--c-muted);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .slide p { line-height: 1.55; margin: 4px 0; }
+  .slide .sub {
+    color: var(--c-muted);
+    font-size: 1.02rem;
+    margin-bottom: 14px;
+  }
+
+  /* Two-column layout helper */
+  .cols-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 10px;
+  }
+
+  /* Scratch block pills */
+  .blk {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 12px;
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.88rem;
+    margin: 1px 2px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+    white-space: nowrap;
+  }
+  .blk.event   { background: var(--c-event); color: #5a4500; }
+  .blk.motion  { background: var(--c-motion); }
+  .blk.looks   { background: var(--c-looks); }
+  .blk.sound   { background: var(--c-sound); }
+  .blk.control { background: var(--c-control); color: #5a4500; }
+  .blk.sense   { background: var(--c-sensing); }
+  .blk.ops     { background: var(--c-ops); }
+  .blk.vars    { background: var(--c-vars); }
+  .blk.input   { background: white; color: #333; border: 1px solid #aaa; box-shadow: none; padding: 1px 7px; }
+
+  /* Block stacks */
+  .stack {
+    background: #f7f9fb;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 10px 0;
+    border-left: 4px solid #e6ebf0;
+    font-size: 0.94rem;
+    text-align: left;
+  }
+  .stack .row { margin: 3px 0; line-height: 1.95; }
+  .stack .indent { padding-left: 24px; }
+  .stack .indent-2 { padding-left: 48px; }
+  .stack .label {
+    font-size: 0.78rem;
+    color: var(--c-muted);
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Callout boxes */
+  .new-idea, .try-it, .check, .why, .toolbox, .mission-goal {
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 10px 0;
+  }
+  .new-idea {
+    background: linear-gradient(135deg, #fff9e6, #fff4d6);
+    border-left: 5px solid #f1c40f;
+  }
+  .new-idea .lbl { font-weight: 700; color: #b8860b; text-transform: uppercase; font-size: 0.78rem; letter-spacing: 1.2px; }
+  .try-it {
+    background: linear-gradient(135deg, #e8f8f0, #d4f0e0);
+    border-left: 5px solid #27ae60;
+  }
+  .try-it .lbl { font-weight: 700; color: #1e8449; font-size: 0.92rem; }
+  .check {
+    background: #f8f5ff;
+    border-left: 5px solid #9966FF;
+  }
+  .check .lbl { font-weight: 700; color: #6c3aaa; font-size: 0.92rem; margin-bottom: 4px; }
+  .check ul { list-style: none; padding-left: 0; }
+  .check li { padding: 3px 0 3px 26px; position: relative; }
+  .check li::before { content: '☐'; position: absolute; left: 0; font-size: 1.15em; color: #9966FF; }
+  .why {
+    background: #f0f4f8;
+    font-size: 0.95rem;
+  }
+  .why .lbl { font-weight: 700; color: var(--c-muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 4px; }
+  .toolbox {
+    background: white;
+    border: 2px solid #f39c12;
+  }
+  .toolbox .lbl { font-weight: 700; color: #b8860b; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .toolbox ul { padding-left: 22px; margin: 4px 0; }
+  .toolbox li { margin: 4px 0; }
+  .mission-goal {
+    background: white;
+    border: 2px solid #f39c12;
+    padding: 16px 20px;
+    font-size: 1.04rem;
+  }
+  .mission-goal .lbl { font-weight: 700; color: #b8860b; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1.4px; }
+
+  /* Hint/solution reveals */
+  details.hint, details.solution {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 6px 0;
+    border-left: 4px solid #f39c12;
+  }
+  details.solution { border-left-color: #27ae60; border: 2px solid #27ae60; }
+  details > summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: #b8860b;
+    user-select: none;
+  }
+  details.solution > summary { color: #1e8449; }
+  details[open] > summary { margin-bottom: 8px; }
+
+  /* Steps */
+  ol.steps { list-style: none; padding-left: 0; counter-reset: s; }
+  ol.steps > li {
+    counter-increment: s;
+    position: relative;
+    padding: 6px 0 6px 36px;
+    line-height: 1.5;
+  }
+  ol.steps > li::before {
+    content: counter(s);
+    position: absolute; left: 0; top: 6px;
+    width: 26px; height: 26px;
+    background: #4C97FF; color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem;
+  }
+  .slide.solo ol.steps > li::before { background: #f39c12; }
+  .slide.stretch ol.steps > li::before { background: #e67e22; }
+
+  /* Badges on phase headers */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .badge.solo    { background: #f39c12; color: white; }
+  .badge.stretch { background: #e67e22; color: white; }
+  .badge.bp      { background: #27ae60; color: white; }
+
+  /* Demo widget styling */
+  .demo {
+    background: #fafcff;
+    border: 2px solid #d6e4f5;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+  .demo .lbl { font-weight: 700; color: var(--c-muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
+  .demo-btn {
+    background: #4C97FF; color: white; border: none;
+    padding: 8px 18px; border-radius: 50px; font-weight: 700;
+    cursor: pointer; font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem; margin: 4px 3px;
+    box-shadow: 0 3px 8px rgba(76,151,255,0.3);
+    transition: transform 0.15s;
+  }
+  .demo-btn:hover { transform: translateY(-1px); }
+  .demo-btn.alt { background: #f39c12; box-shadow: 0 3px 8px rgba(243,156,18,0.3); }
+  .demo-btn.go  { background: #27ae60; box-shadow: 0 3px 8px rgba(39,174,96,0.3); }
+  .demo-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Gravity demo */
+  .gravity-stage {
+    width: 100%; max-width: 320px; height: 170px;
+    background: linear-gradient(180deg, #87CEEB 0%, #B0E0E6 100%);
+    margin: 8px auto; border-radius: 10px;
+    position: relative; overflow: hidden;
+    border: 2px solid #4C97FF;
+  }
+  #g-ball {
+    position: absolute;
+    left: 50%;
+    width: 36px; height: 36px;
+    background: radial-gradient(circle at 30% 30%, #ffeb3b, #ff9800);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    transition: bottom 0.08s linear;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  /* Clone demo */
+  .clone-stage {
+    width: 100%; height: 130px;
+    background: linear-gradient(180deg, #87CEEB 0%, #d4edda 100%);
+    margin: 8px auto; border-radius: 10px;
+    position: relative; overflow: hidden;
+    border: 2px solid #4C97FF;
+  }
+  .clone-bldg {
+    position: absolute;
+    bottom: 0;
+    width: 26px; height: 60px;
+    background: #8B4513;
+    border-radius: 4px 4px 0 0;
+  }
+
+  /* Wait demo */
+  .wait-stage {
+    background: white; border-radius: 10px;
+    padding: 14px; border: 2px dashed #ccc;
+    margin: 8px 0;
+  }
+  .wait-counter {
+    display: inline-block;
+    background: #FF8C1A; color: white;
+    padding: 6px 16px; border-radius: 8px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem; min-width: 60px;
+  }
+  .wait-status {
+    margin-top: 10px; font-weight: 700;
+    color: var(--c-muted);
+    transition: color 0.3s;
+  }
+  .wait-status.ready { color: #27ae60; font-size: 1.1rem; }
+
+  /* Var-drives demo */
+  .var-stage {
+    width: 100%; height: 80px;
+    background: linear-gradient(180deg, #fff9e6, #fff4d6);
+    margin: 8px auto; border-radius: 10px;
+    position: relative; overflow: hidden;
+    border: 2px solid #f1c40f;
+  }
+  #v-fly {
+    position: absolute;
+    left: 10px; top: 50%; transform: translateY(-50%);
+    font-size: 1.6rem;
+    transition: left linear;
+  }
+  .slider-row {
+    display: flex; align-items: center; gap: 10px;
+    justify-content: center; margin: 8px 0;
+    font-size: 0.92rem;
+  }
+  .slider-row input[type=range] { flex: 1; max-width: 180px; }
+  .slider-row .val {
+    background: #FF8C1A; color: white;
+    padding: 2px 8px; border-radius: 6px;
+    font-weight: 700; min-width: 32px;
+  }
+
+  /* Roadmap */
+  .roadmap {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .rm-step {
+    background: white;
+    border: 2px solid #4C97FF;
+    border-radius: 10px;
+    padding: 10px 6px;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  .rm-step.solo { border-color: #f39c12; background: #fffbe6; }
+  .rm-step.stretch { border-color: #e67e22; background: #fff4eb; }
+  .rm-step .num {
+    display: block;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    color: #4C97FF;
+    margin-bottom: 4px;
+  }
+  .rm-step.solo .num { color: #f39c12; }
+  .rm-step.stretch .num { color: #e67e22; }
+  .rm-step .ttl { font-weight: 700; font-size: 0.82rem; line-height: 1.2; }
+
+  /* Closing checklist */
+  ul.final-list { list-style: none; padding-left: 0; }
+  ul.final-list li {
+    padding: 6px 0 6px 30px;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.2s;
+    font-size: 1rem;
+  }
+  ul.final-list li::before {
+    content: '⬜';
+    position: absolute; left: 0;
+    font-size: 1.15em;
+  }
+  ul.final-list li.done { opacity: 0.45; text-decoration: line-through; }
+  ul.final-list li.done::before { content: '✅'; }
+
+  /* Controls */
+  .controls {
+    background: white;
+    padding: 12px 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 3px solid #4C97FF;
+    z-index: 10;
+  }
+  .nav-btn {
+    background: #4C97FF; color: white;
+    border: none; padding: 9px 22px;
+    border-radius: 50px; font-family: 'Fredoka One', cursive;
+    font-size: 0.95rem; cursor: pointer;
+    box-shadow: 0 3px 8px rgba(76,151,255,0.25);
+    transition: transform 0.15s;
+  }
+  .nav-btn:hover:not(:disabled) { transform: translateY(-1px); }
+  .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .nav-btn.back { background: #9966FF; box-shadow: 0 3px 8px rgba(153,102,255,0.25); }
+  #counter {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
+    color: #4C97FF;
+  }
+
+  /* Progress */
+  .pbar { height: 6px; background: #eef2f7; }
+  .pfill {
+    height: 100%;
+    background: linear-gradient(to right, #4C97FF, #59C059);
+    width: 0%;
+    transition: width 0.35s ease;
+  }
+
+  /* Small screens */
+  @media (max-width: 720px) {
+    header.bar h1 { font-size: 1.1rem; }
+    .slide { padding: 18px; }
+    .slide h2 { font-size: 1.5rem; }
+    .cols-2 { grid-template-columns: 1fr; }
+    .roadmap { grid-template-columns: repeat(2, 1fr); }
+    .nav-btn { padding: 7px 14px; font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="bar">
+    <h1>🦜 Parrot Fly Game · Build Guide</h1>
+    <button class="home-btn" onclick="location.href='index.html'">🏠 Hub</button>
+  </header>
+
+  <div id="viewport">
+
+    <!-- ============== SLIDE 1: WELCOME ============== -->
+    <div class="slide active" id="s1">
+      <div class="kicker">Welcome</div>
+      <h2>Build a Flying Parrot Game</h2>
+      <p class="sub">A parrot, some buildings, a score, and three difficulty levels — built one piece at a time.</p>
+      <div class="cols-2">
+        <div>
+          <div class="new-idea">
+            <div class="lbl">What you'll end up with</div>
+            <p>A parrot that flaps with the <strong>U</strong> key, falls with gravity, and dodges buildings that scroll across the screen. A score counts every building you survive. Press <strong>1</strong>, <strong>2</strong>, or <strong>3</strong> for easy, medium, or hard. Press <strong>R</strong> to play again.</p>
+          </div>
+          <div class="try-it">
+            <div class="lbl">★ Stretch (optional)</div>
+            <p>Add a friendly Squirrel who announces the score in a speech bubble.</p>
+          </div>
+        </div>
+        <div style="text-align:center; font-size: 5rem; line-height: 1; padding-top: 20px;">
+          🦜<br>
+          <div style="font-size: 2rem; margin-top: 6px;">🏢 🏢 🏢</div>
+          <div style="font-size: 0.95rem; color: var(--c-muted); margin-top: 14px;">6 phases &middot; 1 solo mission &middot; 1 stretch</div>
+        </div>
+      </div>
+      <p style="margin-top: 12px;"><strong>Before you start:</strong> open Scratch, start a new project, delete the cat sprite. Click <strong>Next</strong> when ready.</p>
+    </div>
+
+    <!-- ============== SLIDE 2: ROADMAP ============== -->
+    <div class="slide" id="s2">
+      <div class="kicker">The Plan</div>
+      <h2>The 6 Phases (plus a stretch)</h2>
+      <p class="sub">Each phase adds one piece. The game runs at the end of every phase — even if it's not finished yet.</p>
+      <div class="roadmap">
+        <div class="rm-step"><span class="num">1</span><span class="ttl">Parrot flies</span></div>
+        <div class="rm-step"><span class="num">2</span><span class="ttl">Buildings appear</span></div>
+        <div class="rm-step solo"><span class="num">🎯</span><span class="ttl">Crash! (solo)</span></div>
+        <div class="rm-step"><span class="num">4</span><span class="ttl">Keep score</span></div>
+        <div class="rm-step"><span class="num">5</span><span class="ttl">Pick a level</span></div>
+        <div class="rm-step"><span class="num">6</span><span class="ttl">Play again</span></div>
+        <div class="rm-step stretch"><span class="num">★</span><span class="ttl">Squirrel friend</span></div>
+      </div>
+      <div class="new-idea" style="margin-top: 18px;">
+        <div class="lbl">Three colours of slide</div>
+        <p><strong>Blue border</strong> = regular phase. <strong>Yellow dashed</strong> = solo mission, work it out alone with hints. <strong>Orange</strong> = optional stretch. <strong>Green</strong> = full code reference.</p>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 3: PHASE 1 INTRO ============== -->
+    <div class="slide" id="s3">
+      <div class="kicker">Phase 1</div>
+      <h2>Make the parrot fly</h2>
+      <p class="sub">A parrot that flaps up when a key is pressed, and falls down on its own.</p>
+      <div class="new-idea">
+        <div class="lbl">★ New idea: Gravity loop</div>
+        <p>A loop that keeps moving the parrot down a tiny bit, over and over. Pressing a key pushes it up a lot, but only once. The push and the loop fight each other — that's what flying feels like.</p>
+      </div>
+      <p style="margin-top: 6px;">Try the gravity demo below to see how it works <em>before</em> building it in Scratch. Click the flap button. Then click it lots. Then stop clicking.</p>
+
+      <div class="demo" style="margin-top: 14px;">
+        <div class="lbl">🧪 Demo: how gravity feels</div>
+        <div class="gravity-stage">
+          <div id="g-ball"></div>
+        </div>
+        <button class="demo-btn" onclick="gravityFlap()">FLAP! 🦜</button>
+        <button class="demo-btn alt" onclick="gravityReset()">Reset</button>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 4: PHASE 1 BUILD ============== -->
+    <div class="slide" id="s4">
+      <div class="kicker">Phase 1 · Build</div>
+      <h2>Build the gravity and flap</h2>
+      <ol class="steps">
+        <li>From the sprite library, add a <strong>Parrot</strong>. Check it has two costumes (wings up and wings down). If not, pick a sprite that does.</li>
+        <li>Click the parrot. Add this script — sets the start position, then runs gravity forever:
+          <div class="stack">
+            <div class="row"><span class="blk event">when 🟢 clicked</span></div>
+            <div class="row"><span class="blk motion">go to x: <span class="blk input">-100</span> y: <span class="blk input">0</span></span></div>
+            <div class="row"><span class="blk control">forever</span></div>
+            <div class="row indent"><span class="blk motion">change y by <span class="blk input">-3</span></span></div>
+            <div class="row indent"><span class="blk control">wait <span class="blk input">0.1</span> seconds</span></div>
+          </div>
+        </li>
+        <li>Add a second script — the flap:
+          <div class="stack">
+            <div class="row"><span class="blk event">when <span class="blk input">u</span> key pressed</span></div>
+            <div class="row"><span class="blk motion">change y by <span class="blk input">20</span></span></div>
+            <div class="row"><span class="blk looks">switch costume to <span class="blk input">parrot-b</span></span></div>
+          </div>
+        </li>
+      </ol>
+      <div class="try-it">
+        <div class="lbl">🧪 Try it</div>
+        <p>Click the green flag. The parrot should drift down. Tap <strong>U</strong> a few times — it should jump up each time.</p>
+      </div>
+      <div class="check">
+        <div class="lbl">✓ Check yourself</div>
+        <ul>
+          <li>Does the parrot fall on its own?</li>
+          <li>Does it jump up when U is pressed?</li>
+          <li>If you stop tapping U, does it eventually leave the screen at the bottom? (Yes — that's normal for now.)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 5: PHASE 2 INTRO ============== -->
+    <div class="slide" id="s5">
+      <div class="kicker">Phase 2</div>
+      <h2>Buildings appear and scroll past</h2>
+      <p class="sub">Buildings keep spawning on the right and sliding to the left.</p>
+      <div class="new-idea">
+        <div class="lbl">★ New idea: Clones</div>
+        <p>A clone is a copy of a sprite, made while the game is running. One "parent" stays hidden and makes a fresh clone every few seconds. Each clone has its own little life — it appears, moves, then disappears.</p>
+      </div>
+
+      <div class="demo" style="margin-top: 12px;">
+        <div class="lbl">🧪 Demo: cloning in action</div>
+        <div class="clone-stage" id="clone-stage"></div>
+        <button class="demo-btn go" onclick="startClones()">▶ Start spawner</button>
+        <button class="demo-btn alt" onclick="stopClones()">⏸ Stop</button>
+        <p style="font-size: 0.85rem; color: var(--c-muted); margin-top: 8px;">Each new building is a fresh clone of the same hidden parent.</p>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 6: PHASE 2 BUILD ============== -->
+    <div class="slide" id="s6">
+      <div class="kicker">Phase 2 · Build</div>
+      <h2>Build the buildings</h2>
+      <ol class="steps">
+        <li>Add a new sprite — any building or block shape. Give it a few costumes if you want variety.</li>
+        <li>The "parent" building hides itself and spawns a clone every 2 seconds:
+          <div class="stack">
+            <div class="row"><span class="blk event">when 🟢 clicked</span></div>
+            <div class="row"><span class="blk looks">hide</span></div>
+            <div class="row"><span class="blk control">forever</span></div>
+            <div class="row indent"><span class="blk control">wait <span class="blk input">2</span> seconds</span></div>
+            <div class="row indent"><span class="blk control">create clone of <span class="blk input">myself</span></span></div>
+          </div>
+        </li>
+        <li>Add the script that runs on every new clone:
+          <div class="stack">
+            <div class="row"><span class="blk control">when I start as a clone</span></div>
+            <div class="row"><span class="blk motion">go to x: <span class="blk input">240</span> y: <span class="blk input">0</span></span></div>
+            <div class="row"><span class="blk looks">switch costume to <span class="blk input">pick random 1 to 4</span></span></div>
+            <div class="row"><span class="blk looks">show</span></div>
+            <div class="row"><span class="blk control">repeat until <span class="blk sense">touching <span class="blk input">edge ▼</span> ?</span></span></div>
+            <div class="row indent"><span class="blk motion">change x by <span class="blk input">-3</span></span></div>
+            <div class="row"><span class="blk control">delete this clone</span></div>
+          </div>
+        </li>
+      </ol>
+      <div class="try-it">
+        <div class="lbl">🧪 Try it</div>
+        <p>Click the flag. Every 2 seconds a new building should appear on the right and slide across. <strong>Experiment:</strong> change <span class="blk control">wait <span class="blk input">2</span></span> to <span class="blk control">wait <span class="blk input">0.5</span></span>. What happens?</p>
+      </div>
+      <div class="check">
+        <div class="lbl">✓ Check yourself</div>
+        <ul>
+          <li>Do buildings appear from the right?</li>
+          <li>Do they slide left across the screen?</li>
+          <li>Do they vanish when they reach the left edge?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 7: PHASE 3 SOLO INTRO ============== -->
+    <div class="slide solo" id="s7">
+      <div class="kicker">Phase 3</div>
+      <h2>Crash! <span class="badge solo">🎯 Solo Mission</span></h2>
+      <p class="sub">Time to figure something out without step-by-step instructions.</p>
+      <div class="mission-goal">
+        <div class="lbl">🎯 Your mission</div>
+        <p style="margin: 0;">Right now the parrot can fly straight through buildings — that's not a game. <strong>Change the parrot's script so the game ends when the parrot crashes into a building.</strong> Show a "Game Over!" message too.</p>
+      </div>
+      <div class="toolbox">
+        <div class="lbl">🧰 You already know everything you need</div>
+        <ul>
+          <li><span class="blk control">repeat until ...</span> — runs again and again, then stops when something becomes true</li>
+          <li><span class="blk sense">touching <span class="blk input">sprite ▼</span> ?</span> — true when this sprite touches another sprite</li>
+          <li><span class="blk looks">say <span class="blk input">Hello</span> for <span class="blk input">2</span> seconds</span></li>
+          <li><span class="blk event">broadcast <span class="blk input">message ▼</span></span> + <span class="blk control">stop <span class="blk input">other scripts in sprite</span></span></li>
+        </ul>
+        <p style="margin-top: 8px; font-size: 0.92rem; color: var(--c-muted);"><strong>Think:</strong> the parrot's gravity uses <span class="blk control">forever</span>. What if it wasn't <em>forever</em> — what if it ran <em>until</em> something happened?</p>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 8: PHASE 3 HINTS & SOLUTION ============== -->
+    <div class="slide solo" id="s8">
+      <div class="kicker">Phase 3 · Hints &amp; Solution</div>
+      <h2>Stuck? Open a hint <span class="badge solo">🎯 Solo</span></h2>
+      <p class="sub">Open them one at a time, only if needed.</p>
+
+      <details class="hint">
+        <summary>Hint 1 — where should the change happen?</summary>
+        <p>Don't change the buildings. Change the <strong>parrot's</strong> gravity script. Gravity is what makes the parrot keep moving — if it stops, the game stops.</p>
+      </details>
+      <details class="hint">
+        <summary>Hint 2 — what replaces <span class="blk control">forever</span>?</summary>
+        <p>Use <span class="blk control">repeat until</span>. Inside the diamond shape, drop the question: "am I touching the building sprite?"</p>
+      </details>
+      <details class="hint">
+        <summary>Hint 3 — how do I announce game over?</summary>
+        <p>After the <span class="blk control">repeat until</span> finishes, add <span class="blk looks">say <span class="blk input">Game Over!</span> for <span class="blk input">2</span> seconds</span>. To stop the buildings spawning too, <span class="blk event">broadcast <span class="blk input">Stop</span></span> first. On the building sprite, react with <span class="blk control">stop <span class="blk input">other scripts in sprite</span></span>.</p>
+      </details>
+
+      <div class="check">
+        <div class="lbl">✓ Check yourself</div>
+        <ul>
+          <li>Does the parrot stop falling when it touches a building?</li>
+          <li>Does "Game Over!" appear?</li>
+          <li>Do new buildings stop spawning after the crash? (Bonus.)</li>
+        </ul>
+      </div>
+
+      <details class="solution">
+        <summary>One way to do it (open only after you've tried)</summary>
+        <p><strong>Parrot — gravity script:</strong></p>
+        <div class="stack">
+          <div class="row"><span class="blk event">when 🟢 clicked</span></div>
+          <div class="row"><span class="blk motion">go to x: <span class="blk input">-100</span> y: <span class="blk input">0</span></span></div>
+          <div class="row"><span class="blk control">repeat until <span class="blk sense">touching <span class="blk input">Buildings ▼</span> ?</span></span></div>
+          <div class="row indent"><span class="blk motion">change y by <span class="blk input">-3</span></span></div>
+          <div class="row indent"><span class="blk control">wait <span class="blk input">0.1</span> seconds</span></div>
+          <div class="row"><span class="blk event">broadcast <span class="blk input">Stop ▼</span></span></div>
+          <div class="row"><span class="blk looks">say <span class="blk input">Game Over!</span> for <span class="blk input">2</span> seconds</span></div>
+        </div>
+        <p><strong>Buildings — stop on Stop:</strong></p>
+        <div class="stack">
+          <div class="row"><span class="blk event">when I receive <span class="blk input">Stop ▼</span></span></div>
+          <div class="row"><span class="blk control">stop <span class="blk input">other scripts in sprite ▼</span></span></div>
+        </div>
+        <p style="margin-top: 10px; font-size: 0.93rem;">If your version is shaped differently but works the same way — your version is right too.</p>
+      </details>
+    </div>
+
+    <!-- ============== SLIDE 9: PHASE 4 INTRO + DEMO ============== -->
+    <div class="slide" id="s9">
+      <div class="kicker">Phase 4</div>
+      <h2>Keep score</h2>
+      <p class="sub">Every time a building goes past, the score goes up by 1.</p>
+      <div class="new-idea">
+        <div class="lbl">★ New idea: <span class="blk control">wait until ...</span></div>
+        <p>This block pauses a script and waits — does nothing — until a question becomes true. Like waiting at a door until someone opens it. Once the door opens, the next block runs.</p>
+      </div>
+
+      <div class="demo">
+        <div class="lbl">🧪 Demo: wait until count reaches 5</div>
+        <div class="wait-stage">
+          <p style="font-size: 0.9rem; color: var(--c-muted); margin-bottom: 6px;">Click the button to count up. The script below is waiting…</p>
+          <div class="wait-counter" id="w-count">0</div>
+          <button class="demo-btn" onclick="waitClick()" style="margin-left: 10px;">Click me +1</button>
+          <button class="demo-btn alt" onclick="waitReset()">Reset</button>
+          <div class="stack" style="margin-top: 10px;">
+            <div class="row"><span class="blk control">wait until <span class="blk ops">count ≥ <span class="blk input">5</span></span></span></div>
+            <div class="row"><span class="blk looks">say <span class="blk input">Hello!</span></span></div>
+          </div>
+          <div class="wait-status" id="w-status">Status: waiting…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 10: PHASE 4 BUILD ============== -->
+    <div class="slide" id="s10">
+      <div class="kicker">Phase 4 · Build</div>
+      <h2>Build the score</h2>
+      <ol class="steps">
+        <li>In the <strong>Variables</strong> tab, click <strong>Make a Variable</strong>. Name it <strong>Score</strong>. <em>Tick the box</em> next to it — that puts the score on the stage.</li>
+        <li>On the <strong>building</strong> sprite, find the green-flag script (the spawner). Add <span class="blk vars">set Score to <span class="blk input">0</span></span> right after <span class="blk event">when 🟢 clicked</span>. This resets the score every new game.</li>
+        <li>Add a <em>second</em> "when I start as a clone" script on the building sprite. Its only job is to wait for a clone to leave the screen, then add to the score:
+          <div class="stack">
+            <div class="row"><span class="blk control">when I start as a clone</span></div>
+            <div class="row"><span class="blk control">wait until <span class="blk ops">x position &lt; <span class="blk input">-200</span></span></span></div>
+            <div class="row"><span class="blk vars">change Score by <span class="blk input">1</span></span></div>
+          </div>
+        </li>
+      </ol>
+      <div class="try-it">
+        <div class="lbl">🧪 Try it</div>
+        <p>Click the flag. Watch the score in the corner. Every time a building slides off the left, the score should go up by 1.</p>
+      </div>
+      <div class="check">
+        <div class="lbl">✓ Check yourself</div>
+        <ul>
+          <li>Does Score start at 0?</li>
+          <li>Does Score go up by 1 every time a building exits left?</li>
+          <li>Does Score stop changing after the parrot crashes?</li>
+        </ul>
+      </div>
+      <div class="why">
+        <div class="lbl">Why this works</div>
+        <p>Each clone has <em>two</em> scripts running at once. One moves it left. The other just sits and waits — doing nothing — until that clone has passed x = -200 (well off the left). Then it adds 1 to the score. Same sprite, two scripts, no problem.</p>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 11: PHASE 5 INTRO + DEMO ============== -->
+    <div class="slide" id="s11">
+      <div class="kicker">Phase 5</div>
+      <h2>Pick your level</h2>
+      <p class="sub">Press 1, 2, or 3 at the start to choose easy, medium, or hard.</p>
+      <div class="new-idea">
+        <div class="lbl">★ New idea: Variables that drive behaviour</div>
+        <p>So far Score has been a variable that just <em>remembers</em>. Now you'll make two new variables — <strong>Speed</strong> and <strong>Interval</strong> — that the game <em>reads from</em> while it plays. Press a different key, the variables change, the game feels different. Same code, different feel.</p>
+      </div>
+
+      <div class="demo">
+        <div class="lbl">🧪 Demo: one variable, different behaviours</div>
+        <div class="var-stage"><div id="v-fly">🦜</div></div>
+        <div class="slider-row">
+          <span>Speed:</span>
+          <input type="range" min="1" max="10" value="3" id="v-slider" oninput="updateVarDemo()">
+          <span class="val" id="v-val">3</span>
+        </div>
+        <button class="demo-btn go" onclick="flyParrot()">▶ Fly across</button>
+        <button class="demo-btn alt" onclick="resetVar()">Reset</button>
+        <p style="font-size: 0.85rem; color: var(--c-muted); margin-top: 6px;">The "fly" code is the same every time. Only the Speed variable changes.</p>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 12: PHASE 5 BUILD PART 1 ============== -->
+    <div class="slide" id="s12">
+      <div class="kicker">Phase 5 · Build (1 of 2)</div>
+      <h2>Make the variables and player input</h2>
+      <ol class="steps">
+        <li>Make two new variables: <strong>Speed</strong> and <strong>Interval</strong>. Untick their stage boxes — they don't need to show.</li>
+        <li>On the parrot, replace the green-flag script. Instead of starting the game right away, ask the player to pick a level first:
+          <div class="stack">
+            <div class="row"><span class="blk event">when 🟢 clicked</span></div>
+            <div class="row"><span class="blk motion">go to x: <span class="blk input">-100</span> y: <span class="blk input">0</span></span></div>
+            <div class="row"><span class="blk looks">say <span class="blk input">Press 1, 2, or 3 to pick a level!</span></span></div>
+            <div class="row"><span class="blk control">wait until <span class="blk ops">&lt;<span class="blk sense">key 1 pressed?</span> or &lt;<span class="blk sense">key 2 pressed?</span> or <span class="blk sense">key 3 pressed?</span>&gt;&gt;</span></span></div>
+            <div class="row"><span class="blk looks">say <span class="blk input"></span></span> <span style="color: var(--c-muted); font-size: 0.85rem;">(empty — clears the bubble)</span></div>
+            <div class="row"><span class="blk event">broadcast <span class="blk input">Start ▼</span></span></div>
+            <div class="row"><span class="blk control">repeat until <span class="blk sense">touching <span class="blk input">Buildings ▼</span> ?</span></span></div>
+            <div class="row indent"><span class="blk motion">change y by <span class="blk input">-3</span></span></div>
+            <div class="row indent"><span class="blk control">wait <span class="blk input">0.1</span> seconds</span></div>
+            <div class="row"><span class="blk event">broadcast <span class="blk input">Stop ▼</span></span></div>
+            <div class="row"><span class="blk looks">say <span class="blk input">Game Over!</span> for <span class="blk input">2</span> seconds</span></div>
+          </div>
+        </li>
+      </ol>
+      <p style="font-size: 0.92rem; color: var(--c-muted);">Now the parrot waits for a key. When 1, 2, or 3 is pressed, it broadcasts <strong>Start</strong>. Next slide hooks the buildings up to that broadcast.</p>
+    </div>
+
+    <!-- ============== SLIDE 13: PHASE 5 BUILD PART 2 ============== -->
+    <div class="slide" id="s13">
+      <div class="kicker">Phase 5 · Build (2 of 2)</div>
+      <h2>Hook up the building behaviour</h2>
+      <ol class="steps">
+        <li>On the <strong>building</strong> sprite, add three new scripts — one for each level. Each sets Speed and Interval:
+          <div class="cols-2">
+            <div class="stack">
+              <div class="row"><span class="blk event">when <span class="blk input">1</span> key pressed</span></div>
+              <div class="row"><span class="blk vars">set Speed to <span class="blk input">-3</span></span></div>
+              <div class="row"><span class="blk vars">set Interval to <span class="blk input">3</span></span></div>
+            </div>
+            <div class="stack">
+              <div class="row"><span class="blk event">when <span class="blk input">2</span> key pressed</span></div>
+              <div class="row"><span class="blk vars">set Speed to <span class="blk input">-4</span></span></div>
+              <div class="row"><span class="blk vars">set Interval to <span class="blk input">2</span></span></div>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="row"><span class="blk event">when <span class="blk input">3</span> key pressed</span></div>
+            <div class="row"><span class="blk vars">set Speed to <span class="blk input">-5</span></span></div>
+            <div class="row"><span class="blk vars">set Interval to <span class="blk input">1.5</span></span></div>
+          </div>
+        </li>
+        <li>Change the building's spawn script. Replace <span class="blk event">when 🟢 clicked</span> with <span class="blk event">when I receive <span class="blk input">Start</span></span>. Replace the fixed wait with <span class="blk control">wait <span class="blk vars">Interval</span> seconds</span>:
+          <div class="stack">
+            <div class="row"><span class="blk event">when I receive <span class="blk input">Start ▼</span></span></div>
+            <div class="row"><span class="blk vars">set Score to <span class="blk input">0</span></span></div>
+            <div class="row"><span class="blk control">forever</span></div>
+            <div class="row indent"><span class="blk control">wait <span class="blk vars">Interval</span> seconds</span></div>
+            <div class="row indent"><span class="blk control">create clone of <span class="blk input">myself</span></span></div>
+          </div>
+        </li>
+        <li>In the clone's movement script, change <span class="blk motion">change x by <span class="blk input">-3</span></span> to <span class="blk motion">change x by <span class="blk vars">Speed</span></span>. Now the buildings move at whatever speed the level set.</li>
+      </ol>
+      <div class="try-it">
+        <div class="lbl">🧪 Try it</div>
+        <p>Click the flag. The parrot will ask for a level. Press <strong>1</strong> — slow, sparse buildings. Press <strong>3</strong> — fast and frequent. The same code runs every time. Only the variables change.</p>
+      </div>
+      <div class="check">
+        <div class="lbl">✓ Check yourself</div>
+        <ul>
+          <li>Does the game wait until 1, 2, or 3 is pressed?</li>
+          <li>Do the three levels feel meaningfully different?</li>
+          <li>Does Score still go up correctly on every level?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 14: PHASE 6 BUILD ============== -->
+    <div class="slide" id="s14">
+      <div class="kicker">Phase 6</div>
+      <h2>Play again</h2>
+      <p class="sub">Press R after a crash to restart without clicking the flag.</p>
+      <div class="new-idea">
+        <div class="lbl">★ New idea: Restart, not start fresh</div>
+        <p>The sprites are already on the stage, the score is showing, leftover building clones are still around. Restarting means <em>resetting</em> what's there, not starting from zero.</p>
+      </div>
+      <ol class="steps">
+        <li>On the <strong>parrot</strong>, add a new script that does what the green flag did, plus a Clear broadcast at the top to wipe leftover clones:
+          <div class="stack">
+            <div class="row"><span class="blk event">when <span class="blk input">r</span> key pressed</span></div>
+            <div class="row"><span class="blk control">stop <span class="blk input">other scripts in sprite ▼</span></span></div>
+            <div class="row"><span class="blk event">broadcast <span class="blk input">Clear ▼</span></span></div>
+            <div class="row"><span class="blk motion">go to x: <span class="blk input">-100</span> y: <span class="blk input">0</span></span></div>
+            <div class="row"><span class="blk looks">say <span class="blk input">Press 1, 2, or 3 to pick a level!</span></span></div>
+            <div class="row"><span class="blk control">wait until <span class="blk ops">&lt;<span class="blk sense">key 1 pressed?</span> or &lt;<span class="blk sense">key 2 pressed?</span> or <span class="blk sense">key 3 pressed?</span>&gt;&gt;</span></span></div>
+            <div class="row"><span class="blk event">broadcast <span class="blk input">Start ▼</span></span></div>
+            <div class="row"><span class="blk control">repeat until <span class="blk sense">touching <span class="blk input">Buildings ▼</span> ?</span></span></div>
+            <div class="row indent"><span class="blk motion">change y by <span class="blk input">-3</span></span></div>
+            <div class="row indent"><span class="blk control">wait <span class="blk input">0.1</span> seconds</span></div>
+            <div class="row"><span class="blk event">broadcast <span class="blk input">Stop ▼</span></span></div>
+            <div class="row"><span class="blk looks">say <span class="blk input">Game Over!</span> for <span class="blk input">2</span> seconds</span></div>
+          </div>
+        </li>
+        <li>On the <strong>building</strong> sprite, stop the spawner on R and add a Clear handler so every leftover clone deletes itself:
+          <div class="cols-2">
+            <div class="stack">
+              <div class="row"><span class="blk event">when <span class="blk input">r</span> key pressed</span></div>
+              <div class="row"><span class="blk control">stop <span class="blk input">other scripts in sprite ▼</span></span></div>
+            </div>
+            <div class="stack">
+              <div class="row"><span class="blk event">when I receive <span class="blk input">Clear ▼</span></span></div>
+              <div class="row"><span class="blk control">delete this clone</span></div>
+            </div>
+          </div>
+        </li>
+      </ol>
+      <div class="try-it">
+        <div class="lbl">🧪 Try it</div>
+        <p>Play, crash on purpose, press <strong>R</strong>. The parrot resets, old buildings vanish, the level prompt comes back.</p>
+      </div>
+      <div class="check">
+        <div class="lbl">✓ Check yourself</div>
+        <ul>
+          <li>Does R work even while the game is still being played?</li>
+          <li>Are all the old buildings cleared?</li>
+          <li>Does the score reset to 0 on the next round?</li>
+          <li>Can you play five games in a row using only R?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 15: BLUEPRINT — PARROT ============== -->
+    <div class="slide blueprint" id="s15">
+      <div class="kicker">Master Blueprint <span class="badge bp">Reference</span></div>
+      <h2>Full parrot code</h2>
+      <p class="sub">Everything that lives on the parrot sprite by the end of Phase 6.</p>
+      <div class="cols-2">
+        <div class="stack">
+          <div class="label">Setup &amp; main loop</div>
+          <div class="row"><span class="blk event">when 🟢 clicked</span></div>
+          <div class="row"><span class="blk motion">go to x: <span class="blk input">-100</span> y: <span class="blk input">0</span></span></div>
+          <div class="row"><span class="blk looks">say <span class="blk input">Press 1, 2, or 3 to pick a level!</span></span></div>
+          <div class="row"><span class="blk control">wait until <span class="blk ops">&lt;... or ... or ...&gt;</span></span></div>
+          <div class="row"><span class="blk event">broadcast <span class="blk input">Start ▼</span></span></div>
+          <div class="row"><span class="blk control">repeat until <span class="blk sense">touching <span class="blk input">Buildings ▼</span> ?</span></span></div>
+          <div class="row indent"><span class="blk motion">change y by <span class="blk input">-3</span></span></div>
+          <div class="row indent"><span class="blk control">wait <span class="blk input">0.1</span> seconds</span></div>
+          <div class="row"><span class="blk event">broadcast <span class="blk input">Stop ▼</span></span></div>
+          <div class="row"><span class="blk looks">say <span class="blk input">Game Over!</span> for <span class="blk input">2</span> seconds</span></div>
+        </div>
+        <div>
+          <div class="stack">
+            <div class="label">Flap</div>
+            <div class="row"><span class="blk event">when <span class="blk input">u</span> key pressed</span></div>
+            <div class="row"><span class="blk motion">change y by <span class="blk input">20</span></span></div>
+            <div class="row"><span class="blk looks">switch costume to <span class="blk input">parrot-b</span></span></div>
+          </div>
+          <div class="stack">
+            <div class="label">Restart</div>
+            <div class="row"><span class="blk event">when <span class="blk input">r</span> key pressed</span></div>
+            <div class="row"><span class="blk control">stop <span class="blk input">other scripts in sprite</span></span></div>
+            <div class="row"><span class="blk event">broadcast <span class="blk input">Clear ▼</span></span></div>
+            <div class="row" style="color: var(--c-muted); font-size: 0.85rem;">…then run the setup loop again.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 16: BLUEPRINT — BUILDINGS ============== -->
+    <div class="slide blueprint" id="s16">
+      <div class="kicker">Master Blueprint <span class="badge bp">Reference</span></div>
+      <h2>Full building code</h2>
+      <p class="sub">Everything that lives on the building sprite by the end of Phase 6.</p>
+      <div class="cols-2">
+        <div>
+          <div class="stack">
+            <div class="label">Level pickers</div>
+            <div class="row"><span class="blk event">when <span class="blk input">1</span> pressed</span> → set Speed -3, Interval 3</div>
+            <div class="row"><span class="blk event">when <span class="blk input">2</span> pressed</span> → set Speed -4, Interval 2</div>
+            <div class="row"><span class="blk event">when <span class="blk input">3</span> pressed</span> → set Speed -5, Interval 1.5</div>
+          </div>
+          <div class="stack">
+            <div class="label">Spawner</div>
+            <div class="row"><span class="blk event">when 🟢 clicked</span></div>
+            <div class="row"><span class="blk looks">hide</span></div>
+            <div class="row" style="color: var(--c-muted); font-size: 0.85rem;">— then —</div>
+            <div class="row"><span class="blk event">when I receive <span class="blk input">Start ▼</span></span></div>
+            <div class="row"><span class="blk vars">set Score to <span class="blk input">0</span></span></div>
+            <div class="row"><span class="blk control">forever</span></div>
+            <div class="row indent"><span class="blk control">wait <span class="blk vars">Interval</span> seconds</span></div>
+            <div class="row indent"><span class="blk control">create clone of <span class="blk input">myself</span></span></div>
+          </div>
+        </div>
+        <div>
+          <div class="stack">
+            <div class="label">Clone — movement</div>
+            <div class="row"><span class="blk control">when I start as a clone</span></div>
+            <div class="row"><span class="blk motion">go to x: <span class="blk input">240</span> y: <span class="blk input">0</span></span></div>
+            <div class="row"><span class="blk looks">show</span></div>
+            <div class="row"><span class="blk control">repeat until <span class="blk sense">touching <span class="blk input">edge</span> ?</span></span></div>
+            <div class="row indent"><span class="blk motion">change x by <span class="blk vars">Speed</span></span></div>
+            <div class="row"><span class="blk control">delete this clone</span></div>
+          </div>
+          <div class="stack">
+            <div class="label">Clone — scoring</div>
+            <div class="row"><span class="blk control">when I start as a clone</span></div>
+            <div class="row"><span class="blk control">wait until <span class="blk ops">x &lt; -200</span></span></div>
+            <div class="row"><span class="blk vars">change Score by <span class="blk input">1</span></span></div>
+          </div>
+          <div class="stack">
+            <div class="label">Stop &amp; Clear</div>
+            <div class="row"><span class="blk event">when I receive <span class="blk input">Stop ▼</span></span> → <span class="blk control">stop other scripts</span></div>
+            <div class="row"><span class="blk event">when I receive <span class="blk input">Clear ▼</span></span> → <span class="blk control">delete this clone</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 17: STRETCH INTRO ============== -->
+    <div class="slide stretch" id="s17">
+      <div class="kicker">Stretch (Optional)</div>
+      <h2>★ The Squirrel Friend <span class="badge stretch">Stretch</span></h2>
+      <p class="sub">A character who sits in the corner and announces the score in their own speech bubble — instead of a plain number on the stage.</p>
+      <div class="new-idea">
+        <div class="lbl">★ New idea: Joining words and numbers</div>
+        <p>The <span class="blk ops">join</span> block glues two pieces of text together. <span class="blk ops">join <span class="blk input">Score: </span> <span class="blk vars">Score</span></span> gives <em>"Score: 5"</em> when Score is 5. That's how a character can say something with a number in it.</p>
+      </div>
+      <div class="why">
+        <div class="lbl">Why this is a stretch</div>
+        <p>The game already works perfectly without the squirrel. The plain Score box on the stage shows the score just fine. The squirrel is a <strong>design choice</strong> — it makes the game friendlier, but it adds a few new pieces to manage. Only add it once Phases 1–6 are working.</p>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 18: STRETCH BUILD ============== -->
+    <div class="slide stretch" id="s18">
+      <div class="kicker">Stretch · Build</div>
+      <h2>Build the squirrel <span class="badge stretch">Stretch</span></h2>
+      <ol class="steps">
+        <li>Add a <strong>Squirrel</strong> sprite from the library.</li>
+        <li>Untick the Score variable box on the stage — the squirrel will be the score display now.</li>
+        <li>Hide the squirrel on green flag so it only appears when the game starts:
+          <div class="stack">
+            <div class="row"><span class="blk event">when 🟢 clicked</span></div>
+            <div class="row"><span class="blk looks">hide</span></div>
+          </div>
+        </li>
+        <li>When Start is received, set up the squirrel in the corner and say the starting score:
+          <div class="stack">
+            <div class="row"><span class="blk event">when I receive <span class="blk input">Start ▼</span></span></div>
+            <div class="row"><span class="blk motion">go to x: <span class="blk input">180</span> y: <span class="blk input">140</span></span></div>
+            <div class="row"><span class="blk looks">set size to <span class="blk input">60</span> %</span></div>
+            <div class="row"><span class="blk motion">point in direction <span class="blk input">-90</span></span></div>
+            <div class="row"><span class="blk looks">show</span></div>
+            <div class="row"><span class="blk looks">say <span class="blk ops">join <span class="blk input">Score: </span> <span class="blk vars">Score</span></span></span></div>
+          </div>
+        </li>
+        <li>Score now changes inside the clone scoring script. After <span class="blk vars">change Score by <span class="blk input">1</span></span>, add a <span class="blk event">broadcast <span class="blk input">Update ▼</span></span>.</li>
+        <li>On the squirrel, react to Update by re-saying the score with the new number:
+          <div class="stack">
+            <div class="row"><span class="blk event">when I receive <span class="blk input">Update ▼</span></span></div>
+            <div class="row"><span class="blk looks">say <span class="blk ops">join <span class="blk input">Score: </span> <span class="blk vars">Score</span></span></span></div>
+          </div>
+        </li>
+      </ol>
+      <div class="try-it">
+        <div class="lbl">🧪 Try it</div>
+        <p>Play. The squirrel should sit in the corner saying "Score: 0", then change its number every time a building goes past.</p>
+      </div>
+      <div class="check">
+        <div class="lbl">✓ Check yourself</div>
+        <ul>
+          <li>Does the squirrel appear when the game starts?</li>
+          <li>Does it say "Score: 0" at the beginning?</li>
+          <li>Does the number in its speech bubble update when score goes up?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============== SLIDE 19: CLOSING CHECKLIST ============== -->
+    <div class="slide closing" id="s19">
+      <div class="kicker">Finish Line</div>
+      <h2>🏆 Everything you built</h2>
+      <p class="sub">Tick each line as it works. Click an item to mark it done.</p>
+      <ul class="final-list" onclick="toggleDone(event)">
+        <li><strong>Phase 1:</strong> The parrot flaps with U and falls with gravity</li>
+        <li><strong>Phase 2:</strong> Buildings spawn from the right and slide across</li>
+        <li><strong>Phase 3:</strong> The game ends when the parrot crashes into a building</li>
+        <li><strong>Phase 4:</strong> Score counts up by 1 for every building survived</li>
+        <li><strong>Phase 5:</strong> Pressing 1, 2, or 3 picks a difficulty level</li>
+        <li><strong>Phase 5:</strong> The three levels feel meaningfully different</li>
+        <li><strong>Phase 6:</strong> Press R to restart cleanly</li>
+        <li><strong>★ Stretch:</strong> A squirrel announces the score in a speech bubble</li>
+      </ul>
+      <div class="new-idea" style="margin-top: 14px;">
+        <div class="lbl">★ What you learned along the way</div>
+        <p>Cloning. Broadcasts. <span class="blk control">repeat until</span>. <span class="blk control">wait until</span>. Variables that <em>remember</em> (Score). Variables that <em>drive behaviour</em> (Speed, Interval). Joining words and numbers. Restarting a game without breaking it.</p>
+      </div>
+      <p style="margin-top: 10px; text-align: center; font-weight: 700; color: #4C97FF;">Game built. 🦜</p>
+    </div>
+
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn back" id="btn-back" onclick="go(-1)">◀ Back</button>
+    <div id="counter">1 / 19</div>
+    <button class="nav-btn" id="btn-next" onclick="go(1)">Next ▶</button>
+  </div>
+  <div class="pbar"><div class="pfill" id="pbar"></div></div>
+
+</div>
+
+<script>
+  const TOTAL = 19;
+  let cur = 1;
+
+  function show(n) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    const s = document.getElementById('s' + n);
+    if (s) s.classList.add('active');
+    document.getElementById('counter').textContent = n + ' / ' + TOTAL;
+    document.getElementById('pbar').style.width = ((n / TOTAL) * 100) + '%';
+    document.getElementById('btn-back').disabled = (n === 1);
+    document.getElementById('btn-next').disabled = (n === TOTAL);
+    cur = n;
+    // pause any running demos when leaving their slide
+    stopClones();
+    gravityReset();
+  }
+  function go(delta) {
+    const n = cur + delta;
+    if (n < 1 || n > TOTAL) return;
+    show(n);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowRight') go(1);
+    else if (e.key === 'ArrowLeft') go(-1);
+  });
+
+  // ===== Gravity demo =====
+  let gBottom = 70, gInterval = null;
+  function gravityTick() {
+    gBottom -= 2;
+    if (gBottom < 0) gBottom = 0;
+    const ball = document.getElementById('g-ball');
+    if (ball) ball.style.bottom = gBottom + 'px';
+  }
+  function startGravity() {
+    if (gInterval) return;
+    gInterval = setInterval(gravityTick, 80);
+  }
+  function gravityFlap() {
+    startGravity();
+    gBottom += 30;
+    if (gBottom > 130) gBottom = 130;
+    const ball = document.getElementById('g-ball');
+    if (ball) ball.style.bottom = gBottom + 'px';
+  }
+  function gravityReset() {
+    if (gInterval) { clearInterval(gInterval); gInterval = null; }
+    gBottom = 70;
+    const ball = document.getElementById('g-ball');
+    if (ball) ball.style.bottom = gBottom + 'px';
+  }
+
+  // ===== Clone demo =====
+  let cloneInterval = null;
+  function startClones() {
+    const stage = document.getElementById('clone-stage');
+    if (!stage || cloneInterval) return;
+    cloneInterval = setInterval(() => {
+      const b = document.createElement('div');
+      b.className = 'clone-bldg';
+      const h = 40 + Math.floor(Math.random() * 60);
+      b.style.height = h + 'px';
+      b.style.background = ['#8B4513', '#A0522D', '#6F4E37', '#5C4033'][Math.floor(Math.random() * 4)];
+      b.style.right = '-30px';
+      stage.appendChild(b);
+      let x = -30;
+      const move = setInterval(() => {
+        x += 3;
+        b.style.right = x + 'px';
+        if (x > stage.offsetWidth + 30) {
+          clearInterval(move);
+          b.remove();
+        }
+      }, 40);
+    }, 900);
+  }
+  function stopClones() {
+    if (cloneInterval) { clearInterval(cloneInterval); cloneInterval = null; }
+    const stage = document.getElementById('clone-stage');
+    if (stage) stage.innerHTML = '';
+  }
+
+  // ===== Wait demo =====
+  let wCount = 0;
+  function waitClick() {
+    wCount++;
+    const c = document.getElementById('w-count');
+    const s = document.getElementById('w-status');
+    if (c) c.textContent = wCount;
+    if (s) {
+      if (wCount >= 5) {
+        s.textContent = '✓ Condition true. Now: Hello!';
+        s.classList.add('ready');
+      } else {
+        s.textContent = 'Status: waiting… (' + (5 - wCount) + ' more)';
+        s.classList.remove('ready');
+      }
+    }
+  }
+  function waitReset() {
+    wCount = 0;
+    const c = document.getElementById('w-count');
+    const s = document.getElementById('w-status');
+    if (c) c.textContent = '0';
+    if (s) { s.textContent = 'Status: waiting…'; s.classList.remove('ready'); }
+  }
+
+  // ===== Variable-drives-behaviour demo =====
+  let flyInterval = null;
+  function updateVarDemo() {
+    const slider = document.getElementById('v-slider');
+    const val = document.getElementById('v-val');
+    if (slider && val) val.textContent = slider.value;
+  }
+  function flyParrot() {
+    const fly = document.getElementById('v-fly');
+    const slider = document.getElementById('v-slider');
+    if (!fly || !slider) return;
+    if (flyInterval) { clearInterval(flyInterval); flyInterval = null; }
+    fly.style.transition = 'none';
+    fly.style.left = '10px';
+    let pos = 10;
+    setTimeout(() => {
+      flyInterval = setInterval(() => {
+        pos += parseInt(slider.value);
+        fly.style.left = pos + 'px';
+        if (pos > 280) {
+          clearInterval(flyInterval);
+          flyInterval = null;
+        }
+      }, 80);
+    }, 50);
+  }
+  function resetVar() {
+    if (flyInterval) { clearInterval(flyInterval); flyInterval = null; }
+    const fly = document.getElementById('v-fly');
+    if (fly) { fly.style.transition = 'none'; fly.style.left = '10px'; }
+  }
+
+  // ===== Closing checklist =====
+  function toggleDone(e) {
+    if (e.target.tagName === 'LI') e.target.classList.toggle('done');
+  }
+
+  // Init
+  show(1);
+</script>
+</body>
+</html>
