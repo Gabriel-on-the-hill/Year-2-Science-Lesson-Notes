@@ -584,10 +584,12 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 <!-- ===== W1 NEW: PARTS OF THE DAY ===== -->
 <div class="slide" id="slide-w1-parts">
 <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
-    <div class="week-badge"><span class="dot w5"></span> Week 1 · Daily Cycle</div>
+    <div class="week-badge"><span class="dot w5"></span> Week 1 · When in the Day</div>
     <div class="glass-card text-center">
-        <div class="slide-title">🌅🌞🌆🌙 Parts of the Day</div>
-        <div class="slide-subtitle">A whole day is split into four big parts. Each part has a feeling — and a typical time range.</div>
+        <div class="slide-title">🌅🌞🌆🌙 When in the Day?</div>
+        <div class="slide-subtitle">A day is split into <strong>four parts we name</strong> — and into <strong>two halves we label</strong> with <em>a.m.</em> and <em>p.m.</em>.</div>
+
+        <div style="font-size:.9rem;color:var(--accent-light);font-weight:700;margin:14px 0 6px;letter-spacing:.06em;text-transform:uppercase;">Part 1 · The Four Parts of the Day</div>
         <div class="cycle-row">
             <div class="cycle-card" style="border-color:#FBBF24;background:rgba(251,191,36,.08);"><div class="cy-emoji">🌅</div><div class="cy-name">Morning</div><div class="cy-time">After waking until 12:00 (noon)</div></div>
             <div class="cycle-card" style="border-color:#F59E0B;background:rgba(245,158,11,.08);"><div class="cy-emoji">🌞</div><div class="cy-name">Afternoon</div><div class="cy-time">12:00 (noon) until ~6:00 pm</div></div>
@@ -595,27 +597,20 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
             <div class="cycle-card" style="border-color:#6366F1;background:rgba(99,102,241,.08);"><div class="cy-emoji">🌙</div><div class="cy-name">Night</div><div class="cy-time">~9:00 pm until waking up</div></div>
         </div>
         <div id="partsDayQuiz"></div>
-        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newPartsDay()">🎲 New Question</button></div>
-        <div class="sentence-stem mt-16">
-            <strong>Sentence stem:</strong> "I eat breakfast in the <span class="hl-qpast">morning</span>. I eat lunch in the <span class="hl-qpast">afternoon</span>. I sleep at <span class="hl-qto">night</span>."
-        </div>
-    </div>
-</div>
-</div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newPartsDay()">🎲 New Day-Part Question</button></div>
 
-<!-- ===== W1 NEW: AM AND PM ===== -->
-<div class="slide" id="slide-w1-ampm">
-<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
-    <div class="week-badge"><span class="dot w5"></span> Week 1 · 12-Hour Clock</div>
-    <div class="glass-card text-center">
-        <div class="slide-title">🌅 a.m. &nbsp;&amp;&nbsp; p.m. 🌙</div>
-        <div class="slide-subtitle">A clock face only has 12 numbers, but a day has <strong>24 hours</strong>. The hour hand goes round <strong>twice</strong> each day. So we use <strong>a.m.</strong> and <strong>p.m.</strong> to know which trip we're on.</div>
+        <div class="sentence-stem" style="margin:18px 0;">
+            🔗 <strong>Bridge:</strong> the clock face only has 12 numbers, but a day has <strong>24 hours</strong>. The hour hand goes round <strong>twice</strong> a day! We need a way to say which trip we're on — that's what <strong>a.m.</strong> and <strong>p.m.</strong> do.
+        </div>
+
+        <div style="font-size:.9rem;color:var(--accent-light);font-weight:700;margin:14px 0 6px;letter-spacing:.06em;text-transform:uppercase;">Part 2 · a.m. and p.m. (Formal Notation)</div>
         <div style="display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:14px 0;">
-            <div style="background:rgba(251,191,36,.08);border:2px solid rgba(251,191,36,.4);border-radius:14px;padding:18px;max-width:280px;"><div style="font-size:1.6rem;font-weight:900;color:#FBBF24;">a.m.</div><div style="color:var(--text-dim);font-size:.85rem;margin:4px 0 8px;">"ante meridiem" = before midday</div><div style="font-size:.95rem;line-height:1.6;color:var(--text);">From <strong>12:00 midnight</strong> until <strong>12:00 noon</strong>.<br>Morning times: 7:00 a.m. is breakfast.</div></div>
-            <div style="background:rgba(99,102,241,.08);border:2px solid rgba(99,102,241,.4);border-radius:14px;padding:18px;max-width:280px;"><div style="font-size:1.6rem;font-weight:900;color:#A78BFA;">p.m.</div><div style="color:var(--text-dim);font-size:.85rem;margin:4px 0 8px;">"post meridiem" = after midday</div><div style="font-size:.95rem;line-height:1.6;color:var(--text);">From <strong>12:00 noon</strong> until <strong>12:00 midnight</strong>.<br>Afternoon &amp; evening: 7:00 p.m. is dinner.</div></div>
+            <div style="background:rgba(251,191,36,.08);border:2px solid rgba(251,191,36,.4);border-radius:14px;padding:16px;max-width:260px;"><div style="font-size:1.5rem;font-weight:900;color:#FBBF24;">a.m.</div><div style="color:var(--text-dim);font-size:.82rem;margin:4px 0 6px;">"ante meridiem" = before midday</div><div style="font-size:.9rem;line-height:1.6;color:var(--text);">From <strong>12:00 midnight</strong> until <strong>12:00 noon</strong>. 7:00 a.m. = breakfast.<br>Covers: 🌅 <em>morning</em>.</div></div>
+            <div style="background:rgba(99,102,241,.08);border:2px solid rgba(99,102,241,.4);border-radius:14px;padding:16px;max-width:260px;"><div style="font-size:1.5rem;font-weight:900;color:#A78BFA;">p.m.</div><div style="color:var(--text-dim);font-size:.82rem;margin:4px 0 6px;">"post meridiem" = after midday</div><div style="font-size:.9rem;line-height:1.6;color:var(--text);">From <strong>12:00 noon</strong> until <strong>12:00 midnight</strong>. 7:00 p.m. = dinner.<br>Covers: 🌞 <em>afternoon</em>, 🌆 <em>evening</em>, 🌙 <em>night</em>.</div></div>
         </div>
         <div id="ampmQuiz"></div>
-        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newAmPm()">🎲 New Question</button></div>
+        <div class="btn-row"><button class="action-btn" style="background:var(--accent);" onclick="newAmPm()">🎲 New a.m./p.m. Question</button></div>
+
         <div class="sentence-stem mt-16">
             <strong>Memory hook:</strong> a.m. = "<em>at morning</em>". p.m. = "<em>past midday</em>". 12:00 noon and 12:00 midnight are special — neither a.m. nor p.m.!
         </div>
@@ -735,27 +730,19 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
 <!-- ===== W2: 5-MIN INTERVALS (concept) ===== -->
 <div class="slide" id="slide-five">
 <div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
-    <div class="week-badge"><span class="dot w6"></span> Week 2</div>
+    <div class="week-badge"><span class="dot w6"></span> Week 2 · 5-Minute Time</div>
     <div class="glass-card text-center">
         <div class="slide-title">🪜 Counting in 5s Around the Clock</div>
-        <div class="slide-subtitle">Each number on the clock = <strong>5 minutes</strong>. Click a number to see how many minutes <em>past</em> the hour it shows.</div>
-        <div id="fiveClock" class="text-center" style="margin:20px 0;"></div>
-        <div class="sentence-stem mt-16" id="fiveStem">
-            🔢 Click any number on the clock. Counting in 5s is the same skip-counting Emmanuel learned in Autumn Term!
+        <div class="slide-subtitle">Each number on the clock = <strong>5 minutes</strong>. Click a number on the clock to skip-count — or use the reference table below to look up every single 5-minute mark.</div>
+        <div id="fiveClock" class="text-center" style="margin:14px 0;"></div>
+        <div class="sentence-stem" id="fiveStem">
+            🔢 Click any number on the clock above. Counting in 5s — the same skip-counting from Autumn Term!
         </div>
-    </div>
-</div>
-</div>
-
-<!-- ===== W2: EVERY 5-MIN REFERENCE TABLE ===== -->
-<div class="slide" id="slide-w2-allmin">
-<div class="slide-content" style="display:flex;flex-direction:column;align-items:center;">
-    <div class="week-badge"><span class="dot w6"></span> Week 2 · Reference</div>
-    <div class="glass-card text-center">
-        <div class="slide-title">📊 Every 5-Minute Mark</div>
-        <div class="slide-subtitle">Click any minute mark to see the analog clock and how we say it. This is your <strong>complete</strong> reference for telling 5-minute time.</div>
-        <div id="allMinTable" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(85px,1fr));gap:8px;margin:18px 0;width:100%;"></div>
-        <div id="allMinDisplay" style="margin-top:10px;"></div>
+        <div style="height:1px;background:var(--card-border);margin:22px 0;width:80%;"></div>
+        <div style="font-size:.95rem;color:var(--accent-light);font-weight:700;margin:0 0 8px;letter-spacing:.04em;text-transform:uppercase;">📊 Full Reference — Every 5-Minute Mark</div>
+        <div style="color:var(--text-dim);font-size:.9rem;margin-bottom:12px;">Click any minute mark to see the analog clock, the spoken time, and the digital reading side by side.</div>
+        <div id="allMinTable" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(85px,1fr));gap:8px;margin:8px 0 14px;width:100%;"></div>
+        <div id="allMinDisplay"></div>
         <div class="sentence-stem mt-16">
             <strong>The 30-min switch:</strong> minutes <span class="hl-qpast">5–30</span> are "past". Minutes <span class="hl-qto">35–55</span> are "to" the next hour. At exactly :30 we say "half past".
         </div>
@@ -1542,7 +1529,7 @@ const slideInit={
     'slide-wp1':()=>newWordProblem(1),
     'slide-mt1':()=>buildMT1(),
     'slide-hook2':()=>renderInto('hook2Clock',clockSvg(7,20,{size:160})),
-    'slide-five':()=>initFiveClock(),
+    'slide-five':()=>{initFiveClock();initAllMin();},
     'slide-totime':()=>initToTime(),
     'slide-digital':()=>initDigital(),
     'slide-units':()=>initUnits(),
@@ -1557,10 +1544,8 @@ const slideInit={
     'slide-w1-mistake':()=>initMistakes(),
     'slide-w1-tf':()=>initTF(),
     'slide-w1-shift':()=>newShift(),
-    'slide-w1-parts':()=>newPartsDay(),
-    'slide-w1-ampm':()=>newAmPm(),
+    'slide-w1-parts':()=>{newPartsDay();newAmPm();},
     'slide-w1-roman':()=>renderInto('romanClock',clockSvg(7,15,{size:200,accent:'var(--qpast)',roman:true})),
-    'slide-w2-allmin':()=>initAllMin(),
     'slide-w2-pairs':()=>newPairs(2),
     'slide-w2-seq':()=>newSeqDigital(),
     'slide-w2-days':()=>{initDaysOrder();newDayQuestion();},
