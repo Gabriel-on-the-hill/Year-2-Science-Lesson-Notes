@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Year 2 Maths: Summer Block 3 — Statistics</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+    --tally:#EC4899;
+    --table:#14B8A6;
+    --block:#F59E0B;
+    --pictogram:#8B5CF6;
+    --keycol:#06B6D4;
+    --success:#10B981;
+    --error:#EF4444;
+    --bg-start:#0F172A;
+    --bg-end:#1E293B;
+    --card-bg:rgba(255,255,255,0.07);
+    --card-border:rgba(255,255,255,0.12);
+    --text:#F1F5F9;
+    --text-dim:#94A3B8;
+    --accent:#8B5CF6;
+    --accent-light:#A78BFA;
+    --nav-bg:rgba(15,23,42,.92);
+    --track:rgba(255,255,255,.05);
+}
+body.light{
+    --bg-start:#F8FAFC;--bg-end:#E2E8F0;--card-bg:rgba(255,255,255,0.75);--card-border:rgba(15,23,42,0.12);
+    --text:#0F172A;--text-dim:#475569;--accent:#7C3AED;--accent-light:#6D28D9;
+    --nav-bg:rgba(248,250,252,.92);--track:rgba(15,23,42,.06);
+}
+body.light .slide-title{background:linear-gradient(135deg,#0F172A,#475569);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body.light .quiz-opt{background:rgba(15,23,42,.04);border-color:rgba(15,23,42,.1)}
+body.light .nav-btn.back{background:rgba(15,23,42,.08);color:var(--text)}
+body.light .progress-bar-container{background:rgba(15,23,42,.08)}
+body.light .tally-mark{stroke:#0F172A}
+body.light .block-cell{border-color:rgba(15,23,42,.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-start),var(--bg-end));color:var(--text);min-height:100vh;overflow:hidden;user-select:none;transition:background .4s ease,color .4s ease}
+
+/* SLIDES */
+.slide{display:none;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:30px 30px 90px;position:relative;animation:fadeIn .5s ease}
+.slide.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+.nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-top:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between;padding:12px 30px;gap:12px}
+.nav-btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 28px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.nav-btn:hover{background:var(--accent-light);transform:translateY(-2px)}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.nav-btn.back{background:rgba(255,255,255,.1)}
+.theme-toggle,.reset-btn{background:transparent;color:var(--text-dim);border:1px solid var(--card-border);border-radius:10px;padding:8px 14px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.theme-toggle:hover,.reset-btn:hover{color:var(--text);border-color:var(--accent)}
+.nav-center{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* RESUME TOAST */
+.resume-toast{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-120%);z-index:200;background:var(--card-bg);backdrop-filter:blur(20px);border:1px solid var(--card-border);border-left:4px solid var(--accent);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 12px 40px rgba(0,0,0,.4);font-size:.95rem;color:var(--text);transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;max-width:92vw}
+.resume-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.resume-toast button{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit}
+.resume-toast button.ghost{background:transparent;color:var(--text-dim);padding:6px 10px}
+
+/* HINT */
+.kbd-hint{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);font-size:.78rem;color:var(--text-dim);background:var(--card-bg);border:1px solid var(--card-border);border-radius:100px;padding:6px 14px;backdrop-filter:blur(10px);pointer-events:none;animation:hintFade 6s ease-in-out forwards;opacity:0}
+@keyframes hintFade{0%{opacity:0}10%{opacity:1}80%{opacity:1}100%{opacity:0}}
+.kbd-hint kbd{background:rgba(255,255,255,.1);border:1px solid var(--card-border);border-radius:4px;padding:1px 6px;font-family:'Inter',sans-serif;font-size:.75rem;margin:0 2px}
+
+.slide-counter{color:var(--text-dim);font-size:.9rem;font-weight:500}
+.progress-bar-container{position:fixed;top:0;left:0;right:0;height:4px;background:var(--track);z-index:101}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--tally),var(--pictogram),var(--block));transition:width .4s ease;border-radius:0 2px 2px 0}
+
+/* CARDS */
+.glass-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:28px;backdrop-filter:blur(20px);max-width:920px;width:100%}
+.slide-title{font-size:2rem;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,#fff,var(--text-dim));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.slide-subtitle{color:var(--text-dim);font-size:1.05rem;margin-bottom:20px;line-height:1.65}
+.step-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.4);border-radius:100px;padding:5px 14px;font-size:.78rem;color:var(--accent-light);margin-bottom:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.step-pill .dot{width:8px;height:8px;border-radius:50%;background:var(--accent-light)}
+.step-pill.s1 .dot{background:var(--tally)}
+.step-pill.s2 .dot{background:var(--table)}
+.step-pill.s3 .dot{background:var(--block)}
+.step-pill.s4 .dot,.step-pill.s5 .dot{background:var(--pictogram)}
+.step-pill.s6 .dot,.step-pill.s7 .dot{background:var(--keycol)}
+
+/* SENTENCE STEM */
+.sentence-stem{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:14px;padding:14px 20px;font-size:1.05rem;text-align:center;margin-top:14px;line-height:1.7;color:var(--accent-light);font-weight:500}
+.hl-tally{color:var(--tally);font-weight:700}
+.hl-table{color:var(--table);font-weight:700}
+.hl-block{color:var(--block);font-weight:700}
+.hl-pic{color:var(--pictogram);font-weight:700}
+.hl-key{color:var(--keycol);font-weight:700}
+
+/* BUTTONS */
+.action-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;border:2px solid transparent;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;color:#fff;background:var(--accent)}
+.action-btn:hover{transform:scale(1.04);background:var(--accent-light)}
+.action-btn.check-btn{background:var(--success)}
+.action-btn.warn{background:var(--block)}
+.action-btn.danger{background:var(--error)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+
+/* QUIZ */
+.quiz-question{background:rgba(255,255,255,.04);border:1px solid var(--card-border);border-radius:16px;padding:22px;margin-bottom:14px}
+.quiz-question .q-text{font-size:1.05rem;font-weight:600;margin-bottom:14px;line-height:1.6}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{padding:12px 18px;border-radius:12px;cursor:pointer;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.1);font-size:1rem;transition:all .2s;text-align:left;font-family:inherit;color:var(--text);font-weight:500}
+.quiz-opt:hover{border-color:var(--accent);background:rgba(139,92,246,.1)}
+.quiz-opt.correct{border-color:var(--success);background:rgba(16,185,129,.15);color:var(--success)}
+.quiz-opt.wrong{border-color:var(--error);background:rgba(239,68,68,.1);color:var(--error)}
+.quiz-opt.disabled{pointer-events:none}
+.quiz-feedback{margin-top:10px;padding:10px 16px;border-radius:10px;font-size:.95rem;font-weight:500;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct-fb{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--success)}
+.quiz-feedback.wrong-fb{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--error)}
+.quiz-input{padding:9px;border-radius:10px;border:2px solid var(--card-border);background:rgba(255,255,255,0.06);color:var(--text);text-align:center;font-family:inherit;font-weight:700;font-size:1.1rem}
+
+/* TALLY */
+.tally-svg{display:inline-block;vertical-align:middle}
+.tally-mark{stroke:var(--text);stroke-width:3;stroke-linecap:round;fill:none}
+.tally-mark.recent{stroke:var(--tally);animation:tallyPop .3s ease}
+@keyframes tallyPop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+
+.data-table{width:100%;max-width:560px;margin:14px auto;border-collapse:collapse;background:rgba(255,255,255,.03);border-radius:12px;overflow:hidden}
+.data-table th,.data-table td{padding:10px 14px;text-align:center;border:1px solid var(--card-border);font-size:1rem}
+.data-table th{background:rgba(139,92,246,.2);color:var(--accent-light);font-weight:800}
+.data-table td.label{text-align:left;font-weight:700;color:var(--text)}
+.data-table td.tally{font-size:1.4rem}
+.data-table td.editable{cursor:pointer;background:rgba(245,158,11,.06)}
+.data-table td.editable:hover{background:rgba(245,158,11,.18)}
+.data-table input.cell-input{width:60px;background:transparent;border:none;color:inherit;text-align:center;font-family:inherit;font-weight:700;font-size:1rem}
+
+/* BLOCK DIAGRAM */
+.block-diagram{display:flex;align-items:flex-end;gap:10px;margin:18px auto;padding:14px;background:rgba(255,255,255,.03);border-radius:14px;justify-content:center;max-width:600px;position:relative}
+.block-col{display:flex;flex-direction:column-reverse;align-items:center;gap:0;min-width:62px}
+.block-cell{width:50px;height:26px;background:var(--block);border:2px solid rgba(0,0,0,.15);border-radius:4px;animation:cellPop .25s ease}
+.block-cell.empty{background:rgba(255,255,255,.04);border:1px dashed var(--card-border);animation:none}
+@keyframes cellPop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.block-col .lbl{margin-top:8px;font-size:.85rem;color:var(--text);font-weight:700;text-align:center;writing-mode:horizontal-tb;max-width:80px}
+.block-col .count{font-size:.95rem;color:var(--accent-light);font-weight:800;margin-bottom:4px}
+.block-yaxis{display:flex;flex-direction:column-reverse;justify-content:space-between;padding-right:8px;border-right:2px solid var(--card-border);font-size:.78rem;color:var(--text-dim);font-weight:600;text-align:right;align-self:stretch}
+.block-yaxis span{height:26px;line-height:0}
+
+/* CUBE STACKER */
+.cube-stack{display:flex;align-items:flex-end;gap:14px;justify-content:center;margin:20px auto;padding:18px;background:rgba(245,158,11,.06);border:2px dashed rgba(245,158,11,.3);border-radius:16px;max-width:680px}
+.cube-col-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+.cube-col{display:flex;flex-direction:column-reverse;gap:0;min-height:30px;width:56px;border-bottom:3px solid var(--card-border);padding-bottom:0}
+.cube-cell{width:48px;height:30px;border-radius:5px;border:2px solid rgba(0,0,0,.18);box-shadow:inset 0 -3px 0 rgba(0,0,0,.12);animation:cellPop .2s ease}
+.cube-c0{background:#22C55E}.cube-c1{background:#EC4899}.cube-c2{background:#3B82F6}.cube-c3{background:#F59E0B}.cube-c4{background:#A78BFA}
+.cube-add{background:var(--accent);color:#fff;border:none;border-radius:8px;width:32px;height:32px;font-size:1.2rem;font-weight:800;cursor:pointer;font-family:inherit}
+.cube-sub{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--card-border);border-radius:8px;width:32px;height:32px;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit}
+.cube-controls{display:flex;gap:6px}
+.cube-lbl{font-size:.85rem;color:var(--text);font-weight:700}
+.cube-count{font-size:.95rem;color:var(--accent-light);font-weight:800}
+
+/* PICTOGRAM */
+.pictogram-table{width:100%;max-width:640px;margin:14px auto;border-collapse:collapse;background:rgba(255,255,255,.03);border-radius:12px;overflow:hidden}
+.pictogram-table th,.pictogram-table td{padding:8px 14px;border:1px solid var(--card-border);text-align:left;font-size:1rem}
+.pictogram-table th{background:rgba(139,92,246,.2);color:var(--accent-light);font-weight:800;font-size:.9rem;text-transform:uppercase;letter-spacing:.04em}
+.pictogram-table td.icons{font-size:1.4rem;letter-spacing:1px;line-height:1.3}
+.pictogram-table td.icons .half{display:inline-block;width:.55em;overflow:hidden;vertical-align:middle;-webkit-mask-image:linear-gradient(to right,#000 50%,transparent 50%);mask-image:linear-gradient(to right,#000 50%,transparent 50%);position:relative}
+.pictogram-table td.icons .half::after{content:'';position:absolute;left:50%;top:10%;bottom:10%;width:2px;background:var(--text-dim);opacity:.4}
+.pictogram-table td.label{font-weight:700;color:var(--text);width:120px}
+.pic-key{display:inline-flex;align-items:center;gap:8px;background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.35);border-radius:10px;padding:6px 14px;font-size:.95rem;font-weight:700;color:#67E8F9;margin:8px 0}
+
+/* VOCAB FLIP */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.vocab-card{background:rgba(255,255,255,.04);border:2px solid var(--card-border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;min-height:110px;display:flex;flex-direction:column;justify-content:center}
+.vocab-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.vocab-card .vt{font-weight:800;color:var(--accent-light);font-size:1rem}
+.vocab-card .vd{display:none;font-size:.82rem;color:var(--text);line-height:1.4;margin-top:4px}
+.vocab-card.flipped{background:rgba(139,92,246,.08);border-color:var(--accent)}
+.vocab-card.flipped .vt{color:var(--text);font-size:.9rem;margin-bottom:6px}
+.vocab-card.flipped .vd{display:block}
+
+/* TINY */
+.tiny-card{background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(139,92,246,.08));border:2px solid rgba(245,158,11,.35);border-radius:18px;padding:18px 22px;margin:14px 0;display:flex;align-items:flex-start;gap:14px}
+.tiny-card .tiny-icon{font-size:2.4rem;flex-shrink:0;line-height:1}
+.tiny-card .tiny-bubble{flex:1}
+.tiny-card .tiny-name{font-weight:800;color:var(--block);font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.tiny-card .tiny-says{font-size:1.05rem;line-height:1.55;color:var(--text)}
+
+/* HOMEWORK */
+.homework-card{background:linear-gradient(135deg,rgba(59,130,246,.05),rgba(139,92,246,.08));border:2px dashed rgba(139,92,246,.3);border-radius:20px;padding:28px;max-width:720px;width:100%}
+.homework-card h3{color:var(--accent-light);margin-bottom:14px;font-size:1.3rem}
+.homework-item{padding:7px 0;font-size:1.02rem;color:var(--text);display:flex;gap:10px;line-height:1.55}
+.tier-header{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:5px 11px;border-radius:100px;margin:12px 0 4px}
+.tier-mild{background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.3)}
+.tier-medium{background:rgba(245,158,11,.12);color:#F59E0B;border:1px solid rgba(245,158,11,.3)}
+.tier-spicy{background:rgba(139,92,246,.12);color:#A78BFA;border:1px solid rgba(139,92,246,.3)}
+.answer-key{margin-top:18px;border-top:1px dashed rgba(255,255,255,.12);padding-top:14px}
+.answer-key summary{cursor:pointer;color:var(--block);font-weight:700;padding:10px 14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;list-style:none;font-size:.95rem}
+.answer-key summary::-webkit-details-marker{display:none}
+.answer-key summary::before{content:'🔑 ';margin-right:4px}
+.answer-key[open] summary{margin-bottom:10px}
+.answer-key .ak-item{padding:5px 0;font-size:.93rem;color:var(--text-dim);line-height:1.55}
+.answer-key .ak-item strong{color:var(--text)}
+
+/* RESULTS / CERTIFICATE */
+.results-card{text-align:center;padding:36px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:24px;backdrop-filter:blur(20px);max-width:560px}
+.score-circle{width:130px;height:130px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:900;color:#fff}
+.score-circle.gold{background:linear-gradient(135deg,#F59E0B,#D97706);box-shadow:0 8px 30px rgba(245,158,11,.4)}
+.score-circle.silver{background:linear-gradient(135deg,#94A3B8,#64748B);box-shadow:0 8px 30px rgba(148,163,184,.3)}
+.score-circle.bronze{background:linear-gradient(135deg,#F97316,#C2410C);box-shadow:0 8px 30px rgba(249,115,22,.3)}
+
+/* I CAN CHECKLIST */
+.ican-list{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.ican-row{display:flex;align-items:center;gap:14px;padding:12px 16px;background:rgba(255,255,255,.04);border:2px solid var(--card-border);border-radius:12px;cursor:pointer;transition:all .2s;text-align:left}
+.ican-row:hover{border-color:var(--accent)}
+.ican-row.ticked{background:rgba(16,185,129,.1);border-color:var(--success)}
+.ican-box{width:28px;height:28px;border-radius:8px;border:2px solid var(--card-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:900;font-size:1.1rem;color:transparent}
+.ican-row.ticked .ican-box{background:var(--success);border-color:var(--success);color:#fff}
+.ican-row.ticked .ican-box::after{content:'✓'}
+.ican-text{font-size:1rem;font-weight:600;color:var(--text)}
+
+/* ORDER PILE (ranking) */
+.order-pile{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:14px 0;padding:14px;background:rgba(255,255,255,.03);border:1px dashed var(--card-border);border-radius:14px;min-height:62px}
+.order-chip{padding:10px 16px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .2s}
+.order-chip:hover{background:var(--accent-light);transform:translateY(-2px)}
+.order-slot{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0;padding:14px;background:rgba(16,185,129,.05);border:2px solid rgba(16,185,129,.25);border-radius:14px;min-height:58px;width:100%}
+.order-placed{padding:9px 14px;background:rgba(16,185,129,.18);color:var(--success);border:2px solid var(--success);border-radius:10px;font-weight:700;font-size:.92rem}
+
+/* DEDUCTION CLUES */
+.clue-list{background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:12px;padding:14px 18px;margin:12px 0}
+.clue-list li{padding:6px 0;font-size:.98rem;line-height:1.6;color:var(--text)}
+.clue-list li strong{color:var(--accent-light)}
+
+/* DIFFERENCE BAR (cross-block bridge) */
+.diff-bar{display:flex;align-items:center;gap:12px;justify-content:center;margin:14px 0;flex-wrap:wrap}
+.diff-bar .db-row{display:flex;align-items:center;gap:6px}
+.diff-bar .db-label{font-weight:700;color:var(--text);min-width:60px}
+.diff-bar .db-units{display:flex;gap:2px}
+.diff-bar .db-unit{width:22px;height:22px;background:var(--block);border-radius:4px;border:1px solid rgba(0,0,0,.15)}
+.diff-bar .db-unit.diff{background:var(--error);box-shadow:0 0 0 2px rgba(239,68,68,.3)}
+.diff-bar .db-arrow{font-weight:900;color:var(--error);font-size:1rem;margin:0 6px}
+
+/* RECAP BRIDGE TILES */
+.bridge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.bridge-tile{background:rgba(255,255,255,.04);border:1px solid var(--card-border);border-radius:12px;padding:14px}
+.bridge-tile .bt-tag{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-light);margin-bottom:6px}
+.bridge-tile .bt-text{font-size:.95rem;color:var(--text);line-height:1.55}
+
+/* MISC */
+.flex-center{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.mt-12{margin-top:12px}.mt-16{margin-top:16px}.mb-12{margin-bottom:12px}
+.text-center{text-align:center}
+.hidden{display:none!important}
+.slide-content{max-height:calc(100vh - 100px);overflow-y:auto;width:100%;max-width:920px;padding-bottom:20px}
+.slide-content::-webkit-scrollbar{width:6px}
+.slide-content::-webkit-scrollbar-track{background:transparent}
+.slide-content::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px}
+
+/* TITLE */
+.title-slide h1{font-size:3.4rem;font-weight:900;text-align:center;line-height:1.15;background:linear-gradient(135deg,var(--tally),var(--pictogram),var(--block));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.title-meta{color:var(--text-dim);font-size:1.05rem;margin-top:10px;text-align:center}
+.title-icons{font-size:3.6rem;margin-bottom:6px;letter-spacing:14px;text-align:center}
+
+/* PRINT */
+@media print{
+    body{background:#fff!important;color:#000!important;overflow:visible!important}
+    .nav-bar,.progress-bar-container,.resume-toast,.kbd-hint,.theme-toggle,.reset-btn{display:none!important}
+    .slide{display:none!important;page-break-after:always}
+    .slide.active{display:block!important;min-height:auto!important;padding:0!important;background:#fff!important}
+    .slide-content{max-height:none!important;overflow:visible!important;padding:0!important}
+    .glass-card,.homework-card,.results-card,.tiny-card{background:#fff!important;border:1px solid #cbd5e1!important;backdrop-filter:none!important;box-shadow:none!important;color:#000!important;page-break-inside:avoid}
+    h3,.slide-title{color:#0F172A!important;-webkit-text-fill-color:#0F172A!important;background:none!important}
+    .slide-subtitle,.homework-item,.ak-item{color:#1e293b!important}
+    .answer-key,.answer-key[open]{display:block!important}
+    .answer-key:not([open])>*:not(summary){display:block!important}
+    .tier-mild{background:#dcfce7!important;color:#166534!important}
+    .tier-medium{background:#fef3c7!important;color:#92400e!important}
+    .tier-spicy{background:#ede9fe!important;color:#5b21b6!important}
+}
+
+@media(max-width:600px){
+    .slide{padding:16px 16px 90px}
+    .title-slide h1{font-size:2.1rem}
+    .slide-title{font-size:1.5rem}
+    .glass-card{padding:18px}
+    .block-cell{width:36px}
+    .cube-cell{width:36px}
+    .pictogram-table td{padding:6px 8px;font-size:.9rem}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- ===== SLIDE 0: TITLE ===== -->
+<div class="slide active title-slide" id="slide-0">
+<div class="slide-content flex-center" style="flex-direction:column;min-height:80vh;">
+    <div class="title-icons">📊 📋 📈</div>
+    <h1>Statistics</h1>
+    <p class="title-meta">Year 2 Mathematics — Summer Term, Block 3</p>
+    <p class="title-meta" style="font-size:.95rem;margin-top:24px;max-width:520px;">Tally charts • Tables • Block diagrams • Pictograms<br>Seven small steps to <strong style="color:var(--accent-light);">data mastery</strong>.</p>
+</div>
+</div>
+
+<!-- ===== SLIDE 1: VOCABULARY ===== -->
+<div class="slide" id="slide-vocab">
+<div class="slide-content">
+    <div class="glass-card text-center">
+        <div class="step-pill"><span class="dot"></span> Before we begin</div>
+        <div class="slide-title">📚 Words you'll meet</div>
+        <div class="slide-subtitle">Tap each card to flip it. Come back here any time you forget a word.</div>
+        <div class="vocab-grid" id="vocabGrid"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== STEP 1 — TALLY CHARTS ===== -->
+<div class="slide" id="s1-teach">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s1"><span class="dot"></span> Step 1 of 7 · Tally charts</div>
+        <div class="slide-title">✏️ How tally marks work</div>
+        <div class="slide-subtitle">A <span class="hl-tally">tally mark</span> is a single line. Every 5th mark goes <em>across</em> the other four to make a <strong>gate</strong>. This makes counting fast — just count in 5s!</div>
+        <div id="tallyDemo" class="text-center" style="margin:14px 0"></div>
+        <div class="sentence-stem">To show a number as tally marks, draw <span class="hl-tally">groups of 5</span> and then <span class="hl-tally">single lines</span>.</div>
+        <div class="btn-row"><button class="action-btn" onclick="stepTallyDemo()">▶ Add the next mark</button><button class="action-btn warn" onclick="resetTallyDemo()">↺ Restart</button></div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s1-do">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s1"><span class="dot"></span> Step 1 · Build it</div>
+        <div class="slide-title">🖱️ Tally builder</div>
+        <div class="slide-subtitle">Click the buttons to add tallies for each colour. Watch the <span class="hl-tally">gate</span> appear every 5th mark. The Total updates by itself.</div>
+        <table class="data-table" id="tallyBuilder"></table>
+        <div class="sentence-stem" id="tbFb">Try making <strong>green = 7</strong>, <strong>blue = 12</strong>, <strong>yellow = 15</strong>.</div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s1-check">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s1"><span class="dot"></span> Step 1 · Check</div>
+        <div class="slide-title">🔍 Spot the mistake</div>
+        <div class="tiny-card">
+            <div class="tiny-icon">🐢</div>
+            <div class="tiny-bubble">
+                <div class="tiny-name">Tiny says</div>
+                <div class="tiny-says">"I drew a tally chart for how children travel to school. Walk = 7, Bus = 4."</div>
+            </div>
+        </div>
+        <div id="tinyMistakeArea"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== STEP 2 — TABLES ===== -->
+<div class="slide" id="s2-teach">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s2"><span class="dot"></span> Step 2 · Tables</div>
+        <div class="slide-title">📋 Same data, two views</div>
+        <div class="slide-subtitle">A <span class="hl-table">table</span> just shows the totals. A tally chart shows <em>how you collected</em> the data. Same numbers — different jobs.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0">
+            <div>
+                <div style="text-align:center;font-weight:800;color:var(--tally);margin-bottom:6px;">Tally chart</div>
+                <table class="data-table" id="s2TallyView"></table>
+            </div>
+            <div>
+                <div style="text-align:center;font-weight:800;color:var(--table);margin-bottom:6px;">Table</div>
+                <table class="data-table" id="s2TableView"></table>
+            </div>
+        </div>
+        <div class="sentence-stem">A <span class="hl-tally">tally chart</span> is best when you are <em>still collecting</em>. A <span class="hl-table">table</span> is best when you want to <em>read</em> the answer fast.</div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s2-do">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s2"><span class="dot"></span> Step 2 · Build it</div>
+        <div class="slide-title">🍎 Count without missing one</div>
+        <div class="slide-subtitle">Look at the picture. <strong>Tap each fruit once</strong> to mark it. Watch the table fill in. (Tip: this is how you avoid counting one fruit twice.)</div>
+        <div id="fruitPic" style="margin:14px 0;"></div>
+        <table class="data-table" id="fruitTable"></table>
+        <div class="quiz-feedback" id="fruitFb"></div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s2-check">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s2"><span class="dot"></span> Step 2 · Check</div>
+        <div class="slide-title">🧩 Use the clues</div>
+        <div class="slide-subtitle">Use the clues to fill in the missing totals in this fruit basket table.</div>
+        <table class="data-table" id="dedTable"></table>
+        <ul class="clue-list" id="dedClues"></ul>
+        <div class="btn-row"><button class="action-btn check-btn" onclick="checkDed()">✓ Check answers</button><button class="action-btn warn" onclick="newDed()">🔀 New puzzle</button></div>
+        <div class="quiz-feedback" id="dedFb"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== STEP 3 — BLOCK DIAGRAMS ===== -->
+<div class="slide" id="s3-teach">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s3"><span class="dot"></span> Step 3 · Block diagrams</div>
+        <div class="slide-title">🧱 From cubes to blocks</div>
+        <div class="slide-subtitle">Each <span class="hl-block">block</span> stands for <strong>one</strong>. Stack them in equal-sized columns. The taller the column, the more popular the category.</div>
+        <div id="cubeToBlockDemo" style="margin:14px 0;"></div>
+        <div class="sentence-stem">There are <strong>3 blocks</strong> shaded. This means <strong>3 children</strong> chose that team.</div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s3-do">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s3"><span class="dot"></span> Step 3 · Build it</div>
+        <div class="slide-title">🛠️ Cube stacker</div>
+        <div class="slide-subtitle">Use <strong>+</strong> and <strong>–</strong> to build a block diagram. Match the target totals shown. Every cube must be the same size!</div>
+        <div id="cubeStacker"></div>
+        <div class="sentence-stem" id="cubeFb">Target: <strong style="color:var(--accent-light)">red=3, blue=6, green=8, yellow=2, purple=5</strong>.</div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s3-check">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s3"><span class="dot"></span> Step 3 · Check</div>
+        <div class="slide-title">📊 How many more? How many fewer?</div>
+        <div class="slide-subtitle">Compare the columns. The <span style="color:var(--error);font-weight:800;">red gap</span> shows the <strong>difference</strong> — just like the bar models from Autumn term.</div>
+        <div id="diffBlock" style="margin:14px 0;"></div>
+        <div id="diffBars" style="margin:14px 0;"></div>
+        <div id="diffQuiz"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== STEP 4 — PICTOGRAMS 1-1 (DRAW) ===== -->
+<div class="slide" id="s4-teach">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s4"><span class="dot"></span> Step 4 · Pictograms (1 to 1)</div>
+        <div class="slide-title">🖼️ One picture = one thing</div>
+        <div class="slide-subtitle">A <span class="hl-pic">pictogram</span> uses pictures instead of bars. The <span class="hl-key">key</span> tells you what one picture means. Use the <strong>same picture every time</strong>!</div>
+        <div class="pic-key">🔑 Key: ⚽ = 1 goal scored</div>
+        <table class="pictogram-table" id="s4Demo"></table>
+        <div class="sentence-stem">If 1 ⚽ = 1 goal and Mo scored 4, I draw <strong>4 footballs</strong> in Mo's row.</div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s4-do">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s4"><span class="dot"></span> Step 4 · Build it</div>
+        <div class="slide-title">🎨 Draw the pictogram</div>
+        <div class="slide-subtitle">Use the table to draw a pictogram of fruit in the lunchbox. Click <strong>+</strong> to add a symbol — the same symbol every time.</div>
+        <div class="pic-key">🔑 Key: 🟩 = 1 piece of fruit</div>
+        <div id="s4Builder"></div>
+        <div class="quiz-feedback" id="s4Fb"></div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s4-check">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s4"><span class="dot"></span> Step 4 · Check</div>
+        <div class="slide-title">🔍 What did Tiny do wrong?</div>
+        <div class="tiny-card">
+            <div class="tiny-icon">🐢</div>
+            <div class="tiny-bubble">
+                <div class="tiny-name">Tiny says</div>
+                <div class="tiny-says">"Here's my pictogram of shapes I saw on a shape hunt — I saw the same number of squares and rectangles!"</div>
+            </div>
+        </div>
+        <table class="pictogram-table" id="s4TinyTbl"></table>
+        <div class="pic-key" style="margin-top:0">🔑 Key: 1 picture = 1 shape</div>
+        <div id="s4TinyQ"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== STEP 5 — INTERPRET PICTOGRAMS 1-1 ===== -->
+<div class="slide" id="s5-do">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s5"><span class="dot"></span> Step 5 · Read pictograms (1 to 1)</div>
+        <div class="slide-title">🪲 Bug hunt — what does the pictogram say?</div>
+        <div class="slide-subtitle">Class 2 went on a bug hunt. Read the pictogram, then answer the questions below. <strong>Watch out:</strong> an empty row means <strong>zero</strong> — not "unfinished".</div>
+        <div class="pic-key">🔑 Key: 🐞 = 1 minibeast</div>
+        <table class="pictogram-table" id="s5Tbl2"></table>
+        <div id="s5Quiz"></div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s5-check">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s5"><span class="dot"></span> Step 5 · Check</div>
+        <div class="slide-title">🧩 Complete the pictogram</div>
+        <div class="slide-subtitle">An ice-cream van sold these flavours. Use the clues to fill in the missing rows.</div>
+        <div class="pic-key">🔑 Key: 🍦 = 1 ice cream</div>
+        <table class="pictogram-table" id="s5DedTbl"></table>
+        <ul class="clue-list" id="s5DedClues"></ul>
+        <div class="btn-row"><button class="action-btn check-btn" onclick="checkS5Ded()">✓ Check</button></div>
+        <div class="quiz-feedback" id="s5DedFb"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== TEXT TO TALLY ===== -->
+<div class="slide" id="slide-text2tally">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill"><span class="dot"></span> Bonus skill · Reading into data</div>
+        <div class="slide-title">📖 Turn a story into a tally chart</div>
+        <div class="slide-subtitle">Read the paragraph. <strong>Highlight the numbers</strong> in your head. Then fill in the totals.</div>
+        <div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.3);border-radius:14px;padding:18px;margin:12px 0;line-height:1.7;font-size:1.05rem;">
+            James asked everyone in his class what their favourite sport was. <strong>Ten</strong> people chose football and <strong>three</strong> people chose rugby. <strong>Bella and Katy</strong> chose dance and <strong>eight</strong> people said tennis. James' favourite sport is cricket.
+        </div>
+        <table class="data-table" id="t2tTable"></table>
+        <div class="btn-row"><button class="action-btn check-btn" onclick="checkT2T()">✓ Check totals</button></div>
+        <div class="quiz-feedback" id="t2tFb"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== STEP 6 — DRAW PICTOGRAMS 2/5/10 ===== -->
+<div class="slide" id="s6-teach">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s6"><span class="dot"></span> Step 6 · Bigger keys (2, 5, 10)</div>
+        <div class="slide-title">⚖️ Why a bigger key helps</div>
+        <div class="slide-subtitle">If you had to draw <strong>30 children</strong> with 1 picture each, you'd run out of room! A <span class="hl-key">key of 10</span> means <strong>1 picture = 10 children</strong>. Same data — much tidier.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;">
+            <div>
+                <div class="pic-key" style="font-size:.85rem">🔑 Key: 🟣 = 1 child (messy!)</div>
+                <table class="pictogram-table" id="s6CompareA"></table>
+            </div>
+            <div>
+                <div class="pic-key" style="font-size:.85rem">🔑 Key: 🟣 = 10 children (tidy!)</div>
+                <table class="pictogram-table" id="s6CompareB"></table>
+            </div>
+        </div>
+        <div class="sentence-stem">A <span class="hl-key">half-picture</span> means <strong>half of the key</strong>. So if 🟣 = 10, then 🟣½ = <strong>5</strong>.</div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s6-do">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s6"><span class="dot"></span> Step 6 · Build it</div>
+        <div class="slide-title">🍰 Cakes sold this week</div>
+        <div class="slide-subtitle">Use the key picker to choose a sensible key, then draw the pictogram. <strong>Half a symbol</strong> represents half of the key.</div>
+        <div class="flex-center" style="margin:10px 0;">
+            <span style="font-weight:700;color:var(--text-dim);">Choose key:</span>
+            <button class="action-btn" data-key="1" onclick="setS6Key(1)">🍰 = 1</button>
+            <button class="action-btn" data-key="5" onclick="setS6Key(5)">🍰 = 5</button>
+            <button class="action-btn" data-key="10" onclick="setS6Key(10)">🍰 = 10</button>
+        </div>
+        <div id="s6Builder"></div>
+        <div class="quiz-feedback" id="s6Fb"></div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s6-check">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s6"><span class="dot"></span> Step 6 · Check</div>
+        <div class="slide-title">🔍 Tiny vs the half-symbol</div>
+        <div class="tiny-card">
+            <div class="tiny-icon">🐢</div>
+            <div class="tiny-bubble">
+                <div class="tiny-name">Tiny says (looking at this pictogram)</div>
+                <div class="tiny-says">"There are 16 and a half vehicles, because I can see 16 and a half pictures!"</div>
+            </div>
+        </div>
+        <div class="pic-key">🔑 Key: 🚗 = 10 vehicles</div>
+        <table class="pictogram-table" id="s6TinyTbl"></table>
+        <div id="s6TinyQ"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== STEP 7 — INTERPRET PICTOGRAMS 2/5/10 ===== -->
+<div class="slide" id="s7-teach">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s7"><span class="dot"></span> Step 7 · Read bigger keys (2, 5, 10)</div>
+        <div class="slide-title">🐦 Counting with the key</div>
+        <div class="slide-subtitle">Count the pictures, then <strong>multiply by the key</strong>. Half a picture means half the key.</div>
+        <div class="pic-key">🔑 Key: 🟦 = 5 birds</div>
+        <table class="pictogram-table" id="s7Tbl"></table>
+        <div class="sentence-stem">Sparrow: <strong>3 pictures</strong> × 5 = <strong>15 birds</strong>. <br>Robin: <strong>1 picture</strong> × 5 = <strong>5 birds</strong>. <br>Difference: 15 − 5 = <strong>10 birds</strong>.</div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s7-do">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s7"><span class="dot"></span> Step 7 · Try it</div>
+        <div class="slide-title">🐑 True or false?</div>
+        <div class="slide-subtitle">Decide if each statement is true or false. Then read why.</div>
+        <div class="pic-key">🔑 Key: ⭐ = 10 animals</div>
+        <table class="pictogram-table" id="s7Tbl2"></table>
+        <div id="s7Quiz"></div>
+    </div>
+</div>
+</div>
+
+<div class="slide" id="s7-check">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill s7"><span class="dot"></span> Step 7 · Don't be fooled</div>
+        <div class="slide-title">🐢 Tiny is right this time!</div>
+        <div class="slide-subtitle">Tiny doesn't always make mistakes. Read carefully and decide if Tiny is correct or not.</div>
+        <div id="tinyRightArea"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== RECAP ===== -->
+<div class="slide" id="slide-recap">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill"><span class="dot"></span> Recap · Bringing it together</div>
+        <div class="slide-title">🧠 You already knew this</div>
+        <div class="slide-subtitle">Statistics isn't really new — it's built on number skills you already have.</div>
+        <div class="bridge-grid">
+            <div class="bridge-tile"><div class="bt-tag">Tallies</div><div class="bt-text">Counting in <strong>5s</strong> — just like your 5 times table.</div></div>
+            <div class="bridge-tile"><div class="bt-tag">Pictogram keys</div><div class="bt-text">Multiplying by <strong>2, 5, 10</strong> — tables you already know.</div></div>
+            <div class="bridge-tile"><div class="bt-tag">Half-symbols</div><div class="bt-text">Finding <strong>half of a number</strong> — Autumn fractions work.</div></div>
+            <div class="bridge-tile"><div class="bt-tag">Comparing data</div><div class="bt-text">"How many more" = <strong>subtraction</strong> (the bar-model from Autumn).</div></div>
+        </div>
+        <div class="sentence-stem">Different picture. Same maths. That's why Statistics is easier than it looks.</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== MASTERY ASSESSMENT ===== -->
+<div class="slide" id="slide-mastery">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill"><span class="dot" style="background:var(--block)"></span> Mastery assessment</div>
+        <div class="slide-title">🏆 Block 3 Mastery Test</div>
+        <div class="slide-subtitle">10 questions covering all 7 steps. Read each one carefully. You'll get an instant review at the end.</div>
+        <div id="masteryQuiz"></div>
+        <div id="masteryResult" class="results-card hidden" style="margin-top:14px"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== REVIEW ===== -->
+<div class="slide" id="slide-review">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill"><span class="dot" style="background:var(--success)"></span> Review</div>
+        <div class="slide-title">📝 What we learned</div>
+        <div class="slide-subtitle">Here are the questions you missed, with the correct answers and a quick reason.</div>
+        <div id="reviewArea"></div>
+    </div>
+</div>
+</div>
+
+<!-- ===== I CAN CHECKLIST ===== -->
+<div class="slide" id="slide-ican">
+<div class="slide-content">
+    <div class="glass-card">
+        <div class="step-pill"><span class="dot"></span> I Can…</div>
+        <div class="slide-title">✅ Tick what you can do</div>
+        <div class="slide-subtitle">Be honest — tick the boxes you feel sure about. Anything left un-ticked is your next practice goal.</div>
+        <div class="ican-list" id="icanList"></div>
+        <div class="sentence-stem" id="icanFb">Tick boxes as you feel ready.</div>
+    </div>
+</div>
+</div>
+
+<!-- ===== HOMEWORK ===== -->
+<div class="slide" id="slide-hw">
+<div class="slide-content">
+    <div class="homework-card">
+        <h3>🎒 Take-home challenge</h3>
+        <div class="tier-header tier-mild">🟢 Mild · 5 minutes</div>
+        <div class="homework-item">📋 <span><strong>Tally hunt.</strong> Sit by a window or in a quiet room and tally <em>every sound you hear</em> for 5 minutes (cars, dogs, voices, doors). Use a <strong>gate of 5</strong> for every 5th mark.</span></div>
+        <div class="tier-header tier-medium">🟡 Medium · 10 minutes</div>
+        <div class="homework-item">📊 <span><strong>Make a table</strong> of your bookshelf. Sort books into 3–4 categories (story, fact, comic, picture-book). Tally each, then write a table with just the totals.</span></div>
+        <div class="tier-header tier-spicy">🟣 Spicy · 15 minutes</div>
+        <div class="homework-item">🖼️ <span><strong>Pictogram with a key of 2.</strong> Use the bookshelf data. Choose a symbol that's easy to <em>halve</em>. Draw the pictogram. Then write 2 questions about your own data ("How many more story books than comics?").</span></div>
+        <div class="homework-item" style="margin-top:14px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.12)">💬 <strong>Talk to a grown-up:</strong> "When would a tally chart be better than a table? When would a table be better?"</div>
+        <details class="answer-key">
+            <summary>Grown-up answer key</summary>
+            <div class="ak-item"><strong>Tally vs table:</strong> tally is best when you're <em>still collecting</em> (e.g. counting cars going past — you can't see them all at once). A table is best when you want to <em>read</em> the total quickly.</div>
+            <div class="ak-item"><strong>Half-able symbols:</strong> circles ●, squares ■, hearts ♥ — easy to split. Avoid stars ★ or animals — hard to draw a clean half.</div>
+            <div class="ak-item"><strong>Good questions to ask about own data:</strong> "Which is the most popular?", "How many altogether?", "How many more X than Y?", "What is the difference between X and Y?"</div>
+        </details>
+    </div>
+</div>
+</div>
+
+<!-- ===== CERTIFICATE ===== -->
+<div class="slide" id="slide-cert">
+<div class="slide-content flex-center" style="flex-direction:column;min-height:80vh;">
+    <div class="results-card">
+        <div class="score-circle gold" id="certScore">—</div>
+        <h2 id="certTitle" style="font-size:1.7rem;margin-bottom:10px;">🌟 Block 3 Complete!</h2>
+        <p id="certMessage" style="color:var(--text-dim);line-height:1.6;margin-bottom:14px;">Finish the mastery test to see your score here.</p>
+        <p style="color:var(--text-dim);font-size:.9rem;">Next up: <strong style="color:var(--accent-light);">Block 4 — Position and Direction</strong>.</p>
+    </div>
+</div>
+</div>
+
+<!-- ===== RESUME TOAST ===== -->
+<div class="resume-toast" id="resumeToast" role="status">
+    <span style="font-size:1.4rem">📊</span>
+    <span id="resumeMsg" style="flex:1"></span>
+    <button onclick="dismissResume()">Continue</button>
+    <button class="ghost" onclick="resetProgress()">Start over</button>
+</div>
+
+<!-- ===== NAV BAR ===== -->
+<div class="nav-bar">
+    <button class="nav-btn back" id="backBtn" onclick="prevSlide()">← Back</button>
+    <div class="nav-center">
+        <span class="slide-counter" id="slideCounter">1 / 29</span>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Dark</button>
+        <button class="reset-btn" onclick="resetProgress()">↺ Reset</button>
+    </div>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+// ============ SOUND ============
+const AudioCtx=window.AudioContext||window.webkitAudioContext;let audioCtx;
+function ensureAudio(){if(!audioCtx)audioCtx=new AudioCtx()}
+function playSound(t){try{ensureAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);const now=audioCtx.currentTime;
+if(t==='correct'){o.frequency.setValueAtTime(523,now);o.frequency.setValueAtTime(659,now+.1);g.gain.setValueAtTime(.15,now);g.gain.exponentialRampToValueAtTime(.001,now+.4);o.start();o.stop(now+.4)}
+else if(t==='wrong'){o.type='sawtooth';o.frequency.setValueAtTime(200,now);g.gain.setValueAtTime(.1,now);g.gain.exponentialRampToValueAtTime(.001,now+.3);o.start();o.stop(now+.3)}
+else if(t==='success'){o.frequency.setValueAtTime(523,now);o.frequency.setValueAtTime(659,now+.15);o.frequency.setValueAtTime(784,now+.3);g.gain.setValueAtTime(.15,now);g.gain.exponentialRampToValueAtTime(.001,now+.6);o.start();o.stop(now+.6)}
+else if(t==='click'){o.frequency.setValueAtTime(800,now);g.gain.setValueAtTime(.08,now);g.gain.exponentialRampToValueAtTime(.001,now+.08);o.start();o.stop(now+.08)}
+else if(t==='tick'){o.frequency.setValueAtTime(1200,now);g.gain.setValueAtTime(.04,now);g.gain.exponentialRampToValueAtTime(.001,now+.05);o.start();o.stop(now+.05)}}catch(e){}}
+
+// ============ STATE ============
+const STORAGE_KEY='y2_stats_state';
+function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}}catch(e){return{}}}
+function saveState(p){try{const s=loadState();localStorage.setItem(STORAGE_KEY,JSON.stringify({...s,...p}))}catch(e){}}
+function applyTheme(m){document.body.classList.toggle('light',m==='light');const b=document.getElementById('themeToggle');if(b)b.textContent=m==='light'?'☀️ Light':'🌙 Dark'}
+function toggleTheme(){const n=document.body.classList.contains('light')?'dark':'light';applyTheme(n);saveState({theme:n});playSound('click')}
+function resetProgress(){try{const s=loadState();localStorage.setItem(STORAGE_KEY,JSON.stringify({theme:s.theme||'dark'}))}catch(e){}dismissResume();showSlide(0);playSound('click')}
+function dismissResume(){const t=document.getElementById('resumeToast');if(t)t.classList.remove('show')}
+function showResumeToast(n,t){const r=document.getElementById('resumeToast');const m=document.getElementById('resumeMsg');if(!r||!m)return;m.innerHTML='Welcome back — picking up at <strong>slide '+(n+1)+' of '+t+'</strong>.';setTimeout(()=>r.classList.add('show'),400);setTimeout(()=>r.classList.remove('show'),7000)}
+function showKbdHint(){if(document.getElementById('kbdHint'))return;const h=document.createElement('div');h.id='kbdHint';h.className='kbd-hint';h.innerHTML='Tip: use <kbd>←</kbd> <kbd>→</kbd> arrow keys to move between slides';document.body.appendChild(h);setTimeout(()=>{const e=document.getElementById('kbdHint');if(e)e.remove()},6500)}
+
+// ============ SLIDES ============
+let cur=0,total=0;
+function showSlide(n){
+    const slides=document.querySelectorAll('.slide');total=slides.length;
+    slides.forEach(s=>s.classList.remove('active'));
+    slides[n].classList.add('active');cur=n;
+    document.getElementById('slideCounter').textContent=(n+1)+' / '+total;
+    document.getElementById('progressBar').style.width=((n+1)/total*100)+'%';
+    document.getElementById('backBtn').disabled=n===0;
+    const id=slides[n].id;
+    if(slideInit[id]&&!initFlags[id]){slideInit[id]();initFlags[id]=true}
+    saveState({slide:n});window.scrollTo(0,0);
+}
+const initFlags={};
+function nextSlide(){if(cur<total-1){playSound('click');showSlide(cur+1)}}
+function prevSlide(){if(cur>0){playSound('click');showSlide(cur-1)}}
+document.addEventListener('keydown',e=>{
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){
+        if(e.key==='Enter'){
+            // Submit the puzzle the current slide belongs to
+            const slide=e.target.closest('.slide');if(!slide)return;
+            const id=slide.id;
+            if(id==='s2-check')checkDed();
+            else if(id==='s5-check')checkS5Ded();
+            else if(id==='slide-text2tally')checkT2T();
+            e.preventDefault();
+        }
+        return;
+    }
+    if(e.key==='ArrowRight')nextSlide();
+    if(e.key==='ArrowLeft')prevSlide();
+});
+
+// ============ HELPERS ============
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+// Mini block-diagram (inline HTML for use inside quiz options)
+function miniBlock(vals,labels,colours){
+    colours=colours||['#EC4899','#3B82F6','#22C55E','#F59E0B'];
+    let h='<span style="display:inline-flex;align-items:flex-end;gap:5px;vertical-align:middle;margin-left:8px;padding:6px;background:rgba(255,255,255,.04);border-radius:6px;">';
+    vals.forEach((v,i)=>{
+        h+='<span style="display:inline-flex;flex-direction:column;align-items:center;">';
+        h+='<span style="display:inline-block;width:16px;height:'+(v*6)+'px;background:'+colours[i]+';border:1px solid rgba(0,0,0,.25);border-radius:2px;"></span>';
+        h+='<span style="font-size:.65rem;color:var(--text-dim);margin-top:3px;font-weight:700;">'+labels[i]+'</span></span>';
+    });
+    h+='</span>';return h;
+}
+function miniTableHtml(rows){
+    let h='<table style="display:inline-table;max-width:200px;margin:6px 0;border-collapse:collapse;font-size:.85rem;background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:6px;overflow:hidden;vertical-align:middle;">';
+    h+='<tr><th style="padding:4px 10px;background:rgba(139,92,246,.15);color:var(--accent-light);border-bottom:1px solid var(--card-border);">House</th><th style="padding:4px 10px;background:rgba(139,92,246,.15);color:var(--accent-light);border-bottom:1px solid var(--card-border);">Points</th></tr>';
+    rows.forEach(r=>{h+='<tr><td style="padding:4px 10px;border-top:1px solid var(--card-border);font-weight:700;">'+r[0]+'</td><td style="padding:4px 10px;border-top:1px solid var(--card-border);"><strong>'+r[1]+'</strong></td></tr>'});
+    h+='</table>';return h;
+}
+
+// ============ TALLY SVG ============
+// Render n tally marks as SVG. Groups of 5 form a "gate".
+function tallySvg(n,opts){
+    opts=opts||{};
+    const groupW=44, singleW=8, mh=36;
+    const fullGroups=Math.floor(n/5);
+    const remainder=n%5;
+    const width=fullGroups*groupW + (remainder>0?(remainder*singleW+10):0) + 6;
+    let svg='<svg class="tally-svg" width="'+Math.max(width,40)+'" height="'+mh+'" viewBox="0 0 '+Math.max(width,40)+' '+mh+'">';
+    let x=4;
+    for(let g=0;g<fullGroups;g++){
+        // four vertical lines
+        for(let i=0;i<4;i++){
+            svg+='<line class="tally-mark" x1="'+(x+i*8)+'" y1="6" x2="'+(x+i*8)+'" y2="30"/>';
+        }
+        // diagonal across (the gate stroke)
+        svg+='<line class="tally-mark" x1="'+(x-3)+'" y1="28" x2="'+(x+3*8+3)+'" y2="8"/>';
+        x+=groupW;
+    }
+    if(remainder>0){
+        for(let i=0;i<remainder;i++){
+            svg+='<line class="tally-mark" x1="'+(x+i*8)+'" y1="6" x2="'+(x+i*8)+'" y2="30"/>';
+        }
+    }
+    svg+='</svg>';
+    return svg;
+}
+
+// ============ VOCAB ============
+const VOCAB=[
+    {t:'tally',d:'A single mark to count one thing. Every 5th mark crosses the other four.'},
+    {t:'gate',d:'A group of 5 tally marks: 4 vertical lines and 1 diagonal across.'},
+    {t:'total',d:'How many altogether — the sum of all the counts.'},
+    {t:'category',d:'A group you sort things into (e.g. "blue", "dog", "Monday").'},
+    {t:'table',d:'A chart that lists categories and their totals — no tally marks needed.'},
+    {t:'block diagram',d:'A chart where each block stands for one — taller column = more.'},
+    {t:'pictogram',d:'A chart that uses pictures instead of blocks.'},
+    {t:'key',d:'The little note that tells you what one picture stands for (e.g. 1 = 5).'},
+    {t:'symbol',d:'The picture you use over and over. Must be the same each time!'},
+    {t:'scale',d:'How big each unit is — 1, 2, 5 or 10 per picture/block.'},
+    {t:'most / least common',d:'The category with the biggest / smallest total.'},
+    {t:'altogether',d:'Add all the totals together.'}
+];
+
+// ============ TALLY DEMO ============
+let tallyDemoN=0;
+function renderTallyDemo(){
+    const el=document.getElementById('tallyDemo');
+    el.innerHTML='<div style="font-size:.9rem;color:var(--text-dim);margin-bottom:8px;">Count: <strong style="color:var(--tally);font-size:1.4rem;">'+tallyDemoN+'</strong></div>'+
+        '<div style="background:rgba(236,72,153,.06);border:1px solid rgba(236,72,153,.25);border-radius:12px;padding:18px;min-height:60px;">'+tallySvg(tallyDemoN)+'</div>'+
+        '<div style="font-size:.85rem;color:var(--text-dim);margin-top:8px;">'+(tallyDemoN===0?'Click "Add the next mark" to begin.':(tallyDemoN%5===0?'⭐ Gate complete! Count in 5s.':''))+'</div>';
+}
+function stepTallyDemo(){if(tallyDemoN>=20){resetTallyDemo();return}tallyDemoN++;renderTallyDemo();playSound(tallyDemoN%5===0?'success':'tick')}
+function resetTallyDemo(){tallyDemoN=0;renderTallyDemo()}
+
+// ============ TALLY BUILDER (S1-DO) ============
+const tbColours=[{lbl:'Green',target:7},{lbl:'Blue',target:12},{lbl:'Yellow',target:15},{lbl:'Pink',target:3}];
+let tbCounts=[0,0,0,0];
+function renderTallyBuilder(){
+    const t=document.getElementById('tallyBuilder');
+    let h='<thead><tr><th>Colour</th><th>Tally</th><th>Total</th><th></th></tr></thead><tbody>';
+    tbColours.forEach((c,i)=>{
+        h+='<tr><td class="label">'+c.lbl+'</td><td class="tally">'+tallySvg(tbCounts[i])+'</td><td><strong style="color:var(--accent-light);font-size:1.1rem;">'+tbCounts[i]+'</strong></td>'+
+           '<td><button class="cube-add" onclick="tbInc('+i+')">+</button> <button class="cube-sub" onclick="tbDec('+i+')">−</button></td></tr>';
+    });
+    h+='</tbody>';t.innerHTML=h;
+    // Check progress against targets
+    const allMatch=tbColours.every((c,i)=>tbCounts[i]===c.target);
+    if(allMatch){document.getElementById('tbFb').innerHTML='🎉 All four match! Notice how counting in <span class="hl-tally">5s</span> makes the totals quick to read.';playSound('success')}
+}
+function tbInc(i){tbCounts[i]++;renderTallyBuilder();playSound(tbCounts[i]%5===0?'success':'tick')}
+function tbDec(i){if(tbCounts[i]>0){tbCounts[i]--;renderTallyBuilder();playSound('click')}}
+
+// ============ TINY'S MISTAKE (S1-CHECK) ============
+function initTinyMistake(){
+    const a=document.getElementById('tinyMistakeArea');
+    a.innerHTML='<table class="data-table" style="margin:14px auto"><thead><tr><th>Journey</th><th>Tally</th><th>Total Tiny wrote</th></tr></thead>'+
+        '<tbody><tr><td class="label">Walk</td><td class="tally"><svg class="tally-svg" width="80" height="36" viewBox="0 0 80 36">'+
+        // 7 individual lines (no gate!)
+        '<line class="tally-mark" x1="6" y1="6" x2="6" y2="30"/><line class="tally-mark" x1="14" y1="6" x2="14" y2="30"/><line class="tally-mark" x1="22" y1="6" x2="22" y2="30"/><line class="tally-mark" x1="30" y1="6" x2="30" y2="30"/><line class="tally-mark" x1="38" y1="6" x2="38" y2="30"/><line class="tally-mark" x1="46" y1="6" x2="46" y2="30"/><line class="tally-mark" x1="54" y1="6" x2="54" y2="30"/></svg></td><td><strong style="color:var(--error)">7</strong></td></tr>'+
+        '<tr><td class="label">Bus</td><td class="tally">'+tallySvg(5)+'<span style="color:var(--text-dim);margin-left:4px;">(extra mark crossed for 4)</span></td><td><strong style="color:var(--error)">4</strong></td></tr></tbody></table>'+
+        '<div class="quiz-question"><div class="q-text">What did Tiny do wrong?</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="tmAns(0)">Walk has 7 single lines — should be <strong>4 + diagonal across + 2 single</strong> (a gate of 5 + 2)</button>'+
+        '<button class="quiz-opt" onclick="tmAns(1)">Bus has 5 marks (a full gate) but Tiny wrote 4 — should be <strong>5</strong></button>'+
+        '<button class="quiz-opt" onclick="tmAns(2)">Both! Walk should be drawn with a <strong>gate of 5 + 2</strong>, and Bus is actually <strong>5</strong>, not 4</button>'+
+        '</div><div class="quiz-feedback" id="tmFb"></div></div>';
+}
+function tmAns(i){
+    const opts=document.querySelectorAll('#tinyMistakeArea .quiz-opt');opts.forEach(o=>o.classList.add('disabled'));
+    opts[2].classList.add('correct');
+    const fb=document.getElementById('tmFb');
+    if(i===2){opts[2].classList.add('correct');fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Exactly right! 7 single lines is <em>not wrong</em>, but it\'s much slower to count. And Bus shows a complete gate (5 marks), so the total is 5, not 4.';playSound('correct')}
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Look again — Tiny made <strong>both</strong> mistakes. Walk wasn\'t grouped into 5s, and the Bus tally has 5 marks (a full gate) but Tiny only wrote 4.';playSound('wrong')}
+}
+
+// ============ S2: TALLY ↔ TABLE VIEW ============
+const s2Data=[{lbl:'Cat',n:11},{lbl:'Dog',n:14},{lbl:'Hamster',n:7},{lbl:'Rabbit',n:4}];
+function initS2Views(){
+    let h1='<thead><tr><th>Pet</th><th>Tally</th></tr></thead><tbody>';
+    s2Data.forEach(d=>{h1+='<tr><td class="label">'+d.lbl+'</td><td class="tally">'+tallySvg(d.n)+'</td></tr>'});
+    h1+='</tbody>';document.getElementById('s2TallyView').innerHTML=h1;
+    let h2='<thead><tr><th>Pet</th><th>Total</th></tr></thead><tbody>';
+    s2Data.forEach(d=>{h2+='<tr><td class="label">'+d.lbl+'</td><td><strong style="color:var(--table);font-size:1.1rem;">'+d.n+'</strong></td></tr>'});
+    h2+='</tbody>';document.getElementById('s2TableView').innerHTML=h2;
+}
+
+// ============ S2-DO: FRUIT PICTURE COUNT ============
+const s2Fruits=[
+    {e:'🍎',lbl:'Apple'},{e:'🍌',lbl:'Banana'},{e:'🍓',lbl:'Strawberry'}
+];
+let s2FruitPicked=[];
+const s2FruitGrid=['🍎','🍌','🍓','🍎','🍓','🍌','🍓','🍎','🍓','🍌','🍎','🍓','🍌','🍓','🍎','🍌','🍓','🍎','🍌','🍓','🍓','🍎','🍓','🍌'];
+function initFruitPic(){
+    s2FruitPicked=Array(s2FruitGrid.length).fill(false);
+    let h='<div style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px;max-width:480px;margin:0 auto;background:rgba(255,255,255,.03);padding:12px;border-radius:12px;">';
+    s2FruitGrid.forEach((f,i)=>{h+='<button onclick="pickFruit('+i+')" id="fp'+i+'" style="font-size:1.8rem;background:rgba(255,255,255,.04);border:1.5px solid var(--card-border);border-radius:8px;padding:6px;cursor:pointer;transition:all .15s;">'+f+'</button>'});
+    h+='</div>';
+    document.getElementById('fruitPic').innerHTML=h;
+    renderFruitTable();
+}
+function pickFruit(i){
+    if(s2FruitPicked[i])return;
+    s2FruitPicked[i]=true;
+    const btn=document.getElementById('fp'+i);
+    btn.style.opacity='0.25';btn.style.background='rgba(16,185,129,.15)';btn.style.borderColor='var(--success)';
+    playSound('tick');
+    renderFruitTable();
+    if(s2FruitPicked.every(Boolean)){
+        const fb=document.getElementById('fruitFb');fb.className='quiz-feedback show correct-fb';
+        fb.innerHTML='🎉 Every fruit counted exactly once! Apple = <strong>'+countFruit('🍎')+'</strong>, Banana = <strong>'+countFruit('🍌')+'</strong>, Strawberry = <strong>'+countFruit('🍓')+'</strong>. Altogether: <strong>'+s2FruitGrid.length+'</strong>.';
+        playSound('success');
+    }
+}
+function countFruit(e){return s2FruitGrid.filter((f,i)=>f===e&&s2FruitPicked[i]).length}
+function renderFruitTable(){
+    let h='<thead><tr><th>Fruit</th><th>Tally</th><th>Total</th></tr></thead><tbody>';
+    s2Fruits.forEach(f=>{
+        const n=countFruit(f.e);
+        h+='<tr><td class="label">'+f.e+' '+f.lbl+'</td><td class="tally">'+tallySvg(n)+'</td><td><strong style="color:var(--accent-light);font-size:1.1rem;">'+n+'</strong></td></tr>';
+    });
+    h+='</tbody>';document.getElementById('fruitTable').innerHTML=h;
+}
+
+// ============ S2-CHECK: DEDUCTION TABLE ============
+// Based on WR Step 2 example: bananas, apples=12, oranges, pears=10. 5 fewer bananas than apples; oranges > pears but < apples.
+let dedData={};
+function newDed(){
+    const sets=[
+        {given:{apples:12,pears:10},solve:{bananas:7,oranges:11},clues:[
+            'There are <strong>5 fewer bananas</strong> than apples.',
+            'The number of <strong>oranges</strong> is greater than the number of pears but less than the number of apples.'
+        ],items:['bananas','apples','oranges','pears']},
+        {given:{cats:8,fish:5},solve:{dogs:11,rabbits:6},clues:[
+            'There are <strong>3 more dogs</strong> than cats.',
+            'The number of <strong>rabbits</strong> is 1 more than the number of fish.'
+        ],items:['cats','dogs','rabbits','fish']},
+        {given:{red:6,green:9},solve:{blue:12,yellow:3},clues:[
+            'There are <strong>twice as many blue</strong> as red.',
+            'The number of <strong>yellow</strong> is half the number of red.'
+        ],items:['red','green','blue','yellow']}
+    ];
+    dedData=sets[Math.floor(Math.random()*sets.length)];
+    let h='<thead><tr><th>Item</th><th>Total</th></tr></thead><tbody>';
+    dedData.items.forEach(k=>{
+        const known=dedData.given[k];
+        if(known!=null)h+='<tr><td class="label">'+k+'</td><td><strong>'+known+'</strong></td></tr>';
+        else h+='<tr><td class="label">'+k+'</td><td class="editable"><input class="cell-input" id="ded-'+k+'" placeholder="?"></td></tr>';
+    });
+    h+='</tbody>';document.getElementById('dedTable').innerHTML=h;
+    document.getElementById('dedClues').innerHTML=dedData.clues.map(c=>'<li>'+c+'</li>').join('');
+    document.getElementById('dedFb').className='quiz-feedback';
+    document.getElementById('dedFb').innerHTML='';
+}
+function checkDed(){
+    let ok=true,details=[];
+    Object.keys(dedData.solve).forEach(k=>{
+        const inp=document.getElementById('ded-'+k);const v=parseInt(inp.value);
+        if(v===dedData.solve[k]){inp.style.color='var(--success)'}
+        else{inp.style.color='var(--error)';ok=false;details.push('<strong>'+k+'</strong> = '+dedData.solve[k])}
+    });
+    const fb=document.getElementById('dedFb');
+    if(ok){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 All correct! That\'s logical deduction — using clues to find missing data.';playSound('success')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Close! Correct answers: '+details.join(', ')+'.';playSound('wrong')}
+}
+
+// ============ S3-TEACH: CUBE → BLOCK DEMO ============
+function initCubeToBlock(){
+    const teams=[{lbl:'Team 1',n:5,c:'#22C55E'},{lbl:'Team 2',n:8,c:'#EC4899'},{lbl:'Team 3',n:2,c:'#3B82F6'},{lbl:'Team 4',n:4,c:'#F59E0B'},{lbl:'Team 5',n:6,c:'#A78BFA'}];
+    const max=8;
+    let yaxis='<div class="block-yaxis">';for(let i=max;i>=1;i--)yaxis+='<span>'+i+'</span>';yaxis+='</div>';
+    let cols='';
+    teams.forEach(t=>{
+        let c='<div class="block-col"><div class="count">'+t.n+'</div>';
+        for(let i=max;i>=1;i--){
+            if(i<=t.n)c+='<div class="block-cell" style="background:'+t.c+'"></div>';
+            else c+='<div class="block-cell empty"></div>';
+        }
+        c+='<div class="lbl">'+t.lbl+'</div></div>';
+        cols+=c;
+    });
+    document.getElementById('cubeToBlockDemo').innerHTML='<div class="block-diagram">'+yaxis+cols+'</div>';
+}
+
+// ============ S3-DO: CUBE STACKER ============
+const cubeTargets=[{lbl:'Red',target:3},{lbl:'Blue',target:6},{lbl:'Green',target:8},{lbl:'Yellow',target:2},{lbl:'Purple',target:5}];
+const cubeColors=['#EF4444','#3B82F6','#22C55E','#F59E0B','#A78BFA'];
+let cubeCounts=[0,0,0,0,0];
+const CUBE_MAX=10;
+function renderCubeStacker(){
+    let h='<div class="cube-stack">';
+    // y-axis
+    h+='<div class="block-yaxis" style="margin-right:6px;">';
+    for(let i=CUBE_MAX;i>=1;i--)h+='<span>'+i+'</span>';
+    h+='</div>';
+    cubeTargets.forEach((t,idx)=>{
+        h+='<div class="cube-col-wrap">';
+        h+='<div class="cube-count">'+cubeCounts[idx]+' / '+t.target+'</div>';
+        h+='<div class="cube-col">';
+        for(let i=0;i<cubeCounts[idx];i++)h+='<div class="cube-cell" style="background:'+cubeColors[idx]+'"></div>';
+        h+='</div>';
+        h+='<div class="cube-lbl" style="color:'+cubeColors[idx]+';margin-top:6px;">'+t.lbl+'</div>';
+        h+='<div class="cube-controls"><button class="cube-add" onclick="cubeInc('+idx+')">+</button><button class="cube-sub" onclick="cubeDec('+idx+')">−</button></div>';
+        h+='</div>';
+    });
+    h+='</div>';
+    document.getElementById('cubeStacker').innerHTML=h;
+    const all=cubeTargets.every((t,i)=>cubeCounts[i]===t.target);
+    const fb=document.getElementById('cubeFb');
+    if(all){fb.innerHTML='🎉 All five columns match the target! Notice every cube is the <strong>same size</strong> — that\'s the rule for block diagrams. 8 (Green) is the most popular; 2 (Yellow) is the least.';playSound('success')}
+    else fb.innerHTML='Target: <strong style="color:var(--accent-light)">red=3, blue=6, green=8, yellow=2, purple=5</strong>.';
+}
+function cubeInc(i){if(cubeCounts[i]<CUBE_MAX){cubeCounts[i]++;renderCubeStacker();playSound('tick')}}
+function cubeDec(i){if(cubeCounts[i]>0){cubeCounts[i]--;renderCubeStacker();playSound('click')}}
+
+// ============ S3-CHECK: DIFFERENCE BAR ============
+function initS3Check(){
+    // Team 2 had 8, Team 4 had 4 — difference 4
+    const t1n=8,t2n=4;
+    let h='<div class="block-diagram" style="max-width:280px;">';
+    h+='<div class="block-yaxis">';for(let i=8;i>=1;i--)h+='<span>'+i+'</span>';h+='</div>';
+    [{lbl:'Team 2',n:t1n,c:'#EC4899'},{lbl:'Team 4',n:t2n,c:'#F59E0B'}].forEach(t=>{
+        let c='<div class="block-col"><div class="count">'+t.n+'</div>';
+        for(let i=8;i>=1;i--){
+            if(i<=t.n)c+='<div class="block-cell" style="background:'+t.c+'"></div>';
+            else c+='<div class="block-cell empty"></div>';
+        }
+        c+='<div class="lbl">'+t.lbl+'</div></div>';
+        h+=c;
+    });
+    h+='</div>';
+    document.getElementById('diffBlock').innerHTML=h;
+    // Bar-difference model
+    let bar='<div style="background:rgba(239,68,68,.06);border:1px dashed rgba(239,68,68,.3);border-radius:12px;padding:14px;">';
+    bar+='<div style="text-align:center;font-size:.85rem;color:var(--text-dim);font-weight:700;margin-bottom:8px;">DIFFERENCE MODEL (Autumn Block 2)</div>';
+    bar+='<div class="diff-bar">';
+    bar+='<div class="db-row"><span class="db-label">Team 2</span><div class="db-units">';
+    for(let i=0;i<8;i++)bar+='<div class="db-unit'+(i>=4?' diff':'')+'"></div>';
+    bar+='</div></div></div>';
+    bar+='<div class="diff-bar"><div class="db-row"><span class="db-label">Team 4</span><div class="db-units">';
+    for(let i=0;i<4;i++)bar+='<div class="db-unit"></div>';
+    bar+='</div><span class="db-arrow">← gap of 4 →</span></div></div>';
+    bar+='</div>';
+    document.getElementById('diffBars').innerHTML=bar;
+    // Quiz
+    document.getElementById('diffQuiz').innerHTML='<div class="quiz-question"><div class="q-text">How many <strong>more</strong> house points did Team 2 get than Team 4?</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="diffAns(0)">2</button>'+
+        '<button class="quiz-opt" onclick="diffAns(1)">4</button>'+
+        '<button class="quiz-opt" onclick="diffAns(2)">8</button>'+
+        '<button class="quiz-opt" onclick="diffAns(3)">12</button>'+
+        '</div><div class="quiz-feedback" id="diffFb"></div></div>';
+}
+function diffAns(i){
+    const opts=document.querySelectorAll('#diffQuiz .quiz-opt');opts.forEach(o=>o.classList.add('disabled'));
+    opts[1].classList.add('correct');
+    const fb=document.getElementById('diffFb');
+    if(i===1){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Right! 8 − 4 = <strong>4</strong>. The red gap shows it visually — same as the bar model.';playSound('correct')}
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. 8 − 4 = <strong>4</strong>. Look at the red gap on the difference bar.';playSound('wrong')}
+}
+
+// ============ S4-TEACH: PICTOGRAM DEMO ============
+function initS4Demo(){
+    const data=[{lbl:'Ann',n:2},{lbl:'Jo',n:1},{lbl:'Mo',n:4},{lbl:'Ron',n:6},{lbl:'Dan',n:0}];
+    let h='<thead><tr><th>Player</th><th>Goals scored</th></tr></thead><tbody>';
+    data.forEach(d=>{h+='<tr><td class="label">'+d.lbl+'</td><td class="icons">'+'⚽'.repeat(d.n)+(d.n===0?'<span style="color:var(--text-dim);font-size:.85rem;">(no goals)</span>':'')+'</td></tr>'});
+    h+='</tbody>';document.getElementById('s4Demo').innerHTML=h;
+}
+
+// ============ S4-DO: PICTOGRAM BUILDER ============
+const s4Targets=[{lbl:'🍎 Apple',target:5},{lbl:'🍌 Banana',target:3},{lbl:'🍐 Pear',target:7},{lbl:'🍇 Grape',target:4}];
+let s4Counts=[0,0,0,0];
+function renderS4Builder(){
+    let h='<table class="pictogram-table"><thead><tr><th>Fruit</th><th>Symbols</th><th>Total</th><th></th></tr></thead><tbody>';
+    s4Targets.forEach((t,i)=>{
+        h+='<tr><td class="label">'+t.lbl+'</td><td class="icons">'+'🟩'.repeat(s4Counts[i])+'</td>'+
+           '<td><strong style="color:var(--accent-light);">'+s4Counts[i]+'</strong> / '+t.target+'</td>'+
+           '<td><button class="cube-add" onclick="s4Inc('+i+')">+</button> <button class="cube-sub" onclick="s4Dec('+i+')">−</button></td></tr>';
+    });
+    h+='</tbody></table>';document.getElementById('s4Builder').innerHTML=h;
+    const ok=s4Targets.every((t,i)=>s4Counts[i]===t.target);
+    if(ok){const fb=document.getElementById('s4Fb');fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Perfect pictogram! Notice every symbol is the same 🟩 — that\'s the rule.';playSound('success')}
+}
+function s4Inc(i){s4Counts[i]++;renderS4Builder();playSound('tick')}
+function s4Dec(i){if(s4Counts[i]>0){s4Counts[i]--;renderS4Builder();playSound('click')}}
+
+// ============ S4-CHECK: TINY INCONSISTENT SYMBOLS ============
+function initS4Tiny(){
+    let h='<thead><tr><th>Shape</th><th>Tiny\'s pictures</th></tr></thead><tbody>';
+    h+='<tr><td class="label">Circle</td><td class="icons" style="font-size:1.8rem;">⚫⚫⚫⚫</td></tr>';
+    h+='<tr><td class="label">Rectangle</td><td class="icons" style="font-size:2.5rem;">▬▬▬▬▬</td></tr>';
+    h+='<tr><td class="label">Square</td><td class="icons" style="font-size:1.3rem;">◾◾◾◾◾◾</td></tr>';
+    h+='<tr><td class="label">Triangle</td><td class="icons" style="font-size:1.5rem;">▲▲▲</td></tr>';
+    h+='</tbody>';document.getElementById('s4TinyTbl').innerHTML=h;
+    document.getElementById('s4TinyQ').innerHTML='<div class="quiz-question"><div class="q-text">Is Tiny\'s claim correct? ("I saw the same number of squares and rectangles.")</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s4TinyAns(0)">Yes — they look about the same size.</button>'+
+        '<button class="quiz-opt" onclick="s4TinyAns(1)">No — squares show 6 pictures, rectangles show 5. They aren\'t the same.</button>'+
+        '<button class="quiz-opt" onclick="s4TinyAns(2)">We can\'t tell — Tiny used different-sized pictures!</button>'+
+        '</div><div class="quiz-feedback" id="s4TinyFb"></div></div>';
+}
+function s4TinyAns(i){
+    const opts=document.querySelectorAll('#s4TinyQ .quiz-opt');opts.forEach(o=>o.classList.add('disabled'));
+    opts[1].classList.add('correct');
+    const fb=document.getElementById('s4TinyFb');
+    if(i===1){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Spot on. <strong>Count the pictures, not their size.</strong> Squares = 6, Rectangles = 5 — not equal. (But Tiny\'s big rectangles also break the "same symbol" rule!)';playSound('correct')}
+    else if(i===2){fb.className='quiz-feedback show wrong-fb';fb.innerHTML='Almost! You\'re right that the sizes are wrong, but we CAN still count: 6 squares vs 5 rectangles. So they\'re not equal.';playSound('wrong')}
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Look again — count the pictures: 6 squares vs 5 rectangles.';playSound('wrong')}
+}
+
+// ============ S5: BUG HUNT PICTOGRAM ============
+const bugData=[{lbl:'Spider',n:7,e:'🕷️'},{lbl:'Ladybird',n:5,e:'🐞'},{lbl:'Centipede',n:0,e:'🐛'},{lbl:'Worm',n:4,e:'🪱'}];
+function initBugTable(elId){
+    let h='<thead><tr><th>Minibeast</th><th>Pictogram</th></tr></thead><tbody>';
+    bugData.forEach(d=>{h+='<tr><td class="label">'+d.lbl+'</td><td class="icons">'+(d.n===0?'<span style="color:var(--text-dim);font-size:.85rem;">(none)</span>':d.e.repeat(d.n))+'</td></tr>'});
+    h+='</tbody>';document.getElementById(elId).innerHTML=h;
+}
+function initS5Quiz(){
+    document.getElementById('s5Quiz').innerHTML=
+        '<div class="quiz-question"><div class="q-text">How many <strong>more</strong> spiders than ladybirds were seen?</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s5q(0,0)">1</button><button class="quiz-opt" onclick="s5q(0,1)">2</button><button class="quiz-opt" onclick="s5q(0,2)">5</button><button class="quiz-opt" onclick="s5q(0,3)">7</button>'+
+        '</div><div class="quiz-feedback" id="s5q0fb"></div></div>'+
+        '<div class="quiz-question"><div class="q-text">How many minibeasts were seen <strong>altogether</strong>?</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s5q(1,0)">12</button><button class="quiz-opt" onclick="s5q(1,1)">15</button><button class="quiz-opt" onclick="s5q(1,2)">16</button><button class="quiz-opt" onclick="s5q(1,3)">19</button>'+
+        '</div><div class="quiz-feedback" id="s5q1fb"></div></div>'+
+        '<div class="quiz-question"><div class="q-text">How many <strong>centipedes</strong> did Class 2 see?</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s5q(2,0)">The row is empty so we can\'t tell.</button><button class="quiz-opt" onclick="s5q(2,1)"><strong>Zero</strong> — empty row means they saw none.</button><button class="quiz-opt" onclick="s5q(2,2)">It\'s missing data — needs to be filled in.</button>'+
+        '</div><div class="quiz-feedback" id="s5q2fb"></div></div>';
+}
+const s5Answers=[1,2,1]; // ladybird-spider=2, total=16, centipede=zero
+const s5Whys=[
+    'Spider has 7, Ladybird has 5. 7 − 5 = <strong>2</strong>.',
+    '7 + 5 + 0 + 4 = <strong>16</strong>. Don\'t forget centipede counts as 0.',
+    'An empty row means <strong>zero</strong>. Class 2 didn\'t see a centipede that day — that IS the data!'
+];
+function s5q(qi,oi){
+    const fb=document.getElementById('s5q'+qi+'fb');
+    const opts=document.querySelectorAll('#s5Quiz .quiz-question:nth-child('+(qi+1)+') .quiz-opt');
+    opts.forEach(o=>o.classList.add('disabled'));
+    opts[s5Answers[qi]].classList.add('correct');
+    if(oi===s5Answers[qi]){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Correct! '+s5Whys[qi];playSound('correct')}
+    else{opts[oi].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. '+s5Whys[qi];playSound('wrong')}
+}
+
+// ============ S5-CHECK: DEDUCTION PICTOGRAM (ICE CREAMS) ============
+let s5Ded={};
+function newS5Ded(){
+    s5Ded={
+        flavours:['Strawberry','Vanilla','Chocolate','Mint','Caramel','Bubblegum'],
+        given:{Strawberry:7,Chocolate:4,Bubblegum:4},
+        solve:{Vanilla:1,Mint:2,Caramel:5},
+        clues:[
+            '<strong>Mint</strong> is half as many as Chocolate.',
+            'Fewer <strong>vanilla</strong> were sold than mint.',
+            '<strong>Caramel</strong> was more than bubblegum but less than strawberry. (And it\'s an odd number greater than 4.)'
+        ]
+    };
+    let h='<thead><tr><th>Flavour</th><th>Pictogram</th><th>Number sold</th></tr></thead><tbody>';
+    s5Ded.flavours.forEach(f=>{
+        const known=s5Ded.given[f];
+        if(known!=null)h+='<tr><td class="label">'+f+'</td><td class="icons">'+'🍦'.repeat(known)+'</td><td><strong>'+known+'</strong></td></tr>';
+        else h+='<tr><td class="label">'+f+'</td><td class="icons" style="color:var(--text-dim);">?</td><td class="editable"><input class="cell-input" id="s5d-'+f+'" placeholder="?"></td></tr>';
+    });
+    h+='</tbody>';
+    document.getElementById('s5DedTbl').innerHTML=h;
+    document.getElementById('s5DedClues').innerHTML=s5Ded.clues.map(c=>'<li>'+c+'</li>').join('');
+    document.getElementById('s5DedFb').className='quiz-feedback';
+    document.getElementById('s5DedFb').innerHTML='';
+}
+function checkS5Ded(){
+    let ok=true,details=[];
+    Object.keys(s5Ded.solve).forEach(k=>{
+        const inp=document.getElementById('s5d-'+k);const v=parseInt(inp.value);
+        const want=s5Ded.solve[k];
+        // Vanilla < mint: 0 OR 1 both valid (WR answer notes both).
+        const accept=(k==='Vanilla')?(v===0||v===1):(v===want);
+        if(accept){inp.style.color='var(--success)'}
+        else{inp.style.color='var(--error)';ok=false;details.push('<strong>'+k+'</strong> = '+(k==='Vanilla'?'0 or 1':want))}
+    });
+    const fb=document.getElementById('s5DedFb');
+    if(ok){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 All correct! Mint = ½ of Chocolate (4) = 2. Vanilla < 2, so <strong>0 or 1</strong> both work. Caramel: odd, between 4 and 7, so 5.';playSound('success')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Close! Correct answers: '+details.join(', ')+'.';playSound('wrong')}
+}
+
+// ============ TEXT-TO-TALLY ============
+const t2tData=[{lbl:'Football',n:10},{lbl:'Rugby',n:3},{lbl:'Dance',n:2},{lbl:'Tennis',n:8},{lbl:'Cricket',n:1}];
+function initT2T(){
+    let h='<thead><tr><th>Sport</th><th>Total (type in)</th></tr></thead><tbody>';
+    t2tData.forEach(d=>{h+='<tr><td class="label">'+d.lbl+'</td><td class="editable"><input class="cell-input" id="t2t-'+d.lbl+'" placeholder="?"></td></tr>'});
+    h+='</tbody>';document.getElementById('t2tTable').innerHTML=h;
+}
+function checkT2T(){
+    let ok=true,details=[];
+    t2tData.forEach(d=>{
+        const inp=document.getElementById('t2t-'+d.lbl);const v=parseInt(inp.value);
+        if(v===d.n){inp.style.color='var(--success)'}
+        else{inp.style.color='var(--error)';ok=false;details.push('<strong>'+d.lbl+'</strong> = '+d.n)}
+    });
+    const fb=document.getElementById('t2tFb');
+    if(ok){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 You extracted the data perfectly! "Bella and Katy" = 2 (count names). "James\' favourite is cricket" = 1 (just James). Total class: '+t2tData.reduce((s,d)=>s+d.n,0)+'.';playSound('success')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Re-read the paragraph carefully. Correct: '+details.join(', ')+'. (Bella + Katy = 2 names = 2 votes. "James\' favourite is cricket" = 1 vote — just James.)';playSound('wrong')}
+}
+
+// ============ S6-TEACH: COMPARE KEYS ============
+function initS6Compare(){
+    // Year 1 = 30 children. Key=1 → 30 symbols (messy). Key=10 → 3 symbols (tidy).
+    let a='<thead><tr><th>Year</th><th>Children</th></tr></thead><tbody>';
+    a+='<tr><td class="label">Year 1</td><td class="icons" style="font-size:.9rem;letter-spacing:0;line-height:1.2;">'+'🟣'.repeat(30)+'</td></tr>';
+    a+='</tbody>';document.getElementById('s6CompareA').innerHTML=a;
+    let b='<thead><tr><th>Year</th><th>Children</th></tr></thead><tbody>';
+    b+='<tr><td class="label">Year 1</td><td class="icons">'+'🟣'.repeat(3)+'</td></tr>';
+    b+='</tbody>';document.getElementById('s6CompareB').innerHTML=b;
+}
+
+// ============ S6-DO: KEY-CHOOSER PICTOGRAM BUILDER ============
+const s6Cakes=[{lbl:'Chocolate',n:65},{lbl:'Lemon',n:35},{lbl:'Fruit',n:20},{lbl:'Carrot',n:25},{lbl:'Banana',n:15}];
+let s6Key=10;
+function setS6Key(k){s6Key=k;document.querySelectorAll('[data-key]').forEach(b=>{b.style.opacity=parseInt(b.dataset.key)===k?'1':'0.5'});renderS6Builder();playSound('click')}
+function renderS6Builder(){
+    let h='<table class="pictogram-table"><thead><tr><th>Cake</th><th>Pictogram (key = '+s6Key+')</th><th>Total</th></tr></thead><tbody>';
+    s6Cakes.forEach(c=>{
+        const wholes=Math.floor(c.n/s6Key);
+        const remainder=c.n%s6Key;
+        let half=(s6Key>1 && remainder===s6Key/2)?true:false;
+        const extra=remainder - (half?s6Key/2:0);
+        let icons='🍰'.repeat(wholes);
+        if(half)icons+='<span class="half">🍰</span>';
+        let suffix='';
+        if(extra>0)suffix=' <span style="color:var(--error);font-size:.8rem;">(+'+extra+' left over — key not perfect)</span>';
+        h+='<tr><td class="label">'+c.lbl+'</td><td class="icons">'+icons+suffix+'</td><td><strong>'+c.n+'</strong></td></tr>';
+    });
+    h+='</tbody></table>';
+    document.getElementById('s6Builder').innerHTML=h;
+    const fb=document.getElementById('s6Fb');
+    if(s6Key===5){
+        fb.className='quiz-feedback show correct-fb';fb.innerHTML='✅ Key = 5 works beautifully! Every total (65, 35, 20, 25, 15) divides cleanly by 5 — no leftovers.';
+    }else if(s6Key===10){
+        fb.className='quiz-feedback show wrong-fb';fb.innerHTML='⚠️ Key = 10 leaves messy leftovers (65 = 6½, 35 = 3½, 25 = 2½, 15 = 1½). Try key = 5 instead.';
+    }else{
+        fb.className='quiz-feedback show wrong-fb';fb.innerHTML='⚠️ Key = 1 means drawing 65 cake symbols just for chocolate — that\'s a LOT. Try a bigger key.';
+    }
+}
+
+// ============ S6-CHECK: TINY HALF-SYMBOL ============
+function initS6Tiny(){
+    let h='<thead><tr><th>Vehicle</th><th>Pictogram</th><th>Total</th></tr></thead><tbody>';
+    h+='<tr><td class="label">Van</td><td class="icons">🚗🚗<span class="half">🚗</span></td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
+    h+='<tr><td class="label">Bus</td><td class="icons">🚗🚗🚗🚗</td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
+    h+='<tr><td class="label">Bike</td><td class="icons">🚗🚗🚗</td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
+    h+='<tr><td class="label">Lorry</td><td class="icons">🚗🚗</td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
+    h+='<tr><td class="label">Car</td><td class="icons">🚗🚗🚗🚗🚗</td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
+    h+='</tbody>';
+    document.getElementById('s6TinyTbl').innerHTML=h;
+    document.getElementById('s6TinyQ').innerHTML='<div class="quiz-question"><div class="q-text">Tiny counted the half-symbol as half a vehicle. What\'s the real total of vans?</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s6TinyAns(0)">2½ vans (Tiny is right)</button>'+
+        '<button class="quiz-opt" onclick="s6TinyAns(1)"><strong>25 vans</strong> — each whole symbol = 10, half symbol = 5</button>'+
+        '<button class="quiz-opt" onclick="s6TinyAns(2)">3 vans</button>'+
+        '<button class="quiz-opt" onclick="s6TinyAns(3)">21 vans</button>'+
+        '</div><div class="quiz-feedback" id="s6TinyFb"></div></div>';
+}
+function s6TinyAns(i){
+    const opts=document.querySelectorAll('#s6TinyQ .quiz-opt');opts.forEach(o=>o.classList.add('disabled'));
+    opts[1].classList.add('correct');
+    const fb=document.getElementById('s6TinyFb');
+    if(i===1){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Exactly. The KEY says 1 picture = 10. Half a picture = <strong>half of 10 = 5</strong>. So 2 wholes + 1 half = 20 + 5 = <strong>25 vans</strong>. Tiny forgot to use the key!';playSound('correct')}
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Use the key! 1 picture = 10 vehicles. Half a picture = <strong>5 vehicles</strong>. So 2 wholes + 1 half = 20 + 5 = <strong>25 vans</strong>.';playSound('wrong')}
+}
+
+// ============ S7: ANIMALS / SHEEP PICTOGRAM ============
+function initS7Tbl(elId){
+    // Key: ⭐ = 10. Sheep=45, Horse=10, Chicken=35, Cow=80.
+    const data=[{lbl:'Sheep',n:45},{lbl:'Horse',n:10},{lbl:'Chicken',n:35},{lbl:'Cow',n:80}];
+    let h='<thead><tr><th>Animal</th><th>Number on farm</th></tr></thead><tbody>';
+    data.forEach(d=>{
+        const w=Math.floor(d.n/10);const half=(d.n%10===5)?true:false;
+        let icons='⭐'.repeat(w)+(half?'<span class="half">⭐</span>':'');
+        h+='<tr><td class="label">'+d.lbl+'</td><td class="icons">'+icons+'</td></tr>';
+    });
+    h+='</tbody>';document.getElementById(elId).innerHTML=h;
+}
+function initS7Quiz(){
+    document.getElementById('s7Quiz').innerHTML=
+        '<div class="quiz-question"><div class="q-text">"There are <strong>80 cows</strong> on the farm." (Key: ⭐ = 10)</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s7q(0,0)">True</button>'+
+        '<button class="quiz-opt" onclick="s7q(0,1)">False</button>'+
+        '</div><div class="quiz-feedback" id="s7q0fb"></div></div>'+
+        '<div class="quiz-question"><div class="q-text">"There are <strong>55 sheep and horses in total</strong>."</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s7q(1,0)">True</button>'+
+        '<button class="quiz-opt" onclick="s7q(1,1)">False</button>'+
+        '</div><div class="quiz-feedback" id="s7q1fb"></div></div>'+
+        '<div class="quiz-question"><div class="q-text">"There are <strong>half as many chickens as cows</strong>."</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s7q(2,0)">True</button>'+
+        '<button class="quiz-opt" onclick="s7q(2,1)">False</button>'+
+        '</div><div class="quiz-feedback" id="s7q2fb"></div></div>';
+}
+// Cow=80 (TRUE: 8 stars × 10 = 80). Sheep+Horse=45+10=55 (TRUE). Chicken=35; half of cows=40 → FALSE.
+const s7Ans=[0,0,1];
+const s7Why=[
+    'TRUE. Cow row has 8 whole stars. 8 × 10 = <strong>80</strong>.',
+    'TRUE. Sheep = 45 (4 stars + ½), Horse = 10 (1 star). 45 + 10 = <strong>55</strong>.',
+    'FALSE. Half of 80 cows = 40. But there are only 35 chickens. 35 ≠ 40.'
+];
+function s7q(qi,oi){
+    const fb=document.getElementById('s7q'+qi+'fb');
+    const opts=document.querySelectorAll('#s7Quiz .quiz-question:nth-child('+(qi+1)+') .quiz-opt');
+    opts.forEach(o=>o.classList.add('disabled'));
+    opts[s7Ans[qi]].classList.add('correct');
+    if(oi===s7Ans[qi]){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 '+s7Why[qi];playSound('correct')}
+    else{opts[oi].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ '+s7Why[qi];playSound('wrong')}
+}
+
+// ============ S7-CHECK: TINY IS RIGHT THIS TIME ============
+function initTinyRight(){
+    document.getElementById('tinyRightArea').innerHTML=
+        '<div class="pic-key">🔑 Key: 🍦 = 2 ice creams</div>'+
+        '<table class="pictogram-table"><thead><tr><th>Day</th><th>Ice creams sold</th></tr></thead><tbody>'+
+        '<tr><td class="label">Mon</td><td class="icons">🍦<span class="half">🍦</span></td></tr>'+
+        '<tr><td class="label">Tue</td><td class="icons">🍦🍦🍦<span class="half">🍦</span></td></tr>'+
+        '<tr><td class="label">Wed</td><td class="icons">🍦🍦</td></tr>'+
+        '<tr><td class="label">Thu</td><td class="icons">🍦🍦🍦</td></tr>'+
+        '<tr><td class="label">Fri</td><td class="icons">🍦🍦🍦🍦🍦</td></tr>'+
+        '<tr><td class="label">Sat</td><td class="icons">🍦🍦🍦🍦🍦🍦🍦🍦</td></tr>'+
+        '<tr><td class="label">Sun</td><td class="icons">🍦🍦🍦🍦🍦🍦🍦🍦🍦🍦</td></tr>'+
+        '</tbody></table>'+
+        '<div class="tiny-card"><div class="tiny-icon">🐢</div><div class="tiny-bubble"><div class="tiny-name">Tiny says</div><div class="tiny-says">"More ice creams were sold at the weekend (Sat + Sun) than during the rest of the week (Mon to Fri)."</div></div></div>'+
+        '<div class="quiz-question"><div class="q-text">Is Tiny right or wrong? Work it out before you click.</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="trAns(0)">Tiny is RIGHT — weekend total is more.</button>'+
+        '<button class="quiz-opt" onclick="trAns(1)">Tiny is WRONG — the weekday total is bigger.</button>'+
+        '<button class="quiz-opt" onclick="trAns(2)">It\'s a tie — they\'re equal.</button>'+
+        '</div><div class="quiz-feedback" id="trFb"></div></div>';
+}
+function trAns(i){
+    // Mon=3, Tue=7, Wed=4, Thu=6, Fri=10 → weekday = 30. Sat=16, Sun=20 → weekend = 36. Tiny is RIGHT.
+    const opts=document.querySelectorAll('#tinyRightArea .quiz-opt');opts.forEach(o=>o.classList.add('disabled'));
+    opts[0].classList.add('correct');
+    const fb=document.getElementById('trFb');
+    if(i===0){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 You weren\'t fooled — Tiny IS right this time! Weekend: Sat (16) + Sun (20) = <strong>36</strong>. Weekdays: 3+7+4+6+10 = <strong>30</strong>. 36 > 30. Sometimes Tiny is right — always check!';playSound('correct')}
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Don\'t be fooled into always doubting Tiny! Weekend: 16 + 20 = 36. Weekdays: 3+7+4+6+10 = 30. Tiny is <strong>right</strong> this time.';playSound('wrong')}
+}
+
+// ============ I CAN CHECKLIST ============
+const ICAN=[
+    'I can read tally marks and count them in 5s using the gate.',
+    'I can show a number as a tally, including using a gate of 5.',
+    'I can read a simple table to find a total.',
+    'I can draw a block diagram with equal-sized blocks.',
+    'I can find "how many more" by subtracting (the difference).',
+    'I can draw a pictogram using the same symbol every time.',
+    'I can choose a sensible key (1, 2, 5 or 10) and use a half-symbol.'
+];
+function initIcan(){
+    let h='';
+    ICAN.forEach((t,i)=>{h+='<div class="ican-row" onclick="toggleIcan('+i+')" id="ican'+i+'"><div class="ican-box"></div><div class="ican-text">'+t+'</div></div>'});
+    document.getElementById('icanList').innerHTML=h;
+}
+function toggleIcan(i){
+    const row=document.getElementById('ican'+i);
+    row.classList.toggle('ticked');
+    playSound(row.classList.contains('ticked')?'correct':'click');
+    const n=document.querySelectorAll('.ican-row.ticked').length;
+    const fb=document.getElementById('icanFb');
+    if(n===7){fb.innerHTML='🌟 All 7 ticked — you\'re ready for Block 4!'}
+    else if(n>=5){fb.innerHTML='💪 '+n+' / 7 ticked — almost there!'}
+    else if(n>=1){fb.innerHTML='📊 '+n+' / 7 ticked. Untick what you\'re not sure about — that\'s where to practise.'}
+    else fb.innerHTML='Tick boxes as you feel ready.';
+}
+
+// ============ MASTERY ASSESSMENT ============
+const MASTERY_QS=[
+    {step:1,q:'What number does this tally show? '+tallySvg(13),opts:['11','12','13','15'],correct:2,why:'2 full gates (5+5=10) + 3 single lines = 13.'},
+    {step:1,q:'How would you draw the number 17 as a tally?',opts:['17 single lines','3 gates + 2 single (5+5+5+2)','3 gates + 1 single (5+5+5+1)','4 gates (5+5+5+5)'],correct:1,why:'17 = 5 + 5 + 5 + 2. Three full gates plus two extra single lines.'},
+    {step:2,q:'A table shows: cat=11, dog=14, hamster=7. How many pets altogether?',opts:['25','28','30','32'],correct:3,why:'11 + 14 + 7 = 32.'},
+    {step:3,q:'Which block diagram matches this table?'+miniTableHtml([['Red',4],['Blue',7],['Green',2]]),opts:['A '+miniBlock([4,7,2],['R','B','G']),'B '+miniBlock([7,4,2],['R','B','G']),'C '+miniBlock([2,4,7],['R','B','G'])],correct:0,why:'Red=4, Blue=7, Green=2. Blue must be tallest, Green shortest. Only diagram A shows that order. (B has Red tallest; C has Green tallest.)'},
+    {step:3,q:'Team A has 9 points; Team B has 4 points. How many MORE points does Team A have?',opts:['3','4','5','13'],correct:2,why:'9 − 4 = 5 (the "difference" — same as the bar-model from Autumn).'},
+    {step:'rank',q:'RANKING: Drag these pets into order from MOST to LEAST popular. Cat = 14, Dog = 18, Fish = 6, Rabbit = 11.',type:'rank',items:[{lbl:'Dog (18)',v:18},{lbl:'Cat (14)',v:14},{lbl:'Rabbit (11)',v:11},{lbl:'Fish (6)',v:6}],why:'Sort by quantity, biggest first: Dog (18) → Cat (14) → Rabbit (11) → Fish (6).'},
+    {step:5,q:'A pictogram has an EMPTY row for "Spider". Key: 🐞 = 1. What does the empty row mean?',opts:['The data is missing','Zero spiders were seen','The row hasn\'t been finished','We need to ask again'],correct:1,why:'An empty row means ZERO. That IS the data — they saw none.'},
+    {step:6,q:'Which key would be SENSIBLE for these totals: 30, 50, 20, 40, 10?',opts:['1 = 1','1 = 2','1 = 5','1 = 10'],correct:3,why:'All totals are multiples of 10 — a key of 10 gives whole symbols every time (no fiddly halves).'},
+    {step:7,q:'Key: 🟦 = 10 children. A pictogram shows 2 whole squares for "blue". How many children?',opts:['2','12','15','20'],correct:3,why:'2 wholes × 10 = 20.'},
+    {step:7,q:'Key: 🚗 = 10 vehicles. A row shows 3 whole cars + 1 half car. How many?',opts:['3½','13','30','35'],correct:3,why:'3 × 10 = 30. Half a picture = ½ of 10 = 5. Total = 30 + 5 = 35.'}
+];
+
+// Mastery quiz state
+let mastery={answers:[],wrong:[]};
+function initMastery(){
+    let h='';
+    MASTERY_QS.forEach((q,qi)=>{
+        h+='<div class="quiz-question" id="mq'+qi+'"><div class="q-text">Q'+(qi+1)+'. '+q.q+'</div>';
+        if(q.type==='rank'){
+            // ranking question
+            h+='<div style="font-size:.85rem;color:var(--text-dim);margin-bottom:6px;">Click chips below in order — biggest first:</div>';
+            h+='<div class="order-pile" id="rankPile'+qi+'"></div>';
+            h+='<div class="order-slot" id="rankSlot'+qi+'"></div>';
+            h+='<div class="btn-row"><button class="action-btn check-btn" onclick="checkRank('+qi+')">✓ Check</button><button class="action-btn warn" onclick="resetRank('+qi+')">↺ Reset</button></div>';
+        }else{
+            h+='<div class="quiz-options">';
+            q.opts.forEach((o,oi)=>{h+='<button class="quiz-opt" onclick="masteryAns('+qi+','+oi+')">'+o+'</button>'});
+            h+='</div>';
+        }
+        h+='<div class="quiz-feedback" id="mf'+qi+'"></div></div>';
+    });
+    document.getElementById('masteryQuiz').innerHTML=h;
+    mastery={answers:Array(MASTERY_QS.length).fill(null),wrong:[]};
+    // init ranking
+    MASTERY_QS.forEach((q,qi)=>{if(q.type==='rank'){rankStates[qi]={pile:shuffle(q.items.slice()),placed:[]};renderRank(qi)}});
+}
+const rankStates={};
+function renderRank(qi){
+    const s=rankStates[qi];
+    document.getElementById('rankPile'+qi).innerHTML=s.pile.length?s.pile.map((it,i)=>'<button class="order-chip" onclick="placeRank('+qi+','+i+')">'+it.lbl+'</button>').join(''):'<span style="color:var(--text-dim);font-size:.9rem;">All placed.</span>';
+    document.getElementById('rankSlot'+qi).innerHTML=s.placed.length?s.placed.map(it=>'<div class="order-placed">'+it.lbl+'</div>').join(''):'<span style="color:var(--text-dim);font-size:.9rem;">Place chips here, biggest first →</span>';
+}
+function placeRank(qi,i){const s=rankStates[qi];s.placed.push(s.pile.splice(i,1)[0]);renderRank(qi);playSound('tick')}
+function resetRank(qi){const q=MASTERY_QS[qi];rankStates[qi]={pile:shuffle(q.items.slice()),placed:[]};renderRank(qi);document.getElementById('mf'+qi).className='quiz-feedback';playSound('click')}
+function checkRank(qi){
+    const s=rankStates[qi];
+    if(s.placed.length<MASTERY_QS[qi].items.length){const fb=document.getElementById('mf'+qi);fb.className='quiz-feedback show wrong-fb';fb.textContent='Place all chips first.';return}
+    const correctOrder=MASTERY_QS[qi].items.slice().sort((a,b)=>b.v-a.v);
+    const ok=s.placed.every((it,i)=>it.v===correctOrder[i].v);
+    const fb=document.getElementById('mf'+qi);
+    if(ok){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 '+MASTERY_QS[qi].why;mastery.answers[qi]=true;playSound('correct')}
+    else{fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ '+MASTERY_QS[qi].why;mastery.answers[qi]=false;mastery.wrong.push({qi,want:correctOrder.map(c=>c.lbl).join(' → '),why:MASTERY_QS[qi].why});playSound('wrong')}
+    checkMasteryDone();
+}
+function masteryAns(qi,oi){
+    if(mastery.answers[qi]!==null)return;
+    const q=MASTERY_QS[qi];
+    const opts=document.querySelectorAll('#mq'+qi+' .quiz-opt');
+    opts.forEach(o=>o.classList.add('disabled'));
+    opts[q.correct].classList.add('correct');
+    const fb=document.getElementById('mf'+qi);
+    if(oi===q.correct){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 '+q.why;mastery.answers[qi]=true;playSound('correct')}
+    else{opts[oi].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Correct answer: <strong>'+q.opts[q.correct]+'</strong>. '+q.why;mastery.answers[qi]=false;mastery.wrong.push({qi,want:q.opts[q.correct],why:q.why});playSound('wrong')}
+    checkMasteryDone();
+}
+function checkMasteryDone(){
+    const answered=mastery.answers.filter(a=>a!==null).length;
+    if(answered===MASTERY_QS.length)setTimeout(showMasteryResult,800);
+}
+function showMasteryResult(){
+    const sc=mastery.answers.filter(a=>a===true).length;
+    const total=MASTERY_QS.length;
+    const pct=Math.round(sc/total*100);
+    const r=document.getElementById('masteryResult');r.classList.remove('hidden');
+    let emoji=pct>=90?'🌟':pct>=70?'👍':'💪';
+    let cls=pct>=90?'gold':pct>=70?'silver':'bronze';
+    r.innerHTML='<div class="score-circle '+cls+'">'+sc+'/'+total+'</div><h3>'+emoji+' '+(pct>=90?'Mastery!':pct>=70?'Almost there':'Keep practising')+'</h3><p style="color:var(--text-dim);margin-top:8px;">'+(mastery.wrong.length===0?'Perfect — every question correct.':'Click Next to see what you missed and learn from it.')+'</p>';
+    // Update cert
+    document.getElementById('certScore').textContent=sc+'/'+total;
+    document.getElementById('certScore').className='score-circle '+cls;
+    if(pct>=90){document.getElementById('certTitle').textContent='🌟 Statistics Master!';document.getElementById('certMessage').textContent='Outstanding. You have full mastery of Year 2 Statistics. Onwards to Position and Direction!';}
+    else if(pct>=70){document.getElementById('certTitle').textContent='👍 Good progress';document.getElementById('certMessage').textContent='Solid work. Review the questions you missed, then re-try the mastery test.';}
+    else{document.getElementById('certTitle').textContent='💪 More practice needed';document.getElementById('certMessage').textContent='Go back through the steps you found hardest — especially the half-symbol and key-choosing questions.';}
+    playSound('success');
+}
+
+// ============ REVIEW ============
+function initReview(){
+    const a=document.getElementById('reviewArea');
+    if(mastery.wrong.length===0){
+        a.innerHTML='<div class="results-card" style="margin:0 auto;"><div style="font-size:3rem;">🎉</div><h3 style="margin-top:10px;">Nothing to review!</h3><p style="color:var(--text-dim);">You got every question right. That\'s mastery.</p></div>';
+        return;
+    }
+    let h='';
+    mastery.wrong.forEach(w=>{
+        const q=MASTERY_QS[w.qi];
+        h+='<div class="quiz-question" style="border-left:4px solid var(--error);"><div style="font-size:.85rem;color:var(--text-dim);font-weight:700;margin-bottom:6px;">Question '+(w.qi+1)+' · Step '+q.step+'</div>';
+        h+='<div class="q-text">'+q.q+'</div>';
+        h+='<div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:12px;margin-top:10px;"><strong style="color:var(--success);">✓ Correct answer:</strong> '+w.want+'</div>';
+        h+='<div style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.3);border-radius:10px;padding:12px;margin-top:8px;"><strong style="color:var(--accent-light);">Why:</strong> '+w.why+'</div></div>';
+    });
+    a.innerHTML=h;
+}
+
+// ============ VOCAB INIT ============
+function initVocab(){
+    const g=document.getElementById('vocabGrid');
+    g.innerHTML=VOCAB.map((v,i)=>'<div class="vocab-card" onclick="flipVocab('+i+')" id="vc'+i+'"><div class="vt">'+v.t+'</div><div class="vd">'+v.d+'</div></div>').join('');
+}
+function flipVocab(i){const c=document.getElementById('vc'+i);c.classList.toggle('flipped');playSound('click')}
+
+// ============ SLIDE INIT MAP ============
+const slideInit={
+    'slide-vocab':initVocab,
+    's1-teach':()=>renderTallyDemo(),
+    's1-do':()=>renderTallyBuilder(),
+    's1-check':initTinyMistake,
+    's2-teach':initS2Views,
+    's2-do':initFruitPic,
+    's2-check':newDed,
+    's3-teach':initCubeToBlock,
+    's3-do':()=>renderCubeStacker(),
+    's3-check':initS3Check,
+    's4-teach':initS4Demo,
+    's4-do':()=>renderS4Builder(),
+    's4-check':initS4Tiny,
+    's5-do':()=>{initBugTable('s5Tbl2');initS5Quiz()},
+    's5-check':newS5Ded,
+    'slide-text2tally':initT2T,
+    's6-teach':initS6Compare,
+    's6-do':()=>renderS6Builder(),
+    's6-check':initS6Tiny,
+    's7-teach':()=>initS7Tbl('s7Tbl'),
+    's7-do':()=>{initS7Tbl('s7Tbl2');initS7Quiz()},
+    's7-check':initTinyRight,
+    'slide-mastery':initMastery,
+    'slide-review':initReview,
+    'slide-ican':initIcan
+};
+
+// ============ INIT ============
+(function(){
+    const s=loadState();
+    applyTheme(s.theme==='light'?'light':'dark');
+    const slidesEl=document.querySelectorAll('.slide');
+    let start=0;
+    if(typeof s.slide==='number'&&s.slide>=0&&s.slide<slidesEl.length)start=s.slide;
+    showSlide(start);
+    if(start>0)showResumeToast(start,slidesEl.length);
+    else setTimeout(showKbdHint,800);
+})();
+</script>
+</body>
+</html>
