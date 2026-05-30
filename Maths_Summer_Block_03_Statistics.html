@@ -418,7 +418,7 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--bg-s
         <div class="slide-title">🛠️ Cube stacker</div>
         <div class="slide-subtitle">Use <strong>+</strong> and <strong>–</strong> to build a block diagram. Match the target totals shown. Every cube must be the same size!</div>
         <div id="cubeStacker"></div>
-        <div class="sentence-stem" id="cubeFb">Target: <strong style="color:var(--accent-light)">red=3, blue=6, green=8, yellow=2, purple=5</strong>.</div>
+        <div class="sentence-stem" id="cubeFb">Target: <strong style="color:var(--accent-light)">red=3, blue=7, green=10, yellow=4, purple=6</strong>.</div>
     </div>
 </div>
 </div>
@@ -866,7 +866,7 @@ function stepTallyDemo(){if(tallyDemoN>=20){resetTallyDemo();return}tallyDemoN++
 function resetTallyDemo(){tallyDemoN=0;renderTallyDemo()}
 
 // ============ TALLY BUILDER (S1-DO) ============
-const tbColours=[{lbl:'Green',target:7},{lbl:'Blue',target:12},{lbl:'Yellow',target:15},{lbl:'Pink',target:3}];
+const tbColours=[{lbl:'Green',target:8},{lbl:'Blue',target:17},{lbl:'Yellow',target:19},{lbl:'Pink',target:12}];
 let tbCounts=[0,0,0,0];
 function renderTallyBuilder(){
     const t=document.getElementById('tallyBuilder');
@@ -876,9 +876,12 @@ function renderTallyBuilder(){
            '<td><button class="cube-add" onclick="tbInc('+i+')">+</button> <button class="cube-sub" onclick="tbDec('+i+')">−</button></td></tr>';
     });
     h+='</tbody>';t.innerHTML=h;
-    // Check progress against targets
     const allMatch=tbColours.every((c,i)=>tbCounts[i]===c.target);
-    if(allMatch){document.getElementById('tbFb').innerHTML='🎉 All four match! Notice how counting in <span class="hl-tally">5s</span> makes the totals quick to read.';playSound('success')}
+    if(allMatch){
+        const total=tbCounts.reduce((s,n)=>s+n,0);
+        document.getElementById('tbFb').innerHTML='🎉 All four match! Total = '+total+'. Now think: <strong>without recounting</strong>, which two colours together equal Yellow on its own?';
+        playSound('success');
+    }
 }
 function tbInc(i){tbCounts[i]++;renderTallyBuilder();playSound(tbCounts[i]%5===0?'success':'tick')}
 function tbDec(i){if(tbCounts[i]>0){tbCounts[i]--;renderTallyBuilder();playSound('click')}}
@@ -1014,7 +1017,7 @@ function initCubeToBlock(){
 }
 
 // ============ S3-DO: CUBE STACKER ============
-const cubeTargets=[{lbl:'Red',target:3},{lbl:'Blue',target:6},{lbl:'Green',target:8},{lbl:'Yellow',target:2},{lbl:'Purple',target:5}];
+const cubeTargets=[{lbl:'Red',target:3},{lbl:'Blue',target:7},{lbl:'Green',target:10},{lbl:'Yellow',target:4},{lbl:'Purple',target:6}];
 const cubeColors=['#EF4444','#3B82F6','#22C55E','#F59E0B','#A78BFA'];
 let cubeCounts=[0,0,0,0,0];
 const CUBE_MAX=10;
@@ -1038,8 +1041,8 @@ function renderCubeStacker(){
     document.getElementById('cubeStacker').innerHTML=h;
     const all=cubeTargets.every((t,i)=>cubeCounts[i]===t.target);
     const fb=document.getElementById('cubeFb');
-    if(all){fb.innerHTML='🎉 All five columns match the target! Notice every cube is the <strong>same size</strong> — that\'s the rule for block diagrams. 8 (Green) is the most popular; 2 (Yellow) is the least.';playSound('success')}
-    else fb.innerHTML='Target: <strong style="color:var(--accent-light)">red=3, blue=6, green=8, yellow=2, purple=5</strong>.';
+    if(all){fb.innerHTML='🎉 Match. Total = 30. Now suppose each block stood for <strong>2 children</strong> instead of 1 — Green\'s 10 blocks would mean <strong>20 children</strong>. (That\'s how scaled bar charts work.) What would Yellow then stand for?';playSound('success')}
+    else fb.innerHTML='Target: <strong style="color:var(--accent-light)">red=3, blue=7, green=10, yellow=4, purple=6</strong>.';
 }
 function cubeInc(i){if(cubeCounts[i]<CUBE_MAX){cubeCounts[i]++;renderCubeStacker();playSound('tick')}}
 function cubeDec(i){if(cubeCounts[i]>0){cubeCounts[i]--;renderCubeStacker();playSound('click')}}
@@ -1073,20 +1076,20 @@ function initS3Check(){
     bar+='</div><span class="db-arrow">← gap of 4 →</span></div></div>';
     bar+='</div>';
     document.getElementById('diffBars').innerHTML=bar;
-    // Quiz
-    document.getElementById('diffQuiz').innerHTML='<div class="quiz-question"><div class="q-text">How many <strong>more</strong> house points did Team 2 get than Team 4?</div><div class="quiz-options">'+
-        '<button class="quiz-opt" onclick="diffAns(0)">2</button>'+
-        '<button class="quiz-opt" onclick="diffAns(1)">4</button>'+
-        '<button class="quiz-opt" onclick="diffAns(2)">8</button>'+
-        '<button class="quiz-opt" onclick="diffAns(3)">12</button>'+
+    // Multi-step: Team 2 gives Team 4 enough to make them equal. How many each then?
+    document.getElementById('diffQuiz').innerHTML='<div class="quiz-question"><div class="q-text">Team 2 gives Team 4 just enough points to make them <strong>equal</strong>. How many points does each team have after the swap?</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="diffAns(0)">Team 2 = 6, Team 4 = 6</button>'+
+        '<button class="quiz-opt" onclick="diffAns(1)">Team 2 = 4, Team 4 = 8</button>'+
+        '<button class="quiz-opt" onclick="diffAns(2)">Team 2 = 8, Team 4 = 4 (no change)</button>'+
+        '<button class="quiz-opt" onclick="diffAns(3)">Team 2 = 2, Team 4 = 10</button>'+
         '</div><div class="quiz-feedback" id="diffFb"></div></div>';
 }
 function diffAns(i){
     const opts=document.querySelectorAll('#diffQuiz .quiz-opt');opts.forEach(o=>o.classList.add('disabled'));
-    opts[1].classList.add('correct');
+    opts[0].classList.add('correct');
     const fb=document.getElementById('diffFb');
-    if(i===1){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Right! 8 − 4 = <strong>4</strong>. The red gap shows it visually — same as the bar model.';playSound('correct')}
-    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Not quite. 8 − 4 = <strong>4</strong>. Look at the red gap on the difference bar.';playSound('wrong')}
+    if(i===0){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Exactly. Total = 8 + 4 = 12. Shared equally between two teams = <strong>6 each</strong>. So Team 2 gives away 2 of its points. (Difference of 4 ÷ 2 = 2 each side of the swap.)';playSound('correct')}
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Two steps: first find the TOTAL (8 + 4 = 12). Then split it equally — 12 ÷ 2 = <strong>6 each</strong>. So the correct answer is Team 2 = 6, Team 4 = 6.';playSound('wrong')}
 }
 
 // ============ S4-TEACH: PICTOGRAM DEMO ============
@@ -1146,22 +1149,35 @@ function initBugTable(elId){
 }
 function initS5Quiz(){
     document.getElementById('s5Quiz').innerHTML=
-        '<div class="quiz-question"><div class="q-text">How many <strong>more</strong> spiders than ladybirds were seen?</div><div class="quiz-options">'+
-        '<button class="quiz-opt" onclick="s5q(0,0)">1</button><button class="quiz-opt" onclick="s5q(0,1)">2</button><button class="quiz-opt" onclick="s5q(0,2)">5</button><button class="quiz-opt" onclick="s5q(0,3)">7</button>'+
+        // Q1: inverse — given total, work out the missing comparison
+        '<div class="quiz-question"><div class="q-text">Altogether, Class 2 saw <strong>16</strong> minibeasts. Using the pictogram, what is the difference between the <strong>most common</strong> and <strong>least common</strong> minibeast that was actually seen? (Don\'t count the empty row.)</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s5q(0,0)">2</button><button class="quiz-opt" onclick="s5q(0,1)">3</button><button class="quiz-opt" onclick="s5q(0,2)">5</button><button class="quiz-opt" onclick="s5q(0,3)">7</button>'+
         '</div><div class="quiz-feedback" id="s5q0fb"></div></div>'+
-        '<div class="quiz-question"><div class="q-text">How many minibeasts were seen <strong>altogether</strong>?</div><div class="quiz-options">'+
-        '<button class="quiz-opt" onclick="s5q(1,0)">12</button><button class="quiz-opt" onclick="s5q(1,1)">15</button><button class="quiz-opt" onclick="s5q(1,2)">16</button><button class="quiz-opt" onclick="s5q(1,3)">19</button>'+
+        // Q2: what does empty row mean (critical concept)
+        '<div class="quiz-question"><div class="q-text">The Centipede row is empty. What does that tell you?</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s5q(1,0)">The row is empty so we can\'t tell.</button><button class="quiz-opt" onclick="s5q(1,1)"><strong>Zero</strong> — they saw no centipedes, and that IS the data.</button><button class="quiz-opt" onclick="s5q(1,2)">It\'s missing — someone forgot to fill it in.</button>'+
         '</div><div class="quiz-feedback" id="s5q1fb"></div></div>'+
-        '<div class="quiz-question"><div class="q-text">How many <strong>centipedes</strong> did Class 2 see?</div><div class="quiz-options">'+
-        '<button class="quiz-opt" onclick="s5q(2,0)">The row is empty so we can\'t tell.</button><button class="quiz-opt" onclick="s5q(2,1)"><strong>Zero</strong> — empty row means they saw none.</button><button class="quiz-opt" onclick="s5q(2,2)">It\'s missing data — needs to be filled in.</button>'+
-        '</div><div class="quiz-feedback" id="s5q2fb"></div></div>';
+        // Q3: inference — what ELSE does the data tell you? (open-ended with model)
+        '<div class="quiz-question"><div class="q-text">"What ELSE does this data tell you about Class 2\'s garden?" Write one true thing you can infer beyond the totals.</div>'+
+        '<textarea id="s5infer" placeholder="Type one inference..." style="width:100%;padding:10px;border-radius:10px;border:2px solid var(--card-border);background:rgba(255,255,255,.05);color:var(--text);font-family:inherit;font-size:.95rem;min-height:70px;resize:vertical;"></textarea>'+
+        '<div class="btn-row" style="justify-content:flex-start;margin-top:8px;"><button class="action-btn" onclick="s5revealModel()">💡 Reveal three model answers</button></div>'+
+        '<div class="quiz-feedback" id="s5q2fb"></div></div>';
 }
-const s5Answers=[1,2,1]; // ladybird-spider=2, total=16, centipede=zero
+const s5Answers=[2,1]; // Q1: most(spider=7) − least seen(worm=4) = 3? wait check below; Q2: zero
+// Most common seen = spider (7). Least common SEEN (excluding 0) = worm (4). Diff = 3. Correct index = 1.
 const s5Whys=[
-    'Spider has 7, Ladybird has 5. 7 − 5 = <strong>2</strong>.',
-    '7 + 5 + 0 + 4 = <strong>16</strong>. Don\'t forget centipede counts as 0.',
+    'Spider = 7 (most common). Worm = 4 (least common <em>that was seen</em> — ignore the zero row). 7 − 4 = <strong>3</strong>.',
     'An empty row means <strong>zero</strong>. Class 2 didn\'t see a centipede that day — that IS the data!'
 ];
+function s5revealModel(){
+    const ta=document.getElementById('s5infer');
+    const wrote=(ta.value||'').trim().length>=10;
+    ta.disabled=true;
+    const fb=document.getElementById('s5q2fb');
+    fb.className='quiz-feedback show '+(wrote?'correct-fb':'wrong-fb');
+    fb.innerHTML=(wrote?'✅ <strong>Good — you tried.</strong> ':'💡 <strong>Always write before revealing.</strong> ')+'Three valid inferences:<br>• Centipedes are rare in this garden — none seen at all.<br>• Spiders are the most common predator here, more than ladybirds (which suggests there is plenty of food for them).<br>• Class 2 saw 16 minibeasts split across only 3 species — the variety is low.';
+    playSound(wrote?'correct':'click');
+}
 function s5q(qi,oi){
     const fb=document.getElementById('s5q'+qi+'fb');
     const opts=document.querySelectorAll('#s5Quiz .quiz-question:nth-child('+(qi+1)+') .quiz-opt');
@@ -1280,19 +1296,39 @@ function initS6Tiny(){
     h+='<tr><td class="label">Car</td><td class="icons">🚗🚗🚗🚗🚗</td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
     h+='</tbody>';
     document.getElementById('s6TinyTbl').innerHTML=h;
-    document.getElementById('s6TinyQ').innerHTML='<div class="quiz-question"><div class="q-text">Tiny counted the half-symbol as half a vehicle. What\'s the real total of vans?</div><div class="quiz-options">'+
-        '<button class="quiz-opt" onclick="s6TinyAns(0)">2½ vans (Tiny is right)</button>'+
-        '<button class="quiz-opt" onclick="s6TinyAns(1)"><strong>25 vans</strong> — each whole symbol = 10, half symbol = 5</button>'+
-        '<button class="quiz-opt" onclick="s6TinyAns(2)">3 vans</button>'+
-        '<button class="quiz-opt" onclick="s6TinyAns(3)">21 vans</button>'+
-        '</div><div class="quiz-feedback" id="s6TinyFb"></div></div>';
+    // Two-step: (a) correct Tiny's interpretation, then (b) use the corrected totals.
+    // Vans=25, Bus=40, Bike=30, Lorry=20, Car=50. Total all = 165. Difference Car − Vans = 25.
+    document.getElementById('s6TinyQ').innerHTML='<div class="quiz-question"><div class="q-text"><strong>Step 1.</strong> First spot Tiny\'s mistake — what\'s the <em>real</em> total of vans?</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s6Step1(0)">2½ vans (Tiny is right)</button>'+
+        '<button class="quiz-opt" onclick="s6Step1(1)"><strong>25 vans</strong> — half a picture = half of 10 = 5</button>'+
+        '<button class="quiz-opt" onclick="s6Step1(2)">3 vans</button>'+
+        '<button class="quiz-opt" onclick="s6Step1(3)">21 vans</button>'+
+        '</div><div class="quiz-feedback" id="s6Step1Fb"></div></div>'+
+        '<div class="quiz-question" id="s6Step2Wrap" style="opacity:.4;pointer-events:none;"><div class="q-text"><strong>Step 2.</strong> Using the <em>correct</em> totals for the whole table, which TWO categories differ by exactly <strong>5 vehicles</strong>?</div><div class="quiz-options">'+
+        '<button class="quiz-opt" onclick="s6Step2(0)">Vans and Bikes</button>'+
+        '<button class="quiz-opt" onclick="s6Step2(1)">Bus and Car</button>'+
+        '<button class="quiz-opt" onclick="s6Step2(2)">Lorry and Bike</button>'+
+        '<button class="quiz-opt" onclick="s6Step2(3)">Vans and Lorry</button>'+
+        '</div><div class="quiz-feedback" id="s6Step2Fb"></div></div>';
 }
-function s6TinyAns(i){
-    const opts=document.querySelectorAll('#s6TinyQ .quiz-opt');opts.forEach(o=>o.classList.add('disabled'));
+function s6Step1(i){
+    const opts=document.querySelectorAll('#s6TinyQ .quiz-question:nth-child(1) .quiz-opt');opts.forEach(o=>o.classList.add('disabled'));
     opts[1].classList.add('correct');
-    const fb=document.getElementById('s6TinyFb');
-    if(i===1){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Exactly. The KEY says 1 picture = 10. Half a picture = <strong>half of 10 = 5</strong>. So 2 wholes + 1 half = 20 + 5 = <strong>25 vans</strong>. Tiny forgot to use the key!';playSound('correct')}
-    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Use the key! 1 picture = 10 vehicles. Half a picture = <strong>5 vehicles</strong>. So 2 wholes + 1 half = 20 + 5 = <strong>25 vans</strong>.';playSound('wrong')}
+    const fb=document.getElementById('s6Step1Fb');
+    if(i===1){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Right. 2 wholes + 1 half = 20 + 5 = <strong>25 vans</strong>. Now unlock step 2.';playSound('correct');
+        // Unlock step 2
+        const wrap=document.getElementById('s6Step2Wrap');wrap.style.opacity='1';wrap.style.pointerEvents='auto';
+    }
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Use the key. 1 picture = 10. Half = 5. So 2 + ½ = <strong>25</strong>. Step 2 stays locked until step 1 is right — try again.';playSound('wrong')}
+}
+function s6Step2(i){
+    // Vans=25, Bus=40, Bike=30, Lorry=20, Car=50. Diffs of 5: Lorry(20)↔Vans(25); Bike(30)↔Vans(25); none of these match the options exactly.
+    // Vans-Lorry = 25-20 = 5 ✓ → option 3
+    const opts=document.querySelectorAll('#s6Step2Wrap .quiz-opt');opts.forEach(o=>o.classList.add('disabled'));
+    opts[3].classList.add('correct');
+    const fb=document.getElementById('s6Step2Fb');
+    if(i===3){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Sharp. Vans = 25, Lorry = 20. 25 − 20 = <strong>5</strong>. (Bus=40, Bike=30, Car=50 — none differ by exactly 5 from each other.)';playSound('correct')}
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Real totals: Vans=25, Bus=40, Bike=30, Lorry=20, Car=50. Only <strong>Vans (25) and Lorry (20)</strong> differ by exactly 5.';playSound('wrong')}
 }
 
 // ============ S7: ANIMALS / SHEEP PICTOGRAM ============
@@ -1396,16 +1432,26 @@ function toggleIcan(i){
 
 // ============ MASTERY ASSESSMENT ============
 const MASTERY_QS=[
-    {step:1,q:'What number does this tally show? '+tallySvg(13),opts:['11','12','13','15'],correct:2,why:'2 full gates (5+5=10) + 3 single lines = 13.'},
-    {step:1,q:'How would you draw the number 17 as a tally?',opts:['17 single lines','3 gates + 2 single (5+5+5+2)','3 gates + 1 single (5+5+5+1)','4 gates (5+5+5+5)'],correct:1,why:'17 = 5 + 5 + 5 + 2. Three full gates plus two extra single lines.'},
-    {step:2,q:'A table shows: cat=11, dog=14, hamster=7. How many pets altogether?',opts:['25','28','30','32'],correct:3,why:'11 + 14 + 7 = 32.'},
-    {step:3,q:'Which block diagram matches this table?'+miniTableHtml([['Red',4],['Blue',7],['Green',2]]),opts:['A '+miniBlock([4,7,2],['R','B','G']),'B '+miniBlock([7,4,2],['R','B','G']),'C '+miniBlock([2,4,7],['R','B','G'])],correct:0,why:'Red=4, Blue=7, Green=2. Blue must be tallest, Green shortest. Only diagram A shows that order. (B has Red tallest; C has Green tallest.)'},
-    {step:3,q:'Team A has 9 points; Team B has 4 points. How many MORE points does Team A have?',opts:['3','4','5','13'],correct:2,why:'9 − 4 = 5 (the "difference" — same as the bar-model from Autumn).'},
+    // Q1: CONSTRUCT-from-target. Given partial tally (10), how many MORE marks to reach 27?
+    {step:1,q:'Tiny has started this tally for the class register: '+tallySvg(10)+' &nbsp;She wants the total to be <strong>27</strong>. How many MORE marks does she need to draw?',opts:['7','15','17','23'],correct:2,why:'She has 10 (two full gates). 27 − 10 = <strong>17</strong> more marks. That\'s 3 more gates plus 2 single lines.'},
+    // Q2: How to construct 32 (bigger target than 17, tests gate-building)
+    {step:1,q:'How would you draw the number <strong>32</strong> as a tally?',opts:['32 single lines','6 gates + 2 single (5×6 + 2)','6 gates + 1 single','7 gates (5×7)'],correct:1,why:'32 = 5×6 + 2. Six full gates plus two extra single lines.'},
+    // Q3: INVERSE — given total, find missing category
+    {step:2,q:'A pet table shows: <strong>Cat = 11, Dog = 14, Hamster = ?</strong>. The total of all three is <strong>32 pets</strong>. How many hamsters?',opts:['3','5','7','11'],correct:2,why:'Total − known = missing. 32 − 11 − 14 = <strong>7</strong>.'},
+    // Q4: match table to block diagram (already a stretch Q, keep)
+    {step:3,q:'Which block diagram matches this table?'+miniTableHtml([['Red',4],['Blue',7],['Green',2]]),opts:['A '+miniBlock([4,7,2],['R','B','G']),'B '+miniBlock([7,4,2],['R','B','G']),'C '+miniBlock([2,4,7],['R','B','G'])],correct:0,why:'Red=4, Blue=7, Green=2. Blue must be tallest, Green shortest. Only diagram A shows that order.'},
+    // Q5: MULTI-STEP — pool and share equally
+    {step:3,q:'Team A has <strong>18</strong> points; Team B has <strong>12</strong>. They pool all their points and share equally. How many points does each team have?',opts:['6','12','15','30'],correct:2,why:'Total = 18 + 12 = 30. Shared equally between 2 teams = 30 ÷ 2 = <strong>15 each</strong>.'},
+    // Q6: ranking (already strong, keep)
     {step:'rank',q:'RANKING: Drag these pets into order from MOST to LEAST popular. Cat = 14, Dog = 18, Fish = 6, Rabbit = 11.',type:'rank',items:[{lbl:'Dog (18)',v:18},{lbl:'Cat (14)',v:14},{lbl:'Rabbit (11)',v:11},{lbl:'Fish (6)',v:6}],why:'Sort by quantity, biggest first: Dog (18) → Cat (14) → Rabbit (11) → Fish (6).'},
-    {step:5,q:'A pictogram has an EMPTY row for "Spider". Key: 🐞 = 1. What does the empty row mean?',opts:['The data is missing','Zero spiders were seen','The row hasn\'t been finished','We need to ask again'],correct:1,why:'An empty row means ZERO. That IS the data — they saw none.'},
+    // Q7: CROSS-REPRESENTATION — tally vs pictogram, one is wrong
+    {step:5,q:'Both of these are supposed to show the SAME bug-hunt data. Key: 🐞 = 1. Spider = 7, Ladybird = 4. Which one is <strong>wrong</strong>?<br><br>A. Tally: '+tallySvg(7)+' (Spider), '+tallySvg(4)+' (Ladybird)<br>B. Pictogram: 🐞🐞🐞🐞🐞🐞 (Spider), 🐞🐞🐞🐞 (Ladybird)',opts:['A — the tally is wrong','B — the pictogram is wrong','Both are right','Both are wrong'],correct:1,why:'Tally shows 7 + 4 ✓. Pictogram shows only <strong>6</strong> spiders (not 7) — so B is the one that\'s wrong.'},
+    // Q8: sensible key (keep — tests meta-judgment)
     {step:6,q:'Which key would be SENSIBLE for these totals: 30, 50, 20, 40, 10?',opts:['1 = 1','1 = 2','1 = 5','1 = 10'],correct:3,why:'All totals are multiples of 10 — a key of 10 gives whole symbols every time (no fiddly halves).'},
-    {step:7,q:'Key: 🟦 = 10 children. A pictogram shows 2 whole squares for "blue". How many children?',opts:['2','12','15','20'],correct:3,why:'2 wholes × 10 = 20.'},
-    {step:7,q:'Key: 🚗 = 10 vehicles. A row shows 3 whole cars + 1 half car. How many?',opts:['3½','13','30','35'],correct:3,why:'3 × 10 = 30. Half a picture = ½ of 10 = 5. Total = 30 + 5 = 35.'}
+    // Q9: INVERSE — given the row total and the key, work out how many symbols to draw
+    {step:6,q:'You\'re drawing a pictogram with key 🚗 = 2 vehicles. One row needs to show <strong>17 vehicles</strong>. How would you draw it?',opts:['8 whole symbols + 1 half','9 whole symbols','7 whole symbols + 3 halves','17 whole symbols'],correct:0,why:'17 = (8 × 2) + 1. So 8 wholes = 16, plus a half = ½ of 2 = 1. Total = <strong>17</strong>. The half-symbol does the leftover.'},
+    // Q10: MULTI-STEP — read pictogram, then share equally
+    {step:7,q:'Key: 🚗 = 10 vehicles. A row shows <strong>3 whole + 1 half</strong> cars for "cars passing in a week". If the same number passed every day across <strong>7 days</strong>, about how many a day?',opts:['3','5','7','35'],correct:1,why:'3 wholes = 30, half = 5. Total = 35. Shared across 7 days = 35 ÷ 7 = <strong>5 a day</strong>.'}
 ];
 
 // Mastery quiz state
