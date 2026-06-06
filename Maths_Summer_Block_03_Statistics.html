@@ -866,7 +866,7 @@ function stepTallyDemo(){if(tallyDemoN>=20){resetTallyDemo();return}tallyDemoN++
 function resetTallyDemo(){tallyDemoN=0;renderTallyDemo()}
 
 // ============ TALLY BUILDER (S1-DO) ============
-const tbColours=[{lbl:'Green',target:8},{lbl:'Blue',target:17},{lbl:'Yellow',target:19},{lbl:'Pink',target:12}];
+const tbColours=[{lbl:'Green',target:8},{lbl:'Blue',target:11},{lbl:'Yellow',target:19},{lbl:'Pink',target:12}];
 let tbCounts=[0,0,0,0];
 function renderTallyBuilder(){
     const t=document.getElementById('tallyBuilder');
@@ -1141,10 +1141,12 @@ function s4TinyAns(i){
 }
 
 // ============ S5: BUG HUNT PICTOGRAM ============
-const bugData=[{lbl:'Spider',n:7,e:'🕷️'},{lbl:'Ladybird',n:5,e:'🐞'},{lbl:'Centipede',n:0,e:'🐛'},{lbl:'Worm',n:4,e:'🪱'}];
+// Rule: a pictogram uses the SAME symbol for every row (the key says 🐞 = 1 minibeast).
+// The LABEL column tells the learner which category each row is.
+const bugData=[{lbl:'Spider',n:7},{lbl:'Ladybird',n:5},{lbl:'Centipede',n:0},{lbl:'Worm',n:4}];
 function initBugTable(elId){
     let h='<thead><tr><th>Minibeast</th><th>Pictogram</th></tr></thead><tbody>';
-    bugData.forEach(d=>{h+='<tr><td class="label">'+d.lbl+'</td><td class="icons">'+(d.n===0?'<span style="color:var(--text-dim);font-size:.85rem;">(none)</span>':d.e.repeat(d.n))+'</td></tr>'});
+    bugData.forEach(d=>{h+='<tr><td class="label">'+d.lbl+'</td><td class="icons">'+(d.n===0?'<span style="color:var(--text-dim);font-size:.85rem;">(none — empty row means zero)</span>':'🐞'.repeat(d.n))+'</td></tr>'});
     h+='</tbody>';document.getElementById(elId).innerHTML=h;
 }
 function initS5Quiz(){
@@ -1163,8 +1165,8 @@ function initS5Quiz(){
         '<div class="btn-row" style="justify-content:flex-start;margin-top:8px;"><button class="action-btn" onclick="s5revealModel()">💡 Reveal three model answers</button></div>'+
         '<div class="quiz-feedback" id="s5q2fb"></div></div>';
 }
-const s5Answers=[2,1]; // Q1: most(spider=7) − least seen(worm=4) = 3? wait check below; Q2: zero
-// Most common seen = spider (7). Least common SEEN (excluding 0) = worm (4). Diff = 3. Correct index = 1.
+// Options for Q1 are ['2','3','5','7']. Correct = 3 (spider 7 − worm 4) → index 1.
+const s5Answers=[1,1];
 const s5Whys=[
     'Spider = 7 (most common). Worm = 4 (least common <em>that was seen</em> — ignore the zero row). 7 − 4 = <strong>3</strong>.',
     'An empty row means <strong>zero</strong>. Class 2 didn\'t see a centipede that day — that IS the data!'
@@ -1278,9 +1280,9 @@ function renderS6Builder(){
     document.getElementById('s6Builder').innerHTML=h;
     const fb=document.getElementById('s6Fb');
     if(s6Key===5){
-        fb.className='quiz-feedback show correct-fb';fb.innerHTML='✅ Key = 5 works beautifully! Every total (65, 35, 20, 25, 15) divides cleanly by 5 — no leftovers.';
+        fb.className='quiz-feedback show correct-fb';fb.innerHTML='✅ Key = 5 works beautifully — every total (65, 35, 20, 25, 15) divides cleanly into <strong>whole symbols only</strong>. No half-pictures needed.';
     }else if(s6Key===10){
-        fb.className='quiz-feedback show wrong-fb';fb.innerHTML='⚠️ Key = 10 leaves messy leftovers (65 = 6½, 35 = 3½, 25 = 2½, 15 = 1½). Try key = 5 instead.';
+        fb.className='quiz-feedback show wrong-fb';fb.innerHTML='⚠️ Key = 10 works, but <strong>four of the five rows need a half-symbol</strong> (65, 35, 25, 15 are all odd multiples of 5). That\'s fiddly. Try key = 5 instead — all whole symbols.';
     }else{
         fb.className='quiz-feedback show wrong-fb';fb.innerHTML='⚠️ Key = 1 means drawing 65 cake symbols just for chocolate — that\'s a LOT. Try a bigger key.';
     }
@@ -1291,7 +1293,7 @@ function initS6Tiny(){
     let h='<thead><tr><th>Vehicle</th><th>Pictogram</th><th>Total</th></tr></thead><tbody>';
     h+='<tr><td class="label">Van</td><td class="icons">🚗🚗<span class="half">🚗</span></td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
     h+='<tr><td class="label">Bus</td><td class="icons">🚗🚗🚗🚗</td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
-    h+='<tr><td class="label">Bike</td><td class="icons">🚗🚗🚗</td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
+    h+='<tr><td class="label">Bike</td><td class="icons">🚗🚗🚗🚗🚗🚗</td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
     h+='<tr><td class="label">Lorry</td><td class="icons">🚗🚗</td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
     h+='<tr><td class="label">Car</td><td class="icons">🚗🚗🚗🚗🚗</td><td><strong style="color:var(--accent-light);">?</strong></td></tr>';
     h+='</tbody>';
@@ -1322,26 +1324,35 @@ function s6Step1(i){
     else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Use the key. 1 picture = 10. Half = 5. So 2 + ½ = <strong>25</strong>. Step 2 stays locked until step 1 is right — try again.';playSound('wrong')}
 }
 function s6Step2(i){
-    // Vans=25, Bus=40, Bike=30, Lorry=20, Car=50. Diffs of 5: Lorry(20)↔Vans(25); Bike(30)↔Vans(25); none of these match the options exactly.
-    // Vans-Lorry = 25-20 = 5 ✓ → option 3
+    // Vans=25, Bus=40, Bike=60, Lorry=20, Car=50. Only Vans-Lorry = 5. Correct answer = D.
     const opts=document.querySelectorAll('#s6Step2Wrap .quiz-opt');opts.forEach(o=>o.classList.add('disabled'));
     opts[3].classList.add('correct');
     const fb=document.getElementById('s6Step2Fb');
-    if(i===3){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Sharp. Vans = 25, Lorry = 20. 25 − 20 = <strong>5</strong>. (Bus=40, Bike=30, Car=50 — none differ by exactly 5 from each other.)';playSound('correct')}
-    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Real totals: Vans=25, Bus=40, Bike=30, Lorry=20, Car=50. Only <strong>Vans (25) and Lorry (20)</strong> differ by exactly 5.';playSound('wrong')}
+    if(i===3){fb.className='quiz-feedback show correct-fb';fb.innerHTML='🎉 Sharp. Vans = 25, Lorry = 20. 25 − 20 = <strong>5</strong>. (Real totals: Bus=40, Bike=60, Car=50 — none of those differ by exactly 5 from each other or from Vans/Lorry.)';playSound('correct')}
+    else{opts[i].classList.add('wrong');fb.className='quiz-feedback show wrong-fb';fb.innerHTML='❌ Real totals: Vans=25, Bus=40, Bike=60, Lorry=20, Car=50. Only <strong>Vans (25) and Lorry (20)</strong> differ by exactly 5.';playSound('wrong')}
 }
 
-// ============ S7: ANIMALS / SHEEP PICTOGRAM ============
-function initS7Tbl(elId){
-    // Key: ⭐ = 10. Sheep=45, Horse=10, Chicken=35, Cow=80.
-    const data=[{lbl:'Sheep',n:45},{lbl:'Horse',n:10},{lbl:'Chicken',n:35},{lbl:'Cow',n:80}];
-    let h='<thead><tr><th>Animal</th><th>Number on farm</th></tr></thead><tbody>';
+// ============ S7: PICTOGRAM RENDERER (parameterised by data, key, symbol) ============
+// One renderer for both s7-teach (birds, key=5, 🟦) and s7-do (animals, key=10, ⭐).
+function renderPicto(elId,header,data,key,symbol){
+    let h='<thead><tr><th>'+header[0]+'</th><th>'+header[1]+'</th></tr></thead><tbody>';
     data.forEach(d=>{
-        const w=Math.floor(d.n/10);const half=(d.n%10===5)?true:false;
-        let icons='⭐'.repeat(w)+(half?'<span class="half">⭐</span>':'');
+        const w=Math.floor(d.n/key);
+        const half=(d.n%key===key/2);
+        const extra=d.n - w*key - (half?key/2:0);
+        let icons=symbol.repeat(w)+(half?'<span class="half">'+symbol+'</span>':'');
+        if(extra>0)icons+=' <span style="color:var(--text-dim);font-size:.75rem;">(+'+extra+' left over)</span>';
         h+='<tr><td class="label">'+d.lbl+'</td><td class="icons">'+icons+'</td></tr>';
     });
     h+='</tbody>';document.getElementById(elId).innerHTML=h;
+}
+function initS7TeachTbl(){
+    // Birds, key 🟦 = 5. Sparrow=15, Robin=5, Blackbird=20, Magpie=10. All divisible by 5 cleanly.
+    renderPicto('s7Tbl',['Bird','Number seen'],[{lbl:'Sparrow',n:15},{lbl:'Robin',n:5},{lbl:'Blackbird',n:20},{lbl:'Magpie',n:10}],5,'🟦');
+}
+function initS7Tbl(elId){
+    // Farm animals, key ⭐ = 10. Sheep=45, Horse=10, Chicken=35, Cow=80.
+    renderPicto(elId,['Animal','Number on farm'],[{lbl:'Sheep',n:45},{lbl:'Horse',n:10},{lbl:'Chicken',n:35},{lbl:'Cow',n:80}],10,'⭐');
 }
 function initS7Quiz(){
     document.getElementById('s7Quiz').innerHTML=
@@ -1574,7 +1585,7 @@ const slideInit={
     's6-teach':initS6Compare,
     's6-do':()=>renderS6Builder(),
     's6-check':initS6Tiny,
-    's7-teach':()=>initS7Tbl('s7Tbl'),
+    's7-teach':initS7TeachTbl,
     's7-do':()=>{initS7Tbl('s7Tbl2');initS7Quiz()},
     's7-check':initTinyRight,
     'slide-mastery':initMastery,
